@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
 import {Location} from "@angular/common";
@@ -8,13 +8,14 @@ import {Location} from "@angular/common";
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css']
 })
-export class RegistrationComponent {
+export class RegistrationComponent implements OnInit{
   form!: FormGroup; // Store the form
   loading = false; // If form send but not done
   submitted = false; // If form is sent
   username: string | undefined;
   password: string | undefined;
   verif_password: string | undefined;
+  birthday: Date | undefined;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -37,7 +38,7 @@ export class RegistrationComponent {
       Validators.required,
       Validators.minLength(6)
     ]),
-      birthday: new FormControl(this.password, [
+      birthday: new FormControl(this.birthday, [
       Validators.required
     ])
   });

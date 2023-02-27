@@ -4,10 +4,10 @@
 
           <tr> <td colspan="2" class="header"> <h1> Sign In </h1></td> </tr>
 
-          <tr> <td colspan="2"> <input type="text" name="username" formControlName="username" placeholder="Login" maxlength = "30" required> </td> </tr>
-          <tr> <td>Birthday</td><td> <input type="date" name="birthday" formControlName="birthday" placeholder="Birthday" required> </td> </tr>
-          <tr> <td colspan="2"> <input type="password" name="password" formControlName="password" placeholder="Password" required> </td> </tr>
-          <tr> <td colspan="2"> <input type="password" name="verif-password" formControlName="verif-password" placeholder="Type password again" required> </td> </tr>
+          <tr> <td colspan="2"> <input type="text" name="username" formControlName="username" placeholder="Login" maxlength = "30" ng-model-options="{ updateOn: 'blur'}" required> </td> </tr>
+          <tr> <td>Birthday</td><td> <input type="date" name="birthday" formControlName="birthday" placeholder="Birthday" ng-model-options="{ updateOn: 'blur'}" required> </td> </tr>
+          <tr> <td colspan="2"> <input type="password" name="password" formControlName="password" placeholder="Password" ng-model-options="{ updateOn: 'blur'}" required> </td> </tr>
+          <tr> <td colspan="2"> <input type="password" name="verif-password" formControlName="verif-password" placeholder="Type password again" ng-model-options="{ updateOn: 'blur'}" required> </td> </tr>
           <tr> <td colspan="2" class="submit"> <input type="submit" value="Sign In"> </td> </tr>
 
           <a routerLink="/login">I already have an account</a>
