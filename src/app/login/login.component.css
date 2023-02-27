@@ -19,55 +19,33 @@ td{
 }
 
 
-input, select{
-	width: 100%;
-  padding: 12px 18px;
-  margin: 5px;
-	border: solid 2px;
-  border-radius: 40px;
-  border-color: black;
-  box-sizing: border-box;
+
+
+.ng-valid[required], .ng-valid.required  {
+  border: 5px solid #42A948; /* green */
 }
 
-input:focus{
-	outline: none;
-	border-color: #025988;
+.ng-invalid:not(form)  {
+  border: 5px solid #a94442; /* red */
 }
 
-
-input[type=submit]{
-	background-color: skyblue;
-	border-color: #044DF9;
-	height: 50px;
-	font-weight: bold;
-	font-size: 18px;
+.alert div {
+  background-color: #fed3d3;
+  color: #820000;
+  padding: 1rem;
+  margin-bottom: 1rem;
 }
 
-input[type=submit]:hover{
-	background-color: #5D73FC;
-	border-color: #5D73FC;
-	color: white;
-	transition: 0.3s;
+.form-group {
+  margin-bottom: 1rem;
 }
 
-input[type=text]:not(:placeholder-shown):invalid, input[type=number]:not(:placeholder-shown):invalid{
-	border-color: red;
+label {
+  display: block;
+  margin-bottom: .5rem;
 }
 
-.header{
-	padding: 0;
-	background-color: #CED4D4;
-  text-align: center;
-}
-
-.submit{
-	background-color: #CED4D4;
-}
-
-a{
-	text-decoration: none;
-}
-
-li{
-	text-align: left;
+select {
+  width: 100%;
+  padding: .5rem;
 }
