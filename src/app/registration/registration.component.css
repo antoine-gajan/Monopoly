@@ -19,20 +19,8 @@ td{
 }
 
 
-
-
-.ng-valid[required], .ng-valid.required  {
-  border: 5px solid #42A948; /* green */
-}
-
-.ng-invalid:not(form)  {
-  border: 5px solid #a94442; /* red */
-}
-
-.alert div {
-  background-color: #fed3d3;
+.alert {
   color: #820000;
-  padding: 1rem;
   margin-bottom: 1rem;
 }
 

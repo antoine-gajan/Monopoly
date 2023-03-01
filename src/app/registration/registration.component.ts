@@ -8,6 +8,8 @@ import {Location} from "@angular/common";
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css']
 })
+
+
 export class RegistrationComponent implements OnInit{
   form!: FormGroup; // Store the form
   loading = false; // If form send but not done
@@ -41,10 +43,32 @@ export class RegistrationComponent implements OnInit{
       birthday: new FormControl(this.birthday, [
       Validators.required
     ])
-  });
+  }, [CustomValidators.MatchValidator('password', 'verif_password')]);
+  }
+
+  get passwordMatchError() {
+    return (
+      this.form.getError('mismatch') &&
+      this.form.get('verif_password')?.dirty
+    );
   }
 
   onSubmit(){
     /// Submit the form
+  }
+}
+
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+
+export class CustomValidators {
+  static MatchValidator(source: string, target: string): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const sourceCtrl = control.get(source);
+      const targetCtrl = control.get(target);
+
+      return sourceCtrl && targetCtrl && sourceCtrl.value !== targetCtrl.value
+        ? { mismatch: true }
+        : null;
+    };
   }
 }

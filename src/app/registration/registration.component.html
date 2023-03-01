@@ -1,13 +1,22 @@
 
-  <form>
+  <form [formGroup] = "form" (ngSubmit)="onSubmit()">
        <table>
 
           <tr> <td colspan="2" class="header"> <h1> Sign In </h1></td> </tr>
 
           <tr> <td colspan="2"> <input type="text" name="username" formControlName="username" placeholder="Login" maxlength = "30" ng-model-options="{ updateOn: 'blur'}" required> </td> </tr>
+         <div *ngIf="submitted && this.form.controls['username'].errors" class="alert">
+            Username is required !
+         </div>
           <tr> <td>Birthday</td><td> <input type="date" name="birthday" formControlName="birthday" placeholder="Birthday" ng-model-options="{ updateOn: 'blur'}" required> </td> </tr>
           <tr> <td colspan="2"> <input type="password" name="password" formControlName="password" placeholder="Password" ng-model-options="{ updateOn: 'blur'}" required> </td> </tr>
-          <tr> <td colspan="2"> <input type="password" name="verif-password" formControlName="verif-password" placeholder="Type password again" ng-model-options="{ updateOn: 'blur'}" required> </td> </tr>
+         <div *ngIf="submitted && this.form.controls['password'].errors" class="alert">
+           <div *ngIf="this.form.controls['password'].errors['required']">Password is required</div>
+         </div>
+          <tr> <td colspan="2"> <input type="password" name="verif_password" formControlName="verif_password" placeholder="Type password again" ng-model-options="{ updateOn: 'blur'}" required> </td> </tr>
+         <div *ngIf="passwordMatchError" class = "alert">
+            Password does not match !
+         </div>
           <tr> <td colspan="2" class="submit"> <input type="submit" value="Sign In"> </td> </tr>
 
           <a routerLink="/login">I already have an account</a>
