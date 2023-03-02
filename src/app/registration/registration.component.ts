@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
 import {Location} from "@angular/common";
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+
 
 @Component({
   selector: 'app-registration',
@@ -9,15 +11,12 @@ import {Location} from "@angular/common";
   styleUrls: ['./registration.component.css']
 })
 export class RegistrationComponent implements OnInit{
-  //p1: string | undefined;
-  //p2: string | undefined;
-  
   form!: FormGroup; // Store the form
   loading = false; // If form send but not done
   submitted = false; // If form is sent
-  username: string | undefined;
-  password: string | undefined;
-  verif_password: string | undefined;
+  email: string | undefined; // Store the email
+  password: string | undefined; // Store password
+  verif_password: string | undefined; // Store the 2nd check of password
 
   constructor(
     private formBuilder: FormBuilder,
@@ -28,7 +27,7 @@ export class RegistrationComponent implements OnInit{
   ngOnInit() {
     /// Init the form with validators
     this.form = new FormGroup({
-      username: new FormControl(this.username, [
+      email: new FormControl(this.email, [
         Validators.required,
         Validators.minLength(4)
       ]),
@@ -40,8 +39,14 @@ export class RegistrationComponent implements OnInit{
       Validators.required,
       Validators.minLength(6)
     ]),
+  }, CustomValidators.MatchValidator('password', 'verif_password'));
+  }
 
-  });
+  get passwordMatchError() {
+    return (
+      this.form.getError('mismatch') &&
+      (this.form.get('verif_password')?.touched || this.form.get('password')?.touched)
+    );
   }
 
   onSubmit(){
@@ -54,4 +59,18 @@ export class RegistrationComponent implements OnInit{
       // Hacer algo si los campos son diferentes
     }
   }*/
+}
+
+// Class with all custom validators for forms
+export class CustomValidators {
+  static MatchValidator(source: string, target: string): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const sourceCtrl = control.get(source);
+      const targetCtrl = control.get(target);
+
+      return sourceCtrl && targetCtrl && sourceCtrl.value !== targetCtrl.value
+        ? {mismatch: true}
+        : null;
+    };
+  }
 }

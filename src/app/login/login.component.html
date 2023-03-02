@@ -3,21 +3,22 @@
     <form class="formulario">
         <div class="filas">
             <label for="email" class="campo"> Email* </label>
-            <input type="email" name="email" placeholder="example@domain.com" class="form-input" formControlName="username" maxlength = "30" ng-model-options="{ updateOn: 'blur'}" required/>
+            <input type="email" id="email" name="email" placeholder="example@domain.com" class="form-input" formControlName="username" maxlength = "30" ng-model-options="{ updateOn: 'blur'}" required/>
         </div>
 
         <div class="filas">
             <label for="password" class="campo"> Password* </label>
-            <input type="password" name="password" placeholder="write your password" class="form-input"formControlName="password" ng-model-options="{ updateOn: 'blur'}" required/>
+            <input type="password" id="password" name="password" placeholder="write your password" class="form-input"formControlName="password" ng-model-options="{ updateOn: 'blur'}" required/>
         </div>
 
         <div>
-            <button class="formbold-btn w-full">Submit</button>
+            <button class="formbold-btn w-full">Login</button>
+            <a routerLink="/signup">I don't have account</a>
         </div>
     </form>
 </div>
 
- 
+
 <!--
 <div class="main-block">
   <form>
@@ -32,8 +33,8 @@
         <td ><input type="password" name="password" formControlName="password" placeholder="Password*" ng-model-options="{ updateOn: 'blur'}" required></td>
       </tr>
         </table>
-        <button type="submit" href="/">Submit</button>    
-  
+        <button type="submit" href="/">Submit</button>
+
     </form>
-  </div> 
+  </div>
 -->

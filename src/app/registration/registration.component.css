@@ -1,123 +1,136 @@
-
-.main-block {
-  margin: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgb(243, 241, 241);
-}
-
-table{
-	margin: auto;
-	border-collapse: collapse;
-  justify-content: center;
-  align-items: center;
-  background: rgb(243, 241, 241);
-}
-
-header {
-  text-align: left;
-}
-body{
-	text-align: center;
-}
-
-.ng-valid[required], .ng-valid.required  {
-  border: 5px solid #42A948; /* green */
-}
-
-.ng-invalid:not(form)  {
-  border: 5px solid #a94442; /* red */
-}
-
-.alert div {
-  background-color: #fed3d3;
-  color: #820000;
-  padding: 1rem;
-  margin-bottom: 1rem;
-}
-
-label {
-  display: block;
-  margin-bottom: .5rem;
-}
-
-select {
-  width: 100%;
-  padding: .5rem;
-}
-
-html, body {
-  min-height: 100%;
-  }
-  body, div, form, input, select, p { 
-  padding: 0;
+* {
+  font-family: "Inter", sans-serif;
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.formulario{
+  padding: 32px 36px;
+  background-color: white;
+}
+
+.campo{
+  display: block;
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 14px;
+  margin-top: 10px;
+}
+
+.filas{
+  margin-bottom: 20px;
+}
+
+.form-input{
+  width: 100%;
+  padding: 12px 24px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  background: white;
+  font-weight: 500;
+  font-size: 16px;
+  color: #6b7280;
   outline: none;
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 14px;
-  color: #666;
-  }
-  
-  fieldset {
+  resize: none;
+}
+
+.formbold-btn {
+  text-align: center;
+  font-size: 16px;
+  border-radius: 6px;
+  padding: 14px 32px;
   border: none;
-  border-top: 1px solid #8ebf42;
-  }
-  
-
-  .account-details >div, .personal-details >div, input, label {
-  width: 100%;
-  }
-
-  input {
-  padding: 5px;
-  vertical-align: middle;
-  }
-  .checkbox {
-  margin-bottom: 10px;
-  }
-  select{
-  width: calc(100% + 26px);
-  padding: 5px 0;
-  background: transparent;
-  }
-
- 
-  .checkbox input, .children input {
-  width: auto;
-  margin: -2px 10px 0 0;
-  }
-  .checkbox a {
-  color: #8ebf42;
-  }
-  .checkbox a:hover {
-  color: #82b534;
-  }
-  button {
-  width: 100%;
-  padding: 10px 0;
-  margin: 10px auto;
-  border-radius: 5px; 
-  border: none;
-  background: #8ebf42; 
-  font-size: 14px;
   font-weight: 600;
-  color: #fff;
+  background-color: #6a64f1;
+  color: white;
+  cursor: pointer;
+}
+
+.formbold-btn:hover {
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+
+.formbold-form-input:focus {
+  border-color: #6a64f1;
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+.formbold--mx-3 {
+  margin-left: -12px;
+  margin-right: -12px;
+}
+.formbold-px-3 {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.flex {
+  display: flex;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.w-full {
+  width: 100%;
+}
+.formbold-form-header {
+  background: #6a64f1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 36px;
+  border-radius: 8px 8px 0px 0px;
+}
+.formbold-form-header h3 {
+  font-weight: 700;
+  font-size: 20px;
+  color: white;
+}
+.formbold-form-header button {
+  color: white;
+  background: transparent;
+  border: none;
+}
+.formbold-chatbox-form {
+  padding: 32px 36px;
+}
+.formbold-action-buttons {
+  max-width: 550px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 48px;
+}
+.formbold-action-btn {
+  width: 70px;
+  height: 70px;
+  background: #6a64f1;
+  color: white;
+  border-radius: 50%;
+  margin-left: 20px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.formbold-action-btn .formbold-cross-icon {
+  display: none;
+}
+
+.formbold-action-btn.active .formbold-cross-icon {
+  display: block;
+}
+
+.formbold-action-btn.active .formbold-chat-icon {
+  display: none;
+}
+@media (min-width: 540px) {
+  .sm\:w-half {
+    width: 50%;
   }
-  button:hover {
-  background: #82b534;
-  }
-  @media (min-width: 568px) {
-  .account-details >div, .personal-details >div {
-  width: 50%;
-  }
-  label {
-  width: 40%;
-  }
-  input {
-  width: 60%;
-  }
-  select {
-  width: calc(60% + 16px);
-  }
-  }
+}
