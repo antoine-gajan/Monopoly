@@ -8,16 +8,16 @@ import {Location} from "@angular/common";
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css']
 })
-
-
 export class RegistrationComponent implements OnInit{
+  //p1: string | undefined;
+  //p2: string | undefined;
+  
   form!: FormGroup; // Store the form
   loading = false; // If form send but not done
   submitted = false; // If form is sent
   username: string | undefined;
   password: string | undefined;
   verif_password: string | undefined;
-  birthday: Date | undefined;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -40,35 +40,18 @@ export class RegistrationComponent implements OnInit{
       Validators.required,
       Validators.minLength(6)
     ]),
-      birthday: new FormControl(this.birthday, [
-      Validators.required
-    ])
-  }, [CustomValidators.MatchValidator('password', 'verif_password')]);
-  }
 
-  get passwordMatchError() {
-    return (
-      this.form.getError('mismatch') &&
-      this.form.get('verif_password')?.dirty
-    );
+  });
   }
 
   onSubmit(){
     /// Submit the form
-  }
-}
-
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-
-export class CustomValidators {
-  static MatchValidator(source: string, target: string): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const sourceCtrl = control.get(source);
-      const targetCtrl = control.get(target);
-
-      return sourceCtrl && targetCtrl && sourceCtrl.value !== targetCtrl.value
-        ? { mismatch: true }
-        : null;
-    };
-  }
+  }/*
+  onSubmit() {
+    if (this.p1 === this.p2) {
+      // Hacer algo si los campos son iguales
+    } else {
+      // Hacer algo si los campos son diferentes
+    }
+  }*/
 }
