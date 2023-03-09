@@ -7,6 +7,7 @@ import { HomeComponent } from './home/home.component';
 import {RegistrationComponent} from "./registration/registration.component";
 import {ReactiveFormsModule} from "@angular/forms";
 import { BoardComponent } from './board/board.component';
+import { ErrorPageComponent } from './error-page/error-page.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { BoardComponent } from './board/board.component';
     LoginComponent,
     HomeComponent,
     RegistrationComponent,
-    BoardComponent
+    BoardComponent,
+    ErrorPageComponent
   ],
   imports: [
     BrowserModule,
