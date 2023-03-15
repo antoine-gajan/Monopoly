@@ -1,0 +1,19 @@
+<div class="formulario">
+    <form class="formulario">
+        <div class="filas">
+            <label for="email" class="campo"> E-mail* </label>
+            <input type="email" id="email" name="email" placeholder="ejemplo@dominio.com" class="form-input" formControlName="username" maxlength = "30" ng-model-options="{ updateOn: 'blur'}" required/>
+        </div>
+
+        <div class="filas">
+            <label for="password" class="campo"> Contraseña* </label>
+            <input type="password" id="password" name="password" placeholder="contraseña" class="form-input"formControlName="password" ng-model-options="{ updateOn: 'blur'}" required/>
+        </div>
+
+        <div style="text-align: center;">
+            <button routerLink="/pantalla" class="formbold-btn w-full" style="margin-bottom: 3%;">Iniciar Sesión</button>
+            <a routerLink="/signup">No tengo cuenta</a>
+        </div>
+    </form>
+</div>
+
