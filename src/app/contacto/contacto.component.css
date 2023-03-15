@@ -4,3 +4,12 @@
     z-index: 997;
     padding: 15px 0;
 }
+
+.section-text{
+    text-align: center;
+}
+
+.texto-menor{
+    text-size-adjust: 9;
+}
+
