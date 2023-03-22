@@ -2,22 +2,31 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
-import {RegistrationComponent} from "./registration/registration.component";
 import {ReactiveFormsModule} from "@angular/forms";
-import { BoardComponent } from './board/board.component';
+import {PantallaComponent} from "./pantalla/pantalla.component";
+import {UserModule} from "./user/user.module";
+import {GameModule} from "./game/game.module";
+import {ErrorPageComponent} from "./error-page/error-page.component";
+import {ContactoComponent} from "./contacto/contacto.component";
+import {ReglasComponent} from "./reglas/reglas.component";
+import {NosotrosComponent} from "./nosotros/nosotros.component";
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
     HomeComponent,
-    RegistrationComponent,
-    BoardComponent
+    PantallaComponent,
+    ErrorPageComponent,
+    ContactoComponent,
+    NosotrosComponent,
+    ReglasComponent,
+    ContactoComponent
   ],
   imports: [
     BrowserModule,
+    UserModule,
+    GameModule,
     AppRoutingModule,
     ReactiveFormsModule,
   ],
