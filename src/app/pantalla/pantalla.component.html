@@ -1,5 +1,46 @@
-<br><br><br><br><br><br><br><br><br><br><br><br>
+<header id="cabecera" class="navegador">
+  <nav id="navegador" class="navegador">
+    <ul><a>HOME USUARIO</a></ul>
+  </nav> 
+</header>
 
+
+<header id="header" class="fixed-top">
+  <div>
+    <nav id="navbar" class="navbar">
+      <ul>
+        <li><a class="active">Inicio</a></li>
+        <!--<li><a routerLink="/reglas">Reglas del juego</a></li>-->
+        <li><a routerLink="/nosotros">Sobre nosotros</a></li>
+        <li><a routerLink="/contacto">Contacto</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<br><br><br><br><br>
+
+<div class="card-container" role="main">
+  <a class="card" rel="noopener" routerLink="/login">
+    <svg class="material-icons" width="24" height="24" viewBox="0 0 24 24"></svg>
+    <span><h4><b>Iniciar Sesión</b></h4></span>
+    <svg class="material-icons" width="24" height="24" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+  </a>
+  <a class="card" rel="noopener" routerLink="/signup">
+    <svg class="material-icons" width="24" height="24" viewBox="0 0 24 24"></svg>
+    <span><h4><b>Registrarse</b></h4></span>
+    <svg class="material-icons" width="24" height="24" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+  </a>
+  <a class="card" rel="noopener">
+    <svg class="material-icons" width="24" height="24" viewBox="0 0 24 24"></svg>
+    <span><h4><b>Jugar como invitado</b></h4></span>
+    <svg class="material-icons" width="24" height="24" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+  </a>
+</div>
+<div class="filas">
+  <label for="email" class="campo"> E-mail* </label>
+  <input type="email" id="email" name="email" placeholder="ejemplo@dominio.com" class="form-input" formControlName="username" maxlength = "30" ng-model-options="{ updateOn: 'blur'}" required/>
+</div>
+<br><br><br><br><br><br>
 <div class="card-container" role="main">
     <a class="card" rel="noopener" routerLink="">
       <svg class="material-icons" width="24" height="24" viewBox="0 0 24 24"></svg>
