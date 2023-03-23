@@ -9,9 +9,11 @@ import { NosotrosComponent } from './nosotros/nosotros.component';
 import { ContactoComponent } from './contacto/contacto.component';
 import {ErrorPageComponent} from "./error-page/error-page.component";
 import {BoardComponent} from "./game/board/board.component";
+import {ProprietyCardComponent} from "./game/propriety-card/propriety-card.component";
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
+  {path: 'test_card', component : ProprietyCardComponent},
   { path: 'signup', component: RegistrationComponent },
   { path: 'board', component: BoardComponent },
   { path: 'pantalla', component: PantallaComponent },
