@@ -11,6 +11,7 @@ import {ErrorPageComponent} from "./error-page/error-page.component";
 import {ContactoComponent} from "./contacto/contacto.component";
 import {ReglasComponent} from "./reglas/reglas.component";
 import {NosotrosComponent} from "./nosotros/nosotros.component";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import {NosotrosComponent} from "./nosotros/nosotros.component";
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     UserModule,
     GameModule,
     AppRoutingModule,
