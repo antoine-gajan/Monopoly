@@ -11,12 +11,12 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
   styleUrls: ['./registration.component.css']
 })
 export class RegistrationComponent implements OnInit{
-  form!: FormGroup; // Store the form
+  form: FormGroup; // Store the form
   loading = false; // If form send but not done
   submitted = false; // If form is sent
-  email: string | undefined; // Store the email
-  password: string | undefined; // Store password
-  verif_password: string | undefined; // Store the 2nd check of password
+  email: string; // Store the email
+  password: string; // Store password
+  verif_password: string; // Store the 2nd check of password
 
   constructor(
     private formBuilder: FormBuilder,
@@ -50,6 +50,7 @@ export class RegistrationComponent implements OnInit{
   }
 
   onSubmit(){
+    console.log(this.email);
     /// Submit the form
   }/*
   onSubmit() {

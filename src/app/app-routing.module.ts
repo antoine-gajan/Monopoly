@@ -14,8 +14,8 @@ import {LeaderboardComponent} from "./game/leaderboard/leaderboard.component";
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'test_card', component : ProprietyCardComponent},
-  { path: 'leaderboard', component : LeaderboardComponent},
+  { path: 'test_card', component : ProprietyCardComponent },
+  { path: 'leaderboard', component : LeaderboardComponent },
   { path: 'signup', component: RegistrationComponent },
   { path: 'board', component: BoardComponent },
   { path: 'pantalla', component: PantallaComponent },
