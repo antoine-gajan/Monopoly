@@ -3,6 +3,8 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
 import {Location} from "@angular/common";
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import {User} from "../user";
+import {AuthService} from "../../auth.service";
 
 
 @Component({
@@ -17,11 +19,13 @@ export class RegistrationComponent implements OnInit{
   email: string; // Store the email
   password: string; // Store password
   verif_password: string; // Store the 2nd check of password
+  user : User;
 
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private authService : AuthService
   ) {}
 
   ngOnInit() {
@@ -51,7 +55,11 @@ export class RegistrationComponent implements OnInit{
 
   onSubmit(){
     console.log(this.email);
-    /// Submit the form
+    console.log(this.password);
+    this.user = new User(this.email, this.password);
+    // Signup
+    this.authService.signup(this.user);
+
   }/*
   onSubmit() {
     if (this.p1 === this.p2) {
