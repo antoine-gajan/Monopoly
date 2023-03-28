@@ -105,7 +105,7 @@ h1, h2, h3, h4, h5, h6 {
 .community-chest-deck {
 	grid-column: 2 / 4;
 	grid-row: 2 / 4;
-	transform: rotate(135deg);
+	transform: rotate(0deg);
 	margin-bottom: 60px;
 	margin-right: 60px;
 }
@@ -113,7 +113,7 @@ h1, h2, h3, h4, h5, h6 {
 .chance-deck {
 	grid-column: 5 / 7;
 	grid-row: 5 / 7;
-	transform: rotate(315deg);
+	transform: rotate(0deg);
 	margin-top: 60px;
 	margin-left: 60px;
 }
@@ -164,7 +164,7 @@ h1, h2, h3, h4, h5, h6 {
 	grid-row: 2 / 11;
 
 	.container {
-		transform: translate(-50%, -50%) rotate(90deg);
+		transform: translate(-50%, -50%) rotate(0deg);
 	}
 }
 
@@ -173,7 +173,7 @@ h1, h2, h3, h4, h5, h6 {
 	grid-row: 1;
 
 	.container {
-		transform: rotate(180deg);
+		transform: rotate(0deg);
 	}
 }
 
@@ -182,7 +182,7 @@ h1, h2, h3, h4, h5, h6 {
 	grid-row: 2 / 11;
 
 	.container {
-		transform: translate(-50%, -50%) rotate(270deg);
+		transform: translate(-50%, -50%) rotate(0deg);
 	}
 }
 
