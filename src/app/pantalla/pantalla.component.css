@@ -1,86 +1,24 @@
-#cabecera{
+* {
+    font-family: "Inter", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#heather{
     background: #BFDBAE;
     box-shadow: 0px 0px 25px 0 rgba(0, 0, 0, 0.08);
     z-index: 997;
     padding: 15px 0;
 }
 
-.navegador, .navegador a{
-    text-align: center;
-    font-family: "Raleway", sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: #black;
-
-    /*display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-family: "Raleway", sans-serif;
-    
-    white-space: nowrap;
-    transition: 0.3s;
-    position: relative;*/
-}
-/*------------------------------------
- * NAVIGATION MENU
- *-----------------------------------*/
-.navbar, .navbar ul {
-    padding: 0;
-}
-  
-.navbar ul {
-    margin: 0;
+.imagen_logo_juego{
     display: flex;
-    list-style: none;
+    justify-content: center;
+    margin-top: 15px;
 }
-  
-.navbar li {
-    position: relative;
-    padding: 10px 0 10px 28px;
-}   
-  
-.navbar a,
-.navbar a:focus {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-family: "Raleway", sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    color: #888888;
-    white-space: nowrap;
-    transition: 0.3s;
-    position: relative;
-}
-  
-.navbar a i,
-.navbar a:focus i {
-    font-size: 12px;
-    line-height: 0;
-    margin-left: 5px;
-    align-items: center;
-}
-  
-.navbar>ul>li>a:before {
-    content: "";
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: -5px;
-    left: 0;
-    background-color: #f06809;
-    visibility: hidden;
-    width: 0px;
-    transition: all 0.3s ease-in-out 0s;
-}
-  
-.navbar a:hover:before, .navbar li:hover>a:before, .navbar .active:before {
-    visibility: visible;
-    width: 25px;
-}
-  
-.navbar a:hover, .navbar .active, .navbar .active:focus, .navbar li:hover>a {
-    color: #222222;
+.volver_boton{
+    height: 40px;
 }
 
 /*------------------------------------
@@ -117,7 +55,7 @@ h1, h2, h3, h4, h5, h6 {
     all: unset;
     border-radius: 4px;
     border: 1px solid #eee;
-    background-color: #aab2c7;
+    background-color: #f6ee02;
     height: 40px;
     width: 200px;
     margin: 0 8px 16px;
@@ -160,4 +98,40 @@ h1, h2, h3, h4, h5, h6 {
   }
 
 
+
+/*------------------------------------
+ * NAVIGATION MENU
+ *-----------------------------------*/
+
+ .navegador li {
+    padding: 10px 0 0 28px;
+  }   
   
+  .navegador a,
+  .navegador a:focus,
+  .navegador img{
+    display: flex;
+    font-weight: 600;
+    color: black;
+  }
+  
+
+  
+  
+  .navegador_derecha li {
+    padding: 10px 0 0 28px;
+  }   
+  .navegador_derecha a,
+  .navegador_derecha a:focus,
+  .navegador_derecha img{
+    display: flex;
+    font-weight: 600;
+    color: black;
+  }
+
+
+  
+
+
+
+

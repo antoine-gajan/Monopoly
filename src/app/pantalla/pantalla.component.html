@@ -1,65 +1,46 @@
-<header id="cabecera" class="navegador">
-  <nav id="navegador" class="navegador">
-    <ul><a>HOME USUARIO</a></ul>
-  </nav>
-</header>
-
-
 <header id="header" class="fixed-top">
-  <div>
-    <nav id="navbar" class="navbar">
-      <ul>
-        <li><a class="active">Inicio</a></li>
-        <li><a routerLink="/reglas">Reglas del juego</a></li>
-        <li><a routerLink="/nosotros">Sobre nosotros</a></li>
-        <li><a routerLink="/contacto">Contacto</a></li>
-      </ul>
-    </nav>
-  </div>
+    <div style="text-align: center;">
+        <h4><a style="color: #080808" routerLink="/">MONOPOLY VERSIÓN INFORMÁTICA</a></h4>
+      </div>
+    <div>
+        <nav id="navegador" class="navegador">
+            <ul><li><img src="../../../assets/images/voler_boton.png" routerLink="javascript:history.back()" queryParamsHandling="preserve" class="volver_boton"><a routerLink="javascript:history.back()" queryParamsHandling="preserve">volver</a></li> </ul>       
+        </nav>
+        <nav id="navegador_derecha" class="navegador_derecha">
+            <ul><li><img src="../../../assets/images/home_boton.png" routerLink="/" class="volver_boton"><a routerLink="/">Inicio</a></li> </ul>       
+        </nav>
+    </div>
+    <h2 style="text-align: center;">HOME USUARIO</h2>
+    <br>
 </header>
-<br><br><br><br><br>
 
+<div class="imagen_logo_juego">
+  <img src="../../assets/images/logo_juego.jpg">
+  </div>
 <div class="card-container" role="main">
-  <a class="card" rel="noopener" routerLink="/login">
-    <svg class="material-icons" width="24" height="24" viewBox="0 0 24 24"></svg>
-    <span><h4><b>Iniciar Sesión</b></h4></span>
-    <svg class="material-icons" width="24" height="24" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-  </a>
-  <a class="card" rel="noopener" routerLink="/signup">
-    <svg class="material-icons" width="24" height="24" viewBox="0 0 24 24"></svg>
-    <span><h4><b>Registrarse</b></h4></span>
-    <svg class="material-icons" width="24" height="24" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-  </a>
-  <a class="card" rel="noopener">
-    <svg class="material-icons" width="24" height="24" viewBox="0 0 24 24"></svg>
-    <span><h4><b>Jugar como invitado</b></h4></span>
-    <svg class="material-icons" width="24" height="24" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-  </a>
-</div>
-<div class="filas">
-  <label for="email" class="campo"> E-mail* </label>
-  <input type="email" id="email" name="email" placeholder="ejemplo@dominio.com" class="form-input" formControlName="username" maxlength = "30" ng-model-options="{ updateOn: 'blur'}" required/>
-</div>
-<br><br><br><br><br><br>
-<div class="card-container" role="main">
-    <a class="card" rel="noopener" routerLink="">
+    <div><a class="card" rel="noopener">
       <svg class="material-icons" width="24" height="24" viewBox="0 0 24 24"></svg>
       <span><h4><b>Crear una sala</b></h4></span>
       <svg class="material-icons" width="24" height="24" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
     </a>
-    <a class="card" rel="noopener" routerLink="">
+    <a class="card" rel="noopener">
       <svg class="material-icons" width="24" height="24" viewBox="0 0 24 24"></svg>
       <span><h4><b>Unirse a una sala</b></h4></span>
       <svg class="material-icons" width="24" height="24" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
     </a>
-    <a class="card" rel="noopener" routerLink="">
+    </div>
+    <div>
+    <a class="card" rel="noopener" routerLink="/reglas">
       <svg class="material-icons" width="24" height="24" viewBox="0 0 24 24"></svg>
       <span><h4><b>Reglas</b></h4></span>
       <svg class="material-icons" width="24" height="24" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
     </a>
-    <a class="card" rel="noopener" routerLink="">
+    <a class="card" rel="noopener">
       <svg class="material-icons" width="24" height="24" viewBox="0 0 24 24"></svg>
       <span><h4><b>Tienda</b></h4></span>
       <svg class="material-icons" width="24" height="24" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
     </a>
+    </div>
   </div>
+
+<br><br><br><br><br><br>

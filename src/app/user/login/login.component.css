@@ -1,3 +1,4 @@
+
 * {
   font-family: "Inter", sans-serif;
   margin: 0;
@@ -143,4 +144,37 @@ label {
 input,
 label {
   margin: 0.4rem 0;
+}
+
+
+/*------------------------------------
+ * NAVIGATION MENU
+ *-----------------------------------*/
+
+.navegador li {
+  padding: 10px 0 0 28px;
+}   
+
+.navegador a,
+.navegador a:focus,
+.navegador img{
+  display: flex;
+  font-weight: 600;
+  color: black;
+}
+
+.volver_boton{
+  height: 40px;
+}
+
+
+.navegador_derecha li {
+  padding: 10px 0 0 28px;
+}   
+.navegador_derecha a,
+.navegador_derecha a:focus,
+.navegador_derecha img{
+  display: flex;
+  font-weight: 600;
+  color: black;
 }

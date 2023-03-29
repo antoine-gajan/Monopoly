@@ -1,35 +1,50 @@
+<header id="header" class="fixed-top">
+    <div style="text-align: center;">
+        <h4><a style="color: #080808" routerLink="/">MONOPOLY VERSIÓN INFORMÁTICA</a></h4>
+      </div>
+    <div>
+        <nav id="navegador" class="navegador">
+            <ul><li><img src="../../../assets/images/voler_boton.png" routerLink="javascript:history.back()" queryParamsHandling="preserve" class="volver_boton"><a routerLink="javascript:history.back()" queryParamsHandling="preserve">volver</a></li> </ul>       
+        </nav>
+        <nav id="navegador_derecha" class="navegador_derecha">
+            <ul><li><img src="../../../assets/images/home_boton.png" routerLink="/" class="volver_boton"><a routerLink="/">Inicio</a></li> </ul>       
+        </nav>
+    </div>
+    <h1 style="text-align: center;">Crear cuenta</h1>
+    <br>
+</header>
 <div class="formulario">
     <form class="formulario" [formGroup] = "form" (ngSubmit)="onSubmit()">
         <div class="filas">
             <label for="email" class="campo"> Email* </label>
-            <input type="email" id="email" name="email" placeholder="example@domain.com" class="form-input" [(ngModel)]="email" formControlName="email" maxlength = "30" ng-model-options="{ updateOn: 'blur'}" required/>
+            <input type="email" id="email" name="email" placeholder="ejemplo@dominio.com" class="form-input" [(ngModel)]="email" formControlName="email" maxlength = "30" ng-model-options="{ updateOn: 'blur'}" required/>
         </div>
 
-        <div *ngIf="submitted && this.form.controls['username'].errors" class="alert">
+        <!--<div *ngIf="submitted && this.form.controls['username'].errors" class="alert">
             Username is required !
         </div>
-
+    -->
         <div class="filas">
-            <label for="password" class="campo"> Password* </label>
-            <input type="password" id="password" name="password" [(ngModel)]="password" placeholder="write your password" class="form-input"formControlName="password" ng-model-options="{ updateOn: 'blur'}" required/>
+            <label for="password" class="campo"> Contraseña* </label>
+            <input type="password" id="password" name="password" [(ngModel)]="password" placeholder="escribe la contraseña" class="form-input"formControlName="password" ng-model-options="{ updateOn: 'blur'}" required/>
         </div>
 
-        <div *ngIf="submitted && this.form.controls['password'].errors" class="alert">
+        <!--<div *ngIf="submitted && this.form.controls['password'].errors" class="alert">
             <div *ngIf="this.form.controls['password'].errors['required']">Password is required</div>
-        </div>
+        </div>-->
 
         <div class="filas">
-              <label for="verif_password" class="campo"> Repeat password* </label>
-              <input type="password" id="verif_password" name="verif_password" [(ngModel)]="verif_password" placeholder="Repeat your password" class="form-input"formControlName="verif_password" ng-model-options="{ updateOn: 'blur'}" required/>
+              <label for="verif_password" class="campo"> Repite la contraseña* </label>
+              <input type="password" id="verif_password" name="verif_password" [(ngModel)]="verif_password" placeholder="repite la contraseña" class="form-input"formControlName="verif_password" ng-model-options="{ updateOn: 'blur'}" required/>
         </div>
 
-      <div *ngIf="passwordMatchError" class = "alert">
+      <!--<div *ngIf="passwordMatchError" class = "alert">
             Password does not match !
-         </div>
+         </div>-->
 
         <div style="text-align: center;">
-            <button class="formbold-btn w-full" style="margin-bottom: 3%;">Submit</button>
-            <a routerLink="/login">I already have an account</a>
+            <button class="formbold-btn w-full" style="margin-bottom: 3%;">Crear cuenta</button>
+            <a routerLink="/login">Ya tengo una cuenta</a>
         </div>
     </form>
 </div>

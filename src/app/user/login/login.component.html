@@ -1,4 +1,22 @@
+<header id="header" class="fixed-top">
+    <div style="text-align: center;">
+        <h4><a style="color: #080808" routerLink="/">MONOPOLY VERSIÓN INFORMÁTICA</a></h4>
+      </div>
+    <div>
+        <nav id="navegador" class="navegador">
+            <ul><li><img src="../../../assets/images/voler_boton.png" routerLink="javascript:history.back()" queryParamsHandling="preserve" class="volver_boton"><a routerLink="javascript:history.back()" queryParamsHandling="preserve">volver</a></li> </ul>       
+        </nav>
+        <nav id="navegador_derecha" class="navegador_derecha">
+            <ul><li><img src="../../../assets/images/home_boton.png" routerLink="/" class="volver_boton"><a routerLink="/">Inicio</a></li> </ul>       
+        </nav>
+    </div>
+    <h1 style="text-align: center;">Inicio de sesión</h1>
+    <br>
+</header>
+
+
 <div class="formulario">
+    
     <form class="formulario" [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="filas">
             <label for="email" class="campo"> E-mail* </label>
@@ -7,7 +25,7 @@
 
         <div class="filas">
             <label for="password" class="campo"> Contraseña* </label>
-            <input [(ngModel)]="password" type="password" id="password" name="password" placeholder="contraseña" class="form-input"formControlName="password" required/>
+            <input [(ngModel)]="password" type="password" id="password" name="password" placeholder="escribe la contraseña" class="form-input"formControlName="password" required/>
         </div>
     </form>
     <div style="text-align: center;">

@@ -43,15 +43,15 @@ export class RegistrationComponent implements OnInit{
       Validators.required,
       Validators.minLength(6)
     ]),
-  }, CustomValidators.MatchValidator('password', 'verif_password'));
+  }/*, CustomValidators.MatchValidator('password', 'verif_password')*/);
   }
 
-  get passwordMatchError() {
+  /*get passwordMatchError() {
     return (
       this.form.getError('mismatch') &&
       (this.form.get('verif_password')?.touched || this.form.get('password')?.touched)
     );
-  }
+  }*/
 
   onSubmit(){
     console.log(this.email);
@@ -69,7 +69,7 @@ export class RegistrationComponent implements OnInit{
     }
   }*/
 }
-
+/*
 // Class with all custom validators for forms
 export class CustomValidators {
   static MatchValidator(source: string, target: string): ValidatorFn {
@@ -83,3 +83,4 @@ export class CustomValidators {
     };
   }
 }
+*/
