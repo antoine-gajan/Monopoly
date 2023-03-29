@@ -1,0 +1,41 @@
+.chance-card{
+  border: 2px black solid;
+  border-radius: 10px;
+  max-width : 350px;
+  max-height : 300px;
+  padding-top: 10px;
+  padding-right: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: black;
+}
+
+.title-card{
+  font-weight: bold;
+  font-size: 25px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.info-container{
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+}
+
+img{
+  display: block;
+  max-width:120px;
+  max-height:160px;
+  margin-left: 30px;
+  width: auto;
+  height: auto;
+}
+
+.info{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}

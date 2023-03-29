@@ -11,10 +11,14 @@ import {ErrorPageComponent} from "./error-page/error-page.component";
 import {BoardComponent} from "./game/board/board.component";
 import {ProprietyCardComponent} from "./game/propriety-card/propriety-card.component";
 import {LeaderboardComponent} from "./game/leaderboard/leaderboard.component";
+import {CommunityCardComponent} from "./game/community-card/community-card.component";
+import {ChanceCardComponent} from "./game/chance-card/chance-card.component";
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'test_card', component : ProprietyCardComponent },
+  { path: 'propriety_card', component : ProprietyCardComponent },
+  { path: 'chance_card', component : ChanceCardComponent },
+  { path: 'community_card', component : CommunityCardComponent },
   { path: 'leaderboard', component : LeaderboardComponent },
   { path: 'signup', component: RegistrationComponent },
   { path: 'board', component: BoardComponent },
