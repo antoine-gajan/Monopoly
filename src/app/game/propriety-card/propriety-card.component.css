@@ -3,33 +3,52 @@
   border-color: #080808;
   width: 18rem;
   padding: 10px 10px;
+  color: black;
 }
 
 .container-info{
   box-sizing: border-box;
   padding-top: 10px;
+  text-transform: uppercase;
 }
 
 .propriety-name{
   font-weight: bold;
   background-color: cyan;
+  padding: 10px 10px;
   text-align: center;
   border: 2px solid;
   border-color: #080808;
 }
 
+.coste{
+  text-align: center;
+  padding-bottom: 10px;
+  font-weight: bold;
+}
+
 .rent-info{
   padding: 5px 5px;
-  width: 65%;
+  width: 85%;
 }
 
 .price-info{
   padding: 5px 5px;
-  width: 35%;
+  width: 15%;
 }
 
 .box-info{
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
+}
+
+.space{
+  padding-left: 20px;
+}
+
+hr{
+  background-color: black;
+  height: 2px;
+  color: black;
 }
