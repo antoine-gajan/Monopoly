@@ -1,0 +1,100 @@
+* {
+    font-family: "Inter", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#heather{
+  background: #BFDBAE;
+  box-shadow: 0px 0px 25px 0 rgba(0, 0, 0, 0.08);
+  z-index: 997;
+  padding: 15px 0;
+}
+
+.titulo h2 {
+  font-size: 32px;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.volver_boton, .inicio_boton{
+    height: 40px;
+}
+
+section {
+  padding: 30px 300px;
+}
+
+.services .icon-box {
+  text-align: center;
+  padding: 70px 20px 80px 20px;
+  background: #fff;
+  box-shadow: 0px 0 35px 0 rgba(0, 0, 0, 0.08);
+}
+
+.services .icon-box h4 {
+  font-weight: 600;
+  margin: 10px 0 15px 0;
+  font-size: 22px;
+}
+
+.services .icon-box h4 a {
+  color: #222222;
+  transition: ease-in-out 0.3s;
+}
+
+.services .icon-box p {
+  line-height: 24px;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  height: 100vh; 
+  background-color: #f1f1f1;
+}
+
+
+label {
+  display: inline;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  padding-right: 10px; /* Ajusta el valor para agregar el espacio deseado */
+}
+
+.dinero{
+  padding: 10px 0.7px;
+}
+
+.jugadores{
+  padding: 10px 65px;
+}
+
+.dinero, .jugadores{
+  text-align: center;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  background: rgb(237, 235, 235);
+  font-size: 16px;
+  color: #6b7280;
+}
+
+.boton-jugar {
+  text-align: center;
+  font-size: 16px;
+  border-radius: 6px;
+  padding: 14px 32px;
+  margin-top: 9%;
+  border: none;
+  font-weight: 600;
+  background-color: #6a64f1;
+  color: white;
+  cursor: pointer;
+}

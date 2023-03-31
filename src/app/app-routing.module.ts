@@ -13,7 +13,9 @@ import {ProprietyCardComponent} from "./game/propriety-card/propriety-card.compo
 import {LeaderboardComponent} from "./game/leaderboard/leaderboard.component";
 import {CommunityCardComponent} from "./game/community-card/community-card.component";
 import {ChanceCardComponent} from "./game/chance-card/chance-card.component";
-
+import { CrearSalaComponent } from './crear_sala/crear_sala.component';
+import { UnirseSalaComponent } from './unirse_sala/unirse_sala.component';
+import { TiendaComponent } from './tienda/tienda.component';
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'propriety_card', component : ProprietyCardComponent },
@@ -27,6 +29,9 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'nosotros', component: NosotrosComponent },
   { path: 'contacto', component: ContactoComponent },
+  { path: 'crear_sala', component: CrearSalaComponent },
+  { path: 'unirse_sala', component: UnirseSalaComponent },
+  { path: 'tienda', component: TiendaComponent },
   { path: '', pathMatch: "full", redirectTo: '/home' },
   { path: '**', component: ErrorPageComponent }
 ];
