@@ -1,3 +1,19 @@
+#header {
+    background: #BFDBAE;
+    box-shadow: 0px 0px 25px 0 rgba(0, 0, 0, 0.08);
+    z-index: 997;
+    padding: 15px 0;
+}
+
+* {
+    font-family: "Inter", sans-serif;
+    padding: 0;
+}
+
+.volver_boton{
+    height: 40px;
+}
+
 // =================
 // TYPOGRAPHY
 // =================
@@ -60,15 +76,15 @@ h1, h2, h3, h4, h5, h6 {
 // LAYOUT
 // =================
 
-// Table and board
-
+/***********************TABLERO***********************/
 .table {
-	padding-left: 50px;
-	padding-right: 50px;
+	padding-left: 40px;
+	padding-right: 40px;
 }
 
+/***********************BOARD***********************/
 .board {
-  transform: scale(0.5);
+  transform: scale(0.45);
   transform-origin: left top;
 	display: grid;
 	grid-template-columns: 125px repeat(9, 80px) 125px;
@@ -81,6 +97,7 @@ h1, h2, h3, h4, h5, h6 {
 	border: 2px solid $black;
 }
 
+/***********************CENTER***********************/
 .center {
 	grid-column: 2 / 11;
 	grid-row: 2 / 11;
@@ -92,6 +109,7 @@ h1, h2, h3, h4, h5, h6 {
 	align-items: center;
 }
 
+/***********************TITLE***********************/
 .title {
 	grid-column: 1 / 9;
 	grid-row: 4;
@@ -100,6 +118,7 @@ h1, h2, h3, h4, h5, h6 {
 	letter-spacing: 12px;
 }
 
+/***********************COMUNITY CHECK DECK***********************/
 .community-chest-deck {
 	grid-column: 2 / 4;
 	grid-row: 2 / 4;
@@ -108,6 +127,7 @@ h1, h2, h3, h4, h5, h6 {
 	margin-right: 60px;
 }
 
+/***********************CHANCE DESK***********************/
 .chance-deck {
 	grid-column: 5 / 7;
 	grid-row: 5 / 7;
@@ -116,6 +136,7 @@ h1, h2, h3, h4, h5, h6 {
 	margin-left: 60px;
 }
 
+/***********************LABEL***********************/
 .label {
 	text-align: center;
 	font-weight: 500;
@@ -123,25 +144,25 @@ h1, h2, h3, h4, h5, h6 {
 	padding-bottom: 10px;
 }
 
+/***********************DECK***********************/
 .deck {
 	border: 2px dashed $black;
 	width: 160px;
 	height: 120px;
 }
 
-
-// Rows of spaces
-
+/***********************ROW***********************/
 .row {
 	display: grid;
 	grid-gap: 2px;
 }
 
+/***********************HORIZONTAL ROW***********************/
 .horizontal-row {
 	grid-template-columns: repeat(9, 80px);
 	grid-template-rows: 125px;
 }
-
+/***********************VERTICAL ROW***********************/
 .vertical-row {
 	grid-template-columns: 125px;
 	grid-template-rows: repeat(9, 80px);
@@ -151,12 +172,12 @@ h1, h2, h3, h4, h5, h6 {
 		left: 50%;
 	}
 }
-
+/***********************BOTTOM ROW***********************/
 .bottom-row {
 	grid-column: 2 / 11;
 	grid-row: 11;
 }
-
+/***********************LEFT ROW***********************/
 .left-row {
 	grid-column: 1;
 	grid-row: 2 / 11;
@@ -165,20 +186,18 @@ h1, h2, h3, h4, h5, h6 {
 		transform: translate(-50%, -50%) rotate(0deg);
 	}
 }
-
+/***********************TOP ROW***********************/
 .top-row {
 	grid-column: 2 / 11;
 	grid-row: 1;
-
 	.container {
 		transform: rotate(0deg);
 	}
 }
-
+/***********************RIGHT ROW***********************/
 .right-row {
 	grid-column: 11;
 	grid-row: 2 / 11;
-
 	.container {
 		transform: translate(-50%, -50%) rotate(0deg);
 	}
@@ -188,10 +207,7 @@ h1, h2, h3, h4, h5, h6 {
 // =================
 // SPACES
 // =================
-
-// Types of spaces
-
-.space {
+.space { //types of spaces
 	background: $board;
 	text-align: center;
 

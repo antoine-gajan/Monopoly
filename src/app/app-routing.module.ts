@@ -16,6 +16,7 @@ import {ChanceCardComponent} from "./game/chance-card/chance-card.component";
 import { CrearSalaComponent } from './crear_sala/crear_sala.component';
 import { UnirseSalaComponent } from './unirse_sala/unirse_sala.component';
 import { TiendaComponent } from './tienda/tienda.component';
+
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'propriety_card', component : ProprietyCardComponent },
