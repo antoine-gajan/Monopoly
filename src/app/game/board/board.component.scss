@@ -22,6 +22,7 @@ $green: #41994e;
 $dark-blue: #5a6dba;
 
 
+
 // =================
 // GLOBAL
 // =================
@@ -144,7 +145,7 @@ h1, h2, h3, h4, h5, h6 {
 .vertical-row {
 	grid-template-columns: 125px;
 	grid-template-rows: repeat(9, 80px);
-
+	
 	.container {
 		top: 50%;
 		left: 50%;
@@ -208,12 +209,43 @@ h1, h2, h3, h4, h5, h6 {
 	.instructions {
 		padding-left: 15px;
 		padding-right: 15px;
+		font-weight: bold;
+		align-self: center;
+	}
+
+	.name_izquierda {
+		font-weight: bold;
+	}
+
+	.name_derecha {
+		font-weight: bold;
+	}
+	.precio_izquierda{
+		font-size: 15px;
+		font-weight: 400;
+		padding-bottom: 35px;
+		font-weight: bold;
+	}
+	
+
+	.precio_derecha{
+		font-size: 15px;
+		font-weight: 400;
+		padding-bottom: 35px;
+		font-weight: bold;
 	}
 
 	.price {
 		font-size: 15px;
 		font-weight: 400;
 		padding-bottom: 5px;
+		font-weight: bold;
+	}
+
+	.logo_san_braulio{
+		align-self: center;
+		width: 40px;
+		height: 40px;
 	}
 }
 
@@ -240,10 +272,44 @@ h1, h2, h3, h4, h5, h6 {
 	}
 }
 
+.propiedad {
+	.color-bar {
+		height: 25px;
+		border-bottom: 2px solid $black;
+	}
+	.name {
+		padding-bottom: 30px;
+	}
+}
+
+.propiedad_fila_izquierda, .propiedad_fila_derecha {
+	.color-bar {
+		transform: rotate(90deg);
+		height: 25px;
+		position: relative;
+		top: 50px;
+	}
+}
+
+.propiedad_fila_izquierda {
+	.color-bar {
+		border-bottom: 2px solid $black;
+		position: relative;
+		left: 50px;
+	}
+}
+
+.propiedad_fila_derecha {
+	.color-bar {
+		border-top: 2px solid $black;
+		right: 50px;
+	}
+}
+
 .railroad {
 	.container {
 		justify-content: center;
-    font-size: 14px;
+    	font-size: 14px;
 	}
 
 	.drawing {
@@ -512,3 +578,8 @@ h1, h2, h3, h4, h5, h6 {
 	position: relative;
 	top: 5px;
 }
+
+
+
+/* -----------logo_san_braulio----------- */
+
