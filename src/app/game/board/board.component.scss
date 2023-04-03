@@ -166,7 +166,7 @@ h1, h2, h3, h4, h5, h6 {
 .vertical-row {
 	grid-template-columns: 125px;
 	grid-template-rows: repeat(9, 80px);
-	
+
 	.container {
 		top: 50%;
 		left: 50%;
@@ -242,7 +242,7 @@ h1, h2, h3, h4, h5, h6 {
 		padding-bottom: 35px;
 		font-weight: bold;
 	}
-	
+
 
 	.precio_derecha{
 		font-size: 15px;
@@ -260,8 +260,8 @@ h1, h2, h3, h4, h5, h6 {
 
 	.logo_san_braulio{
 		align-self: center;
-		width: 40px;
-		height: 40px;
+		width: 19px;
+		height: 8%;
 	}
 }
 
@@ -323,9 +323,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .railroad {
+
 	.container {
 		justify-content: center;
-    	font-size: 14px;
+    	font-size: 15px;
 	}
 
 	.drawing {
@@ -369,7 +370,7 @@ h1, h2, h3, h4, h5, h6 {
 
 	.container {
 		justify-content: center;
-		transform: rotate(315deg);
+
     font-size: 40px;
     font-weight: bold;
 	}
@@ -412,10 +413,10 @@ h1, h2, h3, h4, h5, h6 {
 	}
 
 	.just {
-		grid-column: 3;
+		grid-column: 2;
 		grid-row: 4;
-		transform: rotate(90deg);
-		padding-top: 5px;
+
+		padding-top: 10px;
 	}
 
 	.visiting {
@@ -465,11 +466,11 @@ h1, h2, h3, h4, h5, h6 {
 
 	.container {
 		justify-content: center;
-		transform: rotate(135deg);
 	}
 
 	.name {
-		font-size: 16px;
+		font-size: 20px;
+    height: 15px;
 	}
 
 	.drawing {
@@ -482,15 +483,16 @@ h1, h2, h3, h4, h5, h6 {
 
 .go-to-jail {
 	grid-column: 11;
-	grid-row: 1 / 1;
+	grid-row: 1 / 2;
+  position: relative;
 
 	.container {
 		justify-content: center;
-		transform: rotate(225deg);
 	}
 
 	.name {
-		font-size: 16px;
+		font-size: 20px;
+    height: 15px;
 	}
 
 	.drawing {
@@ -537,6 +539,7 @@ h1, h2, h3, h4, h5, h6 {
 .electric-company {
 	.drawing {
 		color: $yellow;
+
 	}
 }
 
