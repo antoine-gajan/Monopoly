@@ -230,14 +230,22 @@ h1, h2, h3, h4, h5, h6 {
 	}
 
 	.name_izquierda {
+		padding-left: 5px;
+		padding-right: 20px;
 		font-weight: bold;
+		align-self: center;
 	}
 
 	.name_derecha {
+		padding-left: 21px;
+		padding-right: 3px;
 		font-weight: bold;
+		align-self: center;
 	}
 	.precio_izquierda{
 		font-size: 15px;
+    padding-left: 6px;
+    padding-right: 20px;
 		font-weight: 400;
 		padding-bottom: 35px;
 		font-weight: bold;
@@ -246,6 +254,8 @@ h1, h2, h3, h4, h5, h6 {
 
 	.precio_derecha{
 		font-size: 15px;
+    padding-left: 25px;
+    padding-right: 3px;
 		font-weight: 400;
 		padding-bottom: 35px;
 		font-weight: bold;
@@ -369,8 +379,8 @@ h1, h2, h3, h4, h5, h6 {
 	position: relative;
 
 	.container {
-		justify-content: center;
-
+		padding-top: 6px;
+    padding-bottom: 40px;
     font-size: 40px;
     font-weight: bold;
 	}
@@ -504,11 +514,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .chance {
+
 	.container {
-		justify-content: center;
-    font-weight: bold;
-    font-size: 40px;
-    color: red;
+		justify-content: space-around;
 	}
 
 	.drawing {
@@ -598,6 +606,19 @@ h1, h2, h3, h4, h5, h6 {
 	top: 5px;
 }
 
+.arrow-left {
+    width: 40px;
+    height: 28px;
+    background-color: $red;
+
+    clip-path: polygon(100% 100%, 100% 0, 0 50%);
+}
+
+.triangle{
+  position: absolute;
+  top: 70%; left: 49%;
+  transform: translate(-50%, -50%);
+}
 
 
 /* -----------logo_san_braulio----------- */
