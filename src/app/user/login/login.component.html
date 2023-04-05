@@ -4,23 +4,18 @@
         <h4><a style="color: #080808" routerLink="/">MONOPOLY VERSIÓN INFORMÁTICA</a></h4>
       <img class="home_boton" src="../../../assets/images/home_boton.png" routerLink="/" class="volver_boton">
   </div>
-  <br>
-  <h1 style="text-align: center;">Inicio de sesión</h1>
 </header>
-<div class="formulario">
-    <form class="formulario" [formGroup]="form" (ngSubmit)="onSubmit()">
-        <div class="filas">
-            <label for="email" class="campo"> E-mail* </label>
-            <input [(ngModel)]="username" type="email" id="email" name="email" placeholder="ejemplo@dominio.com" class="form-input" formControlName="username" maxlength = "30" required/>
-        </div>
 
-        <div class="filas">
-            <label for="password" class="campo"> Contraseña* </label>
-            <input [(ngModel)]="password" type="password" id="password" name="password" placeholder="escribe la contraseña" class="form-input"formControlName="password" required/>
-        </div>
-    </form>
-    <div style="text-align: center;">
-        <button routerLink="/pantalla" class="formbold-btn w-full" style="margin-bottom: 3%;">Iniciar Sesión</button>
-        <a routerLink="/signup">No tengo cuenta</a>
+<form class="formulario-login">
+  <h1>Iniciar sesión</h1><br><br>
+  <div class="filas">
+    <label for="password" class="campo"> Nombre de usuario* </label>
+    <input type="text" id="username" name="username" placeholder="nombre de usuario" class="form-input" [(ngModel)]="username"  required/>
     </div>
-</div>
+  <div class="filas">
+    <label for="password" class="campo"> Contraseña* </label>
+    <input type="password" name="password" placeholder="escribe la contraseña" class="form-input" [(ngModel)]="password" required/>
+    </div>
+  <button class="boton" type="submit" (click)="login()">Iniciar sesión</button>
+</form>
+

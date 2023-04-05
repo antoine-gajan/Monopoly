@@ -10,16 +10,10 @@
     padding: 0;
 }
 
-.volver_boton{
-    height: 40px;
-}
-
 // =================
 // TYPOGRAPHY
 // =================
-
 $body-font: 'Oswald', sans-serif;
-
 
 // =================
 // COLORS
@@ -37,8 +31,6 @@ $yellow: #ffed20;
 $green: #41994e;
 $dark-blue: #5a6dba;
 
-
-
 // =================
 // GLOBAL
 // =================
@@ -47,21 +39,11 @@ $dark-blue: #5a6dba;
 	box-sizing: border-box;
 }
 
-body {
-	font-family: $body-font;
-  font-weight: 400;
-  font-size: 10px;
-  color: $black;
-  text-transform: uppercase;
-}
-
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
 }
 
-
 // Property colors
-
 .dark-purple { background: $dark-purple; }
 .light-blue  { background: $light-blue; }
 .purple      { background: $purple; }
@@ -70,7 +52,6 @@ h1, h2, h3, h4, h5, h6 {
 .yellow      { background: $yellow; }
 .green       { background: $green; }
 .dark-blue   { background: $dark-blue; }
-
 
 // =================
 // LAYOUT
@@ -84,8 +65,8 @@ h1, h2, h3, h4, h5, h6 {
 
 /***********************BOARD***********************/
 .board {
-  transform: scale(0.45);
-  transform-origin: left top;
+  	transform: scale(0.45);
+  	transform-origin: left top;
 	display: grid;
 	grid-template-columns: 125px repeat(9, 80px) 125px;
 	grid-template-rows: 125px repeat(9, 80px) 125px;
@@ -203,7 +184,6 @@ h1, h2, h3, h4, h5, h6 {
 	}
 }
 
-
 // =================
 // SPACES
 // =================
@@ -236,6 +216,12 @@ h1, h2, h3, h4, h5, h6 {
 		align-self: center;
 	}
 
+	.name_arriba {
+		padding-top: 30%;
+		font-weight: bold;
+		align-self: center;
+	}
+
 	.name_derecha {
 		padding-left: 21px;
 		padding-right: 3px;
@@ -244,18 +230,17 @@ h1, h2, h3, h4, h5, h6 {
 	}
 	.precio_izquierda{
 		font-size: 15px;
-    padding-left: 6px;
-    padding-right: 20px;
+    	padding-left: 6px;
+    	padding-right: 20px;
 		font-weight: 400;
 		padding-bottom: 35px;
 		font-weight: bold;
 	}
 
-
 	.precio_derecha{
 		font-size: 15px;
-    padding-left: 25px;
-    padding-right: 3px;
+    	padding-left: 25px;
+    	padding-right: 3px;
 		font-weight: 400;
 		padding-bottom: 35px;
 		font-weight: bold;
@@ -265,6 +250,13 @@ h1, h2, h3, h4, h5, h6 {
 		font-size: 15px;
 		font-weight: 400;
 		padding-bottom: 5px;
+		font-weight: bold;
+	}
+
+	.precio_arriba {
+		font-size: 15px;
+		font-weight: 400;
+		padding-bottom: 35px;
 		font-weight: bold;
 	}
 
@@ -297,6 +289,24 @@ h1, h2, h3, h4, h5, h6 {
 		padding-bottom: 50px;
 	}
 }
+
+.property_fila_arriba {
+	
+	.color-bar {
+		height: 25px;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		position: fixed;
+		border-top: 2px solid $black;
+	}
+
+	.name {
+		padding-top: 50px;
+	}
+}
+
+
 
 .propiedad {
 	.color-bar {
@@ -333,7 +343,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .railroad {
-
 	.container {
 		justify-content: center;
     	font-size: 15px;
@@ -620,6 +629,28 @@ h1, h2, h3, h4, h5, h6 {
   transform: translate(-50%, -50%);
 }
 
+.panel {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  text-align: right;
+}
 
-/* -----------logo_san_braulio----------- */
 
+
+.volver_boton, .inicio_boton{
+    height: 40px;
+}
+
+section {
+  padding: 30px 300px;
+}
+
+.services{
+	position: absolute;
+    top: 50%;
+    right: 0px;
+    transform: translateY(-50%);
+    text-align: right;
+	width: 100%;
+}
