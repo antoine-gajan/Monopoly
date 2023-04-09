@@ -5,46 +5,7 @@
       <img class="home_boton" src="../../../assets/images/home_boton.png" routerLink="/" class="volver_boton">
   </div>
   <br>
-  <h1 style="text-align: center;">Crear cuenta</h1>
 </header>
-<!--
-<div class="formulario">
-    <form class="formulario">
-        <div class="filas">
-            <label for="email" class="campo"> Email* </label>
-            <input type="email" id="email" name="email" placeholder="ejemplo@dominio.com" class="form-input" formControlName="email" maxlength = "30" ng-model-options="{ updateOn: 'blur'}" required/>
-        </div>
-
-        <--<div *ngIf="submitted && this.form.controls['username'].errors" class="alert">
-            Username is required !
-        </div>
-    --
-        <div class="filas">
-            <label for="password" class="campo"> Contraseña* </label>
-            <input type="password" id="password" name="password" placeholder="escribe la contraseña" class="form-input"formControlName="password" ng-model-options="{ updateOn: 'blur'}" required/>
-        </div>
-
-        <!-<div *ngIf="submitted && this.form.controls['password'].errors" class="alert">
-            <div *ngIf="this.form.controls['password'].errors['required']">Password is required</div>
-        </div>--
-
-        <div class="filas">
-              <label for="verif_password" class="campo"> Repite la contraseña* </label>
-              <input type="password" id="verif_password" name="verif_password" placeholder="repite la contraseña" class="form-input"formControlName="verif_password" ng-model-options="{ updateOn: 'blur'}" required/>
-        </div>
-
-      <--<div *ngIf="passwordMatchError" class = "alert">
-            Password does not match !
-         </div>--
-
-        <div style="text-align: center;">
-            <button class="formbold-btn w-full" style="margin-bottom: 3%;">Crear cuenta</button>
-            <a routerLink="/login">Ya tengo una cuenta</a>
-        </div>
-    </form>
-</div>-->
-
-
 <form class="formulario-login">
     <h1>Crear cuenta</h1><br><br>
     <div class="filas">
@@ -64,8 +25,10 @@
         <label for="confirm_password" class="campo"> Repita la contraseña* </label>
         <input type="password" name="confirm_password" placeholder="repita la contraseña" class="form-input" [(ngModel)]="confirm_password" required/>
     </div>
-    
-    <button class="boton" type="submit" (click)="registro()">Iniciar sesión</button>
-  </form>
+    <button class="boton" type="submit" (click)="registro()">Crear cuenta</button>
+    <div class="link">
+        <a routerLink="/signup"><p>No tengo cuenta</p></a>
+      </div>
+</form>
 
 
