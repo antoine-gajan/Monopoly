@@ -62,7 +62,7 @@ h1, h2, h3, h4, h5, h6 {
 	padding-left: 40px;
 	padding-right: 40px;
   float:left;
-  width: 45%;
+  width: 40%;
 }
 
 /***********************BOARD***********************/
@@ -639,19 +639,23 @@ h1, h2, h3, h4, h5, h6 {
 .main-container{
   width: 100%;
   height: 497px;
-  overflow: hidden;
+}
+
+.main-container:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 .right-container{
-  width: 100%;
+  width: 45%;
   padding: 20px;
+  float: left;
 }
 
 .info-partida{
-  width: 50%;
   border : 2px solid black;
   padding: 30px;
-  float: right;
 }
 
 .id-partida{
@@ -698,8 +702,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .dice-container{
   width: 10%;
-  // Center all elements
+  margin: 10px;
   display: flex;
+  float: left;
   justify-content: center;
   align-items: center;
   flex-direction: column;
@@ -719,6 +724,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .dice{
-  border: 1px solid black;
-  padding: 10px;
+  display: block;
+  max-width:50px;
+  max-height:50px;
+  width: auto;
+  height: auto;
 }
