@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-cambiar_correo_usuario',
@@ -7,4 +8,12 @@ import {Component, OnInit} from '@angular/core';
 })
 
 export class CambiarCorreoComponent {
+  email: string;
+  constructor( public userService: UserService
+  ) {}
+  ngOnInit(): void {}
+  guardar_nuevo_correo(){
+    const user = {username: this.email};
+    this.userService.guardar_nuevo_correo(user);
+  }
 }

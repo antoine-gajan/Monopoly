@@ -5,17 +5,18 @@
     <img class="home_boton" src="../../../assets/images/home_boton.png" routerLink="/" class="volver_boton">
   </div>
   <div style="text-align: center;">
-    <h4><a style="color: #080808">Cambio nombre usuario</a></h4>
+    <h4><a style="color: #080808">Eliminar usuario</a></h4>
   </div>
 </header>
 
 <form>
-  <h5> Introduzca el nuevo nombre del usuario </h5>
-  <div class="formulario-nombre-usuario" >
-    <input type="text" id="new_username" name="new_username" placeholder="nombre de usuario" class="formulario-nombre-usuario-input" [(ngModel)]="new_username"  required/>
+  <h5>¿Está seguro que desea eliminar su cuenta?</h5>
+  <div>
+    <button class="boton" type="submit">Sí</button>
+    <button class="boton" type="submit">No</button>
   </div>
   <br><br><br>
-  <button class="boton" type="submit" (click)="guardar_new_username()" routerLink="/ajustes_usuario">Guardar</button>
+  <button class="boton" type="submit" (click)="onDeleteUser()" routerLink="/">Guardar</button>
 
 </form>
 <br><br><br><br><br><br>

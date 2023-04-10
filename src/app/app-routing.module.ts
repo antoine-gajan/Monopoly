@@ -21,6 +21,7 @@ import { AjustesUsuarioComponent } from './user/ajustes_usuario/ajustes_usuario.
 import { CambiarUsernameComponent } from './user/cambiar_nombre_usuario/cambiar_nombre_usuario.component';
 import { CambiarCorreoComponent } from './user/cambiar_correo_usuario/cambiar_correo_usuario.component';
 import { CambiarContraseñaComponent } from './user/cambiar_contraseña_usuario/cambiar_contraseña_usuario.component';
+import { DeleteUserComponent } from './user/delete_user/delete_user.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
