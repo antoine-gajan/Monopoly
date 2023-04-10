@@ -8,23 +8,27 @@ import { Component } from '@angular/core';
 export class BoardComponent {
   dices: Number[] = [];
   position_player: Number = 0;
-  id_player: Number = 0;
+  current_player: Number = 0;
 
   play(): void{
-    // Function to play the game
-    // Roll dices
-    this.roll_dices();
-    // Update player position
-    this.update_position(this.id_player, this.position_player, this.dices);
-    /// TODO : Verify is the player can buy the property and ask to buy it
-    /// TODO : If dices is double, play again
-    if (this.dices[0] == this.dices[1]) {
-      this.play();
-    }
+    this.play_turn_player(this.current_player);
   }
 
   play_turn_player(id_player: Number): void{
-
+    // Function to play the turn of a player
+    // Roll dices
+    this.roll_dices();
+    // Update player position
+    this.update_position(this.current_player, this.position_player, this.dices);
+    /// TODO : Verify is the player can buy the property and ask to buy it
+    /// TODO : If dices is double, play again
+    if (this.dices[0] == this.dices[1]) {
+      this.play_turn_player(this.current_player);
+    }
+    else{
+      // Next player
+      //this.current_player = +this.current_player + 1;
+    }
   }
   roll_dices(): void{
     // Function to roll dices
