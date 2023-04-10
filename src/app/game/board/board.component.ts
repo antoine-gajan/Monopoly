@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { GameService} from "../game.service";
 
 @Component({
   selector: 'app-board',
@@ -10,6 +11,8 @@ export class BoardComponent {
   position_player: Number = 0;
   current_player: Number = 0;
 
+  constructor(private gameService: GameService) { }
+
   play(): void{
     this.play_turn_player(this.current_player);
   }
@@ -17,6 +20,10 @@ export class BoardComponent {
   play_turn_player(id_player: Number): void{
     // Function to play the turn of a player
     // Roll dices
+    //this.gameService.roll_dices("antoine",0).subscribe((data: any) => {
+      //console.log(data.json());
+    //});
+
     this.roll_dices();
     // Update player position
     this.update_position(this.current_player, this.position_player, this.dices);
