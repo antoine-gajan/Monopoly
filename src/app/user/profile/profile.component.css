@@ -8,3 +8,84 @@ background: -webkit-linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgb
 /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 background: linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1))
 }
+
+.logo_ajustes{
+text-align: right;
+align-items: right;
+align-self: right;
+margin-right: 0%;
+}
+
+* {
+    font-family: "Inter", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .campo{
+    display: block;
+    font-weight: 500;
+    font-size: 16px;
+    margin-top: 10px;
+  }
+  
+  .filas{
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    font: 1rem 'Fira Sans', sans-serif;
+  }
+  
+  input,
+  label {
+    margin: 0.4rem 0;
+  }
+  
+  .volver_boton{
+    height: 40px;
+  }
+  
+  .boton{
+    padding: 2rem 3rem;
+    margin: auto;
+    border-radius: 2.5rem;
+    box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #ffffff;
+    color: black;
+    text-transform: uppercase;
+    border: none;
+    font-weight: bold;
+    background-color: #bcd8c1;
+    display: block;
+    cursor: pointer;
+  }
+  
+  .formulario-login{
+    max-width: 60%;
+    margin: 0px auto;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 2rem 3rem;
+    border-radius: 2.5rem;
+    background-color: #ecf0f3;
+    box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #ffffff;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .formulario-login input {
+    display: block;
+    margin: 2rem 0;
+    width: 100%;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    border: none;
+    box-shadow: inset -5px -5px 15px rgba(255, 255, 255, 0.8), inset 5px 5px 10px rgba(0, 0, 0, 0.1);
+    background: #ebf5fc;
+  }
+  
+  .link{
+    margin-top: 6px;
+    text-align: center;
+  }

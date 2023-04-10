@@ -16,6 +16,11 @@ import {ChanceCardComponent} from "./card/chance-card/chance-card.component";
 import { CrearSalaComponent } from './crear_sala/crear_sala.component';
 import { UnirseSalaComponent } from './unirse_sala/unirse_sala.component';
 import { TiendaComponent } from './tienda/tienda.component';
+import { ProfileComponent } from './user/profile/profile.component';
+import { AjustesUsuarioComponent } from './user/ajustes_usuario/ajustes_usuario.component';
+import { CambiarUsernameComponent } from './user/cambiar_nombre_usuario/cambiar_nombre_usuario.component';
+import { CambiarCorreoComponent } from './user/cambiar_correo_usuario/cambiar_correo_usuario.component';
+import { CambiarContraseñaComponent } from './user/cambiar_contraseña_usuario/cambiar_contraseña_usuario.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -33,6 +38,11 @@ const routes: Routes = [
   { path: 'crear_sala', component: CrearSalaComponent },
   { path: 'unirse_sala', component: UnirseSalaComponent },
   { path: 'tienda', component: TiendaComponent },
+  { path: 'profile', component: ProfileComponent },
+  { path: 'ajustes_usuario', component: AjustesUsuarioComponent },
+  { path: 'cambiar_username', component: CambiarUsernameComponent},
+  { path: 'cambiar_correo', component: CambiarCorreoComponent},
+  { path: 'cambiar_contraseña', component: CambiarContraseñaComponent},
   { path: '', pathMatch: "full", redirectTo: '/home' },
   { path: '**', component: ErrorPageComponent }
 ];
