@@ -16,9 +16,10 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './user/login/login.component';
 import { RegistrationComponent } from './user/registration/registration.component';
+import {AjustesUsuarioComponent} from "./user/ajustes_usuario/ajustes_usuario.component";
 
 @NgModule({
-  declarations: [ 
+  declarations: [
     LoginComponent,
     RegistrationComponent,
     AppComponent,
@@ -28,8 +29,9 @@ import { RegistrationComponent } from './user/registration/registration.componen
     ContactoComponent,
     NosotrosComponent,
     ReglasComponent,
-    ContactoComponent],
-  imports: [ 
+    ContactoComponent,
+    AjustesUsuarioComponent],
+  imports: [
     FormsModule,
     BrowserModule,
     HttpClientModule,
@@ -37,10 +39,10 @@ import { RegistrationComponent } from './user/registration/registration.componen
     GameModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    RouterModule],//.forRoot(ROUTES), 
+    RouterModule],//.forRoot(ROUTES),
     //routing],
   providers: [],
-  bootstrap: [AppComponent] 
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
 
