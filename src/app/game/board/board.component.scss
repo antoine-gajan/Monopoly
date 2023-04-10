@@ -62,7 +62,7 @@ h1, h2, h3, h4, h5, h6 {
 	padding-left: 40px;
 	padding-right: 40px;
   float:left;
-  width: 50%;
+  width: 45%;
 }
 
 /***********************BOARD***********************/
@@ -638,10 +638,13 @@ h1, h2, h3, h4, h5, h6 {
 
 .main-container{
   width: 100%;
+  height: 497px;
+  overflow: hidden;
 }
 
 .right-container{
   width: 100%;
+  padding: 20px;
 }
 
 .info-partida{
@@ -688,4 +691,34 @@ h1, h2, h3, h4, h5, h6 {
 .info-otros-jugadores{
   padding: 10px;
   margin-bottom: 10px;
+}
+
+/*====================*/
+/*  CSS FOR THE DICE  */
+
+.dice-container{
+  width: 10%;
+  // Center all elements
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.btn-roll-dice{
+  background-color: transparent;
+  border: 1px solid black;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.dices-values{
+  display: flex;
+}
+
+.dice{
+  border: 1px solid black;
+  padding: 10px;
 }

@@ -28,7 +28,7 @@ export class RegistrationComponent implements OnInit{
     const user = {username: this.username, email: this.email, password: this.password, confirm_password: this.confirm_password};
     console.log(user);
     this.userService.registro(user);
-    
+
   }
 
 }

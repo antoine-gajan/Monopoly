@@ -345,3 +345,12 @@
   </div>
 </div>
 <div style="clear:both"></div>
+
+<div class="dice-container">
+  <div class="dices-values" *ngIf="dices.length > 0">
+    <div class="dice">{{dices[0]}}</div>
+    <div class="dice">{{dices[1]}}</div>
+  </div>
+  <button class="btn-roll-dice" id="tirar-dados" (click)="roll_dices()">Tirar dados</button>
+</div>
+
