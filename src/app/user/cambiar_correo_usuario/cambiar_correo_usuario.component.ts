@@ -16,7 +16,7 @@ export class CambiarCorreoComponent {
   }
   ngOnInit(): void {}
   guardar_nuevo_correo(){
-    const user = {username: this.userService.getUsername(), email: this.userService.getEmail()};
+    const user = {username: this.username, email: this.email};
     console.log(user);
     this.userService.guardar_nuevo_correo(user);
   }

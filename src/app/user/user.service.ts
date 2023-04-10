@@ -106,6 +106,7 @@ export class UserService {
                     .subscribe(
                       (response) => {
                         console.log(response.status);
+                        this.username = user.newusername;
                         this.router.navigateByUrl('/ajustes_usuario');
                       },
                       (error) => {
