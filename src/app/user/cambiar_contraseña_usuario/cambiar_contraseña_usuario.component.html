@@ -15,17 +15,17 @@
   <h5> Introduzca la contraseña nueva </h5>
   <br>
   <div class="formulario-nombre-usuario" >
-    <input type="password" placeholder="contraseña" class="formulario-nombre-usuario-input" required/>
+    <input type="password" placeholder="contraseña" class="formulario-nombre-usuario-input" [(ngModel)]="password" required/>
   </div>
 
   <br><br>
   <h5> Repita la contraseña</h5>
   <br>
   <div class="formulario-nombre-usuario" >
-    <input type="password" placeholder="repita la contraseña" class="formulario-nombre-usuario-input" required/>
+    <input type="password" placeholder="repita la contraseña" class="formulario-nombre-usuario-input" [(ngModel)]="confirm_password" required/>
   </div>
   <br><br>
-  <button class="boton" type="submit">Guardar</button>
+  <button class="boton" type="submit" (click)="guardar_cambio_password()" >Guardar</button>
 
 </form>
 <br>

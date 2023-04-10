@@ -39,4 +39,59 @@ export class UserService {
                     );
   }
 
+  guardar_new_username(user: any){
+    console.log(user);
+    return this.http.put( 'http://nerks.net:7003/users/updateUsername', user, {responseType: 'text', observe: 'response'})
+                    .subscribe(
+                      (response) => {
+                        console.log(response.status);
+                          this.router.navigateByUrl('/pantalla');
+                      },
+                      (error) => {
+                        console.log(error);
+                      }
+                    );
+  }
+
+  guardar_nuevo_correo(user: any){
+    console.log(user);
+    return this.http.put('http://nerks.net:7003/users/updateCorreo', user, {responseType: 'text', observe: 'response'})
+                    .subscribe(
+                      (response) => {
+                        console.log(response.status);
+                          this.router.navigateByUrl('/pantalla');
+                      },
+                      (error) => {
+                        console.log(error);
+                      }
+                    );
+  }
+
+  guardar_cambio_password(user: any){
+    console.log(user);
+    return this.http.put('http://nerks.net:7003/users/updatePassword', user, {responseType: 'text', observe: 'response'})
+                    .subscribe(
+                      (response) => {
+                        console.log(response.status);
+                          this.router.navigateByUrl('/pantalla');
+                      },
+                      (error) => {
+                        console.log(error);
+                      }
+                    );
+  }
+
+  onDeleteUser(user: any){
+    console.log(user);
+    return this.http.delete('http://nerks.net:7003/users/delete', user)
+                    .subscribe(
+                      (response) => {
+                        //console.log(response.status);
+                          this.router.navigateByUrl('/pantalla');
+                      },
+                      (error) => {
+                        console.log(error);
+                      }
+                    );
+  }
  }

@@ -17,6 +17,10 @@ import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './user/login/login.component';
 import { RegistrationComponent } from './user/registration/registration.component';
 import {AjustesUsuarioComponent} from "./user/ajustes_usuario/ajustes_usuario.component";
+import { CambiarContraseñaComponent } from './user/cambiar_contraseña_usuario/cambiar_contraseña_usuario.component';
+import { CambiarCorreoComponent } from './user/cambiar_correo_usuario/cambiar_correo_usuario.component';
+import { CambiarUsernameComponent } from './user/cambiar_nombre_usuario/cambiar_nombre_usuario.component';
+import { DeleteUserComponent } from './user/delete_user/delete_user.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +34,12 @@ import {AjustesUsuarioComponent} from "./user/ajustes_usuario/ajustes_usuario.co
     NosotrosComponent,
     ReglasComponent,
     ContactoComponent,
-    AjustesUsuarioComponent],
+    AjustesUsuarioComponent, 
+    CambiarContraseñaComponent,
+    CambiarCorreoComponent,
+    CambiarUsernameComponent,
+    DeleteUserComponent
+  ],
   imports: [
     FormsModule,
     BrowserModule,

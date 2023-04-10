@@ -15,10 +15,12 @@
 
   <h5> Introduzca el nuevo correo del usuario </h5>
   <div class="formulario-nombre-usuario" >
-    <input placeholder="nuevo correo electrónnico" class="formulario-nombre-usuario-input" required/>
+    <!--<input placeholder="nuevo correo electrónnico" class="formulario-nombre-usuario-input" required/>-->
+    <input type="text" id="email" name="email" placeholder="nuevo correo electrónico" class="formulario-nombre-usuario-input" [(ngModel)]="email"  required/>
+  
   </div>
   <br><br>
-  <button class="boton" type="submit" routerLink="/ajustes_usuario">Guardar</button>
+  <button class="boton" type="submit" routerLink="/ajustes_usuario" (click)="guardar_nuevo_correo()">Guardar</button>
 
 </form>
 <br><br>
