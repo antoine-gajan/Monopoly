@@ -8,12 +8,16 @@ import { UserService } from '../user.service';
 })
 
 export class CambiarCorreoComponent {
+  username: string;
   email: string;
-  constructor( public userService: UserService
-  ) {}
+  constructor( public userService: UserService){
+    this.username = userService.getUsername();
+    this.email = userService.getEmail();
+  }
   ngOnInit(): void {}
   guardar_nuevo_correo(){
-    const user = {username: this.email};
+    const user = {username: this.userService.getUsername(), email: this.userService.getEmail()};
+    console.log(user);
     this.userService.guardar_nuevo_correo(user);
   }
 }

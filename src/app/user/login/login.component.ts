@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit{
   //submitted = false; // If form is sent
   username: string;
   password: string;
-  constructor( public userService: UserService
+  constructor( public userService: UserService, private router: Router
     /*private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private location: Location*/
@@ -46,6 +46,8 @@ export class LoginComponent implements OnInit{
   //}
 
   login(){
+    this.userService.setUsername(this.username);
+    //this.router.navigate(['/pantalla', { username: this.username }]);
     console.log(this.username, this.password);
     const user = {username: this.username, password: this.password};
     console.log(user);

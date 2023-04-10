@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-ajustes_usuario',
@@ -9,5 +10,8 @@ import { ActivatedRoute } from '@angular/router';
 })
 
 export class AjustesUsuarioComponent {
-  
+  username: string;
+  constructor(private userService: UserService) {
+    this.username = userService.getUsername();
+  }
 }

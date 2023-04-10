@@ -21,6 +21,7 @@ import { CambiarContraseñaComponent } from './user/cambiar_contraseña_usuario/
 import { CambiarCorreoComponent } from './user/cambiar_correo_usuario/cambiar_correo_usuario.component';
 import { CambiarUsernameComponent } from './user/cambiar_nombre_usuario/cambiar_nombre_usuario.component';
 import { DeleteUserComponent } from './user/delete_user/delete_user.component';
+import { UserService } from './user/user.service';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,7 @@ import { DeleteUserComponent } from './user/delete_user/delete_user.component';
     ReactiveFormsModule,
     RouterModule],//.forRoot(ROUTES),
     //routing],
-  providers: [],
+  providers: [UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
