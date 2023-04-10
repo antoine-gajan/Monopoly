@@ -7,6 +7,25 @@ import { Component } from '@angular/core';
 })
 export class BoardComponent {
   dices: Number[] = [];
+  position_player: Number = 0;
+  id_player: Number = 0;
+
+  play(): void{
+    // Function to play the game
+    // Roll dices
+    this.roll_dices();
+    // Update player position
+    this.update_position(this.id_player, this.position_player, this.dices);
+    /// TODO : Verify is the player can buy the property and ask to buy it
+    /// TODO : If dices is double, play again
+    if (this.dices[0] == this.dices[1]) {
+      this.play();
+    }
+  }
+
+  play_turn_player(id_player: Number): void{
+
+  }
   roll_dices(): void{
     // Function to roll dices
     let dices: Number[] = [];
@@ -24,8 +43,11 @@ export class BoardComponent {
   }
 
   convert_position_to_number(x: Number, y: Number): Number{
-    // Function to convert position (x, y) to number between 1 and 39
-    if (x == 0){
+    // Function to convert position (x, y) to number between 0 and 39
+    if (x == 10 && y == 10) {
+      return 0;
+    }
+    else if (x == 0){
       return +20 + +y;
     }
     else if (x == 10){
@@ -43,16 +65,40 @@ export class BoardComponent {
     }
   }
 
-  display_position(x: Number, y: Number): void{
+  add_position(id_player : Number, id_property : Number): void{
     // Function to display position (x, y) in the board
-    let position = this.convert_position_to_number(x, y);
     // Get the property of the element with id = position
-    let position_element = document.getElementById(position.toString());
-    if (position_element != null){
+    let property = document.getElementById(id_property.toString());
+    if (property != null){
+      let container_property = property.getElementsByClassName("container")[0];
       /// TODO : Add player's image in the center of the property
+      // Add a circle on the property
+      let player : HTMLElement = document.createElement("div");
+      player.id = "player" + id_player.toString();
+      player.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: red; border-radius: 50%; width: 20px; height: 20px;";
+      container_property.appendChild(player);
     }
     else{
       console.log("Error: position is not valid");
     }
+  }
+
+  remove_position(id_player : Number, id_property : Number): void{
+    /// TODO : Remove previous position of player
+    // Get the div with circle id = id_player
+    let player = document.getElementById("player" + id_player.toString());
+    // Remove the div
+    if (player != null){
+      player.remove();
+    }
+  }
+  update_position(id_player : Number, old_position : Number, dices : Number[]){
+    // Function to update the position of a player
+    // Update position attribute
+    this.position_player = (+this.position_player + +dices[0] + +dices[1]) % 40;
+    // Remove previous position
+    this.remove_position(id_player, old_position);
+    // Display new position
+    this.add_position(id_player, this.position_player);
   }
 }
