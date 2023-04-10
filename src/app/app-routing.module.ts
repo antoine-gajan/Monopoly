@@ -44,6 +44,7 @@ const routes: Routes = [
   { path: 'cambiar_username', component: CambiarUsernameComponent},
   { path: 'cambiar_correo', component: CambiarCorreoComponent},
   { path: 'cambiar_contraseña', component: CambiarContraseñaComponent},
+  { path: 'delete_user', component: DeleteUserComponent},
   { path: '', pathMatch: "full", redirectTo: '/home' },
   { path: '**', component: ErrorPageComponent }
 ];

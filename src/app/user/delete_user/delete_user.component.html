@@ -11,12 +11,11 @@
 
 <form>
   <h5>¿Está seguro que desea eliminar su cuenta?</h5>
-  <div>
-    <button class="boton" type="submit">Sí</button>
-    <button class="boton" type="submit">No</button>
+  <div class="opciones">
+    <button class="boton_si"(click)="onDeleteUser()" type="submit">Sí</button>
+    <button class="boton_no" type="submit" routerLink="/ajustes_usuario">No</button>
   </div>
   <br><br><br>
-  <button class="boton" type="submit" (click)="onDeleteUser()" routerLink="/">Guardar</button>
 
 </form>
 <br><br><br><br><br><br>

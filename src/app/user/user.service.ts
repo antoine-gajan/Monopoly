@@ -13,6 +13,8 @@ export class UserService {
   private username: string;
   private newusername: string;
   private email: string;
+  private password: string;
+  private confirm_password: string;
   //username: string;
   //newusername: string;
 
@@ -36,7 +38,7 @@ export class UserService {
   }
 
   hacerPeticion() {
-    return this.http.get('/http://localhost:8080/users/login').pipe(
+    return this.http.get('/http://localhost:3000/users/login').pipe(
       map((response: any) => response.username)
     );
   }
@@ -45,7 +47,7 @@ export class UserService {
     console.log(user);
     this.setUsername(user.username);
     
-    return this.http.post('http://localhost:8080/users/login'/*http:nerks.net:7003/users/login'*/, user, {responseType: 'text', observe: 'response'})
+    return this.http.post('http://localhost:3000/users/login'/*http:nerks.net:7003/users/login'*/, user, {responseType: 'text', observe: 'response'})
                     .subscribe(
                       (response) => {
                         console.log(response.status);
@@ -60,7 +62,7 @@ export class UserService {
     console.log(user);
     this.setUsername(user.username);
     this.setEmail(user.email);
-    return this.http.post('http://localhost:8080/users/register'/*nerks.net:7003/users/register'*/, user, {responseType: 'text', observe: 'response'})
+    return this.http.post('http://localhost:3000/users/register'/*nerks.net:7003/users/register'*/, user, {responseType: 'text', observe: 'response'})
                     .subscribe(
                       (response) => {
                         console.log(response.status);
@@ -72,37 +74,9 @@ export class UserService {
                     );
   }
 
-  /*guardar_new_username(username: string, newusername: string){
-    console.log(username, newusername);
-    return this.http.put('http://localhost:8080/users/updateUsername'/*'http://nerks.net:7003/users/updateUsername'*,{username: 'pilar', newusername: 'pilar1'})
-                    .subscribe(
-                      (response) => {
-                        console.log(response);
-                        this.router.navigateByUrl('/ajustes_usuario');
-                      },
-                      (error) => {
-                        console.log(error);
-                      }
-                    );
-  }*/
-
-  /*guardar_new_username(old_u: string, new_u: string){
-    console.log(old_u, new_u);
-    return this.http.put('http://localhost:8080/users/updateUsername'/*'http://nerks.net:7003/users/updateUsername'/, {oldusername: old_u, newusername: new_u})
-                    .subscribe(
-                      (response) => {
-                        console.log(response);
-                        this.setUsername(new_u);
-                        this.router.navigateByUrl('/ajustes_usuario');
-                      },
-                      (error) => {
-                        console.log(error);
-                      }
-                    );
-}*/
   guardar_new_username(user: any){
     console.log(user);
-    return this.http.put('http://localhost:8080/users/updateUsername'/*'http://nerks.net:7003/users/updateUsername'*/, user, {responseType: 'text', observe: 'response'})
+    return this.http.put('http://localhost:3000/users/updateUsername'/*'http://nerks.net:7003/users/updateUsername'*/, user, {responseType: 'text', observe: 'response'})
                     .subscribe(
                       (response) => {
                         console.log(response.status);
@@ -117,7 +91,7 @@ export class UserService {
 
   guardar_nuevo_correo(user: any){
     console.log(user);
-    return this.http.put('http://localhost:8080/users/updateCorreo'/*'http://nerks.net:7003/users/updateCorreo'*/, user, {responseType: 'text', observe: 'response'})
+    return this.http.put('http://localhost:3000/users/updateCorreo'/*'http://nerks.net:7003/users/updateCorreo'*/, user, {responseType: 'text', observe: 'response'})
                     .subscribe(
                       (response) => {
                         console.log(response.status);
@@ -131,11 +105,11 @@ export class UserService {
 
   guardar_cambio_password(user: any){
     console.log(user);
-    return this.http.put('http://nerks.net:7003/users/updatePassword', user, {responseType: 'text', observe: 'response'})
+    return this.http.put('http://localhost:3000/users/updatePassword', user, {responseType: 'text', observe: 'response'})
                     .subscribe(
                       (response) => {
                         console.log(response.status);
-                          this.router.navigateByUrl('/pantalla');
+                          this.router.navigateByUrl('/ajustes_usuario');
                       },
                       (error) => {
                         console.log(error);
@@ -145,15 +119,16 @@ export class UserService {
 
   onDeleteUser(user: any){
     console.log(user);
-    return this.http.delete('http://nerks.net:7003/users/delete', user)
+    this.http.delete('http://localhost:3000/users/delete'/*http://nerks.net:7003/users/delete'*/, user)
                     .subscribe(
                       (response) => {
                         //console.log(response.status);
-                          this.router.navigateByUrl('/pantalla');
+                          this.router.navigateByUrl('/');
                       },
                       (error) => {
                         console.log(error);
                       }
                     );
   }
+
  }

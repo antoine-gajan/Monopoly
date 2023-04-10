@@ -11,6 +11,10 @@ import { NgForm } from '@angular/forms';
 
 export class DeleteUserComponent {
   username: string;
+  basura: string;
+  constructor( public userService: UserService){
+    this.username = userService.getUsername();
+  }
   /*new_username: string;
   username_anterior: string;
   constructor( public userService: UserService     
@@ -26,6 +30,7 @@ export class DeleteUserComponent {
   }*/
   onDeleteUser(){
     const user = {username: this.username};
-    //this.userService.onDeleteUser(user);
+    this.userService.onDeleteUser(user);
+    //this.userService.onDeleteUser(this.username);
   }
 }
