@@ -12,13 +12,13 @@
 <form>
   <br><br><br>
   <h1>HOLA {{username}}</h1>
-  <h1>HOLA {{email}}</h1>
-  <h5> Correo electrónico actual: {{email}} </h5>
+  <h1>HOLA {{old_email}}</h1>
+  <h5> Correo electrónico actual: {{old_email}} </h5>
 
   <h5> Introduzca el nuevo correo del usuario </h5>
   <div class="formulario-nombre-usuario" >
     <!--<input placeholder="nuevo correo electrónnico" class="formulario-nombre-usuario-input" required/>-->
-    <input type="text" id="email" name="email" placeholder="nuevo correo electrónico" class="formulario-nombre-usuario-input" [(ngModel)]="email"  required/>
+    <input type="text" id="email" name="email" placeholder="nuevo correo electrónico" class="formulario-nombre-usuario-input" [(ngModel)]="new_email"  required/>
   
   </div>
   <br><br>

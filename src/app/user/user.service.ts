@@ -28,6 +28,9 @@ export class UserService {
   setEmail(email: string): void {
     this.email = email;
   }
+  getEmail(): string {
+    return this.email;
+  }
 
   getUsername(): string {
     return this.username;
@@ -93,7 +96,7 @@ export class UserService {
     //this.setUsername(user.username);
     // return this.http.get('/http://localhost:3000/users/devolverCorreo').pipe(
     //   map((response: any) => response.email)
-    // );
+    // ); 
     return this.http.post('http://localhost:3000/users/devolverCorreo'/*http:nerks.net:7003/users/devolverCorreo'*/, user, {responseType: 'text', observe: 'response'})
                     .subscribe(
                       (response) => {
