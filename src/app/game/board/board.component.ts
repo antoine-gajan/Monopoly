@@ -95,7 +95,6 @@ export class BoardComponent {
   }
 
   remove_position(id_player : Number, id_property : Number): void{
-    /// TODO : Remove previous position of player
     // Get the div with circle id = id_player
     let player = document.getElementById("player" + id_player.toString());
     // Remove the div

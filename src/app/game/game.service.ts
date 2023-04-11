@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Router} from "@angular/router";
-import {catchError, of, tap} from "rxjs";
+import {tap} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -41,5 +41,30 @@ export class GameService {
           console.log(response);
         }
     ));
+  }
+
+  buy_card(username: string, idPartida : Number, h : Number, v : Number){
+    const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
+    let body = JSON.stringify({"username": username, "h": h, "v": v, "idPartida": idPartida});
+
+    return this.http.post("http://localhost:8080/partida/comprar", body, httpOptions).pipe(
+      tap(
+        (response) => {
+          console.log(response);
+        }
+    ));
+  }
+
+  actualize(idPartida : Number, nPJugadores : Number, dineroInicial : Number){
+    const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
+    let body = JSON.stringify({"idPartida": idPartida, "nPJugadores": nPJugadores, "dineroInicial": dineroInicial});
+
+    return this.http.put("http://localhost:8080/partida/actualizar", body, httpOptions).pipe(
+      tap(
+        (response) => {
+          console.log(response);
+        }
+    ));
+
   }
 }
