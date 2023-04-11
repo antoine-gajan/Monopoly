@@ -23,7 +23,7 @@ export class AjustesUsuarioComponent {
     //this.email = (this.userService.leer_email(this.username)).toString();
     const user = {username: this.username};
     console.log(this.username, this.email);
-    this.router.navigate(['/cambiar_correo', { email: (this.userService.leer_email(user)).toString()}]);
-    console.log("sale: leer_email", this.email);
+    //this.router.navigate(['/cambiar_correo', { email: (this.userService.leer_email(user)).toString()}]);
+    //console.log("sale: leer_email", this.email);
   }
 }

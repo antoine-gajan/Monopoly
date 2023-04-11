@@ -13,9 +13,21 @@ export class CambiarCorreoComponent {
   new_email: string;
   constructor( public userService: UserService, private route: ActivatedRoute){
     this.username = userService.getUsername();
-    //this.email = (userService.leer_email(this.username)).toString();
+    userService.leer_email({username: this.username})
+    .subscribe(
+      (response) => {
+        console.log(response.body);
+        userService.setEmail(response.body?.email ?? '');
+        this.old_email = userService.getEmail();
+        console.log(this.old_email);
+          // this.router.navigateByUrl('/pantalla');
+      },
+      (error) => {
+        console.log(error);
+      }
+    );   
     
-    this.old_email = this.route.snapshot.paramMap.get('email') ?? 'correo';
+    //this.old_email = this.route.snapshot.paramMap.get('email') ?? 'correo';
   }
   ngOnInit(): void {
     
@@ -26,7 +38,7 @@ export class CambiarCorreoComponent {
   guardar_nuevo_correo(){
     //this.email = (this.userService.leer_email(this.username)).toString();
     console.log(this.old_email);
-    const user = {username: this.username, email: this.old_email};
+    const user = {username: this.username, email: this.new_email};
     console.log(user);
     this.userService.guardar_nuevo_correo(user);
     
