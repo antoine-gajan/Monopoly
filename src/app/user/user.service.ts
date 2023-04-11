@@ -87,14 +87,14 @@ export class UserService {
                     );
   }
 
-  /*leer_email(user: any){
+  leer_email(user: any){
     //console.log("SI LO HACE");
     console.log(user);
     //this.setUsername(user.username);
     return this.http.get('/http://localhost:3000/users/devolverCorreo').pipe(
       map((response: any) => response.username)
     );
-    return this.http.get('http://localhost:3000/users/devolverCorreo'/*http:nerks.net:7003/users/devolverCorreo'*, user)
+    return this.http.get('http://localhost:3000/users/devolverCorreo'/*http:nerks.net:7003/users/devolverCorreo'*/, user)
                     .subscribe(
                       (response) => {
                         console.log(response);
@@ -104,11 +104,8 @@ export class UserService {
                         console.log(error);
                       }
                     );    
-  }*/
+  }
 
-  /*leer_email_aux(){
-    return (leer_email(username)).toString();
-  }*/
   guardar_nuevo_correo(user: any){
     console.log(user);
     return this.http.put('http://localhost:3000/users/updateCorreo'/*'http://nerks.net:7003/users/updateCorreo'*/, user, {responseType: 'text', observe: 'response'})

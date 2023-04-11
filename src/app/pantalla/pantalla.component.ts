@@ -14,17 +14,10 @@ import { Router } from 'express';
 export class PantallaComponent {
 
   username: string;
-  //email: string;
 
-  constructor(private userService: UserService,  private router: Router) {
+  constructor(private userService: UserService) {
     this.username = userService.getUsername();
-    
   }
-
-  /*leer_email(){
-    this.email = (this.userService.leer_email(this.username)).toString();
-    //this.router.navigate(['/ajustes_usuario', { username: this.username }]);
-  }*/
 
   /*username: any;
   constructor(private route: ActivatedRoute, private userService: UserService) {
