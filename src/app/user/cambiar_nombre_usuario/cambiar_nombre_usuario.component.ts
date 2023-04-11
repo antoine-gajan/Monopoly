@@ -25,7 +25,17 @@ export class CambiarUsernameComponent {
     //this.username_anterior = this.form.controls['username'].value;
     const username_change = {username: this.old_username, newusername: this.new_username};
     //this.userService.guardar_new_username(this.old_username, this.new_username);
-    this.userService.guardar_new_username(username_change);
-    this.router.navigate(['/ajuses_usuario', { username: this.new_username }]);
+    this.userService.guardar_new_username(username_change).subscribe(
+      (response) => {
+        console.log(response.status);
+        this.userService.setUsername(this.new_username);
+        console.log(this.userService.getUsername());
+        console.log(this.new_username);
+        this.router.navigate(['/ajustes_usuario']);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 }

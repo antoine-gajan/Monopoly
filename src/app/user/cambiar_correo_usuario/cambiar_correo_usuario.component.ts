@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import { UserService } from '../user.service';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-cambiar_correo_usuario',
   templateUrl: './cambiar_correo_usuario.component.html',
@@ -11,7 +11,7 @@ export class CambiarCorreoComponent {
   username: string;
   old_email: string;
   new_email: string;
-  constructor( public userService: UserService, private route: ActivatedRoute){
+  constructor( public userService: UserService, private router: Router){
     this.username = userService.getUsername();
     userService.leer_email({username: this.username})
     .subscribe(
@@ -20,7 +20,7 @@ export class CambiarCorreoComponent {
         userService.setEmail(response.body?.email ?? '');
         this.old_email = userService.getEmail();
         console.log(this.old_email);
-          // this.router.navigateByUrl('/pantalla');
+        this.router.navigate(['/ajustes_usuario']);
       },
       (error) => {
         console.log(error);

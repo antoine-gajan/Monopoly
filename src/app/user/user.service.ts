@@ -84,16 +84,6 @@ export class UserService {
   guardar_new_username(user: any){
     console.log(user);
     return this.http.put('http://localhost:8080/users/updateUsername'/*'http://nerks.net:7003/users/updateUsername'*/, user, {responseType: 'text', observe: 'response'})
-                    .subscribe(
-                      (response) => {
-                        console.log(response.status);
-                        this.username = user.newusername;
-                        this.router.navigateByUrl('/ajustes_usuario');
-                      },
-                      (error) => {
-                        console.log(error);
-                      }
-                    );
   }
 
   leer_email(user: any){
