@@ -88,17 +88,17 @@ export class UserService {
   }
 
   leer_email(user: any){
-    //console.log("SI LO HACE");
+    console.log("SI LO HACE");
     console.log(user);
     //this.setUsername(user.username);
-    return this.http.get('/http://localhost:3000/users/devolverCorreo').pipe(
-      map((response: any) => response.username)
-    );
-    return this.http.get('http://localhost:3000/users/devolverCorreo'/*http:nerks.net:7003/users/devolverCorreo'*/, user)
+    // return this.http.get('/http://localhost:3000/users/devolverCorreo').pipe(
+    //   map((response: any) => response.email)
+    // );
+    return this.http.post('http://localhost:3000/users/devolverCorreo'/*http:nerks.net:7003/users/devolverCorreo'*/, user, {responseType: 'text', observe: 'response'})
                     .subscribe(
                       (response) => {
                         console.log(response);
-                          this.router.navigateByUrl('/pantalla');
+                          // this.router.navigateByUrl('/pantalla');
                       },
                       (error) => {
                         console.log(error);
