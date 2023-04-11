@@ -33,14 +33,12 @@ export class UserService {
     return this.username;
   }
 
-  getEmail(): string {
-    return this.email;
-  }
-
   hacerPeticion() {
     return this.http.get('/http://localhost:3000/users/login').pipe(
       map((response: any) => response.username)
     );
+
+    
   }
   
   login(user: any){
@@ -89,6 +87,28 @@ export class UserService {
                     );
   }
 
+  /*leer_email(user: any){
+    //console.log("SI LO HACE");
+    console.log(user);
+    //this.setUsername(user.username);
+    return this.http.get('/http://localhost:3000/users/devolverCorreo').pipe(
+      map((response: any) => response.username)
+    );
+    return this.http.get('http://localhost:3000/users/devolverCorreo'/*http:nerks.net:7003/users/devolverCorreo'*, user)
+                    .subscribe(
+                      (response) => {
+                        console.log(response);
+                          this.router.navigateByUrl('/pantalla');
+                      },
+                      (error) => {
+                        console.log(error);
+                      }
+                    );    
+  }*/
+
+  /*leer_email_aux(){
+    return (leer_email(username)).toString();
+  }*/
   guardar_nuevo_correo(user: any){
     console.log(user);
     return this.http.put('http://localhost:3000/users/updateCorreo'/*'http://nerks.net:7003/users/updateCorreo'*/, user, {responseType: 'text', observe: 'response'})
@@ -118,16 +138,11 @@ export class UserService {
   }
 
   onDeleteUser(user: any){
-    console.log(user);
-    this.http.delete('http://localhost:3000/users/delete'/*http://nerks.net:7003/users/delete'*/, user)
+    const options = { body: user };
+    this.http.delete('http://localhost:3000/users/delete'/*http://nerks.net:7003/users/delete'*/, options)
                     .subscribe(
-                      (response) => {
-                        //console.log(response.status);
-                          this.router.navigateByUrl('/');
-                      },
-                      (error) => {
-                        console.log(error);
-                      }
+                      (response) => { this.router.navigateByUrl('/'); },
+                      (error) => { console.log(error); }
                     );
   }
 

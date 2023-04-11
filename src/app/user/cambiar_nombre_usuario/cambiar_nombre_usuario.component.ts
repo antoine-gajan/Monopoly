@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import { UserService } from '../user.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { NgForm } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-cambiar_nombre_usuario',
@@ -13,7 +14,7 @@ export class CambiarUsernameComponent {
   old_username: string;
   new_username: string;
   
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private router: Router) {
     this.old_username = userService.getUsername();
   }
 
@@ -25,5 +26,6 @@ export class CambiarUsernameComponent {
     const username_change = {username: this.old_username, newusername: this.new_username};
     //this.userService.guardar_new_username(this.old_username, this.new_username);
     this.userService.guardar_new_username(username_change);
+    this.router.navigate(['/ajuses_usuario', { username: this.new_username }]);
   }
 }

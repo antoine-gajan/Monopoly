@@ -9,8 +9,8 @@
   </div>
 </header>
 
-<h1>HOLA {{old_username}}</h1>
 <form>
+  <h5> Su nombre de usuario actual es: {{old_username}}</h5>
   <h5> Introduzca el nuevo nombre del usuario </h5>
   <div class="formulario-nombre-usuario" >
     <input type="text" id="new_username" name="new_username" placeholder="nombre de usuario" class="formulario-nombre-usuario-input" [(ngModel)]="new_username"  required/>
