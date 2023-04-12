@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { GameService} from "../game.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {UserService} from "../../user/user.service";
 
 @Component({
   selector: 'app-board',
@@ -7,11 +9,27 @@ import { GameService} from "../game.service";
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent {
+  game_id : Number;
   dices: Number[] = [];
   position_player: Number = 0;
   current_player: Number = 0;
+  player_name: string;
 
-  constructor(private gameService: GameService) { }
+  constructor(private gameService: GameService, private userService: UserService, private route: ActivatedRoute, private router: Router) { }
+
+  ngOnInit() {
+  // Get id of the game
+  const game_id : string|null = this.route.snapshot.paramMap.get('id');
+  if (game_id != null) {
+    this.game_id = +game_id;
+  }
+  else{
+    // Redirect to error page
+    this.router.navigate(['/error']);
+  }
+  // Get name of the player
+  this.player_name = this.userService.getUsername();
+}
 
   play(): void{
     this.play_turn_player(this.current_player);
@@ -30,7 +48,7 @@ export class BoardComponent {
     /// TODO : Verify is the player can buy the property and ask to buy it
     /// TODO : If dices is double, play again
     if (this.dices[0] == this.dices[1]) {
-      this.play_turn_player(this.current_player);
+      //this.play_turn_player(this.current_player);
     }
     else{
       // Next player
@@ -53,7 +71,7 @@ export class BoardComponent {
     return "../../../assets/images/dice/" + value + ".png";
   }
 
-  convert_position_to_number(x: Number, y: Number): Number{
+  convert_position_to_id(x: Number, y: Number): Number{
     // Function to convert position (x, y) to number between 0 and 39
     if (x == 10 && y == 10) {
       return 0;
@@ -76,6 +94,29 @@ export class BoardComponent {
     }
   }
 
+  convert_id_to_position(id: Number): Number[]{
+    // Function to convert id to position (x, y)
+    if (id == 0) {
+      return [10, 10];
+    }
+    else if (id < 10){
+      return [0, 10 - +id];
+    }
+    else if (id < 20){
+      return [10 - +id, 0];
+    }
+    else if (id < 30){
+      return [10, +id - 20];
+    }
+    else if (id < 40){
+      return [+id - 30, 10];
+    }
+    else{
+      console.log("Error: position is not valid");
+      return [0, 0];
+    }
+  }
+
   add_position(id_player : Number, id_property : Number): void{
     // Function to display position (x, y) in the board
     // Get the property of the element with id = position
@@ -86,7 +127,7 @@ export class BoardComponent {
       // Add a circle on the property
       let player : HTMLElement = document.createElement("div");
       player.id = "player" + id_player.toString();
-      player.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: red; border-radius: 50%; width: 20px; height: 20px;";
+      player.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: red; border-radius: 50%; width: 30px; height: 30px;";
       container_property.appendChild(player);
     }
     else{
@@ -106,6 +147,10 @@ export class BoardComponent {
     // Function to update the position of a player
     // Update position attribute
     this.position_player = (+this.position_player + +dices[0] + +dices[1]) % 40;
+    // If player has to go to jail
+    if (this.position_player == 30){
+      this.position_player = 10;
+    }
     // Remove previous position
     this.remove_position(id_player, old_position);
     // Display new position

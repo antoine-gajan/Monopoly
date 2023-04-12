@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Router} from "@angular/router";
-import {tap} from "rxjs";
+import {Observable, tap} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -22,11 +22,11 @@ export class GameService {
     ));
   }
 
-  get_list_players(idPartida : Number){
+  get_list_players(idPartida : Number): Observable<String[]>{
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     let body = JSON.stringify({"idPartida": idPartida});
 
-    return this.http.put("http://localhost:8080/partida/listaJugadores", body, httpOptions).pipe(
+    return this.http.put<String[]>("http://localhost:8080/partida/listaJugadores", body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response);
