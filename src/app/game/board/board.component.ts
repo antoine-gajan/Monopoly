@@ -35,22 +35,21 @@ export class BoardComponent {
     this.play_turn_player(this.current_player);
   }
 
-  play_turn_player(id_player: Number): void{
+  play_turn_player(id_player: Number): void {
     // Function to play the turn of a player
     // Roll dices
-    //this.gameService.roll_dices("antoine",0).subscribe((data: any) => {
-      //console.log(data.json());
-    //});
+    this.gameService.roll_dices("antoine", 0).subscribe((data: any) => {
+      this.dices[0] = data.dado1;
+      this.dices[1] = data.dado2;
+    });
 
-    this.roll_dices();
     // Update player position
     this.update_position(this.current_player, this.position_player, this.dices);
     /// TODO : Verify is the player can buy the property and ask to buy it
     /// TODO : If dices is double, play again
     if (this.dices[0] == this.dices[1]) {
       //this.play_turn_player(this.current_player);
-    }
-    else{
+    } else {
       // Next player
       //this.current_player = +this.current_player + 1;
     }

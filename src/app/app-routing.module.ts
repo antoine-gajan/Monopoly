@@ -22,6 +22,9 @@ import { CambiarUsernameComponent } from './user/cambiar_nombre_usuario/cambiar_
 import { CambiarCorreoComponent } from './user/cambiar_correo_usuario/cambiar_correo_usuario.component';
 import { CambiarContraseñaComponent } from './user/cambiar_contraseña_usuario/cambiar_contraseña_usuario.component';
 import { DeleteUserComponent } from './user/delete_user/delete_user.component';
+import {ElectricityCardComponent} from "./card/electricity-card/electricity-card.component";
+import {HeatCardComponent} from "./card/heat-card/heat-card.component";
+import {PartyCardComponent} from "./card/party-card/party-card.component";
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -41,6 +44,7 @@ const routes: Routes = [
   { path: 'tienda', component: TiendaComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'error', component: ErrorPageComponent },
+  { path: 'fiesta', component: PartyCardComponent},
   { path: 'ajustes_usuario', component: AjustesUsuarioComponent },
   { path: 'cambiar_username', component: CambiarUsernameComponent},
   { path: 'cambiar_correo', component: CambiarCorreoComponent},

@@ -1,0 +1,38 @@
+.propriety-card{
+  border: 3px solid;
+  width: 20rem;
+  padding: 10px 10px;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+.image-company{
+  max-width: 150px;
+  max-height: 150px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.electricity-title{
+  font-weight: bold;
+  font-size: 20px;
+  padding: 10px 10px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.container-info{
+  box-sizing: border-box;
+  padding-top: 10px;
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+.value{
+  margin-top: 10px;
+  font-weight: bold;
+}
