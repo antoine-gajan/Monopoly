@@ -3,6 +3,7 @@
   border-color: #080808;
   width: 20rem;
   color: black;
+  background-color: white;
 }
 
 .message{
@@ -27,6 +28,7 @@
   border-radius: 20px;
   padding: 10px;
   border: 0;
+  cursor: pointer;
 }
 
 .buy{

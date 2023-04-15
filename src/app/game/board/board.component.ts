@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, ComponentFactoryResolver, ElementRef, ViewContainerRef} from '@angular/core';
 import { GameService} from "../game.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../user/user.service";
+import {BuyCardComponent} from "../../card/buy-card/buy-card.component";
 
 @Component({
   selector: 'app-board',
@@ -9,13 +10,15 @@ import {UserService} from "../../user/user.service";
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent {
-  game_id : Number;
-  dices: Number[] = [];
-  position_player: Number = 0;
-  current_player: Number = 0;
+  game_id : number;
+  dices: number[] = [];
+  position_player: number = 0;
+  current_player: number = 0;
   player_name: string;
 
-  constructor(private gameService: GameService, private userService: UserService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private gameService: GameService, private userService: UserService, private route: ActivatedRoute,
+              private router: Router, private componentFactoryResolver: ComponentFactoryResolver,
+              private viewContainerRef: ViewContainerRef, private elRef: ElementRef) { }
 
   ngOnInit() {
   // Get id of the game
@@ -35,28 +38,37 @@ export class BoardComponent {
     this.play_turn_player(this.current_player);
   }
 
-  play_turn_player(id_player: Number): void {
+  async play_turn_player(id_player: number) {
     // Function to play the turn of a player
+    // Disable play button to avoid double click
+    document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
     // Roll dices
-    this.gameService.roll_dices("antoine", 0).subscribe((data: any) => {
+    await this.gameService.roll_dices("antoine", 0).subscribe( {
+      next: (data: any) => {
       this.dices[0] = data.dado1;
       this.dices[1] = data.dado2;
-    });
-
-    // Update player position
-    this.update_position(this.current_player, this.position_player, this.dices);
-    /// TODO : Verify is the player can buy the property and ask to buy it
-    /// TODO : If dices is double, play again
-    if (this.dices[0] == this.dices[1]) {
-      //this.play_turn_player(this.current_player);
-    } else {
-      // Next player
-      //this.current_player = +this.current_player + 1;
+      console.log(this.dices);
+    },
+    error: (error) => {
+      console.error(error);
+    },
+    complete: async () => {
+      // Update player position
+      this.update_position(this.current_player, this.position_player, this.dices);
+      // Wait 2 seconds
+      await this.sleep(1500);
+      /// TODO : Verify is the player can buy the property and ask to buy it
+      // Display a buy card component
+      let position_x_y = this.convert_id_to_position(this.position_player);
+      this.createBuyCardComponent(position_x_y[1], position_x_y[0], "Quieres comprar ?", this.dices[0] == this.dices[1]);
+      /// TODO : End turn
     }
+  });
+
   }
   roll_dices(): void{
     // Function to roll dices
-    let dices: Number[] = [];
+    let dices: number[] = [];
     for (let i = 0; i < 2; i++) {
       dices.push(Math.floor(Math.random() * 6) + 1);
     }
@@ -65,12 +77,12 @@ export class BoardComponent {
     console.table(this.dices)
   }
 
-  get_image_from_dice_value(value: Number): String{
+  get_image_from_dice_value(value: number): String{
     // Function to get the image path from the dice value
     return "../../../assets/images/dice/" + value + ".png";
   }
 
-  convert_position_to_id(x: Number, y: Number): Number{
+  convert_position_to_id(x: number, y: number): number{
     // Function to convert position (x, y) to number between 0 and 39
     if (x == 10 && y == 10) {
       return 0;
@@ -93,19 +105,19 @@ export class BoardComponent {
     }
   }
 
-  convert_id_to_position(id: Number): Number[]{
-    // Function to convert id to position (x, y)
+  convert_id_to_position(id: number): number[]{
+    // Function to convert id to position (v, h)
     if (id == 0) {
       return [10, 10];
     }
     else if (id < 10){
-      return [0, 10 - +id];
+      return [10, 10 - +id];
     }
     else if (id < 20){
       return [10 - +id, 0];
     }
     else if (id < 30){
-      return [10, +id - 20];
+      return [0, +id - 20];
     }
     else if (id < 40){
       return [+id - 30, 10];
@@ -116,7 +128,7 @@ export class BoardComponent {
     }
   }
 
-  add_position(id_player : Number, id_property : Number): void{
+  add_position(id_player : number, id_property : number): void{
     // Function to display position (x, y) in the board
     // Get the property of the element with id = position
     let property = document.getElementById(id_property.toString());
@@ -134,7 +146,7 @@ export class BoardComponent {
     }
   }
 
-  remove_position(id_player : Number, id_property : Number): void{
+  remove_position(id_player : number, id_property : number): void{
     // Get the div with circle id = id_player
     let player = document.getElementById("player" + id_player.toString());
     // Remove the div
@@ -142,7 +154,7 @@ export class BoardComponent {
       player.remove();
     }
   }
-  update_position(id_player : Number, old_position : Number, dices : Number[]){
+  update_position(id_player : number, old_position : number, dices : number[]){
     // Function to update the position of a player
     // Update position attribute
     this.position_player = (+this.position_player + +dices[0] + +dices[1]) % 40;
@@ -154,5 +166,22 @@ export class BoardComponent {
     this.remove_position(id_player, old_position);
     // Display new position
     this.add_position(id_player, this.position_player);
+  }
+
+  createBuyCardComponent(h: number, v: number, message: string = "Quieres comprar", play_again: boolean = false): void {
+    const factory = this.componentFactoryResolver.resolveComponentFactory(BuyCardComponent);
+    const componentRef = this.viewContainerRef.createComponent(factory);
+    componentRef.instance.h = h;
+    componentRef.instance.v = v;
+    componentRef.instance.message = message;
+    componentRef.instance.play_again = play_again;
+    // Give an id to the component html
+    componentRef.location.nativeElement.id = "buy-card-component";
+    // Center the component at the middle of the page
+    componentRef.location.nativeElement.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);";
+  }
+
+  sleep(ms : number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 }

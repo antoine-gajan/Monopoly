@@ -23,6 +23,7 @@ import { CambiarUsernameComponent } from './user/cambiar_nombre_usuario/cambiar_
 import { DeleteUserComponent } from './user/delete_user/delete_user.component';
 import { UserService } from './user/user.service';
 import {CardModule} from "./card/card.module";
+import {BuyCardComponent} from "./card/buy-card/buy-card.component";
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import {CardModule} from "./card/card.module";
     RouterModule],//.forRoot(ROUTES),
     //routing],
   providers: [UserService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [BuyCardComponent]
 })
 export class AppModule { }
 

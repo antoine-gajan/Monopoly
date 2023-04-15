@@ -14,7 +14,7 @@ export class GameService {
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     let body = JSON.stringify({"idPartida": idPartida, "username": username});
 
-    return this.http.post("http://localhost:8080/partida/tirarDados", body, httpOptions).pipe(
+    return this.http.post("http://localhost:8080/partida/lanzarDados", body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response);
