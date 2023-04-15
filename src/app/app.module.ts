@@ -22,6 +22,7 @@ import { CambiarCorreoComponent } from './user/cambiar_correo_usuario/cambiar_co
 import { CambiarUsernameComponent } from './user/cambiar_nombre_usuario/cambiar_nombre_usuario.component';
 import { DeleteUserComponent } from './user/delete_user/delete_user.component';
 import { UserService } from './user/user.service';
+import {CardModule} from "./card/card.module";
 
 @NgModule({
   declarations: [
@@ -35,7 +36,7 @@ import { UserService } from './user/user.service';
     NosotrosComponent,
     ReglasComponent,
     ContactoComponent,
-    AjustesUsuarioComponent, 
+    AjustesUsuarioComponent,
     CambiarContraseñaComponent,
     CambiarCorreoComponent,
     CambiarUsernameComponent,
@@ -47,6 +48,7 @@ import { UserService } from './user/user.service';
     HttpClientModule,
     //UserModule,
     GameModule,
+    CardModule,
     AppRoutingModule,
     ReactiveFormsModule,
     RouterModule],//.forRoot(ROUTES),

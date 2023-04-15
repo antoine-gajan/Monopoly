@@ -1,0 +1,42 @@
+.buy-card{
+  border: 3px solid;
+  border-color: #080808;
+  width: 20rem;
+  color: black;
+}
+
+.message{
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 10px 10px;
+}
+
+.list-button{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.button-action{
+  width: 100%;
+  color: black;
+  font-size: 15px;
+  font-weight: bold;
+  margin: 10px 10px;
+  border-radius: 20px;
+  padding: 10px;
+  border: 0;
+}
+
+.buy{
+  background-color: lightskyblue;
+}
+
+.play-again{
+  background-color: #00ff00;
+}
+
+.stop{
+  background-color: slategrey;
+}

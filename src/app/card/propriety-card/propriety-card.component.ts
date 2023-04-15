@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Propriety} from "../propriety";
 
 @Component({
@@ -6,23 +6,31 @@ import {Propriety} from "../propriety";
   templateUrl: './propriety-card.component.html',
   styleUrls: ["../../../../node_modules/bootstrap/dist/css/bootstrap.min.css", './propriety-card.component.css']
 })
-export class ProprietyCardComponent {
-  @Input() h : Number;
-  @Input() v : Number;
+export class ProprietyCardComponent implements OnInit{
+  @Input() h: number = 0;
+  @Input() v: number = 0;
+  propriety: Propriety;
 
-  propriety : Propriety;
-  constructor() {}
+  constructor() {
+  }
 
-  get_propriety(){
+  ngOnInit() {
+    ///TODO : Initialize proprierty attribute
+  }
+
+  get_propriety() {
     /// TODO : Get the property from the server
-    if (this.h == 5 || this.v == 5){
-      /// Get "festividad"
-    }
-    else if ((this.h == 0 && this.v == 8) || (this.h == 8 && this.v == 0)){
-      /// Get "impuesto"
-    }
-    else if ((this.h == 10 && this.v == 6) || (this.h == 8 && this.v == 10) || (this.h == 10 && this.v == 0) || (this.h == 0 || this.v == 0)){
-      /// Get "tipo special"
-    }
+
+  }
+
+  get_color() {
+    if (this.v == 10 && this.h > 5) return "#e01a98";
+    else if (this.v == 10 && this.h < 5) return "#8b4a9f";
+    else if (this.h == 0 && this.v > 5) return "#4a34c5";
+    else if (this.h == 0 && this.v < 5) return "#25a3e8";
+    else if (this.v == 0 && this.h < 5) return "#18ca0c";
+    else if (this.v == 0 && this.h > 5) return "#f6ee02";
+    else if (this.h == 10 && this.v < 5) return "#f06809";
+    else return "#f82102";
   }
 }
