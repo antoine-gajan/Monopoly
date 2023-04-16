@@ -12,15 +12,12 @@
   <h2>CREAR SALA</h2>
   <p>Configura las siguientes opciones para poder crear una partida nueva.</p>
 </div>
-
+<h1>{{username}}</h1>
 <section class="services">
-    <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
       <div class="icon-box iconbox-blue">
-        
         <h4>PARTIDA #XXXXX</h4>
-               
         <form ><label>Número de jugadores</label>
-          <select name="jugadores"  class="jugadores">
+          <select name="jugadores" type="number" class="jugadores">
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
@@ -34,10 +31,9 @@
         
         <div>
           <label>Dinero inicial (€)</label>
-          <input class="dinero" placeholder="1.500€"/>
+          <input type="number" class="dinero" placeholder="1500€" />
         </div>
         
-        <button  routerLink="/pantalla" class="boton-jugar">Jugar</button>
-      </div>
+        <button (click)="crearPartidaDatos()" class="boton-jugar">Jugar</button>
     </div>
 </section>

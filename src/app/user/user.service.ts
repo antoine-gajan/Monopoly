@@ -43,7 +43,7 @@ export class UserService {
   }
 
   hacerPeticion() {
-    return this.http.get('/http://localhost:8080/users/login').pipe(
+    return this.http.get('/http://localhost:3000/users/login').pipe(
       map((response: any) => response.username)
     );
 
@@ -54,7 +54,7 @@ export class UserService {
     console.log(user);
     this.setUsername(user.username);
     
-    return this.http.post('http://localhost:8080/users/login'/*http:nerks.net:7003/users/login'*/, user, {responseType: 'text', observe: 'response'})
+    return this.http.post('http://localhost:3000/users/login'/*http:nerks.net:7003/users/login'*/, user, {responseType: 'text', observe: 'response'})
                     .subscribe(
                       (response) => {
                         console.log(response.status);
@@ -69,7 +69,7 @@ export class UserService {
     console.log(user);
     this.setUsername(user.username);
     this.setEmail(user.email);
-    return this.http.post('http://localhost:8080/users/register'/*nerks.net:7003/users/register'*/, user, {responseType: 'text', observe: 'response'})
+    return this.http.post('http://localhost:3000/users/register'/*nerks.net:7003/users/register'*/, user, {responseType: 'text', observe: 'response'})
                     .subscribe(
                       (response) => {
                         console.log(response.status);
@@ -83,7 +83,7 @@ export class UserService {
 
   guardar_new_username(user: any){
     console.log(user);
-    return this.http.put('http://localhost:8080/users/updateUsername'/*'http://nerks.net:7003/users/updateUsername'*/, user, {responseType: 'text', observe: 'response'})
+    return this.http.put('http://localhost:3000/users/updateUsername'/*'http://nerks.net:7003/users/updateUsername'*/, user, {responseType: 'text', observe: 'response'})
   }
 
   leer_email(user: any){
@@ -93,12 +93,12 @@ export class UserService {
     // return this.http.get('/http://localhost:8080/users/devolverCorreo').pipe(
     //   map((response: any) => response.email)
     // ); 
-    return this.http.post<EmailInt>('http://localhost:8080/users/devolverCorreo'/*http:nerks.net:7003/users/devolverCorreo'*/, user, {observe: 'response'}) 
+    return this.http.post<EmailInt>('http://localhost:3000/users/devolverCorreo'/*http:nerks.net:7003/users/devolverCorreo'*/, user, {observe: 'response'}) 
   }
 
   guardar_nuevo_correo(user: any){
     console.log(user);
-    return this.http.put('http://localhost:8080/users/updateCorreo'/*'http://nerks.net:7003/users/updateCorreo'*/, user, {responseType: 'text', observe: 'response'})
+    return this.http.put('http://localhost:3000/users/updateCorreo'/*'http://nerks.net:7003/users/updateCorreo'*/, user, {responseType: 'text', observe: 'response'})
                     .subscribe(
                       (response) => {
                         console.log(response.status);
@@ -112,7 +112,7 @@ export class UserService {
 
   guardar_cambio_password(user: any){
     console.log(user);
-    return this.http.put('http://localhost:8080/users/updatePassword', user, {responseType: 'text', observe: 'response'})
+    return this.http.put('http://localhost:3000/users/updatePassword', user, {responseType: 'text', observe: 'response'})
                     .subscribe(
                       (response) => {
                         console.log(response.status);
@@ -126,11 +126,14 @@ export class UserService {
 
   onDeleteUser(user: any){
     const options = { body: user };
-    this.http.delete('http://localhost:8080/users/delete'/*http://nerks.net:7003/users/delete'*/, options)
+    this.http.delete('http://localhost:3000/users/delete'/*http://nerks.net:7003/users/delete'*/, options)
                     .subscribe(
                       (response) => { this.router.navigateByUrl('/'); },
                       (error) => { console.log(error); }
                     );
   }
 
+  crearPartida(user: any){
+    console.log(user);
+  }
  }

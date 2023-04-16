@@ -20,12 +20,12 @@ export class CambiarCorreoComponent {
         userService.setEmail(response.body?.email ?? '');
         this.old_email = userService.getEmail();
         console.log(this.old_email);
-        this.router.navigate(['/ajustes_usuario']);
+        //this.router.navigate(['/ajustes_usuario']);
       },
       (error) => {
         console.log(error);
       }
-    );   
+    );  
     
     //this.old_email = this.route.snapshot.paramMap.get('email') ?? 'correo';
   }
@@ -41,7 +41,5 @@ export class CambiarCorreoComponent {
     const user = {username: this.username, email: this.new_email};
     console.log(user);
     this.userService.guardar_nuevo_correo(user);
-    
-
   }
 }
