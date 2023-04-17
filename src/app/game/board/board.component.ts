@@ -64,12 +64,7 @@ export class BoardComponent {
       this.createBuyCardComponent(position_x_y[1], position_x_y[0], "Quieres comprar ?", this.dices[0] == this.dices[1]);
       /// TODO : End turn
     }
-    
     });
-    
-    
-    
-
   }
   roll_dices(): void{
     // Function to roll dices
@@ -89,6 +84,7 @@ export class BoardComponent {
 
   convert_position_to_id(x: number, y: number): number{
     // Function to convert position (x, y) to number between 0 and 39
+    console.log("convert_to_id", x, y);
     if (x == 10 && y == 10) {
       return 0;
     }
@@ -111,18 +107,19 @@ export class BoardComponent {
   }
 
   convert_id_to_position(id: number): number[]{
-    // Function to convert id to position (v, h)
+    console.log("id:", id);
+    // Function to convert id to position (h, v)
     if (id == 0) {
       return [10, 10];
     }
-    else if (id < 10){
-      return [10, 10 - +id];
+    else if (id <= 10){
+      return [10 - +id, 10]; //[v, h] //OK
     }
-    else if (id < 20){
-      return [10 - +id, 0];
+    else if (id <= 20){
+      return [0, 10-((-1)*(10 - +id))]; //[v, h] //
     }
-    else if (id < 30){
-      return [0, +id - 20];
+    else if (id <= 30){
+      return [0+id - 20, 0];
     }
     else if (id < 40){
       return [+id - 30, 10];
