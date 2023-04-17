@@ -1,4 +1,5 @@
 export class Propriety {
+  _id: string;
   nombre: string;
   precioCompra: number;
   matricula: number;
@@ -11,6 +12,7 @@ export class Propriety {
   coordenadas: {
     h: number;
     v: number;
+    _id: string;
   };
   cuatrisemestre: number;
 }

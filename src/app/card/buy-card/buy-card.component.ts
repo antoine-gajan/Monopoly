@@ -16,7 +16,6 @@ export class BuyCardComponent {
   ocultarTarjeta() {
     this.mostrarTarjeta = false;
     document.getElementById("tirar-dados")!.removeAttribute("disabled");
-    console.log("posiciones h: ", this.h, "v: ", this.v);
   }
 
   get_type_casilla() {
@@ -24,10 +23,10 @@ export class BuyCardComponent {
       return "party";
     }
     else if (this.h == 0 && this.v == 8){
-      return "heat"
+      return "electricity"
     }
     else if (this.h == 8 && this.v == 0){
-      return "electricity";
+      return "heat";
     }
     else{
       return "propriety";

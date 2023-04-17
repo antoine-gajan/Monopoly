@@ -1,46 +1,42 @@
 <div class="propriety-card">
   <div class="propriety-name" [style.background-color]="get_color()">
-    <h3 class="card-title">Proyecto software</h3>
+    <h3 class="card-title">{{propriety.nombre}}</h3>
   </div>
 
   <div class="container-info">
       <div class="coste">
-        Coste : 373€
+        Coste : {{propriety.precioCompra}}€
       </div>
       <div class="box-info">
-        <div class="text-start rent-info">Alquileres : 10€</div>
+        <div class="text-start rent-info">Alquileres : {{propriety.matricula}}€</div>
       </div>
       <div class="box-info">
         <div class="text-start rent-info space">1 crédito.......................</div>
-        <div class="text-end price-info">20€</div>
+        <div class="text-end price-info">{{propriety.precio1C}}€</div>
       </div>
       <div class="box-info">
         <div class="text-start rent-info space">2 créditos.....................</div>
-        <div class="text-end price-info">30€</div>
+        <div class="text-end price-info">{{propriety.precio2C}}€</div>
       </div>
       <div class="box-info">
         <div class="text-start rent-info space">3 créditos.....................</div>
-        <div class="text-end price-info">40€</div>
+        <div class="text-end price-info">{{propriety.precio3C}}€</div>
       </div>
       <div class="box-info">
         <div class="text-start rent-info space">4 créditos.....................</div>
-        <div class="text-end price-info">50€</div>
+        <div class="text-end price-info">{{propriety.precio4C}}€</div>
       </div>
       <div class="box-info">
         <div class="text-start rent-info space">Hotel...............................</div>
-        <div class="text-end price-info">60€</div>
+        <div class="text-end price-info">{{propriety.precio4C}}€</div>
       </div>
       <hr/>
       <div class="box-info">
-        <div class="text-start rent-info">Hipoteca : 30€</div>
+        <div class="text-start rent-info">Hipoteca : {{propriety.devolucionMatricula}}€</div>
       </div>
       <div class="box-info">
         <div class="text-start rent-info space">Precio crédito............</div>
-        <div class="text-end price-info">50€</div>
+        <div class="text-end price-info">{{propriety.matricula}}€</div>
       </div>
-    <div class="box-info">
-        <div class="text-start rent-info space">Precio hotel.................</div>
-        <div class="text-end price-info">50€</div>
-    </div>
   </div>
 </div>

@@ -15,6 +15,9 @@ export class BoardComponent {
   position_player: number = 0;
   current_player: number = 0;
   player_name: string;
+  special_cards: number[] = [0, 10, 20, 30];
+  chance_cards: number[] = [7, 22, 36];
+  community_cards: number[] = [2, 17, 33];
 
   constructor(private gameService: GameService, private userService: UserService, private route: ActivatedRoute,
               private router: Router, private componentFactoryResolver: ComponentFactoryResolver,
@@ -36,6 +39,7 @@ export class BoardComponent {
 }
 
   play(): void{
+    /// TODO : Check if the player can play
     this.play_turn_player(this.current_player);
   }
 
@@ -60,21 +64,24 @@ export class BoardComponent {
       await this.sleep(1500);
       /// TODO : Verify is the player can buy the property and ask to buy it
       // Display a buy card component
-      let position_x_y = this.convert_id_to_position(this.position_player);
-      this.createBuyCardComponent(position_x_y[1], position_x_y[0], "Quieres comprar ?", this.dices[0] == this.dices[1]);
+      let position_v_h = this.convert_id_to_position(this.position_player);
+      if (this.special_cards.includes(this.position_player)){
+        // Do nothing
+      }
+      else if (this.chance_cards.includes(this.position_player)){
+        /// TODO : Display random chance card
+      }
+      else if (this.community_cards.includes(this.position_player)){
+        /// TODO : Display random community card
+      }
+      else {
+        // Display buy card
+        console.log("Display buy card", position_v_h)
+        this.createBuyCardComponent(position_v_h[0], position_v_h[1], "Quieres comprar ?", this.dices[0] == this.dices[1]);
+      }
       /// TODO : End turn
     }
     });
-  }
-  roll_dices(): void{
-    // Function to roll dices
-    let dices: number[] = [];
-    for (let i = 0; i < 2; i++) {
-      dices.push(Math.floor(Math.random() * 6) + 1);
-    }
-    this.dices = dices;
-    // Display for degugging
-    console.table(this.dices)
   }
 
   get_image_from_dice_value(value: number): String{
@@ -82,23 +89,23 @@ export class BoardComponent {
     return "../../../assets/images/dice/" + value + ".png";
   }
 
-  convert_position_to_id(x: number, y: number): number{
-    // Function to convert position (x, y) to number between 0 and 39
-    console.log("convert_to_id", x, y);
-    if (x == 10 && y == 10) {
+  convert_position_to_id(v: number, h: number): number{
+    // Function to convert position (v, h) to number between 0 and 39
+    console.log("convert_to_id", v, h);
+    if (v == 10 && h == 10) {
       return 0;
     }
-    else if (x == 0){
-      return +20 + +y;
+    else if (v == 0){
+      return 20 + h;
     }
-    else if (x == 10){
-      return +10 - +y;
+    else if (v == 10){
+      return 10 - h;
     }
-    else if (y == 0){
-      return 20 - +x;
+    else if (h == 0){
+      return 20 - v;
     }
-    else if (y == 10){
-      return +30 + +x;
+    else if (h == 10){
+      return 30 + v;
     }
     else{
       console.log("Error: x and y are not valid");
@@ -107,22 +114,21 @@ export class BoardComponent {
   }
 
   convert_id_to_position(id: number): number[]{
-    console.log("id:", id);
-    // Function to convert id to position (h, v)
+    // Function to convert id to position (v, h)
     if (id == 0) {
       return [10, 10];
     }
-    else if (id <= 10){
-      return [10 - +id, 10]; //[v, h] //OK
+    else if (id < 10){
+      return [10, 10 - id];
     }
-    else if (id <= 20){
-      return [0, 10-((-1)*(10 - +id))]; //[v, h] //
+    else if (id < 20){
+      return [20 - id, 0];
     }
-    else if (id <= 30){
-      return [0+id - 20, 0];
+    else if (id < 30){
+      return [0, id - 20];
     }
     else if (id < 40){
-      return [+id - 30, 10];
+      return [id - 30, 10];
     }
     else{
       console.log("Error: position is not valid");
@@ -159,10 +165,15 @@ export class BoardComponent {
   update_position(id_player : number, old_position : number, dices : number[]){
     // Function to update the position of a player
     // Update position attribute
-    this.position_player = (+this.position_player + +dices[0] + +dices[1]) % 40;
+    let change_turn = this.position_player + dices[0] + dices[1] >= 40;
+    this.position_player = (this.position_player + dices[0] + dices[1]) % 40;
     // If player has to go to jail
     if (this.position_player == 30){
       this.position_player = 10;
+    }
+    // If player has to change turn
+    if (change_turn){
+      /// TODO : Receive 200€
     }
     // Remove previous position
     this.remove_position(id_player, old_position);
@@ -170,7 +181,7 @@ export class BoardComponent {
     this.add_position(id_player, this.position_player);
   }
 
-  createBuyCardComponent(h: number, v: number, message: string = "Quieres comprar", play_again: boolean = false): void {
+  createBuyCardComponent(v: number, h: number, message: string = "Quieres comprar", play_again: boolean = false): void {
     const factory = this.componentFactoryResolver.resolveComponentFactory(BuyCardComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
     componentRef.instance.h = h;
