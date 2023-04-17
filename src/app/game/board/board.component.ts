@@ -40,10 +40,11 @@ export class BoardComponent {
 
   play(): void{
     /// TODO : Check if the player can play
-    this.play_turn_player(this.current_player);
+    // When he can play, activate button
+    document.getElementById("tirar-dados")!.removeAttribute("disabled");
   }
 
-  async play_turn_player(id_player: number) {
+  async play_turn_player() {
     // Function to play the turn of a player
     // Disable play button to avoid double click
     document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
@@ -80,6 +81,8 @@ export class BoardComponent {
         this.createBuyCardComponent(position_v_h[0], position_v_h[1], "Quieres comprar ?", this.dices[0] == this.dices[1]);
       }
       /// TODO : End turn
+      // Return to main function of game to wait his turn
+      this.play();
     }
     });
   }
