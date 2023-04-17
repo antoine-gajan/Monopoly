@@ -135,5 +135,29 @@ export class UserService {
 
   crearPartida(user: any){
     console.log(user);
+    return this.http.post('http://localhost:3000/partida/crear'/*nerks.net:7003/partida/crear'*/, user, {responseType: 'text', observe: 'response'})
+                    .subscribe(
+                      (response) => {
+                        console.log(response.status);
+                          this.router.navigateByUrl('/game/:id');
+                      },
+                      (error) => {
+                        console.log(error);
+                      }
+                    );
+  }
+
+  unirseSala(user: any){
+    console.log(user);
+    return this.http.put('http://localhost:3000/partida/unirJugador'/*nerks.net:7003/partida/unirJugador'*/, user, {responseType: 'text', observe: 'response'})
+                    .subscribe(
+                      (response) => {
+                        console.log(response.status);
+                          this.router.navigateByUrl('/game/:id');
+                      },
+                      (error) => {
+                        console.log(error);
+                      }
+                    );
   }
  }

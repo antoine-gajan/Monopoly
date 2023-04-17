@@ -13,6 +13,7 @@ export class CrearSalaComponent {
   numJugadores: number = 2;
   dineroJugador: number = 1500;
   username: string;
+  normas: string = "";
 
   constructor(private http: HttpClient, private userService: UserService) {
     this.username = userService.getUsername();
@@ -24,7 +25,7 @@ export class CrearSalaComponent {
   
   crearPartidaDatos(){
     console.log("Crear partida: ", this.numJugadores, this.dineroJugador, this.username);
-    const datos = {username: this.username, dineroInicial: this.dineroJugador, nJugadores: this.numJugadores};
+    const datos = {username: this.username, dineroInicial: this.dineroJugador, normas: this.normas, nJugadores: this.numJugadores};
     this.userService.crearPartida(datos);
   }
 

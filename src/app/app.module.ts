@@ -24,6 +24,8 @@ import { DeleteUserComponent } from './user/delete_user/delete_user.component';
 import { UserService } from './user/user.service';
 import {CardModule} from "./card/card.module";
 import {BuyCardComponent} from "./card/buy-card/buy-card.component";
+import { CrearSalaComponent } from './crear_sala/crear_sala.component';
+import { UnirseSalaComponent } from './unirse_sala/unirse_sala.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,10 @@ import {BuyCardComponent} from "./card/buy-card/buy-card.component";
     CambiarContraseñaComponent,
     CambiarCorreoComponent,
     CambiarUsernameComponent,
-    DeleteUserComponent
+    DeleteUserComponent,
+    CrearSalaComponent,
+    UnirseSalaComponent
+    //BoardComponent
   ],
   imports: [
     FormsModule,

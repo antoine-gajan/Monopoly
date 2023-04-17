@@ -1,7 +1,8 @@
 import {Component} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {Location} from "@angular/common";
-
+import { HttpClient } from '@angular/common/http';
+import { UserService } from 'app/user/user.service';
 
 @Component({
   selector: 'app-unirse_sala',
@@ -10,9 +11,17 @@ import {Location} from "@angular/common";
 })
 export class UnirseSalaComponent {
 
-  constructor(
-    private route: ActivatedRoute,
-    private location: Location
-  ) {}
+  idPartida: number;
+  username: string;
+
+  constructor(private http: HttpClient, private userService: UserService) {
+    this.username = userService.getUsername();
+  }
+
+  uniseSalaDatos(){
+    console.log("Unirse partida: ", this.username, this.idPartida);
+    const datos = {idPartida: this.idPartida, username: this.username};
+    this.userService.unirseSala(datos);
+  }
 
 }
