@@ -1,5 +1,7 @@
-<div class="buy-card">
-  <div class="message">{{message}}</div>
+<div class="buy-card" *ngIf="mostrarTarjeta">
+  <div class="buy-card">
+  <div class="message">{{message}}
+  </div>
   <div class="card-information">
     <ng-container *ngIf="get_type_casilla() === 'propriety'">
       <app-propriety-card [h]= "h" [v]="v"></app-propriety-card>
@@ -19,7 +21,7 @@
   </div>
   <div class="list-button">
     <button class="button-action buy">Comprar</button>
-    <button *ngIf="play_again" class="button-action play-again">Jugar otra vez</button>
-    <button *ngIf="!play_again" class="button-action stop">Cancelar</button>
+    <button *ngIf="play_again" class="button-action play-again" (click)="ocultarTarjeta()">Jugar otra vez</button>
+    <button *ngIf="!play_again" class="button-action stop" (click)="ocultarTarjeta()">Cancelar</button>
   </div>
 </div>

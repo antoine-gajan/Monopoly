@@ -14,7 +14,7 @@ export class GameService {
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     let body = JSON.stringify({"idPartida": idPartida, "username": username});
 
-    return this.http.post("http://localhost:8080/partida/lanzarDados", body, httpOptions).pipe(
+    return this.http.post('http://localhost:3000/partida/lanzarDados', body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response);
@@ -26,7 +26,7 @@ export class GameService {
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     let body = JSON.stringify({"idPartida": idPartida});
 
-    return this.http.put<String[]>("http://localhost:8080/partida/listaJugadores", body, httpOptions).pipe(
+    return this.http.put<String[]>('http://localhost:3000/partida/listaJugadores', body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response);
@@ -35,7 +35,7 @@ export class GameService {
   }
 
   get_card(){
-    return this.http.get("http://localhost:8080/partida/casilla").pipe(
+    return this.http.get('http://localhost:3000/partida/casilla').pipe(
       tap(
         (response) => {
           console.log(response);
@@ -47,7 +47,7 @@ export class GameService {
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     let body = JSON.stringify({"username": username, "h": h, "v": v, "idPartida": idPartida});
 
-    return this.http.post("http://localhost:8080/partida/comprar", body, httpOptions).pipe(
+    return this.http.post('http://localhost:3000/partida/comprar', body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response);
@@ -58,13 +58,11 @@ export class GameService {
   actualize(idPartida : Number, nPJugadores : Number, dineroInicial : Number){
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     let body = JSON.stringify({"idPartida": idPartida, "nPJugadores": nPJugadores, "dineroInicial": dineroInicial});
-
-    return this.http.put("http://localhost:8080/partida/actualizar", body, httpOptions).pipe(
+    return this.http.put('http://localhost:3000/partida/actualizar', body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response);
         }
     ));
-
   }
 }

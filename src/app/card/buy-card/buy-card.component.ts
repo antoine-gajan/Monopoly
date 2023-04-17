@@ -8,8 +8,16 @@ import {Component, Input} from '@angular/core';
 export class BuyCardComponent {
   @Input() h = 8;
   @Input() v = 0;
-  @Input() message: string = "Quieres comprar ?";
+  @Input() message: string = "¿ Quieres comprala ?";
   @Input() play_again: boolean = false;
+
+  mostrarTarjeta = true;
+
+  ocultarTarjeta() {
+    this.mostrarTarjeta = false;
+    document.getElementById("tirar-dados")!.removeAttribute("disabled");
+    console.log("posiciones h: ", this.h, "v: ", this.v);
+  }
 
   get_type_casilla() {
     if (this.h == 5 || this.v == 5){
@@ -25,5 +33,4 @@ export class BuyCardComponent {
       return "propriety";
     }
   }
-
 }

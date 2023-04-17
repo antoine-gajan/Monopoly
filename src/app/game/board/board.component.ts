@@ -21,10 +21,10 @@ export class BoardComponent {
               private viewContainerRef: ViewContainerRef, private elRef: ElementRef) { }
 
   ngOnInit() {
-    this.play();
-  // Get id of the game
-  const game_id : string|null = this.route.snapshot.paramMap.get('id');
-  if (game_id != null) {
+    //this.play();
+    // Get id of the game
+    const game_id : string|null = this.route.snapshot.paramMap.get('id');
+    if (game_id != null) {
     this.game_id = +game_id;
   }
   else{
@@ -64,7 +64,11 @@ export class BoardComponent {
       this.createBuyCardComponent(position_x_y[1], position_x_y[0], "Quieres comprar ?", this.dices[0] == this.dices[1]);
       /// TODO : End turn
     }
-  });
+    
+    });
+    
+    
+    
 
   }
   roll_dices(): void{
