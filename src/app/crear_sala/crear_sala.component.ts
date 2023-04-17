@@ -17,7 +17,6 @@ export class CrearSalaComponent {
 
   constructor(private http: HttpClient, private userService: UserService) {
     this.username = userService.getUsername();
-
   }
 
  

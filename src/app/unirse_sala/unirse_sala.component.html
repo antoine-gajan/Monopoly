@@ -12,11 +12,9 @@
 </div>
 
 <section class="services">
-    <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
       <div class="icon-box iconbox-blue">
-          <input class="dinero" placeholder="#ID PARTIDA"/>
-          <button class="boton-jugar" (click)="uniseSalaDatos()">Unirse a la sala</button>
+        <input type="number" class="dinero" placeholder="#ID PARTIDA" [(ngModel)]="idPartida"/>
+        <button class="boton-jugar" (click)="uniseSalaDatos()">Unirse a la sala</button>
       </div>
-    </div>
 </section>
 <br><br><br><br><br><br>
