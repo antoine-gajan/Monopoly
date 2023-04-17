@@ -46,7 +46,6 @@ import { UnirseSalaComponent } from './unirse_sala/unirse_sala.component';
     DeleteUserComponent,
     CrearSalaComponent,
     UnirseSalaComponent
-    //BoardComponent
   ],
   imports: [
     FormsModule,
