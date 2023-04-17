@@ -21,6 +21,7 @@ export class BoardComponent {
               private viewContainerRef: ViewContainerRef, private elRef: ElementRef) { }
 
   ngOnInit() {
+    this.play();
   // Get id of the game
   const game_id : string|null = this.route.snapshot.paramMap.get('id');
   if (game_id != null) {

@@ -1,3 +1,4 @@
+/************************CABECERA************************/
 #header {
     background: #BFDBAE;
     box-shadow: 0px 0px 25px 0 rgba(0, 0, 0, 0.08);
@@ -8,17 +9,13 @@
 * {
     font-family: "Inter", sans-serif;
     padding: 0;
+	box-sizing: border-box;
 }
 
-// =================
-// TYPOGRAPHY
-// =================
+/************************TIPOGRAFÍA************************/
 $body-font: 'Oswald', sans-serif;
 
-// =================
-// COLORS
-// =================
-
+/************************COLORES************************/
 $black: #080808;
 $brown: #640303;
 $board: #fafaf8;
@@ -31,19 +28,12 @@ $yellow: #ffed20;
 $green: #41994e;
 $dark-blue: #5a6dba;
 
-// =================
-// GLOBAL
-// =================
-
-* {
-	box-sizing: border-box;
-}
 
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
 }
 
-// Property colors
+/************************PROPIEDAD COLORES************************/
 .dark-purple { background: $dark-purple; }
 .light-blue  { background: $light-blue; }
 .purple      { background: $purple; }
@@ -53,22 +43,18 @@ h1, h2, h3, h4, h5, h6 {
 .green       { background: $green; }
 .dark-blue   { background: $dark-blue; }
 
-// =================
-// LAYOUT
-// =================
-
 /***********************TABLERO***********************/
 .table {
 	padding-left: 40px;
 	padding-right: 40px;
-  float:left;
-  width: 45%;
+  	float:left;
+ 	width: 45%;
 }
 
 /***********************BOARD***********************/
 .board {
-  transform: scale(0.45);
-  transform-origin: left top;
+  	transform: scale(0.45);
+  	transform-origin: left top;
 	display: grid;
 	grid-template-columns: 125px repeat(9, 80px) 125px;
 	grid-template-rows: 125px repeat(9, 80px) 125px;
