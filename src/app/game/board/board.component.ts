@@ -18,13 +18,13 @@ export class BoardComponent {
   special_cards: number[] = [0, 10, 20, 30];
   chance_cards: number[] = [7, 22, 36];
   community_cards: number[] = [2, 17, 33];
+  taxes_cards: number[] = [4, 38];
 
   constructor(private gameService: GameService, private userService: UserService, private route: ActivatedRoute,
               private router: Router, private componentFactoryResolver: ComponentFactoryResolver,
               private viewContainerRef: ViewContainerRef, private elRef: ElementRef) { }
 
   ngOnInit() {
-    //this.play();
     // Get id of the game
     const game_id : string|null = this.route.snapshot.paramMap.get('id');
     if (game_id != null) {
@@ -36,6 +36,10 @@ export class BoardComponent {
   }
   // Get name of the player
   this.player_name = this.userService.getUsername();
+  // Show position of the player
+  this.show_position(this.current_player);
+  // Start the game
+  this.play();
 }
 
   play(): void{
@@ -74,6 +78,9 @@ export class BoardComponent {
       }
       else if (this.community_cards.includes(this.position_player)){
         /// TODO : Display random community card
+      }
+      else if (this.taxes_cards.includes(this.position_player)){
+        /// TODO : Display tax card and pay
       }
       else {
         // Display buy card
@@ -157,7 +164,7 @@ export class BoardComponent {
     }
   }
 
-  remove_position(id_player : number, id_property : number): void{
+  remove_position(id_player : number): void{
     // Get the div with circle id = id_player
     let player = document.getElementById("player" + id_player.toString());
     // Remove the div
@@ -174,17 +181,28 @@ export class BoardComponent {
     if (this.position_player == 30){
       this.position_player = 10;
     }
+    ///TODO : Update position with database
+
     // If player has to change turn
     if (change_turn){
       /// TODO : Receive 200€
     }
-    // Remove previous position
-    this.remove_position(id_player, old_position);
-    // Display new position
+    // Show position
+    this.show_position(id_player);
+  }
+
+  show_position(id_player : number): void{
+    // Function to display position of id_player in the board
+    this.remove_position(id_player);
     this.add_position(id_player, this.position_player);
   }
 
   createBuyCardComponent(v: number, h: number, message: string = "Quieres comprar", play_again: boolean = false): void {
+    // Assure to delete the old buy card component
+    const old_buy_card_component_element = document.getElementById('buy-card-component');
+    if (old_buy_card_component_element != null){
+      old_buy_card_component_element.remove();
+    }
     const factory = this.componentFactoryResolver.resolveComponentFactory(BuyCardComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
     componentRef.instance.h = h;

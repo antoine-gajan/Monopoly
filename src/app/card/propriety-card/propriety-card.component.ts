@@ -17,7 +17,7 @@ export class ProprietyCardComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.get_propriety();
+    //this.get_propriety();
   }
 
   get_propriety() {
