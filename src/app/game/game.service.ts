@@ -51,9 +51,11 @@ export class GameService {
 
   buy_card(username: string, idPartida : Number, h : Number, v : Number){
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
-    let body = JSON.stringify({"username": username, "h": h, "v": v, "idPartida": idPartida});
+    let body = JSON.stringify({  "username": username,
+                                                    "coordenadas":{"h": h,"v": v},
+                                                    "idPartida": idPartida})
 
-    return this.http.post('http://localhost:8080/partida/comprar', body, httpOptions).pipe(
+    return this.http.put('http://localhost:8080/partida/comprar', body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response);

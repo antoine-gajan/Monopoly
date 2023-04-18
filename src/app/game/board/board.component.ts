@@ -13,7 +13,7 @@ export class BoardComponent {
   game_id : number;
   dices: number[] = [];
   position_player: number = 0;
-  current_player: number = 0;
+  current_player: string = "antoine";
   player_name: string;
   special_cards: number[] = [0, 10, 20, 30];
   chance_cards: number[] = [7, 22, 36];
@@ -164,12 +164,12 @@ export class BoardComponent {
     }
   }
 
-  add_position(id_player : number, id_property : number): void{
+  add_position(id_player: string, id_property: number): void{
     // Function to display position (x, y) in the board
     // Get the property of the element with id = position
     let property = document.getElementById(id_property.toString());
     if (property != null){
-      let container_property = property.getElementsByClassName("container")[0];
+      let container_property = property.getElementsByClassName("list-players")[0];
       /// TODO : Add player's image in the center of the property
       // Add a circle on the property
       let player : HTMLElement = document.createElement("div");
@@ -182,7 +182,7 @@ export class BoardComponent {
     }
   }
 
-  remove_position(id_player : number): void{
+  remove_position(id_player: string): void{
     // Get the div with circle id = id_player
     let player = document.getElementById("player" + id_player.toString());
     // Remove the div
@@ -190,7 +190,8 @@ export class BoardComponent {
       player.remove();
     }
   }
-  update_position(id_player : number, old_position : number, dices : number[]){
+
+  update_position(id_player: string, old_position: number, dices: number[]){
     // Function to update the position of a player
     // Update position attribute
     let change_turn = this.position_player + dices[0] + dices[1] >= 40;
@@ -209,7 +210,7 @@ export class BoardComponent {
     this.show_position(id_player);
   }
 
-  show_position(id_player : number): void{
+  show_position(id_player: string): void{
     // Function to display position of id_player in the board
     this.remove_position(id_player);
     this.add_position(id_player, this.position_player);
@@ -225,6 +226,8 @@ export class BoardComponent {
     const componentRef = this.viewContainerRef.createComponent(factory);
     componentRef.instance.h = h;
     componentRef.instance.v = v;
+    componentRef.instance.game_id = this.game_id;
+    componentRef.instance.username = this.current_player;
     componentRef.instance.message = message;
     componentRef.instance.play_again = play_again;
     // Give an id to the component html

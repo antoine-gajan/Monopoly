@@ -8,6 +8,7 @@ import { ElectricityCardComponent } from './electricity-card/electricity-card.co
 import { HeatCardComponent } from './heat-card/heat-card.component';
 import { BuyCardComponent } from './buy-card/buy-card.component';
 import {AppModule} from "../app.module";
+import {GameModule} from "../game/game.module";
 
 @NgModule({
   declarations: [
@@ -18,9 +19,10 @@ import {AppModule} from "../app.module";
     ElectricityCardComponent,
     HeatCardComponent,
     BuyCardComponent],
-  imports: [
-    CommonModule,
-  ],
+    imports: [
+        CommonModule,
+        GameModule,
+    ],
   exports: [
     ProprietyCardComponent,
     PartyCardComponent,

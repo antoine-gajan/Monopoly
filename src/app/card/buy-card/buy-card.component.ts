@@ -1,4 +1,5 @@
 import {Component, Input} from '@angular/core';
+import {GameService} from "../../game/game.service";
 
 @Component({
   selector: 'app-buy-card',
@@ -8,10 +9,16 @@ import {Component, Input} from '@angular/core';
 export class BuyCardComponent {
   @Input() h = 8;
   @Input() v = 0;
+  @Input() game_id : number = 0;
+  @Input() username : string = "antoine";
   @Input() message: string = "¿ Quieres comprala ?";
   @Input() play_again: boolean = false;
 
   mostrarTarjeta = true;
+
+  constructor(private gameService : GameService) {
+
+  }
 
   ocultarTarjeta() {
     this.mostrarTarjeta = false;
@@ -20,7 +27,7 @@ export class BuyCardComponent {
   }
 
   get_type_casilla() {
-    
+
     if (this.h == 5 || this.v == 5){
       return "party";
     }
@@ -33,5 +40,12 @@ export class BuyCardComponent {
     else{
       return "propriety";
     }
+  }
+
+  buy_card() {
+    this.gameService.buy_card(this.username, this.game_id, this.h, this.v).subscribe((response) => {
+      console.log(response);
+      this.ocultarTarjeta();
+    });
   }
 }

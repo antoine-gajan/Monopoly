@@ -2,15 +2,20 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {BoardComponent} from "./board/board.component";
 import {LeaderboardComponent} from "./leaderboard/leaderboard.component";
+import {LoaderComponent} from "./loader/loader.component";
 
 
 @NgModule({
   declarations: [
     BoardComponent,
-    LeaderboardComponent
+    LeaderboardComponent,
+    LoaderComponent
   ],
   imports: [
-    CommonModule
-  ]
+    CommonModule,
+  ],
+  exports: [
+    LoaderComponent,
+    ]
 })
 export class GameModule { }

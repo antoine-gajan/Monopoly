@@ -23,7 +23,7 @@ export class ProprietyCardComponent implements OnInit{
 
   get_propriety() {
     /// TODO : Get the property from the game service
-    this.gameService.get_info_propriety(this.h, this.v).subscribe((propriety) => {
+    this.gameService.get_info_propriety(this.v, this.h).subscribe((propriety) => {
       this.propriety = propriety;
     });
   }

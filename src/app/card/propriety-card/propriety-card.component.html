@@ -1,9 +1,11 @@
-<div class="propriety-card" *ngIf="propriety">
-  <div class="propriety-name" [style.background-color]="get_color()">
+<div class="propriety-card">
+  <div class="propriety-name" *ngIf="propriety" [style.background-color]="get_color()">
     <h3 class="card-title">{{propriety.casillaInfo.nombre}}</h3>
   </div>
-
-  <div class="container-info">
+  <div *ngIf="!propriety" class="load-center">
+    <app-loader></app-loader>
+  </div>
+  <div class="container-info" *ngIf="propriety">
       <div class="coste">
         Coste : {{propriety.casillaInfo.precioCompra}}€
       </div>

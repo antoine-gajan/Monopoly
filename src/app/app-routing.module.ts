@@ -26,6 +26,7 @@ import {ElectricityCardComponent} from "./card/electricity-card/electricity-card
 import {HeatCardComponent} from "./card/heat-card/heat-card.component";
 import {PartyCardComponent} from "./card/party-card/party-card.component";
 import {BuyCardComponent} from "./card/buy-card/buy-card.component";
+import {LoaderComponent} from "./game/loader/loader.component";
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },

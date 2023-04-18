@@ -49,3 +49,10 @@ hr{
   height: 2px;
   color: black;
 }
+
+.load-center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
