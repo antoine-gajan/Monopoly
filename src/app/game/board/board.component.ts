@@ -41,6 +41,16 @@ export class BoardComponent {
   // Start the game
   this.play();
 }
+diceImages = [
+  "../../../assets/images/dice/1.png",
+  "../../../assets/images/dice/2.png",
+  "../../../assets/images/dice/3.png",
+  "../../../assets/images/dice/4.png",
+  "../../../assets/images/dice/5.png",
+  "../../../assets/images/dice/6.png"
+];
+
+
 
   play(): void{
     /// TODO : Check if the player can play
@@ -49,6 +59,18 @@ export class BoardComponent {
   }
 
   async play_turn_player() {
+      let count = 0;
+      const interval = setInterval(() => {
+        this.dices[0] = Math.floor(Math.random() * 6) + 1;
+        this.dices[1] = Math.floor(Math.random() * 6) + 1;
+        count++;
+        if (count === 10) {
+          clearInterval(interval);
+          // Set the final dice values
+          this.dices[0] = Math.floor(Math.random() * 6) + 1;
+          this.dices[1] = Math.floor(Math.random() * 6) + 1;
+        }
+      }, 200);
     // Function to play the turn of a player
     // Disable play button to avoid double click
     document.getElementById("tirar-dados")!.setAttribute("disabled", "true");

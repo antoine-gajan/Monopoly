@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Propriety} from "../propriety";
 import { HttpClient } from '@angular/common/http';
 import {GameService} from "../../game/game.service";
+import { response } from 'express';
 
 @Component({
   selector: 'app-propriety-card',
@@ -11,19 +12,40 @@ import {GameService} from "../../game/game.service";
 export class ProprietyCardComponent implements OnInit{
   @Input() h: number = 0;
   @Input() v: number = 0;
+  _id: string= "";
   propriety: Propriety;
+  nombre: string;
+  precioCompra: number;
+  matricula: number;
+  precio1C: number;
+  precio2C: number;
+  precio3C: number;
+  precio4C: number;
+  devolucionMatricula: number;
+  tipo: string;
+  coordenadas: {
+    h: number;
+    v: number;
+  };
+  cuatrisemestre: number;
 
   constructor(private http: HttpClient, public gameService: GameService) {
   }
 
   ngOnInit() {
-    //this.get_propriety();
+    this.get_propriety();
   }
 
   get_propriety() {
     /// TODO : Get the property from the game service
-    this.gameService.get_info_propriety(this.v, this.h).subscribe
-    (propriety => this.propriety = propriety);
+    //this.gameService.get_info_propriety(this.v, this.h).subscribe
+    //(propriety => this.propriety = propriety);
+    this.gameService.get_info_propriety(this.h, this.v).subscribe((response) => {
+      this.propriety = response;
+      console.log(this.propriety); // Imprime en la consola el objeto JSON devuelto por el servidor
+    });
+    
+    
   }
 
   get_color() {

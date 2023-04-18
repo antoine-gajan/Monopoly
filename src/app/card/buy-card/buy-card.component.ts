@@ -16,9 +16,11 @@ export class BuyCardComponent {
   ocultarTarjeta() {
     this.mostrarTarjeta = false;
     document.getElementById("tirar-dados")!.removeAttribute("disabled");
+    console.log("h: ", this.h, "v: ", this.v);
   }
 
   get_type_casilla() {
+    
     if (this.h == 5 || this.v == 5){
       return "party";
     }
