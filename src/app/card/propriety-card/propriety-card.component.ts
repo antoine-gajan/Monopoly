@@ -12,22 +12,7 @@ import { response } from 'express';
 export class ProprietyCardComponent implements OnInit{
   @Input() h: number = 0;
   @Input() v: number = 0;
-  _id: string= "";
   propriety: Propriety;
-  nombre: string;
-  precioCompra: number;
-  matricula: number;
-  precio1C: number;
-  precio2C: number;
-  precio3C: number;
-  precio4C: number;
-  devolucionMatricula: number;
-  tipo: string;
-  coordenadas: {
-    h: number;
-    v: number;
-  };
-  cuatrisemestre: number;
 
   constructor(private http: HttpClient, public gameService: GameService) {
   }
@@ -38,14 +23,9 @@ export class ProprietyCardComponent implements OnInit{
 
   get_propriety() {
     /// TODO : Get the property from the game service
-    //this.gameService.get_info_propriety(this.v, this.h).subscribe
-    //(propriety => this.propriety = propriety);
-    this.gameService.get_info_propriety(this.h, this.v).subscribe((response) => {
-      this.propriety = response;
-      console.log(this.propriety); // Imprime en la consola el objeto JSON devuelto por el servidor
+    this.gameService.get_info_propriety(this.h, this.v).subscribe((propriety) => {
+      this.propriety = propriety;
     });
-    
-    
   }
 
   get_color() {

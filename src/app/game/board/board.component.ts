@@ -41,14 +41,14 @@ export class BoardComponent {
   // Start the game
   this.play();
 }
-diceImages = [
-  "../../../assets/images/dice/1.png",
-  "../../../assets/images/dice/2.png",
-  "../../../assets/images/dice/3.png",
-  "../../../assets/images/dice/4.png",
-  "../../../assets/images/dice/5.png",
-  "../../../assets/images/dice/6.png"
-];
+  diceImages = [
+    "../../../assets/images/dice/1.png",
+    "../../../assets/images/dice/2.png",
+    "../../../assets/images/dice/3.png",
+    "../../../assets/images/dice/4.png",
+    "../../../assets/images/dice/5.png",
+    "../../../assets/images/dice/6.png"
+  ];
 
 
 
@@ -59,22 +59,11 @@ diceImages = [
   }
 
   async play_turn_player() {
-      let count = 0;
-      const interval = setInterval(() => {
-        this.dices[0] = Math.floor(Math.random() * 6) + 1;
-        this.dices[1] = Math.floor(Math.random() * 6) + 1;
-        count++;
-        if (count === 10) {
-          clearInterval(interval);
-          // Set the final dice values
-          this.dices[0] = Math.floor(Math.random() * 6) + 1;
-          this.dices[1] = Math.floor(Math.random() * 6) + 1;
-        }
-      }, 200);
-    // Function to play the turn of a player
     // Disable play button to avoid double click
     document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
+    // Function to play the turn of a player
     // Roll dices
+    this.move_dices_action();
     await this.gameService.roll_dices("antoine", 0).subscribe( {
       next: (data: any) => {
       this.dices[0] = data.dado1;
@@ -116,9 +105,16 @@ diceImages = [
     });
   }
 
-  get_image_from_dice_value(value: number): String{
-    // Function to get the image path from the dice value
-    return "../../../assets/images/dice/" + value + ".png";
+  move_dices_action(): void{
+    let count = 0;
+      const interval = setInterval(() => {
+        this.dices[0] = Math.floor(Math.random() * 6) + 1;
+        this.dices[1] = Math.floor(Math.random() * 6) + 1;
+        count++;
+        if (count === 10) {
+          clearInterval(interval);
+        }
+      }, 200);
   }
 
   convert_position_to_id(v: number, h: number): number{
