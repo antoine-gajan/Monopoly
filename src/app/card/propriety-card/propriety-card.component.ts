@@ -1,8 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Propriety} from "../propriety";
-import { HttpClient } from '@angular/common/http';
 import {GameService} from "../../game/game.service";
-import { response } from 'express';
 
 @Component({
   selector: 'app-propriety-card',
@@ -14,8 +12,7 @@ export class ProprietyCardComponent implements OnInit{
   @Input() v: number = 0;
   propriety: Propriety;
 
-  constructor(private http: HttpClient, public gameService: GameService) {
-  }
+  constructor(public gameService: GameService) {}
 
   ngOnInit() {
     this.get_propriety();

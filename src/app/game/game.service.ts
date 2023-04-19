@@ -7,8 +7,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-
-
+import { environment } from 'enviroment/enviroment';
+import { Party } from 'app/card/party';
 @Injectable({
   providedIn: 'root'
 })
@@ -20,7 +20,7 @@ export class GameService {
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     let body = JSON.stringify({"idPartida": idPartida, "username": username});
 
-    return this.http.post('http://localhost:8080/partida/lanzarDados', body, httpOptions).pipe(
+    return this.http.post(environment.lanzarDados, body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response);
@@ -32,7 +32,7 @@ export class GameService {
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     let body = JSON.stringify({"idPartida": idPartida});
 
-    return this.http.put<String[]>('http://localhost:8080/partida/listaJugadores', body, httpOptions).pipe(
+    return this.http.put<String[]>(environment.listaJugadores, body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response);
@@ -46,7 +46,7 @@ export class GameService {
     let body = JSON.stringify({  "username": username,
                                                     "coordenadas":{"h": h,"v": v},
                                                     "idPartida": idPartida})
-    return this.http.put('http://localhost:8080/partida/casilla', body, httpOptions).pipe(
+    return this.http.put(environment.casilla, body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response);
@@ -60,7 +60,7 @@ export class GameService {
                                                     "coordenadas":{"h": h,"v": v},
                                                     "idPartida": idPartida})
 
-    return this.http.put('http://localhost:8080/partida/comprar', body, httpOptions).pipe(
+    return this.http.put(environment.comprarCasilla, body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response);
@@ -71,7 +71,7 @@ export class GameService {
   actualize(idPartida : Number, nPJugadores : Number, dineroInicial : Number){
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     let body = JSON.stringify({"idPartida": idPartida, "nPJugadores": nPJugadores, "dineroInicial": dineroInicial});
-    return this.http.put('http://localhost:8080/partida/actualizar', body, httpOptions).pipe(
+    return this.http.put(environment.actualizarPartida, body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response);
@@ -84,7 +84,18 @@ export class GameService {
     const body = {"coordenadas":{"h": h,"v": v}};
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 
-    return this.http.put<Propriety>('http://localhost:8080/partida/infoAsignatura', body, httpOptions).pipe(
+    return this.http.put<Propriety>(environment.infoAsignatura, body, httpOptions).pipe(
+      tap(
+        (response) => {
+          console.log(response)})
+      );
+  }
+
+  get_info_party(v: number, h: number){ //Devuelve la información de la tarjeta de la casilla de fiesta (San braulio, san pepe, ...)
+    const body = {"coordenadas":{"h": h,"v": v}};
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+
+    return this.http.put<Party>(environment.infoAsignatura, body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response)})

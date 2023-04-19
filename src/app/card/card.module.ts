@@ -19,8 +19,8 @@ import {GameModule} from "../game/game.module";
     HeatCardComponent,
     BuyCardComponent],
     imports: [
-        CommonModule,
-        GameModule,
+      CommonModule,
+      GameModule,
     ],
   exports: [
     ProprietyCardComponent,

@@ -52,7 +52,7 @@ import { UnirseSalaComponent } from './unirse_sala/unirse_sala.component';
         BrowserModule,
         HttpClientModule,
         GameModule,
-        CardModule,
+        //CardModule,
         AppRoutingModule,
         ReactiveFormsModule,
         RouterModule
