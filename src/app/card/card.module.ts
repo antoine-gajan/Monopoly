@@ -7,7 +7,6 @@ import { PartyCardComponent } from './party-card/party-card.component';
 import { ElectricityCardComponent } from './electricity-card/electricity-card.component';
 import { HeatCardComponent } from './heat-card/heat-card.component';
 import { BuyCardComponent } from './buy-card/buy-card.component';
-import {AppModule} from "../app.module";
 import {GameModule} from "../game/game.module";
 
 @NgModule({

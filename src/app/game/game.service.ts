@@ -40,8 +40,13 @@ export class GameService {
     ));
   }
 
-  get_card(){
-    return this.http.get('http://localhost:8080/partida/casilla').pipe(
+  get_card(username: string, idPartida : number, h : Number, v : number){
+    // Function which return the card information (owner, price to pay) and update position
+    const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
+    let body = JSON.stringify({  "username": username,
+                                                    "coordenadas":{"h": h,"v": v},
+                                                    "idPartida": idPartida})
+    return this.http.put('http://localhost:8080/partida/casilla', body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response);
@@ -75,6 +80,7 @@ export class GameService {
   }
 
   get_info_propriety(v: number, h: number){
+    // Return the information of the "Asignatura"
     const body = {"coordenadas":{"h": h,"v": v}};
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 

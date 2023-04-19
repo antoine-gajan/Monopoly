@@ -76,31 +76,55 @@ export class BoardComponent {
     complete: async () => {
       // Update player position
       this.update_position(this.current_player, this.position_player, this.dices);
-      // Wait 2 seconds
-      await this.sleep(1500);
-      /// TODO : Verify is the player can buy the property and ask to buy it
-      // Display a buy card component
       let position_v_h = this.convert_id_to_position(this.position_player);
-      if (this.special_cards.includes(this.position_player)){
-        // Do nothing
-      }
-      else if (this.chance_cards.includes(this.position_player)){
-        /// TODO : Display random chance card
-      }
-      else if (this.community_cards.includes(this.position_player)){
-        /// TODO : Display random community card
-      }
-      else if (this.taxes_cards.includes(this.position_player)){
-        /// TODO : Display tax card and pay
-      }
-      else {
-        // Display buy card
-        console.log("Display buy card", position_v_h)
-        this.createBuyCardComponent(position_v_h[0], position_v_h[1], "Quieres comprar ?", this.dices[0] == this.dices[1]);
-      }
-      /// TODO : End turn
-      // Return to main function of game to wait his turn
-      this.play();
+
+      // Get card information
+      let owner_of_card : string | null = null;
+      let money_to_pay : number | null = null;
+      this.gameService.get_card(this.current_player, this.game_id, position_v_h[0], position_v_h[1]).subscribe({
+        next: (data: any) => {
+          owner_of_card = data.jugador;
+          money_to_pay = data.dinero;
+        },
+        error: (error) => {
+          console.error(error);
+        },
+        complete: async () => {
+          console.log("Position updated in database");
+          // Wait 1 seconds
+          await this.sleep(1000);
+          /// TODO : Verify is the player can buy the property and ask to buy it
+          // Display a buy card component
+          if (this.special_cards.includes(this.position_player)){
+            // Do nothing
+          }
+          else if (this.chance_cards.includes(this.position_player)){
+            /// TODO : Display random chance card
+          }
+          else if (this.community_cards.includes(this.position_player)){
+            /// TODO : Display random community card
+          }
+          else if (this.taxes_cards.includes(this.position_player)){
+            /// TODO : Display tax card and pay
+          }
+          // If it's a normal card
+          else {
+            if (owner_of_card == null){
+              // Display buy card
+              console.log("Display buy card", position_v_h)
+              this.createBuyCardComponent(position_v_h[0], position_v_h[1], "Quieres comprar ?", this.dices[0] == this.dices[1]);
+            }
+            else if (owner_of_card == this.current_player){
+              /// TODO : Display a buy card component to ask if the player wants to buy credit
+              console.log("You own this property", position_v_h);
+            }
+            else {
+              /// TODO : Display a card to pay the owner
+              console.log("Display pay card", position_v_h);
+            }
+          }
+        }
+      });
     }
     });
   }
@@ -200,8 +224,6 @@ export class BoardComponent {
     if (this.position_player == 30){
       this.position_player = 10;
     }
-    ///TODO : Update position with database
-
     // If player has to change turn
     if (change_turn){
       /// TODO : Receive 200€

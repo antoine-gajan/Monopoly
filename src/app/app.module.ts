@@ -51,13 +51,12 @@ import { UnirseSalaComponent } from './unirse_sala/unirse_sala.component';
         FormsModule,
         BrowserModule,
         HttpClientModule,
-        //UserModule,
         GameModule,
         CardModule,
         AppRoutingModule,
         ReactiveFormsModule,
-        RouterModule],//.forRoot(ROUTES),
-    //routing],
+        RouterModule
+    ],
     providers: [UserService],
     bootstrap: [AppComponent],
     entryComponents: [BuyCardComponent]
