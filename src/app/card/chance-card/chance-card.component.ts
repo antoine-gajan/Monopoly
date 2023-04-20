@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {Chance} from "../chance";
 
 @Component({
   selector: 'app-chance-card',
@@ -6,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./chance-card.component.css']
 })
 export class ChanceCardComponent {
-
+  chance: Chance;
 }

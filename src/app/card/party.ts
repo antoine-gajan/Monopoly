@@ -1,5 +1,6 @@
-export interface Party{
+export interface Party {
   casillaInfo: {
+    _id: string;
     nombre: string;
     precioCompra: number;
     matricula: number;
@@ -11,7 +12,7 @@ export interface Party{
     coordenadas: {
       h: number;
       v: number;
+      _id: string;
     };
   }
-  
 }

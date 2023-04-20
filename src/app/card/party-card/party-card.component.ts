@@ -9,10 +9,9 @@ import {GameService} from "../../game/game.service";
   styleUrls: ['./party-card.component.css']
 })
 export class PartyCardComponent implements OnInit{
-  @Input() h: number = 5;
-  @Input() v: number = 10;
+  @Input() h: number;
+  @Input() v: number;
   party: Party;
-  propriety: Propriety;
   constructor(public gameService: GameService) {}
 
   ngOnInit() {
@@ -21,6 +20,7 @@ export class PartyCardComponent implements OnInit{
 
   get_party() {
     this.gameService.get_info_party(this.v, this.h).subscribe((party) => {
+      console.log(party);
       this.party = party;
     });
   }

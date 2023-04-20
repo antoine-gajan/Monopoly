@@ -68,9 +68,9 @@ export class GameService {
     ));
   }
 
-  actualize(idPartida : Number, nPJugadores : Number, dineroInicial : Number){
+  actualize(idPartida : Number, nJugadores : Number, dineroInicial : Number){
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
-    let body = JSON.stringify({"idPartida": idPartida, "nPJugadores": nPJugadores, "dineroInicial": dineroInicial});
+    let body = JSON.stringify({"idPartida": idPartida, "nJugadores": nJugadores, "dineroInicial": dineroInicial});
     return this.http.put(environment.actualizarPartida, body, httpOptions).pipe(
       tap(
         (response) => {
@@ -91,7 +91,8 @@ export class GameService {
       );
   }
 
-  get_info_party(v: number, h: number){ //Devuelve la información de la tarjeta de la casilla de fiesta (San braulio, san pepe, ...)
+  get_info_party(v: number, h: number){
+    // Return information of the "Party" card
     const body = {"coordenadas":{"h": h,"v": v}};
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 

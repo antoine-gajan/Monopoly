@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, EventEmitter, Output } from '@angular/core';
 import {GameService} from "../../game/game.service";
 
 @Component({
@@ -7,23 +7,18 @@ import {GameService} from "../../game/game.service";
   styleUrls: ['./buy-card.component.css']
 })
 export class BuyCardComponent {
-  @Input() h = 8;
-  @Input() v = 0;
+  @Input() h : number;
+  @Input() v : number;
   @Input() game_id : number = 0;
   @Input() username : string = "antoine";
   @Input() message: string = "¿ Quieres comprala ?";
   @Input() play_again: boolean = false;
 
-  mostrarTarjeta = true;
+  // Define an EventEmitter to emit the "end turn" event of BoardComponent
+  @Output() end_turn = new EventEmitter();
 
   constructor(private gameService : GameService) {
 
-  }
-
-  ocultarTarjeta() {
-    this.mostrarTarjeta = false;
-    document.getElementById("tirar-dados")!.removeAttribute("disabled");
-    console.log("h: ", this.h, "v: ", this.v);
   }
 
   get_type_casilla() {
@@ -45,7 +40,12 @@ export class BuyCardComponent {
   buy_card() {
     this.gameService.buy_card(this.username, this.game_id, this.h, this.v).subscribe((response) => {
       console.log(response);
-      this.ocultarTarjeta();
+      // Call end turn of BoardComponent
+      this.callback_end_turn();
     });
+  }
+
+  callback_end_turn() {
+    this.end_turn.emit();
   }
 }

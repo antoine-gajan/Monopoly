@@ -1,4 +1,4 @@
-<div class="buy-card" *ngIf="mostrarTarjeta">
+<div class="buy-card">
   <div class="buy-card">
   <div class="message">{{message}}
   </div>
@@ -21,7 +21,7 @@
   </div>
   <div class="list-button">
     <button class="button-action buy" (click)="buy_card()">Comprar</button>
-    <button *ngIf="play_again" class="button-action play-again" (click)="ocultarTarjeta()">Jugar otra vez</button>
-    <button *ngIf="!play_again" class="button-action stop" (click)="ocultarTarjeta()">Cancelar</button>
+    <button *ngIf="play_again" class="button-action play-again" (click)="callback_end_turn()">Jugar otra vez</button>
+    <button *ngIf="!play_again" class="button-action stop" (click)="callback_end_turn()">Cancelar</button>
   </div>
 </div>

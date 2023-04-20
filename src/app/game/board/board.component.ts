@@ -56,7 +56,14 @@ export class BoardComponent {
     /// TODO : Check if the player can play
     // When he can play, activate button
     document.getElementById("tirar-dados")!.removeAttribute("disabled");
+
+    /*this.gameService.get_list_players(this.game_id).subscribe({
+      next: (data: any) => {
+        console.log(data);
+      }
+    });*/
   }
+
 
   async play_turn_player() {
     // Disable play button to avoid double click
@@ -91,8 +98,8 @@ export class BoardComponent {
         },
         complete: async () => {
           console.log("Position updated in database");
-          // Wait 1 seconds
-          await this.sleep(1000);
+          // Wait 0.5 seconds
+          await this.sleep(500);
           /// TODO : Verify is the player can buy the property and ask to buy it
           // Display a buy card component
           if (this.special_cards.includes(this.position_player)){
@@ -100,6 +107,7 @@ export class BoardComponent {
           }
           else if (this.chance_cards.includes(this.position_player)){
             /// TODO : Display random chance card
+            this.createBuyCardComponent(position_v_h[0], position_v_h[1], "Quieres comprar ?", this.dices[0] == this.dices[1]);
           }
           else if (this.community_cards.includes(this.position_player)){
             /// TODO : Display random community card
@@ -127,6 +135,17 @@ export class BoardComponent {
       });
     }
     });
+  }
+
+  end_turn(): void{
+    ///TODO : Indicate to backend that the player has finished his turn
+    // Delete the pop-up-card component
+    const old_buy_card_component_element = document.getElementById('pop-up-card');
+    if (old_buy_card_component_element != null){
+      old_buy_card_component_element.remove();
+    }
+    // Go inside the next loop of game
+    this.play();
   }
 
   move_dices_action(): void{
@@ -198,7 +217,7 @@ export class BoardComponent {
       // Add a circle on the property
       let player : HTMLElement = document.createElement("div");
       player.id = "player" + id_player.toString();
-      player.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: red; border-radius: 50%; width: 30px; height: 30px;";
+      player.style.cssText = "background-color: red; border-radius: 50%; width: 30px; height: 30px;";
       container_property.appendChild(player);
     }
     else{
@@ -240,7 +259,28 @@ export class BoardComponent {
 
   createBuyCardComponent(v: number, h: number, message: string = "Quieres comprar", play_again: boolean = false): void {
     // Assure to delete the old buy card component
-    const old_buy_card_component_element = document.getElementById('buy-card-component');
+    const old_buy_card_component_element = document.getElementById('pop-up-card');
+    if (old_buy_card_component_element != null){
+      old_buy_card_component_element.remove();
+    }
+    const factory = this.componentFactoryResolver.resolveComponentFactory(BuyCardComponent);
+    const componentRef = this.viewContainerRef.createComponent(factory);
+    componentRef.instance.h = h;
+    componentRef.instance.v = v;
+    componentRef.instance.game_id = this.game_id;
+    componentRef.instance.username = this.current_player;
+    componentRef.instance.message = message;
+    componentRef.instance.play_again = play_again;
+    componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
+    // Give an id to the component html
+    componentRef.location.nativeElement.id = "pop-up-card";
+    // Center the component at the middle of the page
+    componentRef.location.nativeElement.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);";
+  }
+
+  createChanceCardComponent(v: number, h: number, message: string = "", play_again: boolean = false): void {
+    // Assure to delete the old buy card component
+    const old_buy_card_component_element = document.getElementById('pop-up-card');
     if (old_buy_card_component_element != null){
       old_buy_card_component_element.remove();
     }
@@ -253,7 +293,7 @@ export class BoardComponent {
     componentRef.instance.message = message;
     componentRef.instance.play_again = play_again;
     // Give an id to the component html
-    componentRef.location.nativeElement.id = "buy-card-component";
+    componentRef.location.nativeElement.id = "pop-up-card";
     // Center the component at the middle of the page
     componentRef.location.nativeElement.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);";
   }
