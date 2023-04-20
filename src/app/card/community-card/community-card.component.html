@@ -1,11 +1,12 @@
 <div class="community-card">
   <h3 class="title-card">
-    FONDO COMUNITARIO
+    BOLETIN
   </h3>
   <div class="info-container">
     <img src='../../../assets/images/perso_left.jpg'>
-    <div class="info">
-      INFO OF CARD XXXXXXXXXXXXXX
+    <div class="info" *ngIf="community">
+      {{community.descripcion}}
     </div>
+    <app-loader *ngIf="!community" class="load-center"></app-loader>
   </div>
 </div>

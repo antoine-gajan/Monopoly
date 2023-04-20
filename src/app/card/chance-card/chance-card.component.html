@@ -3,9 +3,10 @@
     CHANCE
   </h3>
   <div class="info-container">
-    <div class="info">
-      INFO OF CARD XXXXXXXXXXXXXX
+    <div class="info" *ngIf="chance">
+      {{chance.descripcion}}
     </div>
+    <app-loader *ngIf="!chance" class="load-center"></app-loader>
     <img src='../../../assets/images/perso_right.png'>
   </div>
 </div>

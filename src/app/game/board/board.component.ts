@@ -3,6 +3,8 @@ import { GameService} from "../game.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../user/user.service";
 import {BuyCardComponent} from "../../card/buy-card/buy-card.component";
+import {ChanceCardComponent} from "../../card/chance-card/chance-card.component";
+import {CommunityCardComponent} from "../../card/community-card/community-card.component";
 
 @Component({
   selector: 'app-board',
@@ -56,6 +58,11 @@ export class BoardComponent {
     /// TODO : Check if the player can play
     // When he can play, activate button
     document.getElementById("tirar-dados")!.removeAttribute("disabled");
+    this.gameService.get_random_boletin_card().subscribe({
+      next: (data: any) => {
+        console.log(data);
+      }
+    });
 
     /*this.gameService.get_list_players(this.game_id).subscribe({
       next: (data: any) => {
@@ -73,8 +80,9 @@ export class BoardComponent {
     this.move_dices_action();
     await this.gameService.roll_dices("antoine", 0).subscribe( {
       next: (data: any) => {
-      this.dices[0] = data.dado1;
-      this.dices[1] = data.dado2;
+      //this.dices[0] = data.dado1;
+      //this.dices[1] = data.dado2;
+        this.dices = [0, 2];
       console.log(this.dices);
     },
     error: (error) => {
@@ -107,10 +115,11 @@ export class BoardComponent {
           }
           else if (this.chance_cards.includes(this.position_player)){
             /// TODO : Display random chance card
-            this.createBuyCardComponent(position_v_h[0], position_v_h[1], "Quieres comprar ?", this.dices[0] == this.dices[1]);
+            this.createChanceCardComponent(position_v_h[0], position_v_h[1], "Quieres comprar ?", this.dices[0] == this.dices[1]);
           }
           else if (this.community_cards.includes(this.position_player)){
             /// TODO : Display random community card
+            this.createCommunityCardComponent(position_v_h[0], position_v_h[1], "Quieres comprar ?", this.dices[0] == this.dices[1]);
           }
           else if (this.taxes_cards.includes(this.position_player)){
             /// TODO : Display tax card and pay
@@ -284,14 +293,22 @@ export class BoardComponent {
     if (old_buy_card_component_element != null){
       old_buy_card_component_element.remove();
     }
-    const factory = this.componentFactoryResolver.resolveComponentFactory(BuyCardComponent);
+    const factory = this.componentFactoryResolver.resolveComponentFactory(ChanceCardComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
-    componentRef.instance.h = h;
-    componentRef.instance.v = v;
-    componentRef.instance.game_id = this.game_id;
-    componentRef.instance.username = this.current_player;
-    componentRef.instance.message = message;
-    componentRef.instance.play_again = play_again;
+    // Give an id to the component html
+    componentRef.location.nativeElement.id = "pop-up-card";
+    // Center the component at the middle of the page
+    componentRef.location.nativeElement.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);";
+  }
+
+  createCommunityCardComponent(v: number, h: number, message: string = "", play_again: boolean = false): void {
+    // Assure to delete the old buy card component
+    const old_buy_card_component_element = document.getElementById('pop-up-card');
+    if (old_buy_card_component_element != null){
+      old_buy_card_component_element.remove();
+    }
+    const factory = this.componentFactoryResolver.resolveComponentFactory(CommunityCardComponent);
+    const componentRef = this.viewContainerRef.createComponent(factory);
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";
     // Center the component at the middle of the page

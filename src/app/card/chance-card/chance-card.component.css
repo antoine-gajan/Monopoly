@@ -9,6 +9,7 @@
   flex-direction: column;
   justify-content: center;
   color: black;
+  background-color: white;
 }
 
 .title-card{
@@ -38,4 +39,11 @@ img{
   justify-content: center;
   align-items: center;
   text-align: center;
+}
+
+.load-center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }

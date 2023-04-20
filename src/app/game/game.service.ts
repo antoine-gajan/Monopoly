@@ -9,6 +9,8 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { environment } from 'enviroment/enviroment';
 import { Party } from 'app/card/party';
+import {Community} from "../card/community";
+import {Chance} from "../card/chance";
 @Injectable({
   providedIn: 'root'
 })
@@ -97,6 +99,22 @@ export class GameService {
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 
     return this.http.put<Party>(environment.infoAsignatura, body, httpOptions).pipe(
+      tap(
+        (response) => {
+          console.log(response)})
+      );
+  }
+
+  get_random_suerte_card(){
+    return this.http.get<Chance[]>(environment.suerteAleatoria).pipe(
+      tap(
+        (response) => {
+          console.log(response)})
+      );
+  }
+
+  get_random_boletin_card(){
+    return this.http.get<Community[]>(environment.comunidadAleatoria).pipe(
       tap(
         (response) => {
           console.log(response)})
