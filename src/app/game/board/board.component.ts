@@ -21,6 +21,9 @@ export class BoardComponent {
   chance_cards: number[] = [7, 22, 36];
   community_cards: number[] = [2, 17, 33];
   taxes_cards: number[] = [4, 38];
+  dinero: number = 0;
+  propiedad_comprada = true; // Supongamos que esta variable contiene información sobre si se ha comprado o no una propiedad
+
 
   constructor(private gameService: GameService, private userService: UserService, private route: ActivatedRoute,
               private router: Router, private componentFactoryResolver: ComponentFactoryResolver,

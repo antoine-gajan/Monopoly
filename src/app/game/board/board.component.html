@@ -12,6 +12,7 @@
       <!-- *************** CENTRO TABLERO *************** -->
       <div class="center">
         <h1 class="title">MONOPOLY</h1>
+        <!-- *************** DADOS *************** -->
         <div class="dice-container">
           <div class="dices-values" *ngIf="dices.length > 1">
             <img class="dice" [src]="diceImages[dices[0] - 1]">
@@ -19,7 +20,6 @@
           </div>
           <button class="btn-roll-dice" id="tirar-dados" (click)="play_turn_player()">Tirar dados</button>
         </div>
-
       </div>
       <!-- *************** CASILLA SALIDA *************** -->
       <div class="space corner go" id="0">
@@ -371,33 +371,36 @@
     </div>
     <button class="btn-roll-dice" id="tirar-dados" (click)="play()">Tirar dados</button>
   </div>-->
+  
+  <div class="panel-usuarios">
+    <div class="id_partida">
+      <h1 class="titulo_id_partida">PARTIDA #{{game_id}}</h1>
+      <h3 class="titulo_id_partida">------------------------------------</h3>
+      
 
-  <div class="right-container">
-      <div class="info-partida">
-        <div class="id-partida">PARTIDA #{{game_id}}</div>
-        <div class="info-jugador">
-          <div class="container-info-jugador">
-            <div class="username">{{player_name}}</div>
-            <div class="dinero">DINERO</div>
-            <div style="clear:both"></div>
-          </div>
-          <div class="list-propiedades">
-            ASIGNATURAS
-          </div>
-        </div>
-        <div class="info-otros-jugadores">
-          <div class="username">USERNAME</div>
-          <div class="dinero">DINERO</div>
-        </div>
-        <div class="info-otros-jugadores">
-          <div class="username">USERNAME</div>
-          <div class="dinero">DINERO</div>
-        </div>
-        <div class="info-otros-jugadores">
-          <div class="username">USERNAME</div>
-          <div class="dinero">DINERO</div>
+      <div class="player-panel" data-ui="player0">
+
+        <svg width="12" height="12" class="player-panel-token">
+          <circle cx="6" cy="6" r="6" fill="red"></circle>
+        </svg>
+        <span class="player-name">{{player_name}}</span>
+        <span class="player-money" data-ui="1500" style="color: rgb(0, 0, 0);">{{dinero}}€</span>
+        <div class="player-properties"></div>
+
+      </div>
+
+      <div class="player-panel" data-ui="player1">
+        <svg width="12" height="12" class="player-panel-token">
+          <circle cx="6" cy="6" r="6" fill="lawngreen"></circle>
+        </svg>
+        <span class="player-name">Player 2</span>
+        <span class="player-money" data-ui="1400" style="color: rgb(0, 0, 0);">DINERO€</span>
+        
+        <div *ngIf="propiedad_comprada" class="player-properties">
+          <div class="player-property" data-ui="vt" style="background-color: lightskyblue;">Vermont Avenue</div>
         </div>
       </div>
+    </div>
   </div>
 </div>
 <div style="clear:both"></div>

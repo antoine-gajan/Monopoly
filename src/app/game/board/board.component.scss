@@ -14,7 +14,6 @@
 
 /************************TIPOGRAFÍA************************/
 $body-font: 'Oswald', sans-serif;
-
 /************************COLORES************************/
 $black: #080808;
 $brown: #640303;
@@ -27,12 +26,9 @@ $red: #f50c2b;
 $yellow: #ffed20;
 $green: #41994e;
 $dark-blue: #5a6dba;
-
-
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
 }
-
 /************************PROPIEDAD COLORES************************/
 .dark-purple { background: $dark-purple; }
 .light-blue  { background: $light-blue; }
@@ -42,19 +38,24 @@ h1, h2, h3, h4, h5, h6 {
 .yellow      { background: $yellow; }
 .green       { background: $green; }
 .dark-blue   { background: $dark-blue; }
-
+/***********************MAIN CONTAINER***********************/
+.main-container{
+  width: 100%;
+  height: auto;     // Ajusta la altura automáticamente
+  overflow: hidden;
+  flex-wrap: wrap;  // Los elementos se pueden ajustar en nuevas líneas cuando no hay espacio suficiente en horizontal
+}
 /***********************TABLERO***********************/
 .table {
 	padding-left: 40px;
 	padding-right: 40px;
-  	float:left;
+  float:left;
  	width: 45%;
 }
-
 /***********************BOARD***********************/
 .board {
-  	transform: scale(0.45);
-  	transform-origin: left top;
+  transform: scale(0.45);
+  transform-origin: left top;
 	display: grid;
 	grid-template-columns: 125px repeat(9, 80px) 125px;
 	grid-template-rows: 125px repeat(9, 80px) 125px;
@@ -85,6 +86,38 @@ h1, h2, h3, h4, h5, h6 {
 	font-size: 90px;
 	font-weight: 400;
 	letter-spacing: 12px;
+}
+
+/***********************DADOS***********************/
+.dice-container{
+  width: 10%;
+  margin: 10px;
+  display: flex;
+  float: left;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.btn-roll-dice{
+  background-color: transparent;
+  border: 1px solid black;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.dices-values{
+  display: flex;
+}
+
+.dice{
+  display: block;
+  max-width:50px;
+  max-height:50px;
+  width: auto;
+  height: auto;
 }
 
 /***********************COMUNITY CHECK DECK***********************/
@@ -622,47 +655,30 @@ h1, h2, h3, h4, h5, h6 {
     height: 40px;
 }
 
-.main-container{
-  width: 100%;
-  height: 500px;
-  overflow: hidden;
-}
-
-.main-container:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-.right-container{
-  width: 40%;
-  padding: 20px;
-  float: left;
-}
 
 .info-partida{
-  border : 2px solid black;
-  padding: 30px;
+  border : 2px solid rgba(0, 0, 0, 0);
+  padding: 2rem 3rem;
+  border-radius: 35px;
+  margin: 0px auto;
+  background-color: #eff3ec;
+  box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #ffffff;
+
 }
 
-.id-partida{
-  margin: 0 auto;
-  font-weight: bold;
-  text-align: center;
-  padding: 10px;
-  font-size: 30px;
+.info-usuario{
+	padding: 10px;
+	margin-bottom: 10px;
 }
+
 
 .info-jugador{
-  border : 2px solid black;
+  border : 1px solid rgb(113, 113, 113);
+  border-radius: 15px;
   padding: 20px;
   margin-bottom: 20px;
 }
 
-.container-info-jugador{
-  width: 100%;
-  margin: 10px auto;
-}
 
 .username{
   width: 50%;
@@ -675,10 +691,12 @@ h1, h2, h3, h4, h5, h6 {
   text-align: right;
 }
 
+
 .list-propiedades{
-  border: 2px solid black;
   padding: 10px;
+  margin-top: 5px;
 }
+
 .info-otros-jugadores{
   padding: 10px;
   margin-bottom: 10px;
@@ -686,37 +704,6 @@ h1, h2, h3, h4, h5, h6 {
 
 /*====================*/
 /*  CSS FOR THE DICE  */
-
-.dice-container{
-  width: 10%;
-  margin: 10px;
-  display: flex;
-  float: left;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.btn-roll-dice{
-  background-color: transparent;
-  border: 1px solid black;
-  padding: 15px;
-  margin: 10px;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.dices-values{
-  display: flex;
-}
-
-.dice{
-  display: block;
-  max-width:50px;
-  max-height:50px;
-  width: auto;
-  height: auto;
-}
 
 /*====================*/
 /*  CSS FOR THE POSITION OF PLAYER  */
@@ -774,3 +761,59 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
   align-items: center;
 }
+
+
+.monopoly-players {
+    float: left;
+    padding-left: 10px;
+	box-sizing: border-box;
+}
+
+.player-panel {
+    border-radius: 4px;
+    padding: 5px;
+    margin-bottom: 10px;
+    width: 300px;
+	border: 1px solid #000;
+    box-sizing: content-box;
+}
+
+.player-panel-token {
+    margin-right: 4px;
+	box-sizing: border-box;
+}
+
+.choice-btn, .player-name {
+    text-align: left;
+	box-sizing: border-box;
+}
+
+.player-money {
+    float: right;
+    text-align: right;
+}
+
+.player-properties {
+    padding-top: 6px;
+}
+
+.panel-usuarios{
+  margin-left: 5%;
+  width: max-content;
+  padding: 20px;
+  float: left;
+}
+
+.id_partida{
+  border : 2px solid rgba(0, 0, 0, 0);
+  padding: 2rem 3rem;
+  border-radius: 35px;
+  margin: 0px auto;
+  background-color: #eff3ec;
+  box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #ffffff;
+}
+
+.titulo_id_partida{
+  text-align: center;
+}
+
