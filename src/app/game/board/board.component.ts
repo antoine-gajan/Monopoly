@@ -2,7 +2,7 @@ import {Component, ComponentFactoryResolver, ElementRef, ViewContainerRef} from 
 import { GameService} from "../game.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../user/user.service";
-import {BuyCardComponent} from "../../card/buy-card/buy-card.component";
+import {InteractionCardComponent} from "../../card/interaction-card/interaction-card.component";
 import {ChanceCardComponent} from "../../card/chance-card/chance-card.component";
 import {CommunityCardComponent} from "../../card/community-card/community-card.component";
 
@@ -109,11 +109,11 @@ export class BoardComponent {
           }
           else if (this.chance_cards.includes(this.position_player)){
             /// TODO : Display random chance card
-            this.createChanceCardComponent(position_v_h[0], position_v_h[1], "Quieres comprar ?", this.dices[0] == this.dices[1]);
+            this.createChanceCardComponent();
           }
           else if (this.community_cards.includes(this.position_player)){
             /// TODO : Display random community card
-            this.createCommunityCardComponent(position_v_h[0], position_v_h[1], "Quieres comprar ?", this.dices[0] == this.dices[1]);
+            this.createCommunityCardComponent();
           }
           else if (this.taxes_cards.includes(this.position_player)){
             /// TODO : Display tax card and pay
@@ -129,9 +129,10 @@ export class BoardComponent {
               /// TODO : Display a buy card component to ask if the player wants to buy credit
               console.log("You own this property", position_v_h);
             }
-            else {
+            else if (owner_of_card != this.current_player && money_to_pay != null){
               /// TODO : Display a card to pay the owner
               console.log("Display pay card", position_v_h);
+              this.createPayCardComponent(position_v_h[0], position_v_h[1], "La tarjeta pertenece a " + owner_of_card, money_to_pay);
             }
           }
         }
@@ -266,7 +267,7 @@ export class BoardComponent {
     if (old_buy_card_component_element != null){
       old_buy_card_component_element.remove();
     }
-    const factory = this.componentFactoryResolver.resolveComponentFactory(BuyCardComponent);
+    const factory = this.componentFactoryResolver.resolveComponentFactory(InteractionCardComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
     componentRef.instance.h = h;
     componentRef.instance.v = v;
@@ -274,6 +275,7 @@ export class BoardComponent {
     componentRef.instance.username = this.current_player;
     componentRef.instance.message = message;
     componentRef.instance.play_again = play_again;
+    componentRef.instance.type = "buy";
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";
@@ -281,7 +283,29 @@ export class BoardComponent {
     componentRef.location.nativeElement.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);";
   }
 
-  createChanceCardComponent(v: number, h: number, message: string = "", play_again: boolean = false): void {
+  createPayCardComponent(v: number, h: number, message: string = "Debes pagar...", amount_to_pay: number): void {
+    // Assure to delete the old buy card component
+    const old_buy_card_component_element = document.getElementById('pop-up-card');
+    if (old_buy_card_component_element != null){
+      old_buy_card_component_element.remove();
+    }
+    const factory = this.componentFactoryResolver.resolveComponentFactory(InteractionCardComponent);
+    const componentRef = this.viewContainerRef.createComponent(factory);
+    componentRef.instance.h = h;
+    componentRef.instance.v = v;
+    componentRef.instance.game_id = this.game_id;
+    componentRef.instance.username = this.current_player;
+    componentRef.instance.message = message;
+    componentRef.instance.type = "pay";
+    componentRef.instance.amount_to_pay = amount_to_pay;
+    componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
+    // Give an id to the component html
+    componentRef.location.nativeElement.id = "pop-up-card";
+    // Center the component at the middle of the page
+    componentRef.location.nativeElement.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);";
+  }
+
+  createChanceCardComponent(): void {
     // Assure to delete the old buy card component
     const old_buy_card_component_element = document.getElementById('pop-up-card');
     if (old_buy_card_component_element != null){
@@ -289,13 +313,18 @@ export class BoardComponent {
     }
     const factory = this.componentFactoryResolver.resolveComponentFactory(ChanceCardComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
+    // Inputs
+    componentRef.instance.idPartida = this.game_id;
+    componentRef.instance.username = this.current_player;
+    // Outputs
+    componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";
     // Center the component at the middle of the page
     componentRef.location.nativeElement.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);";
   }
 
-  createCommunityCardComponent(v: number, h: number, message: string = "", play_again: boolean = false): void {
+  createCommunityCardComponent(): void {
     // Assure to delete the old buy card component
     const old_buy_card_component_element = document.getElementById('pop-up-card');
     if (old_buy_card_component_element != null){
@@ -303,6 +332,11 @@ export class BoardComponent {
     }
     const factory = this.componentFactoryResolver.resolveComponentFactory(CommunityCardComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
+    // Inputs
+    componentRef.instance.idPartida = this.game_id;
+    componentRef.instance.username = this.current_player;
+    // Outputs
+    componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";
     // Center the component at the middle of the page

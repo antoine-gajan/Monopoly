@@ -6,7 +6,7 @@ import { CommunityCardComponent } from "./community-card/community-card.componen
 import { PartyCardComponent } from './party-card/party-card.component';
 import { ElectricityCardComponent } from './electricity-card/electricity-card.component';
 import { HeatCardComponent } from './heat-card/heat-card.component';
-import { BuyCardComponent } from './buy-card/buy-card.component';
+import { InteractionCardComponent } from './interaction-card/interaction-card.component';
 import {GameModule} from "../game/game.module";
 
 @NgModule({
@@ -17,7 +17,7 @@ import {GameModule} from "../game/game.module";
     PartyCardComponent,
     ElectricityCardComponent,
     HeatCardComponent,
-    BuyCardComponent],
+    InteractionCardComponent],
     imports: [
       CommonModule,
       GameModule,
@@ -27,7 +27,7 @@ import {GameModule} from "../game/game.module";
     PartyCardComponent,
     HeatCardComponent,
     ElectricityCardComponent,
-    BuyCardComponent,
+    InteractionCardComponent,
     ]
 })
 export class CardModule { }

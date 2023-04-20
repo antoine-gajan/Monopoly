@@ -9,4 +9,9 @@
     </div>
     <app-loader *ngIf="!community" class="load-center"></app-loader>
   </div>
+  <div class="list-button" *ngIf="community">
+    <button *ngIf="community.cobrarPagarNada === 'pagar'" class="button-action pagar" (click)="validate()">Pagar {{community.dinero}}€</button>
+    <button *ngIf="community.cobrarPagarNada === 'cobrar'" class="button-action cobrar" (click)="validate()">Cobrar{{community.dinero}}€</button>
+    <button *ngIf="community.cobrarPagarNada === 'nada'" class="button-action nada" (click)="validate()">Vale</button>
+  </div>
 </div>

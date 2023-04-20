@@ -2,16 +2,18 @@ import {Component, Input, EventEmitter, Output } from '@angular/core';
 import {GameService} from "../../game/game.service";
 
 @Component({
-  selector: 'app-buy-card',
-  templateUrl: './buy-card.component.html',
-  styleUrls: ['./buy-card.component.css']
+  selector: 'app-interaction-card',
+  templateUrl: './interaction-card.component.html',
+  styleUrls: ['./interaction-card.component.css']
 })
-export class BuyCardComponent {
+export class InteractionCardComponent {
   @Input() h : number;
   @Input() v : number;
   @Input() game_id : number = 0;
-  @Input() username : string = "antoine";
-  @Input() message: string = "¿ Quieres comprala ?";
+  @Input() type : string = "buy";
+  @Input() amount_to_pay : number = 0;
+  @Input() username : string;
+  @Input() message: string;
   @Input() play_again: boolean = false;
 
   // Define an EventEmitter to emit the "end turn" event of BoardComponent
@@ -47,5 +49,11 @@ export class BuyCardComponent {
 
   callback_end_turn() {
     this.end_turn.emit();
+  }
+
+  pay_card() {
+    // Call end turn of BoardComponent
+    console.log("You have paid " + this.amount_to_pay + "€");
+    this.callback_end_turn();
   }
 }

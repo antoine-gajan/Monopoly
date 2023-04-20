@@ -1,7 +1,7 @@
 .community-card{
   border: 2px black solid;
   border-radius: 10px;
-  max-width : 350px;
+  max-width : 400px;
   max-height : 300px;
   padding: 20px 20px;
   display: flex;
@@ -46,4 +46,35 @@ img{
   justify-content: center;
   align-items: center;
   height: 100%;
+}
+
+
+.list-button{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.button-action{
+  width: 100%;
+  color: black;
+  font-size: 15px;
+  font-weight: bold;
+  margin: 10px 10px;
+  border-radius: 20px;
+  padding: 10px;
+  border: 0;
+  cursor: pointer;
+}
+
+.pagar{
+  background-color: lightskyblue;
+}
+
+.cobrar{
+  background-color: #00ff00;
+}
+
+.nada{
+  background-color: slategrey;
 }

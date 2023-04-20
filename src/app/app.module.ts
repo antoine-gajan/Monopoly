@@ -23,7 +23,7 @@ import { CambiarUsernameComponent } from './user/cambiar_nombre_usuario/cambiar_
 import { DeleteUserComponent } from './user/delete_user/delete_user.component';
 import { UserService } from './user/user.service';
 import {CardModule} from "./card/card.module";
-import {BuyCardComponent} from "./card/buy-card/buy-card.component";
+import {InteractionCardComponent} from "./card/interaction-card/interaction-card.component";
 import { CrearSalaComponent } from './crear_sala/crear_sala.component';
 import { UnirseSalaComponent } from './unirse_sala/unirse_sala.component';
 
@@ -59,7 +59,7 @@ import { UnirseSalaComponent } from './unirse_sala/unirse_sala.component';
     ],
     providers: [UserService],
     bootstrap: [AppComponent],
-    entryComponents: [BuyCardComponent]
+    entryComponents: [InteractionCardComponent]
 })
 export class AppModule { }
 

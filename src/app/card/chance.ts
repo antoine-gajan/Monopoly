@@ -1,4 +1,4 @@
-export interface Chance{
+export interface RandomCard{
     "cobrarPagarNada": string;
     "descripcion": string;
     "dinero": number;

@@ -3,14 +3,9 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {Observable, tap} from "rxjs";
 import {Propriety} from "../card/propriety";
-import { HttpErrorResponse } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
 import { environment } from 'enviroment/enviroment';
 import { Party } from 'app/card/party';
-import {Community} from "../card/community";
-import {Chance} from "../card/chance";
+import {RandomCard} from "../card/chance";
 @Injectable({
   providedIn: 'root'
 })
@@ -105,16 +100,27 @@ export class GameService {
       );
   }
 
-  get_random_suerte_card(){
-    return this.http.get<Chance[]>(environment.suerteAleatoria).pipe(
+  get_random_suerte_card(idPartida: number, username: string){
+    const body =  JSON.stringify({  "idPartida": idPartida,
+                                            "username": username,
+                                            "tipo": "suerte"
+                                        });
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    return this.http.put<RandomCard[]>(environment.tarjetaAleatoria, body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response)})
       );
   }
 
-  get_random_boletin_card(){
-    return this.http.get<Community[]>(environment.comunidadAleatoria).pipe(
+  get_random_boletin_card(idPartida: number, username: string){
+    const body =  JSON.stringify({  "idPartida": idPartida,
+                                            "username": username,
+                                            "tipo": "boletin"
+                                        })
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+
+    return this.http.put<RandomCard[]>(environment.tarjetaAleatoria, body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response)})

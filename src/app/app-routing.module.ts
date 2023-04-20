@@ -25,7 +25,7 @@ import { DeleteUserComponent } from './user/delete_user/delete_user.component';
 import {ElectricityCardComponent} from "./card/electricity-card/electricity-card.component";
 import {HeatCardComponent} from "./card/heat-card/heat-card.component";
 import {PartyCardComponent} from "./card/party-card/party-card.component";
-import {BuyCardComponent} from "./card/buy-card/buy-card.component";
+import {InteractionCardComponent} from "./card/interaction-card/interaction-card.component";
 import {LoaderComponent} from "./game/loader/loader.component";
 
 const routes: Routes = [
@@ -46,7 +46,7 @@ const routes: Routes = [
   { path: 'tienda', component: TiendaComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'error', component: ErrorPageComponent },
-  { path: 'buy', component: BuyCardComponent},
+  { path: 'buy', component: InteractionCardComponent},
   { path: 'ajustes_usuario', component: AjustesUsuarioComponent },
   { path: 'cambiar_username', component: CambiarUsernameComponent},
   { path: 'cambiar_correo', component: CambiarCorreoComponent},
