@@ -58,11 +58,6 @@ export class BoardComponent {
     /// TODO : Check if the player can play
     // When he can play, activate button
     document.getElementById("tirar-dados")!.removeAttribute("disabled");
-    this.gameService.get_random_boletin_card().subscribe({
-      next: (data: any) => {
-        console.log(data);
-      }
-    });
 
     /*this.gameService.get_list_players(this.game_id).subscribe({
       next: (data: any) => {
@@ -80,9 +75,8 @@ export class BoardComponent {
     this.move_dices_action();
     await this.gameService.roll_dices("antoine", 0).subscribe( {
       next: (data: any) => {
-      //this.dices[0] = data.dado1;
-      //this.dices[1] = data.dado2;
-        this.dices = [0, 2];
+      this.dices[0] = data.dado1;
+      this.dices[1] = data.dado2;
       console.log(this.dices);
     },
     error: (error) => {
