@@ -124,16 +124,15 @@ export class BoardComponent {
         this.message = this.player[0] + ", has sacado " + this.dices[0] + " y " + this.dices[1];
       }
       // Update player position
-      this.update_local_player_position(this.player[0], this.position_player, this.dices);
+      let jail = await this.update_local_player_position(this.player[0], this.position_player, this.dices);
       // Action of the card
-      this.card_action();
+      this.card_action(jail);
     }
     });
   }
 
-  card_action(){
+  card_action(is_in_jail: boolean){
     let position_v_h = this.convert_id_to_position(this.position_player);
-    let is_in_prison = (this.position_player === 30);
     // Get card information
       let owner_of_card : string | null = null;
       let money_to_pay : number | null = null;
@@ -155,7 +154,7 @@ export class BoardComponent {
             // End turn
             this.end_turn();
           }
-          else if (is_in_prison){
+          else if (is_in_jail){
             // TODO : Display a card component to ask if the player wants to pay to get out of prison
             // End turn
             this.end_turn();
@@ -204,8 +203,13 @@ export class BoardComponent {
       this.play();
     }
     // If the position of player has changed, launch card action of the new position
-    else if (this.position_player != old_position_player){
-      this.card_action();
+    else if (this.position_player != old_position_player) {
+      if (this.position_player == 10) {
+        // Player has be sent to jail
+        this.card_action(true);
+      } else {
+        this.card_action(false);
+      }
     }
     else {
       // Idicate to backend that the player has finished his turn
@@ -309,6 +313,7 @@ export class BoardComponent {
     // Update position attribute
     let change_turn = this.position_player + dices[0] + dices[1] >= 40;
     this.position_player = (this.position_player + dices[0] + dices[1]) % 40;
+    let jail = this.position_player == 30;
     // If change turn, receive 200
     if (change_turn){
       this.message = "Has pasado por la salida";
@@ -326,6 +331,7 @@ export class BoardComponent {
     }
     // Show position
     this.show_position(id_player, this.position_player, 0);
+    return jail;
   }
 
   show_position(id_player: string, property_id: number, index_color: number): void{
