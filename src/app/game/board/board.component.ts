@@ -15,9 +15,10 @@ export class BoardComponent {
   game_id : number;
   dices: number[] = [];
   position_player: number = 0;
-  player: [string, number] = ["antoine2", 0];
+  player: [string, number] = ["TEST", 200];
   other_players_list: [string, number][] = [];
-  special_cards: number[] = [0, 10, 20, 30];
+  nothing_cards: number[] = [0, 10, 20];
+  prison_cards: number[] = [30];
   chance_cards: number[] = [7, 22, 36];
   community_cards: number[] = [2, 17, 33];
   taxes_cards: number[] = [4, 38];
@@ -48,7 +49,7 @@ export class BoardComponent {
       this.router.navigate(['/error']);
     }
     // Get name of the player
-    this.player[0] = this.userService.getUsername();
+    //this.player[0] = this.userService.getUsername();
     // If undefined, redirect to error page
     if (this.player[0] === undefined) {
       this.router.navigate(['/error']);
@@ -124,9 +125,16 @@ export class BoardComponent {
       }
       // Update player position
       this.update_local_player_position(this.player[0], this.position_player, this.dices);
-      let position_v_h = this.convert_id_to_position(this.position_player);
+      // Action of the card
+      this.card_action();
+    }
+    });
+  }
 
-      // Get card information
+  card_action(){
+    let position_v_h = this.convert_id_to_position(this.position_player);
+    let is_in_prison = (this.position_player === 30);
+    // Get card information
       let owner_of_card : string | null = null;
       let money_to_pay : number | null = null;
       this.gameService.get_card(this.player[0], this.game_id, position_v_h[0], position_v_h[1]).subscribe({
@@ -143,8 +151,14 @@ export class BoardComponent {
           await this.sleep(500);
           /// TODO : Verify is the player can buy the property and ask to buy it
           // Display a buy card component
-          if (this.special_cards.includes(this.position_player)){
-            // Do nothing
+          if (this.nothing_cards.includes(this.position_player)){
+            // End turn
+            this.end_turn();
+          }
+          else if (is_in_prison){
+            // TODO : Display a card component to ask if the player wants to pay to get out of prison
+            // End turn
+            this.end_turn();
           }
           else if (this.chance_cards.includes(this.position_player)){
             this.createChanceCardComponent();
@@ -154,12 +168,12 @@ export class BoardComponent {
           }
           else if (this.taxes_cards.includes(this.position_player)){
             /// TODO : Display tax card and pay
+            this.end_turn();
           }
           // If it's a normal card
           else {
             if (owner_of_card == null){
               // Display buy card
-              console.log("Display buy card", position_v_h)
               this.createBuyCardComponent(position_v_h[0], position_v_h[1], "Quieres comprar ?", this.player[1], this.dices[0] == this.dices[1]);
             }
             else if (owner_of_card == this.player[0]){
@@ -173,24 +187,36 @@ export class BoardComponent {
           }
         }
       });
-    }
-    });
   }
 
-  end_turn(): void{
+  end_turn(): void {
     // Delete the pop-up-card component
     const old_buy_card_component_element = document.getElementById('pop-up-card');
-    if (old_buy_card_component_element != null){
+    if (old_buy_card_component_element != null) {
       old_buy_card_component_element.remove();
     }
-    // Idicate to backend that the player has finished his turn
-    this.gameService.next_turn(this.game_id).subscribe({
-      next: (data: any) => {
-        console.log(data);
-      }
-    });
-    // Go inside the next loop of game
-    this.play();
+    /// TODO: Get the position of the player from the backend
+    let old_position_player = this.position_player;
+    // If the player can play again, activate the button and play again
+    if (this.dices[0] === this.dices[1]) {
+      this.message = this.player[0] + ", tira los dados";
+      document.getElementById("tirar-dados")!.removeAttribute("disabled");
+      this.play();
+    }
+    // If the position of player has changed, launch card action of the new position
+    else if (this.position_player != old_position_player){
+      this.card_action();
+    }
+    else {
+      // Idicate to backend that the player has finished his turn
+      this.gameService.next_turn(this.game_id).subscribe({
+        next: (data: any) => {
+          console.log(data);
+          // Go back to play
+          this.play();
+        }
+      });
+    }
   }
 
   move_dices_action(): void{
