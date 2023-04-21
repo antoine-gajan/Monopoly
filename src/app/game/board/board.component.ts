@@ -15,7 +15,7 @@ export class BoardComponent {
   game_id : number;
   dices: number[] = [];
   position_player: number = 0;
-  player: [string, number] = ["", 0];
+  player: [string, number] = ["antoine2", 0];
   other_players_list: [string, number][] = [];
   special_cards: number[] = [0, 10, 20, 30];
   chance_cards: number[] = [7, 22, 36];
@@ -38,12 +38,12 @@ export class BoardComponent {
               private viewContainerRef: ViewContainerRef, private elRef: ElementRef) { }
 
   ngOnInit() {
+
     // Get id of the game
-    const game_id : string|null = this.route.snapshot.paramMap.get('id');
+    const game_id: string | null = this.route.snapshot.paramMap.get('id');
     if (game_id != null) {
       this.game_id = +game_id;
-    }
-    else{
+    } else {
       // Redirect to error page
       this.router.navigate(['/error']);
     }
@@ -55,7 +55,7 @@ export class BoardComponent {
     }
     // Load game
     this.load_game();
-}
+  }
 
 
   load_game(){
@@ -79,10 +79,10 @@ export class BoardComponent {
           }
         }
         // Show position of the player
-        this.show_position(this.player[0], 0);
+        this.show_position(this.player[0], this.position_player,0);
         // Show position of the other players
         for (let i = 0; i < this.other_players_list.length; i++) {
-          this.show_position(this.other_players_list[i][0], i + 1);
+          this.show_position(this.other_players_list[i][0], 0, i + 1);
         }
         // Start the game
         this.play();
@@ -123,7 +123,7 @@ export class BoardComponent {
         this.message = this.player[0] + ", has sacado " + this.dices[0] + " y " + this.dices[1];
       }
       // Update player position
-      this.update_position(this.player[0], this.position_player, this.dices);
+      this.update_local_player_position(this.player[0], this.position_player, this.dices);
       let position_v_h = this.convert_id_to_position(this.position_player);
 
       // Get card information
@@ -160,7 +160,7 @@ export class BoardComponent {
             if (owner_of_card == null){
               // Display buy card
               console.log("Display buy card", position_v_h)
-              this.createBuyCardComponent(position_v_h[0], position_v_h[1], "Quieres comprar ?", this.dices[0] == this.dices[1]);
+              this.createBuyCardComponent(position_v_h[0], position_v_h[1], "Quieres comprar ?", this.player[1], this.dices[0] == this.dices[1]);
             }
             else if (owner_of_card == this.player[0]){
               /// TODO : Display a buy card component to ask if the player wants to buy credit
@@ -168,7 +168,7 @@ export class BoardComponent {
             }
             else if (owner_of_card != this.player[0] && money_to_pay != null){
               console.log("Display pay card", position_v_h);
-              this.createPayCardComponent(position_v_h[0], position_v_h[1], "La tarjeta pertenece a " + owner_of_card, money_to_pay);
+              this.createPayCardComponent(position_v_h[0], position_v_h[1], "La tarjeta pertenece a " + owner_of_card, this.player[1], money_to_pay);
             }
           }
         }
@@ -257,7 +257,7 @@ export class BoardComponent {
     // Get the property of the element with id = position
     let property = document.getElementById(id_property.toString());
     if (property != null){
-      let container_property = property.getElementsByClassName("list-players")[0];
+      let container_property : Element = property.getElementsByClassName("list-players")[0];
       // Add a circle on the property
       let player : HTMLElement = document.createElement("div");
       player.id = "player" + id_player.toString();
@@ -278,30 +278,37 @@ export class BoardComponent {
     }
   }
 
-  async update_position(id_player: string, old_position: number, dices: number[]) {
+  async update_local_player_position(id_player: string, old_position: number, dices: number[]) {
     // Function to update the position of a player
     // Update position attribute
     let change_turn = this.position_player + dices[0] + dices[1] >= 40;
     this.position_player = (this.position_player + dices[0] + dices[1]) % 40;
+    // If change turn, receive 200
+    if (change_turn){
+      this.message = "Has pasado por la salida";
+      this.player[1] += 200;
+      // Wait 0.5 seconds
+      await this.sleep(500);
+    }
     // If player has to go to jail
     if (this.position_player == 30) {
-      this.show_position(id_player, 0);
+      this.show_position(id_player, this.position_player, 0);
       this.message = "Has ido en julio";
       // Wait 0.5 seconds
       await this.sleep(500);
       this.position_player = 10;
     }
     // Show position
-    this.show_position(id_player, 0);
+    this.show_position(id_player, this.position_player, 0);
   }
 
-  show_position(id_player: string, index_color: number): void{
+  show_position(id_player: string, property_id: number, index_color: number): void{
     // Function to display position of id_player in the board
     this.remove_position(id_player);
-    this.add_position(id_player, this.position_player, index_color);
+    this.add_position(id_player, property_id, index_color);
   }
 
-  createBuyCardComponent(v: number, h: number, message: string = "Quieres comprar", play_again: boolean = false): void {
+  createBuyCardComponent(v: number, h: number, message: string = "Quieres comprar", money: number, play_again: boolean = false): void {
     // Assure to delete the old buy card component
     const old_buy_card_component_element = document.getElementById('pop-up-card');
     if (old_buy_card_component_element != null){
@@ -315,6 +322,7 @@ export class BoardComponent {
     componentRef.instance.username = this.player[0];
     componentRef.instance.message = message;
     componentRef.instance.play_again = play_again;
+    componentRef.instance.player_money = money;
     componentRef.instance.type = "buy";
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     // Give an id to the component html
@@ -323,7 +331,7 @@ export class BoardComponent {
     componentRef.location.nativeElement.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);";
   }
 
-  createPayCardComponent(v: number, h: number, message: string = "Debes pagar...", amount_to_pay: number): void {
+  createPayCardComponent(v: number, h: number, message: string = "Debes pagar...", money: number, amount_to_pay: number): void {
     // Assure to delete the old buy card component
     const old_buy_card_component_element = document.getElementById('pop-up-card');
     if (old_buy_card_component_element != null){
@@ -337,6 +345,7 @@ export class BoardComponent {
     componentRef.instance.username = this.player[0];
     componentRef.instance.message = message;
     componentRef.instance.type = "pay";
+    componentRef.instance.player_money = money;
     componentRef.instance.amount_to_pay = amount_to_pay;
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     // Give an id to the component html
