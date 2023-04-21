@@ -38,5 +38,6 @@ export const environment = {
     comprarCasilla: 'http://localhost:8080/partida/comprar',
     actualizarPartida: 'http://localhost:8080/partida/actualizar',
     infoAsignatura: 'http://localhost:8080/partida/infoAsignatura',
-    tarjetaAleatoria: 'http://localhost:8080/partida/tarjeta/'
+    tarjetaAleatoria: 'http://localhost:8080/partida/tarjeta/',
+    siguienteTurno: 'http://localhost:8080/partida/siguienteTurno/',
 };

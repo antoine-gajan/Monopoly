@@ -6,6 +6,8 @@
 	</div>
 </header>
 
+<div class="main-info">{{message}}</div>
+
 <div class="main-container">
   <div class="table">
     <div class="board">
@@ -371,35 +373,37 @@
     </div>
     <button class="btn-roll-dice" id="tirar-dados" (click)="play()">Tirar dados</button>
   </div>-->
-  
+
   <div class="panel-usuarios">
     <div class="id_partida">
       <h1 class="titulo_id_partida">PARTIDA #{{game_id}}</h1>
       <h3 class="titulo_id_partida">------------------------------------</h3>
-      
+
 
       <div class="player-panel" data-ui="player0">
 
         <svg width="12" height="12" class="player-panel-token">
           <circle cx="6" cy="6" r="6" fill="red"></circle>
         </svg>
-        <span class="player-name">{{player_name}}</span>
-        <span class="player-money" data-ui="1500" style="color: rgb(0, 0, 0);">{{dinero}}€</span>
+        <span class="player-name">{{player[0]}}</span>
+        <span class="player-money" data-ui="1500" style="color: rgb(0, 0, 0);">{{player[1]}}€</span>
         <div class="player-properties"></div>
 
       </div>
+      <ng-container *ngFor="let other_player of other_players_list; let i = index">
+        <div class="player-panel" *ngIf="other_player[0] != player[0]">
 
-      <div class="player-panel" data-ui="player1">
-        <svg width="12" height="12" class="player-panel-token">
-          <circle cx="6" cy="6" r="6" fill="lawngreen"></circle>
-        </svg>
-        <span class="player-name">Player 2</span>
-        <span class="player-money" data-ui="1400" style="color: rgb(0, 0, 0);">DINERO€</span>
-        
-        <div *ngIf="propiedad_comprada" class="player-properties">
-          <div class="player-property" data-ui="vt" style="background-color: lightskyblue;">Vermont Avenue</div>
+          <svg width="12" height="12" class="player-panel-token">
+            <circle cx="6" cy="6" r="6" [attr.fill]= "get_token_color_from_index(i + 1)"></circle>
+          </svg>
+          <span class="player-name">{{other_player[0]}}</span>
+          <span class="player-money" data-ui="1400" style="color: rgb(0, 0, 0);">{{other_player[1]}}€</span>
+
+          <div *ngIf="propiedad_comprada" class="player-properties">
+            <div class="player-property" data-ui="vt" style="background-color: lightskyblue;">Vermont Avenue</div>
+          </div>
         </div>
-      </div>
+      </ng-container>
     </div>
   </div>
 </div>

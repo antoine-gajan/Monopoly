@@ -126,4 +126,15 @@ export class GameService {
           console.log(response)})
       );
   }
+
+  next_turn(idPartida: number){
+    const body =  JSON.stringify({ "idPartida": idPartida});
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+
+    return this.http.put(environment.siguienteTurno, body, httpOptions).pipe(
+      tap(
+        (response) => {
+          console.log(response)})
+      );
+  }
 }

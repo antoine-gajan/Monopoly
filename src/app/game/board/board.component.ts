@@ -15,15 +15,23 @@ export class BoardComponent {
   game_id : number;
   dices: number[] = [];
   position_player: number = 0;
-  current_player: string = "antoine";
-  player_name: string;
+  player: [string, number] = ["", 0];
+  other_players_list: [string, number][] = [];
   special_cards: number[] = [0, 10, 20, 30];
   chance_cards: number[] = [7, 22, 36];
   community_cards: number[] = [2, 17, 33];
   taxes_cards: number[] = [4, 38];
   dinero: number = 0;
   propiedad_comprada = true; // Supongamos que esta variable contiene información sobre si se ha comprado o no una propiedad
-
+  diceImages = [
+    "../../../assets/images/dice/1.png",
+    "../../../assets/images/dice/2.png",
+    "../../../assets/images/dice/3.png",
+    "../../../assets/images/dice/4.png",
+    "../../../assets/images/dice/5.png",
+    "../../../assets/images/dice/6.png"
+  ];
+  message: string;
 
   constructor(private gameService: GameService, private userService: UserService, private route: ActivatedRoute,
               private router: Router, private componentFactoryResolver: ComponentFactoryResolver,
@@ -33,42 +41,63 @@ export class BoardComponent {
     // Get id of the game
     const game_id : string|null = this.route.snapshot.paramMap.get('id');
     if (game_id != null) {
-    this.game_id = +game_id;
-  }
-  else{
-    // Redirect to error page
-    this.router.navigate(['/error']);
-  }
-  // Get name of the player
-  this.player_name = this.userService.getUsername();
-  // Show position of the player
-  this.show_position(this.current_player);
-  // Start the game
-  this.play();
+      this.game_id = +game_id;
+    }
+    else{
+      // Redirect to error page
+      this.router.navigate(['/error']);
+    }
+    // Get name of the player
+    this.player[0] = this.userService.getUsername();
+    // If undefined, redirect to error page
+    if (this.player[0] === undefined) {
+      this.router.navigate(['/error']);
+    }
+    // Load game
+    this.load_game();
 }
-  diceImages = [
-    "../../../assets/images/dice/1.png",
-    "../../../assets/images/dice/2.png",
-    "../../../assets/images/dice/3.png",
-    "../../../assets/images/dice/4.png",
-    "../../../assets/images/dice/5.png",
-    "../../../assets/images/dice/6.png"
-  ];
 
 
+  load_game(){
+    this.message = "Cargando la partida..."
+    // Get list of players
+    this.gameService.get_list_players(this.game_id).subscribe({
+      next: (data: any) => {
+        this.other_players_list = data.listaTuplas;
+      },
+      error: (error) => {
+        console.error(error);
+      },
+      complete: () => {
+        // Get money of player_name and delete player from other_players_list
+        for (let i = 0; i < this.other_players_list.length; i++) {
+          if (this.other_players_list[i][0] === this.player[0]) {
+            // Get money of the player
+            this.dinero = this.other_players_list[i][1];
+            // Remove player from other_players_list
+            this.other_players_list.splice(i, 1);
+          }
+        }
+        // Show position of the player
+        this.show_position(this.player[0], 0);
+        // Show position of the other players
+        for (let i = 0; i < this.other_players_list.length; i++) {
+          this.show_position(this.other_players_list[i][0], i + 1);
+        }
+        // Start the game
+        this.play();
+      }
+    });
+  }
 
-  play(): void{
+  async play(): Promise<void> {
     /// TODO : Check if the player can play
     // When he can play, activate button
+    this.message = this.player[0] + ", es tu turno";
+    await this.sleep(1000);
+    this.message = this.player[0] + ", tira los dados";
     document.getElementById("tirar-dados")!.removeAttribute("disabled");
-
-    /*this.gameService.get_list_players(this.game_id).subscribe({
-      next: (data: any) => {
-        console.log(data);
-      }
-    });*/
   }
-
 
   async play_turn_player() {
     // Disable play button to avoid double click
@@ -86,14 +115,21 @@ export class BoardComponent {
       console.error(error);
     },
     complete: async () => {
+      // Update message
+      if (this.dices[0] === this.dices[1]){
+        this.message = this.player[0] + ", has sacado dobles " + this.dices[0];
+      }
+      else {
+        this.message = this.player[0] + ", has sacado " + this.dices[0] + " y " + this.dices[1];
+      }
       // Update player position
-      this.update_position(this.current_player, this.position_player, this.dices);
+      this.update_position(this.player[0], this.position_player, this.dices);
       let position_v_h = this.convert_id_to_position(this.position_player);
 
       // Get card information
       let owner_of_card : string | null = null;
       let money_to_pay : number | null = null;
-      this.gameService.get_card(this.current_player, this.game_id, position_v_h[0], position_v_h[1]).subscribe({
+      this.gameService.get_card(this.player[0], this.game_id, position_v_h[0], position_v_h[1]).subscribe({
         next: (data: any) => {
           owner_of_card = data.jugador;
           money_to_pay = data.dinero;
@@ -111,11 +147,9 @@ export class BoardComponent {
             // Do nothing
           }
           else if (this.chance_cards.includes(this.position_player)){
-            /// TODO : Display random chance card
             this.createChanceCardComponent();
           }
           else if (this.community_cards.includes(this.position_player)){
-            /// TODO : Display random community card
             this.createCommunityCardComponent();
           }
           else if (this.taxes_cards.includes(this.position_player)){
@@ -128,12 +162,11 @@ export class BoardComponent {
               console.log("Display buy card", position_v_h)
               this.createBuyCardComponent(position_v_h[0], position_v_h[1], "Quieres comprar ?", this.dices[0] == this.dices[1]);
             }
-            else if (owner_of_card == this.current_player){
+            else if (owner_of_card == this.player[0]){
               /// TODO : Display a buy card component to ask if the player wants to buy credit
               console.log("You own this property", position_v_h);
             }
-            else if (owner_of_card != this.current_player && money_to_pay != null){
-              /// TODO : Display a card to pay the owner
+            else if (owner_of_card != this.player[0] && money_to_pay != null){
               console.log("Display pay card", position_v_h);
               this.createPayCardComponent(position_v_h[0], position_v_h[1], "La tarjeta pertenece a " + owner_of_card, money_to_pay);
             }
@@ -145,12 +178,17 @@ export class BoardComponent {
   }
 
   end_turn(): void{
-    ///TODO : Indicate to backend that the player has finished his turn
     // Delete the pop-up-card component
     const old_buy_card_component_element = document.getElementById('pop-up-card');
     if (old_buy_card_component_element != null){
       old_buy_card_component_element.remove();
     }
+    // Idicate to backend that the player has finished his turn
+    this.gameService.next_turn(this.game_id).subscribe({
+      next: (data: any) => {
+        console.log(data);
+      }
+    });
     // Go inside the next loop of game
     this.play();
   }
@@ -214,17 +252,16 @@ export class BoardComponent {
     }
   }
 
-  add_position(id_player: string, id_property: number): void{
+  add_position(id_player: string, id_property: number, index_color: number): void{
     // Function to display position (x, y) in the board
     // Get the property of the element with id = position
     let property = document.getElementById(id_property.toString());
     if (property != null){
       let container_property = property.getElementsByClassName("list-players")[0];
-      /// TODO : Add player's image in the center of the property
       // Add a circle on the property
       let player : HTMLElement = document.createElement("div");
       player.id = "player" + id_player.toString();
-      player.style.cssText = "background-color: red; border-radius: 50%; width: 30px; height: 30px;";
+      player.style.cssText = "background-color: " + this.get_token_color_from_index(index_color)+ "; border-radius: 50%; width: 30px; height: 30px;";
       container_property.appendChild(player);
     }
     else{
@@ -241,27 +278,27 @@ export class BoardComponent {
     }
   }
 
-  update_position(id_player: string, old_position: number, dices: number[]){
+  async update_position(id_player: string, old_position: number, dices: number[]) {
     // Function to update the position of a player
     // Update position attribute
     let change_turn = this.position_player + dices[0] + dices[1] >= 40;
     this.position_player = (this.position_player + dices[0] + dices[1]) % 40;
     // If player has to go to jail
-    if (this.position_player == 30){
+    if (this.position_player == 30) {
+      this.show_position(id_player, 0);
+      this.message = "Has ido en julio";
+      // Wait 0.5 seconds
+      await this.sleep(500);
       this.position_player = 10;
     }
-    // If player has to change turn
-    if (change_turn){
-      /// TODO : Receive 200€
-    }
     // Show position
-    this.show_position(id_player);
+    this.show_position(id_player, 0);
   }
 
-  show_position(id_player: string): void{
+  show_position(id_player: string, index_color: number): void{
     // Function to display position of id_player in the board
     this.remove_position(id_player);
-    this.add_position(id_player, this.position_player);
+    this.add_position(id_player, this.position_player, index_color);
   }
 
   createBuyCardComponent(v: number, h: number, message: string = "Quieres comprar", play_again: boolean = false): void {
@@ -275,7 +312,7 @@ export class BoardComponent {
     componentRef.instance.h = h;
     componentRef.instance.v = v;
     componentRef.instance.game_id = this.game_id;
-    componentRef.instance.username = this.current_player;
+    componentRef.instance.username = this.player[0];
     componentRef.instance.message = message;
     componentRef.instance.play_again = play_again;
     componentRef.instance.type = "buy";
@@ -297,7 +334,7 @@ export class BoardComponent {
     componentRef.instance.h = h;
     componentRef.instance.v = v;
     componentRef.instance.game_id = this.game_id;
-    componentRef.instance.username = this.current_player;
+    componentRef.instance.username = this.player[0];
     componentRef.instance.message = message;
     componentRef.instance.type = "pay";
     componentRef.instance.amount_to_pay = amount_to_pay;
@@ -318,7 +355,7 @@ export class BoardComponent {
     const componentRef = this.viewContainerRef.createComponent(factory);
     // Inputs
     componentRef.instance.idPartida = this.game_id;
-    componentRef.instance.username = this.current_player;
+    componentRef.instance.username = this.player[0];
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     // Give an id to the component html
@@ -337,13 +374,37 @@ export class BoardComponent {
     const componentRef = this.viewContainerRef.createComponent(factory);
     // Inputs
     componentRef.instance.idPartida = this.game_id;
-    componentRef.instance.username = this.current_player;
+    componentRef.instance.username = this.player[0];
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";
     // Center the component at the middle of the page
     componentRef.location.nativeElement.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);";
+  }
+
+  get_token_color_from_index(index: number): string{
+    // Function to get the color of the token from the index
+    switch(index){
+      case 0:
+        return "red";
+      case 1:
+        return "blue";
+      case 2:
+        return "green";
+      case 3:
+        return "yellow";
+      case 4:
+        return "purple";
+      case 5:
+        return "orange";
+      case 6:
+        return "pink";
+      case 7:
+        return "brown";
+      default:
+        return "black";
+    }
   }
 
   sleep(ms : number) {
