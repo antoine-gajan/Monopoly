@@ -14,7 +14,7 @@
 </div>
         <h4>PARTIDA #XXXXX</h4>
         <form><label>Número de jugadores</label>
-          <select name="jugadores" type="number" class="jugadores">
+          <select name="jugadores" [(ngModel)]="numJugadores" class="jugadores" name="numJugadores">
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
@@ -28,7 +28,7 @@
         
         <div>
           <label>Dinero inicial (€)</label>
-          <input type="number" class="dinero" placeholder="1500€" />
+          <input type="number" class="dinero" [(ngModel)]="dineroJugador" placeholder="1500€" />
         </div>
         
         <button (click)="crearPartidaDatos()" class="boton-jugar">Jugar</button>

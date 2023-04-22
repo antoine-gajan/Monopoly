@@ -59,6 +59,15 @@ export class BoardComponent {
     this.load_game();
   }
 
+  obtener_asignaturas_lista(){
+    /*getProperties(): string[] {
+      // Aquí haces la llamada al servidor para obtener la lista de propiedades del jugador actual
+      // Supongamos que la lista de propiedades se devuelve en un arreglo de strings llamado 'properties'
+      const properties: string[] = ['Vermont Avenue', 'Connecticut Avenue']; // Ejemplo de lista de propiedades
+      return properties;
+    }*/
+    
+  }
 
   load_game(){
     // Block buttons to avoid risks

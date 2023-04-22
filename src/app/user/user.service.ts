@@ -134,7 +134,13 @@ export class UserService {
                     .subscribe(
                       (response) => {
                         console.log(response.status);
-                          this.router.navigateByUrl('/game/:id');
+                        let idPartida = '';
+                        if (response.body !== null) {
+                          idPartida = JSON.parse(response.body).idPartida;
+                        }
+                        user.idPartida = idPartida;
+                        const ruta = '/game/' + idPartida;
+                        this.router.navigateByUrl(ruta);
                       },
                       (error) => {
                         console.log(error);
@@ -148,11 +154,27 @@ export class UserService {
                     .subscribe(
                       (response) => {
                         console.log(response.status);
-                          this.router.navigateByUrl('/game/:id');
+                        const ruta = '/game/' + user.idPartida;
+                        this.router.navigateByUrl(ruta);
                       },
                       (error) => {
                         console.log(error);
                       }
                     );
   }
- }
+
+  unirseSalaInvitado(user: any){
+    console.log(user);
+    return this.http.put(environment.unirJugador, user, {responseType: 'text', observe: 'response'})
+                    .subscribe(
+                      (response) => {
+                        console.log(response.status);
+                        const ruta = '/game/' + user.idPartida;
+                        this.router.navigateByUrl(ruta);
+                      },
+                      (error) => {
+                        console.log(error);
+                      }
+                    );
+  }
+}
