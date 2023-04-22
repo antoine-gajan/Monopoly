@@ -156,7 +156,7 @@ export class GameService {
     const body =  JSON.stringify({"idPartida": idPartida});
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 
-    return this.http.put(environment.siguienteTurno, body, httpOptions).pipe(
+    return this.http.put<PlayerResponse>(environment.siguienteTurno, body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response)})

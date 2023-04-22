@@ -16,7 +16,8 @@ export class BoardComponent {
   game_id : number;
   dices: number[] = [];
   position_player: number = 0;
-  player: [string, number] = ["TEST", 200];
+  current_player: string;
+  player: [string, number] = ["antoine", 200];
   other_players_list: [string, number][] = [];
   nothing_cards: number[] = [0, 10, 20];
   prison_cards: number[] = [30];
@@ -108,11 +109,10 @@ export class BoardComponent {
   }
   async play(): Promise<void> {
     // Check if the player can play or not
-    let current_player: string;
     interval(5000)
       .pipe(
         // Take while the current player is not the current user's player
-        takeWhile(() => current_player !== this.player[0]),
+        takeWhile(() => this.current_player !== this.player[0]),
         switchMap(() => this.gameService.get_current_player(this.game_id)),
         switchMap((playerResponse) => {
       if (playerResponse.jugador === this.player[0]) {
@@ -142,6 +142,7 @@ export class BoardComponent {
       // Delete client from other_players_list
       this.delete_client_from_other_list();
       // TODO : Update position of the players
+      this.show_position_every_players();
     }
     });
   }
@@ -180,9 +181,8 @@ export class BoardComponent {
       console.log(this.dices);
     },
     error: (error) => {
-      this.message = "Error al tirar los dados, inténtalo de nuevo";
       // Try again
-      document.getElementById("tirar-dados")!.setAttribute("disabled", "false");
+      this.play_turn_player();
     },
     complete: async () => {
       // Update message
@@ -297,11 +297,13 @@ export class BoardComponent {
       this.message = "Has terminado tu turno";
       // Indicate to backend that the player has finished his turn
       this.gameService.next_turn(this.game_id).subscribe({
-        next: (data: any) => {
+        next: (data) => {
+          this.current_player = data.jugador;
           console.log(data);
         },
         error: (error) => {
           console.error(error);
+          this.end_turn();
         },
         complete: () => {
           // Go back to play to wait next time to play
