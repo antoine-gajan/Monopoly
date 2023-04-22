@@ -180,9 +180,9 @@ export class BoardComponent {
       console.log(this.dices);
     },
     error: (error) => {
-      console.error(error);
+      this.message = "Error al tirar los dados, inténtalo de nuevo";
       // Try again
-      this.play_turn_player();
+      document.getElementById("tirar-dados")!.setAttribute("disabled", "false");
     },
     complete: async () => {
       // Update message
@@ -243,8 +243,13 @@ export class BoardComponent {
             this.createCommunityCardComponent();
           }
           else if (this.taxes_cards.includes(this.position_player)){
-            this.message = "Tienes que pagar..."
-            /// TODO : Display tax card and pay
+            this.message = "Tienes que pagar...";
+            if (this.position_player == 38){
+              alert("Tienes que pagar el seguro escolar : 133€");
+            }
+            else if (this.position_player == 4){
+              alert("Tienes que pagar la apertura de expediente : 267");
+            }
             this.end_turn();
           }
           // If it's a normal card
