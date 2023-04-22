@@ -115,7 +115,8 @@ export class BoardComponent {
         takeWhile(() => this.current_player !== this.player[0]),
         switchMap(() => this.gameService.get_current_player(this.game_id)),
         switchMap((playerResponse) => {
-      if (playerResponse.jugador === this.player[0]) {
+          this.current_player = playerResponse.jugador;
+      if (this.current_player === this.player[0]) {
         // When he can play, activate button
         this.message = this.player[0] + ", es tu turno";
         document.getElementById("tirar-dados")!.removeAttribute("disabled");
@@ -123,7 +124,7 @@ export class BoardComponent {
         return EMPTY;
       } else {
         // If it's not his turn, indicate who is playing
-        this.message = playerResponse.jugador + " está jugando su turno";
+        this.message = this.current_player + " está jugando su turno";
         // Update game information
         return this.gameService.get_list_players(this.game_id);
       }
@@ -306,6 +307,7 @@ export class BoardComponent {
           this.end_turn();
         },
         complete: () => {
+          this.message = "Es el turno de " + this.current_player;
           // Go back to play to wait next time to play
           this.play();
         }
