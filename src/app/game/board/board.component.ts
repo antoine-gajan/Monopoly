@@ -50,7 +50,7 @@ export class BoardComponent {
       this.router.navigate(['/error']);
     }
     // Get name of the player
-    //this.player[0] = this.userService.getUsername();
+    this.player[0] = this.userService.getUsername();
     // If undefined, redirect to error page
     if (this.player[0] === undefined) {
       this.router.navigate(['/error']);
@@ -59,15 +59,6 @@ export class BoardComponent {
     this.load_game();
   }
 
-  obtener_asignaturas_lista(){
-    /*getProperties(): string[] {
-      // Aquí haces la llamada al servidor para obtener la lista de propiedades del jugador actual
-      // Supongamos que la lista de propiedades se devuelve en un arreglo de strings llamado 'properties'
-      const properties: string[] = ['Vermont Avenue', 'Connecticut Avenue']; // Ejemplo de lista de propiedades
-      return properties;
-    }*/
-    
-  }
 
   load_game(){
     // Block buttons to avoid risks
@@ -85,6 +76,8 @@ export class BoardComponent {
       complete: () => {
         // Delete client from other_players_list
         this.delete_client_from_other_list();
+        // Get every properties of each player
+        //this.get_every_properties_of_players();
         // Show position of the players
         this.show_position_every_players();
         // Indicate that the game is loaded
@@ -95,6 +88,24 @@ export class BoardComponent {
     });
   }
 
+  get_every_properties_of_players(): void {
+    // Get every properties of the player
+    this.gameService.get_all_properties_of_player(this.game_id, this.player[0]).subscribe({
+      next: (data: any) => {
+        console.log(data);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+      complete: () => {
+        /// TODO: Store in variable
+      }
+    })
+    // Get every properties of the other players
+    for (let i = 0; i < this.other_players_list.length; i++) {
+      this.gameService.get_all_properties_of_player(this.game_id, this.other_players_list[i][0]);
+    }
+  }
   async play(): Promise<void> {
     // Check if the player can play or not
     let current_player: string;
@@ -208,24 +219,31 @@ export class BoardComponent {
           console.log("Position updated in database");
           // Wait 0.5 seconds
           await this.sleep(500);
-          /// TODO : Verify is the player can buy the property and ask to buy it
           // Display a buy card component
-          if (this.nothing_cards.includes(this.position_player)){
-            // End turn
-            this.end_turn();
-          }
-          else if (is_in_jail){
+          if (is_in_jail){
             // TODO : Display a card component to ask if the player wants to pay to get out of prison
             // End turn
             this.end_turn();
           }
+          if (this.nothing_cards.includes(this.position_player)){
+            this.message = "No pasa nada";
+            // End turn
+            this.end_turn();
+          }
           else if (this.chance_cards.includes(this.position_player)){
+            // Wait 0.5 seconds
+            await this.sleep(500);
+            this.message = "Toma una carta de suerte";
             this.createChanceCardComponent();
           }
           else if (this.community_cards.includes(this.position_player)){
+            // Wait 0.5 seconds
+            await this.sleep(500);
+            this.message = "Toma una carta de comunidad";
             this.createCommunityCardComponent();
           }
           else if (this.taxes_cards.includes(this.position_player)){
+            this.message = "Tienes que pagar..."
             /// TODO : Display tax card and pay
             this.end_turn();
           }
@@ -258,7 +276,7 @@ export class BoardComponent {
     let old_position_player = this.position_player;
     // If the player can play again, activate the button to play again
     if (this.dices[0] === this.dices[1]) {
-      this.message = this.player[0] + ", tira los dados";
+      this.message = this.player[0] + ", puedes volver a tirar los dados";
       document.getElementById("tirar-dados")!.removeAttribute("disabled");
     }
     // If the position of player has changed, launch card action of the new position
@@ -271,6 +289,7 @@ export class BoardComponent {
       }
     }
     else {
+      this.message = "Has terminado tu turno";
       // Indicate to backend that the player has finished his turn
       this.gameService.next_turn(this.game_id).subscribe({
         next: (data: any) => {
