@@ -26,7 +26,7 @@ import {CardModule} from "./card/card.module";
 import {InteractionCardComponent} from "./card/interaction-card/interaction-card.component";
 import { CrearSalaComponent } from './crear_sala/crear_sala.component';
 import { UnirseSalaComponent } from './unirse_sala/unirse_sala.component';
-
+import { PantallaInvitadoComponent } from './pantalla_invitado/pantalla_invitado.component';
 @NgModule({
     declarations: [
         LoginComponent,
@@ -46,6 +46,7 @@ import { UnirseSalaComponent } from './unirse_sala/unirse_sala.component';
         DeleteUserComponent,
         CrearSalaComponent,
         UnirseSalaComponent,
+        PantallaInvitadoComponent
     ],
     imports: [
         FormsModule,

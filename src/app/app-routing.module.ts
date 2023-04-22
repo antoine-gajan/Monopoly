@@ -27,6 +27,7 @@ import {HeatCardComponent} from "./card/heat-card/heat-card.component";
 import {PartyCardComponent} from "./card/party-card/party-card.component";
 import {InteractionCardComponent} from "./card/interaction-card/interaction-card.component";
 import {LoaderComponent} from "./game/loader/loader.component";
+import { PantallaInvitadoComponent } from './pantalla_invitado/pantalla_invitado.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -52,6 +53,7 @@ const routes: Routes = [
   { path: 'cambiar_correo', component: CambiarCorreoComponent},
   { path: 'cambiar_contraseña', component: CambiarContraseñaComponent},
   { path: 'delete_user', component: DeleteUserComponent},
+  { path: 'pantalla_invitado', component: PantallaInvitadoComponent},
   { path: '', pathMatch: "full", redirectTo: '/home' },
   { path: '**', component: ErrorPageComponent }
 ];

@@ -1,22 +1,35 @@
+<!--------------------CABECERA WEB-------------------->
 <header id="header" class="fixed-top">
-    <div style="display: flex; justify-content: space-between;">
-        <img class="voler_boton" src="../../../assets/images/voler_boton.png" class="volver_boton" style="cursor: pointer;" onclick="window.history.back();" />
-        <h4><a style="color: #080808" routerLink="/">MONOPOLY VERSIÓN INFORMÁTICA</a></h4>
-      <img class="home_boton" src="../../../assets/images/home_boton.png" routerLink="/" class="volver_boton">
+    <div class="texto_cabecera">
+        <img class="volver_boton" src="../../../assets/images/voler_boton.png"  onclick="window.history.back();" />
+        <h4><a style="cursor: pointer;" style="color: #080808" routerLink="/">MONOPOLY VERSIÓN INFORMÁTICA</a></h4>
+      <img class="home_boton" src="../../../assets/images/home_boton.png" routerLink="/">
   </div>
 </header>
-
-<form class="formulario-login">
-  <h1>Iniciar sesión</h1><br><br>
+<!--------------------FORMULARIO-------------------->
+<form  [formGroup]="form" (ngSubmit)="login()" class="formulario-login">
+ <h1>Iniciar sesión</h1><br><br>
+  <!--------------------campo nombre usuario-------------------->
   <div class="filas">
     <label for="password" class="campo"> Nombre de usuario* </label>
-    <input type="text" id="username" name="username" placeholder="nombre de usuario" class="form-input" [(ngModel)]="username"  required/>
+    <input type="text" formControlName="username" id="username" name="username" placeholder="nombre de usuario" class="form-input" required/>    
+    <div *ngIf="form?.get('username')?.invalid && (form?.get('username')?.dirty || form?.get('username')?.touched)">
+      <div *ngIf="form?.get('username')?.errors?.['required']" style="color: red;">Este campo es obligatorio</div>
     </div>
+  </div>
+  <!--------------------campo comtraseña usuario-------------------->
   <div class="filas">
     <label for="password" class="campo"> Contraseña* </label>
-    <input type="password" name="password" placeholder="escribe la contraseña" class="form-input" [(ngModel)]="password" required/>
+    <input type="password" id="password" formControlName="password" name="password" placeholder="escribe la contraseña" class="form-input" required/>
+    <div *ngIf="form?.get('password')?.invalid && (form?.get('password')?.dirty || form?.get('password')?.touched)">
+      <div *ngIf="form?.get('password')?.errors?.['required']" style="color: red;">Este campo es obligatorio</div>
+      <div *ngIf="form?.get('password')?.errors?.['minlength']" style="color: red;">La contraseña debe tener al menos 8 caracteres</div>
     </div>
-  <button class="boton" type="submit" (click)="login()">Iniciar sesión</button>
+  </div>
+  <!--------------------botón confirmación crear cuenta-------------------->
+  <button class="boton" type="submit">Iniciar sesión</button>
+  <!--------------------link si ya tiene cuenta-------------------->
+  <br>
   <div class="link">
     <a routerLink="/signup"><p>No tengo cuenta</p></a>
   </div>  

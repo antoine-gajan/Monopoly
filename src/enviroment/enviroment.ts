@@ -23,7 +23,7 @@ export const environment = {
 
 
     //--API servidor local -> cuando funcione cambiarlo
-    login: 'http://localhost:8080/users/login',
+    /*login: 'http://localhost:8080/users/login',
     registration: 'http://localhost:8080/users/register',
     delete: 'http://localhost:8080/users/delete',
     get_ner_username: 'http://localhost:8080/users/updateUsername',
@@ -41,5 +41,26 @@ export const environment = {
     tarjetaAleatoria: 'http://localhost:8080/partida/tarjeta/',
     siguienteTurno: 'http://localhost:8080/partida/siguienteTurno/',
     listaAsignaturas: 'http://localhost:8080/partida/listaAsignaturasC/',
-    turnoActual: 'http://localhost:8080/partida/turnoActual/',
+    turnoActual: 'http://localhost:8080/partida/turnoActual/',*/
+
+
+    login: 'http://localhost:3000/users/login',
+    registration: 'http://localhost:3000/users/register',
+    delete: 'http://localhost:3000/users/delete',
+    get_ner_username: 'http://localhost:3000/users/updateUsername',
+    devolver_correo: 'http://localhost:3000/users/devolverCorreo',
+    update_correo: 'http://localhost:3000/users/updateCorreo',
+    update_password: 'http://localhost:3000/users/updatePassword',
+    crearPartida: 'http://localhost:3000/partida/crear',
+    unirJugador: 'http://localhost:3000/partida/unirJugador',
+    listaJugadores: 'http://localhost:3000/partida/listaJugadores',
+    lanzarDados: 'http://localhost:3000/partida/lanzarDados',
+    casilla: 'http://localhost:3000/partida/casilla',
+    comprarCasilla: 'http://localhost:3000/partida/comprar',
+    actualizarPartida: 'http://localhost:3000/partida/actualizar',
+    infoAsignatura: 'http://localhost:3000/partida/infoAsignatura',
+    tarjetaAleatoria: 'http://localhost:3000/partida/tarjeta/',
+    siguienteTurno: 'http://localhost:3000/partida/siguienteTurno/',
+    listaAsignaturas: 'http://localhost:3000/partida/listaAsignaturasC/',
+    turnoActual: 'http://localhost:3000/partida/turnoActual/'
 };

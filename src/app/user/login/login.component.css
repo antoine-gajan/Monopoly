@@ -1,4 +1,3 @@
-
 * {
   font-family: "Inter", sans-serif;
   margin: 0;
@@ -6,43 +5,26 @@
   box-sizing: border-box;
 }
 
-.campo{
-  display: block;
-  font-weight: 500;
-  font-size: 16px;
-  margin-top: 10px;
+.texto_cabecera{
+  display: flex;
+  justify-content: space-between;
 }
 
-.filas{
-  margin-bottom: 20px;
-}
-
-label {
-  display: block;
-  font: 1rem 'Fira Sans', sans-serif;
-}
-
-input,
-label {
-  margin: 0.4rem 0;
-}
-
-.volver_boton{
+.volver_boton, 
+.home_boton{
   height: 40px;
+  cursor: pointer;
 }
 
-.boton{
-  padding: 2rem 3rem;
-  margin: auto;
-  border-radius: 2.5rem;
-  box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #ffffff;
-  color: black;
-  text-transform: uppercase;
-  border: none;
-  font-weight: bold;
-  background-color: #bcd8c1;
+.formulario-login input {
   display: block;
-  cursor: pointer;
+  margin: 2rem 0;
+  width: 100%;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  border: none;
+  box-shadow: inset -5px -5px 15px rgba(255, 255, 255, 0.8), inset 5px 5px 10px rgba(0, 0, 0, 0.1);
+  background: #ebf5fc;
 }
 
 .formulario-login{
@@ -57,15 +39,53 @@ label {
   margin-bottom: 20px;
 }
 
-.formulario-login input {
+.filas{
+  margin-bottom: 20px;
+}
+
+label {
   display: block;
-  margin: 2rem 0;
+  font: 1rem 'Fira Sans', sans-serif;
+}
+
+.campo{
+  display: block;
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 14px;
+  margin-top: 10px;
+}
+
+.form-input{
   width: 100%;
-  border-radius: 0.5rem;
-  padding: 1rem;
+  padding: 12px 24px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  background: white;
+  font-weight: 500;
+  font-size: 16px;
+  color: #6b7280;
+  outline: none;
+  resize: none;
+}
+
+.formulario{
+  padding: 32px 36px;
+  background-color: white;
+}
+
+.boton{
+  padding: 2rem 3rem;
+  margin: auto;
+  border-radius: 2.5rem;
+  box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #ffffff;
+  color: black;
+  text-transform: uppercase;
   border: none;
-  box-shadow: inset -5px -5px 15px rgba(255, 255, 255, 0.8), inset 5px 5px 10px rgba(0, 0, 0, 0.1);
-  background: #ebf5fc;
+  font-weight: bold;
+  background-color: #bcd8c1;
+  display: block;
+  cursor: pointer;
 }
 
 .link{

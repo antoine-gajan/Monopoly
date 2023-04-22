@@ -1,11 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import { UserService } from '../user.service';
-import { AppRoutingModule } from 'app/app-routing.module';
-import { Router } from '@angular/router';
-import {ActivatedRoute} from "@angular/router";
-import { Location } from '@angular/common';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import * as yup from 'yup';
 
 @Component({
@@ -24,7 +19,7 @@ export class RegistrationComponent implements OnInit{
       confirm_password: ['', [Validators.required]]
     });
   }
-
+  
   get username() {
     return this.form.get('username');
   }
