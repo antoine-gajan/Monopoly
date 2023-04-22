@@ -19,9 +19,16 @@ export class ProprietyCardComponent implements OnInit{
   }
 
   get_propriety() {
-    /// TODO : Get the property from the game service
-    this.gameService.get_info_propriety(this.v, this.h).subscribe((propriety) => {
-      this.propriety = propriety;
+    // Get the property from the game service
+    this.gameService.get_info_propriety(this.v, this.h).subscribe({
+      next: (data) => {
+        this.propriety = data;
+      },
+      error: (error) => {
+        console.log(error);
+        // Try again
+        setTimeout(() => this.get_propriety(), 2000);
+      }
     });
   }
 

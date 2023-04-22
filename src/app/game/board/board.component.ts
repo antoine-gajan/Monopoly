@@ -5,6 +5,7 @@ import {UserService} from "../../user/user.service";
 import {InteractionCardComponent} from "../../card/interaction-card/interaction-card.component";
 import {ChanceCardComponent} from "../../card/chance-card/chance-card.component";
 import {CommunityCardComponent} from "../../card/community-card/community-card.component";
+import {EMPTY, interval, switchMap, takeWhile} from "rxjs";
 
 @Component({
   selector: 'app-board',
@@ -60,6 +61,9 @@ export class BoardComponent {
 
 
   load_game(){
+    // Block buttons to avoid risks
+    document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
+    // Indicate that the game is loading
     this.message = "Cargando la partida..."
     // Get list of players
     this.gameService.get_list_players(this.game_id).subscribe({
@@ -70,21 +74,12 @@ export class BoardComponent {
         console.error(error);
       },
       complete: () => {
-        // Get money of player_name and delete player from other_players_list
-        for (let i = 0; i < this.other_players_list.length; i++) {
-          if (this.other_players_list[i][0] === this.player[0]) {
-            // Get money of the player
-            this.dinero = this.other_players_list[i][1];
-            // Remove player from other_players_list
-            this.other_players_list.splice(i, 1);
-          }
-        }
-        // Show position of the player
-        this.show_position(this.player[0], this.position_player,0);
-        // Show position of the other players
-        for (let i = 0; i < this.other_players_list.length; i++) {
-          this.show_position(this.other_players_list[i][0], 0, i + 1);
-        }
+        // Delete client from other_players_list
+        this.delete_client_from_other_list();
+        // Show position of the players
+        this.show_position_every_players();
+        // Indicate that the game is loaded
+        this.message = "Partida cargada";
         // Start the game
         this.play();
       }
@@ -92,12 +87,64 @@ export class BoardComponent {
   }
 
   async play(): Promise<void> {
-    /// TODO : Check if the player can play
-    // When he can play, activate button
-    this.message = this.player[0] + ", es tu turno";
-    await this.sleep(1000);
-    this.message = this.player[0] + ", tira los dados";
-    document.getElementById("tirar-dados")!.removeAttribute("disabled");
+    // Check if the player can play or not
+    let current_player: string;
+    interval(5000)
+      .pipe(
+        // Take while the current player is not the current user's player
+        takeWhile(() => current_player !== this.player[0]),
+        switchMap(() => this.gameService.get_current_player(this.game_id)),
+        switchMap((playerResponse) => {
+      if (playerResponse.jugador === this.player[0]) {
+        // When he can play, activate button
+        this.message = this.player[0] + ", es tu turno";
+        document.getElementById("tirar-dados")!.removeAttribute("disabled");
+        // Return empty observable to stop the interval
+        return EMPTY;
+      } else {
+        // If it's not his turn, indicate who is playing
+        this.message = playerResponse.jugador + " está jugando su turno";
+        // Update game information
+        return this.gameService.get_list_players(this.game_id);
+      }
+    })
+  )
+  .subscribe({
+    next : (data: any) => {
+      this.other_players_list = data.listaTuplas;
+    },
+    error: (error) => {
+      console.error(error);
+      // Try again
+      this.play();
+    },
+    complete: () => {
+      // Delete client from other_players_list
+      this.delete_client_from_other_list();
+      // TODO : Update position of the players
+    }
+    });
+  }
+
+  delete_client_from_other_list(): void {
+    // Get money of player_name and delete player from other_players_list
+    for (let i = 0; i < this.other_players_list.length; i++) {
+      if (this.other_players_list[i][0] === this.player[0]) {
+        // Get money of the player
+        this.player[1] = this.other_players_list[i][1];
+        // Remove client from other_players_list
+        this.other_players_list.splice(i, 1);
+      }
+    }
+  }
+
+  show_position_every_players(): void {
+    // Show position of the player
+    this.show_position(this.player[0], this.position_player,0);
+    // Show position of the other players
+    for (let i = 0; i < this.other_players_list.length; i++) {
+      this.show_position(this.other_players_list[i][0], 0, i + 1);
+    }
   }
 
   async play_turn_player() {
@@ -114,6 +161,8 @@ export class BoardComponent {
     },
     error: (error) => {
       console.error(error);
+      // Try again
+      this.play_turn_player();
     },
     complete: async () => {
       // Update message
@@ -143,6 +192,8 @@ export class BoardComponent {
         },
         error: (error) => {
           console.error(error);
+          // Try again
+          this.card_action(is_in_jail);
         },
         complete: async () => {
           console.log("Position updated in database");
@@ -196,11 +247,10 @@ export class BoardComponent {
     }
     /// TODO: Get the position of the player from the backend
     let old_position_player = this.position_player;
-    // If the player can play again, activate the button and play again
+    // If the player can play again, activate the button to play again
     if (this.dices[0] === this.dices[1]) {
       this.message = this.player[0] + ", tira los dados";
       document.getElementById("tirar-dados")!.removeAttribute("disabled");
-      this.play();
     }
     // If the position of player has changed, launch card action of the new position
     else if (this.position_player != old_position_player) {
@@ -212,11 +262,16 @@ export class BoardComponent {
       }
     }
     else {
-      // Idicate to backend that the player has finished his turn
+      // Indicate to backend that the player has finished his turn
       this.gameService.next_turn(this.game_id).subscribe({
         next: (data: any) => {
           console.log(data);
-          // Go back to play
+        },
+        error: (error) => {
+          console.error(error);
+        },
+        complete: () => {
+          // Go back to play to wait next time to play
           this.play();
         }
       });

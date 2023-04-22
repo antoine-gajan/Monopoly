@@ -6,6 +6,7 @@ import {Propriety} from "../card/propriety";
 import { environment } from 'enviroment/enviroment';
 import { Party } from 'app/card/party';
 import {RandomCard} from "../card/chance";
+import {PlayerResponse} from "./Player";
 @Injectable({
   providedIn: 'root'
 })
@@ -134,6 +135,17 @@ export class GameService {
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 
     return this.http.put(environment.listaAsignaturas, body, httpOptions).pipe(
+      tap(
+        (response) => {
+          console.log(response)})
+      );
+  }
+
+  get_current_player(idPartida: number){
+    const body =  JSON.stringify({"idPartida": idPartida});
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+
+    return this.http.put<PlayerResponse>(environment.turnoActual, body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response)})

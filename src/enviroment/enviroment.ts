@@ -41,4 +41,5 @@ export const environment = {
     tarjetaAleatoria: 'http://localhost:8080/partida/tarjeta/',
     siguienteTurno: 'http://localhost:8080/partida/siguienteTurno/',
     listaAsignaturas: 'http://localhost:8080/partida/listaAsignaturasC/',
+    turnoActual: 'http://localhost:8080/partida/turnoActual/',
 };

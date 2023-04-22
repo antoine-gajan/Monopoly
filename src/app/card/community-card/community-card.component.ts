@@ -16,9 +16,18 @@ export class CommunityCardComponent {
   constructor(private gameService: GameService) { }
 
   ngOnInit() {
-    this.gameService.get_random_boletin_card(this.idPartida, this.username).subscribe((community) => {
-      console.log(community);
-      this.community = community[0];
+    this.gameService.get_random_boletin_card(this.idPartida, this.username).subscribe({
+    next:
+      (cards) => {
+        this.community = cards[0];
+        console.log(this.community);
+      },
+    error:
+      (error) => {
+        console.log(error);
+        // Try again in 3 seconds
+        setTimeout(() => this.ngOnInit(), 3000);
+      }
     });
   }
 
