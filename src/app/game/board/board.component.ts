@@ -26,7 +26,6 @@ export class BoardComponent {
   chance_cards: number[] = [7, 22, 36];
   community_cards: number[] = [2, 17, 33];
   taxes_cards: number[] = [4, 38];
-  dinero: number = 0;
   propiedad_comprada = true; // Supongamos que esta variable contiene información sobre si se ha comprado o no una propiedad
   diceImages = [
     "../../../assets/images/dice/1.png",
@@ -90,7 +89,7 @@ export class BoardComponent {
     });
   }
 
-  get_every_properties_of_players(): void {
+  get_properties(): void {
     // Get every properties of the player
     this.gameService.get_all_properties_of_player(this.game_id, this.player[0]).subscribe({
       next: (data: any) => {
@@ -103,10 +102,6 @@ export class BoardComponent {
         /// TODO: Store in variable
       }
     })
-    // Get every properties of the other players
-    for (let i = 0; i < this.other_players_list.length; i++) {
-      this.gameService.get_all_properties_of_player(this.game_id, this.other_players_list[i][0]);
-    }
   }
   async play(): Promise<void> {
     // Check if the player can play or not
@@ -260,9 +255,12 @@ export class BoardComponent {
               /// TODO : Display a buy card component to ask if the player wants to buy credit
               console.log("You own this property", position_v_h);
             }
-            else if (owner_of_card != this.player[0] && money_to_pay != null){
+            else if (owner_of_card != this.player[0] && money_to_pay != null && money_to_pay <= this.player[1]){
               console.log("Display pay card", position_v_h);
               this.createPayCardComponent(position_v_h[0], position_v_h[1], "La tarjeta pertenece a " + owner_of_card, this.player[1], money_to_pay);
+            }
+            else if(owner_of_card != this.player[0] && money_to_pay != null && money_to_pay > this.player[1]){
+              this.createInfoCardComponent("BANCARROTA", "Has perdido...<br>No tienes suficiente dinero para pagar " + money_to_pay + "€ a " + owner_of_card + " !", "Vale");
             }
           }
         }
