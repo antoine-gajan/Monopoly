@@ -43,7 +43,6 @@ export class BoardComponent {
               private viewContainerRef: ViewContainerRef, private elRef: ElementRef) { }
 
   ngOnInit() {
-
     // Get id of the game
     const game_id: string | null = this.route.snapshot.paramMap.get('id');
     if (game_id != null) {
@@ -53,7 +52,7 @@ export class BoardComponent {
       this.router.navigate(['/error']);
     }
     // Get name of the player
-    //this.player[0] = this.userService.getUsername();
+    this.player[0] = this.userService.getUsername();
     // If undefined, redirect to error page
     if (this.player[0] === undefined) {
       this.router.navigate(['/error']);
@@ -181,7 +180,6 @@ export class BoardComponent {
       next: (data: any) => {
       this.dices[0] = data.dado1;
       this.dices[1] = data.dado2;
-      console.log(this.dices);
     },
     error: (error) => {
       // Try again
