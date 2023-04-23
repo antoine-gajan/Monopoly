@@ -1,0 +1,18 @@
+<div class="info-card">
+  <h3 class="title-card">
+    SEGUNDA CONVOCATORIA DE JULIO
+  </h3>
+  <div class="info-container">
+    <div class="info" *ngIf="player_money >= 67">
+      Fuiste convocado a la segunda convocatoria de exámenes de la EINA en julio...<br><br>Sin embargo, tienes suficiente dinero para comprar al profesor y aprobar el examen sin ir. <br><br>¿Qué quieres hacer?
+    </div>
+    <div class="info" *ngIf="player_money < 67">
+      Fuiste convocado a la segunda convocatoria de exámenes de la EINA en julio...<br><br>Todo el equipo del Monopoly te desea buena suerte para sacar 5/10 :)
+    </div>
+    <img src='../../../assets/images/card/carcel.png'>
+  </div>
+  <div class="list-button">
+    <button class="button-action pagar" *ngIf="player_money >= 67" (click)="pagar()">Pagar 67€</button>
+    <button class="button-action nada" (click)="validate()">Ir al examen</button>
+  </div>
+</div>

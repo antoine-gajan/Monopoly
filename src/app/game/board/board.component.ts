@@ -6,6 +6,8 @@ import {InteractionCardComponent} from "../../card/interaction-card/interaction-
 import {ChanceCardComponent} from "../../card/chance-card/chance-card.component";
 import {CommunityCardComponent} from "../../card/community-card/community-card.component";
 import {EMPTY, interval, switchMap, takeWhile} from "rxjs";
+import {InfoCardComponent} from "../../card/info-card/info-card.component";
+import {JailCardComponent} from "../../card/jail-card/jail-card.component";
 
 @Component({
   selector: 'app-board',
@@ -51,7 +53,7 @@ export class BoardComponent {
       this.router.navigate(['/error']);
     }
     // Get name of the player
-    this.player[0] = this.userService.getUsername();
+    //this.player[0] = this.userService.getUsername();
     // If undefined, redirect to error page
     if (this.player[0] === undefined) {
       this.router.navigate(['/error']);
@@ -217,14 +219,12 @@ export class BoardComponent {
           this.card_action(is_in_jail);
         },
         complete: async () => {
-          console.log("Position updated in database");
           // Wait 0.5 seconds
           await this.sleep(500);
           // Display a buy card component
           if (is_in_jail){
-            // TODO : Display a card component to ask if the player wants to pay to get out of prison
-            // End turn
-            this.end_turn();
+            // Display a jail card component
+            this.createJailCardComponent();
           }
           if (this.nothing_cards.includes(this.position_player)){
             this.message = "No pasa nada";
@@ -246,12 +246,11 @@ export class BoardComponent {
           else if (this.taxes_cards.includes(this.position_player)){
             this.message = "Tienes que pagar...";
             if (this.position_player == 38){
-              alert("Tienes que pagar el seguro escolar : 133€");
+              this.createInfoCardComponent("SEGURO ESCOLAR", "Tienes que pagar el seguro escolar : 133€", "Pagar 133€");
             }
             else if (this.position_player == 4){
-              alert("Tienes que pagar la apertura de expediente : 267");
+              this.createInfoCardComponent("APERTURA DE EXPEDIENTE", "Tienes que pagar la apertura de expediente : 267€", "Pagar 267€");
             }
-            this.end_turn();
           }
           // If it's a normal card
           else {
@@ -288,7 +287,7 @@ export class BoardComponent {
     // If the position of player has changed, launch card action of the new position
     else if (this.position_player != old_position_player) {
       if (this.position_player == 10) {
-        // Player has be sent to jail
+        // Player has be sent to jail-card
         this.card_action(true);
       } else {
         this.card_action(false);
@@ -413,7 +412,7 @@ export class BoardComponent {
       // Wait 0.5 seconds
       await this.sleep(500);
     }
-    // If player has to go to jail
+    // If player has to go to jail-card
     if (this.position_player == 30) {
       this.show_position(id_player, this.position_player, 0);
       this.message = "Has ido en julio";
@@ -509,6 +508,40 @@ export class BoardComponent {
     componentRef.instance.idPartida = this.game_id;
     componentRef.instance.username = this.player[0];
     // Outputs
+    componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
+    // Give an id to the component html
+    componentRef.location.nativeElement.id = "pop-up-card";
+    // Center the component at the middle of the page
+    componentRef.location.nativeElement.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);";
+  }
+
+  createInfoCardComponent(title : string, description: string, button_text : string): void {
+    // Assure to delete the old buy card component
+    const old_buy_card_component_element = document.getElementById('pop-up-card');
+    if (old_buy_card_component_element != null){
+      old_buy_card_component_element.remove();
+    }
+    const factory = this.componentFactoryResolver.resolveComponentFactory(InfoCardComponent);
+    const componentRef = this.viewContainerRef.createComponent(factory);
+    componentRef.instance.title = title;
+    componentRef.instance.description = description;
+    componentRef.instance.button_message = button_text;
+    componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
+    // Give an id to the component html
+    componentRef.location.nativeElement.id = "pop-up-card";
+    // Center the component at the middle of the page
+    componentRef.location.nativeElement.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);";
+  }
+
+  createJailCardComponent(): void {
+    // Assure to delete the old buy card component
+    const old_buy_card_component_element = document.getElementById('pop-up-card');
+    if (old_buy_card_component_element != null){
+      old_buy_card_component_element.remove();
+    }
+    const factory = this.componentFactoryResolver.resolveComponentFactory(JailCardComponent);
+    const componentRef = this.viewContainerRef.createComponent(factory);
+    componentRef.instance.player_money = this.player[1];
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";

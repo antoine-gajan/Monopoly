@@ -8,6 +8,8 @@ import { ElectricityCardComponent } from './electricity-card/electricity-card.co
 import { HeatCardComponent } from './heat-card/heat-card.component';
 import { InteractionCardComponent } from './interaction-card/interaction-card.component';
 import {GameModule} from "../game/game.module";
+import { InfoCardComponent } from './info-card/info-card.component';
+import { JailCardComponent } from './jail-card/jail-card.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import {GameModule} from "../game/game.module";
     PartyCardComponent,
     ElectricityCardComponent,
     HeatCardComponent,
-    InteractionCardComponent],
+    InteractionCardComponent,
+    InfoCardComponent,
+    JailCardComponent],
     imports: [
       CommonModule,
       GameModule,
