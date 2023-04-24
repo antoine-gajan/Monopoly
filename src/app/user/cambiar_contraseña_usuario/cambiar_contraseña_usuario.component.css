@@ -1,28 +1,14 @@
-
 * {
-    font-family: "Inter", sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-#heather{
-    background: #BFDBAE;
-    box-shadow: 0px 0px 25px 0 rgba(0, 0, 0, 0.08);
-    z-index: 997;
-    padding: 15px 0;
-}
-
-.imagen_logo_juego{
-    display: flex;
-    justify-content: center;
-    margin-top: 15px;
-    height: 150px;
+  font-family: "Inter", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .volver_boton,
 .inicio_boton{
-    height: 40px;
+  height: 40px;
+  cursor: pointer;
 }
 
 .formulario-nombre-usuario{
@@ -43,6 +29,18 @@
   cursor: pointer;
 }
 
+.filas{
+  margin-bottom: 20px;
+}
+
+.campo{
+  display: block;
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 14px;
+  margin-top: 10px;
+}
+
 .formulario-nombre-usuario-input{
   padding: 12px 24px;
   border-radius: 6px;
@@ -53,10 +51,7 @@
   color: #6b7280;
   text-align: center;
 }
-
-/*------------------------------------
- * BODY
- *-----------------------------------*/
+/*-------------------BODY-----------------*/
 body{
     font-family: "Open Sans", sans-serif;
     color: #444444;
@@ -74,99 +69,39 @@ h5{
   text-align: center;
 }
 
-/*------------------------------------
- * CARDS
- *-----------------------------------*/  
-
-
-.material-icons{
-  fill: #888;
-  width: 24px;
-  height: 24px;
+.opciones{
+  display: flex;
+}
+.boton_si, .boton_no{
+  padding: 2rem 3rem;
+  margin: auto;
+  border-radius: 2.5rem;
+  box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #ffffff;
+  color: black;
+  text-transform: uppercase;
+  border: none;
+  font-weight: bold;
+  display: block;
+  cursor: pointer;
 }
 
-.icono-tienda, 
-.icono-reglas {
-  border: #222222;
-  width: 24px;
-  height: 24px;
+.boton_si {
+  background-color: #bcd8c1;
 }
 
-.card-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 16px;
+.boton_no{
+  background-color: #d8bcbc; 
 }
 
-.card {
-    all: unset;
-    border-radius: 4px;
-    border: 1px solid #eee;
-    background-color: #f6ee02;
-    height: 40px;
-    width: 200px;
-    margin: 0 8px 16px;
-    padding: 16px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.2s ease-in-out;
-    line-height: 24px;
+.form-input{
+  width: 100%;
+  padding: 12px 24px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  background: white;
+  font-weight: 500;
+  font-size: 16px;
+  color: #6b7280;
+  outline: none;
+  resize: none;
 }
-
-.card-container .card:not(.highlight-card) {
-    cursor: pointer;
-}
-    
-.card-container .card:not(.highlight-card):hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 17px rgba(0, 0, 0, 0.35);
-}
-
-/*------------------------------------
- * FOOTER
- *-----------------------------------*/  
-#footer {
-    background: #e9e8e6;
-    padding: 30px 0;
-    color: #222222;
-    font-size: 14px;
-    text-align: center;
-  }
-  
-  #footer .credits {
-    padding-top: 5px;
-    font-size: 13px;
-  }
-  
-  #footer .credits a {
-    color: #34b7a7;
-  }
-
-
-
-/*------------------------------------
- * NAVIGATION MENU
- *-----------------------------------*/
-
- .navegador li {
-    padding: 10px 0 0 28px;
-  }   
-  
-  .navegador a,
-  .navegador a:focus,
-  .navegador img{
-    font-weight: 600;
-    color: black;
-  }
-  
-   
-  .navegador_derecha a,
-  .navegador_derecha a:focus,
-  .navegador_derecha img{
-    align-items: end;
-    font-weight: 600;
-    color: black;
-  }

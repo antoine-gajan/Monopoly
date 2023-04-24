@@ -1,46 +1,18 @@
-
 * {
-    font-family: "Inter", sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-#heather{
-    background: #BFDBAE;
-    box-shadow: 0px 0px 25px 0 rgba(0, 0, 0, 0.08);
-    z-index: 997;
-    padding: 15px 0;
-}
-
-.imagen_logo_juego{
-    display: flex;
-    justify-content: center;
-    margin-top: 15px;
-    height: 150px;
+  font-family: "Inter", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .volver_boton,
 .inicio_boton{
     height: 40px;
+    cursor: pointer;
 }
 
 .formulario-nombre-usuario{
   text-align: center;
-}
-
-.boton{
-  padding: 2rem 3rem;
-  margin: auto;
-  border-radius: 2.5rem;
-  box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #ffffff;
-  color: black;
-  text-transform: uppercase;
-  border: none;
-  font-weight: bold;
-  background-color: #bcd8c1;
-  display: block;
-  cursor: pointer;
 }
 
 .formulario-nombre-usuario-input{
@@ -54,9 +26,6 @@
   text-align: center;
 }
 
-/*------------------------------------
- * BODY
- *-----------------------------------*/
 body{
     font-family: "Open Sans", sans-serif;
     color: #444444;
@@ -75,100 +44,26 @@ h5{
   margin-top: 10%;
   margin-bottom: 5%;
 }
-
-/*------------------------------------
- * CARDS
- *-----------------------------------*/  
-
-
-.material-icons{
-  fill: #888;
-  width: 24px;
-  height: 24px;
-}
-
-.icono-tienda, 
-.icono-reglas {
-  border: #222222;
-  width: 24px;
-  height: 24px;
-}
-
-.card-container {
+  .opciones{
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 16px;
-}
-
-.card {
-    all: unset;
-    border-radius: 4px;
-    border: 1px solid #eee;
-    background-color: #f6ee02;
-    height: 40px;
-    width: 200px;
-    margin: 0 8px 16px;
-    padding: 16px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.2s ease-in-out;
-    line-height: 24px;
-}
-
-.card-container .card:not(.highlight-card) {
+  }
+  .boton_si, .boton_no{
+    padding: 2rem 3rem;
+    margin: auto;
+    border-radius: 2.5rem;
+    box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #ffffff;
+    color: black;
+    text-transform: uppercase;
+    border: none;
+    font-weight: bold;
+    display: block;
     cursor: pointer;
-}
-    
-.card-container .card:not(.highlight-card):hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 17px rgba(0, 0, 0, 0.35);
-}
-
-/*------------------------------------
- * FOOTER
- *-----------------------------------*/  
-#footer {
-    background: #e9e8e6;
-    padding: 30px 0;
-    color: #222222;
-    font-size: 14px;
-    text-align: center;
   }
   
-  #footer .credits {
-    padding-top: 5px;
-    font-size: 13px;
+  .boton_si {
+    background-color: #bcd8c1;
   }
   
-  #footer .credits a {
-    color: #34b7a7;
-  }
-
-
-
-/*------------------------------------
- * NAVIGATION MENU
- *-----------------------------------*/
-
- .navegador li {
-    padding: 10px 0 0 28px;
-  }   
-  
-  .navegador a,
-  .navegador a:focus,
-  .navegador img{
-    font-weight: 600;
-    color: black;
-  }
-  
-   
-  .navegador_derecha a,
-  .navegador_derecha a:focus,
-  .navegador_derecha img{
-    align-items: end;
-    font-weight: 600;
-    color: black;
+  .boton_no{
+    background-color: #d8bcbc; 
   }

@@ -10,22 +10,19 @@ background: linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 1
 }
 
 * {
-    font-family: "Inter", sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
+  font-family: "Inter", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 .volver_boton,
 .inicio_boton{
   height: 40px;
+  cursor: pointer;
 }
 
-
-/*------------------------------------
-* BODY
-*-----------------------------------*/
+/*****************BODY*****************/
 body{
   font-family: "Open Sans", sans-serif;
   color: #444444;
@@ -40,9 +37,7 @@ h1, h2, h3, h4, h5, h6 {
   color: black;
 }
 
-/*------------------------------------
-* CARDS
-*-----------------------------------*/  
+/*****************CARDS*****************/
 .card-container {
   display: flex;
   flex-wrap: wrap;

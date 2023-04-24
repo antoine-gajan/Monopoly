@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import { UserService } from '../user.service';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -11,13 +12,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 
 export class CambiarUsernameComponent {
+  form: FormGroup;
   old_username: string;
-  new_username: string;
+  //new_username: string;
   
-  constructor(private userService: UserService, private router: Router) {
+  constructor(private fb: FormBuilder, private userService: UserService, private router: Router) {
+    this.form = this.fb.group({
+      new_username: ['', [Validators.required]]
+    });
     this.old_username = userService.getUsername();
   }
-
+  get new_username() {
+    return this.form.get('new_username');
+  }
   ngOnInit(): void {}
   guardar_new_username(){
     //this.username_anterior = this.miFormulario.get('nombreCampo').value;
@@ -28,7 +35,7 @@ export class CambiarUsernameComponent {
     this.userService.guardar_new_username(username_change).subscribe(
       (response) => {
         console.log(response.status);
-        this.userService.setUsername(this.new_username);
+        this.userService.setUsername(this.form.value.new_username);
         console.log(this.userService.getUsername());
         console.log(this.new_username);
         this.router.navigate(['/ajustes_usuario']);
