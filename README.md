@@ -1,27 +1,24 @@
-# Monopoly
+# Monopoly (Web Front-end)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.1.5.
+## 💻︎ Contents of the repository :
 
-## Development server
+This GitHub repository contains all the code of the Web Front-end produced during the EINA Monopoly software project in 2023.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-## Code scaffolding
+## 🎯 Course Objectives:
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Participate in a team effort to complete a major project
+- Learning project management
+- Design a powerful software architecture
+- Self-taught training in new languages
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## 🧑‍💻 Technologies used:
 
-## Running unit tests
+The MEARN stack was used to perform the front end of the software. In particular, we used Angular (HTML, CSS, TypeScript) to code and we used a MongoDB database for data persistence.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
+## 💡Proposed Features: 
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Our software allows from an online interface to create a user account, to connect and modify its information as well as to play a part of Monopoly (EINA version) with other players. During this game, the player will be able to roll the dice and buy properties (courses) as in the real game. Some aspects of the game have been revisited to allow for increased user experience. 
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
