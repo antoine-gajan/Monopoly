@@ -5,10 +5,10 @@ import {UserService} from "../../user/user.service";
 import {InteractionCardComponent} from "../../card/interaction-card/interaction-card.component";
 import {ChanceCardComponent} from "../../card/chance-card/chance-card.component";
 import {CommunityCardComponent} from "../../card/community-card/community-card.component";
-import {EMPTY, firstValueFrom, interval, startWith, switchMap, takeWhile} from "rxjs";
+import {EMPTY, interval, switchMap, takeWhile} from "rxjs";
 import {InfoCardComponent} from "../../card/info-card/info-card.component";
 import {JailCardComponent} from "../../card/jail-card/jail-card.component";
-import {PropertiesBoughtResponse} from "../Player";
+import {PropertiesBoughtResponse} from "../response-type";
 
 @Component({
   selector: 'app-board',
@@ -39,6 +39,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   // Variables for the game component
   message: string;
   interval: any;
+  dices_interval: any;
 
   constructor(private gameService: GameService, private userService: UserService, private route: ActivatedRoute,
               private router: Router, private componentFactoryResolver: ComponentFactoryResolver,
@@ -181,12 +182,13 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.move_dices_action();
     this.gameService.roll_dices(this.player[0], this.game_id).subscribe( {
       next: (data: any) => {
-      this.dices[0] = data.dado1;
-      this.dices[1] = data.dado2;
+        // Clear dices interval to stop animation
+        clearInterval(this.dices_interval);
+        // Store true value of dices
+        this.dices[0] = data.dado1;
+        this.dices[1] = data.dado2;
     },
     error: async (error) => {
-      // Wait 1 second
-      await this.sleep(1000);
       // Try again
       this.play_turn_player();
     },
@@ -317,12 +319,12 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   move_dices_action(): void{
     let count = 0;
-      const interval = setInterval(() => {
+      this.dices_interval = setInterval(() => {
         this.dices[0] = Math.floor(Math.random() * 6) + 1;
         this.dices[1] = Math.floor(Math.random() * 6) + 1;
         count++;
         if (count === 10) {
-          clearInterval(interval);
+          clearInterval(this.dices_interval);
         }
       }, 200);
   }
