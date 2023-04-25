@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Router} from "@angular/router";
-import {Observable, tap} from "rxjs";
+import {map, Observable, tap} from "rxjs";
 import {Propriety} from "../card/propriety";
 import { environment } from 'enviroment/enviroment';
 import { Party } from 'app/card/party';
 import {RandomCard} from "../card/chance";
-import {PlayerResponse} from "./Player";
+import {PlayerResponse, PropertiesBoughtResponse} from "./Player";
 @Injectable({
   providedIn: 'root'
 })
@@ -134,7 +134,7 @@ export class GameService {
                                         });
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 
-    return this.http.put(environment.listaAsignaturas, body, httpOptions).pipe(
+    return this.http.put<PropertiesBoughtResponse>(environment.listaAsignaturas, body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response)})

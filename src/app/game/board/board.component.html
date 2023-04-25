@@ -391,7 +391,9 @@
         </svg>
         <span class="player-name">{{player[0]}}</span>
         <span class="player-money" data-ui="1500" style="color: rgb(0, 0, 0);">{{player[1]}}€</span>
-        <div class="player-properties"></div>
+          <div *ngFor="let prop of player_properties.casillas" class="player-properties">
+            <div class="player-property" data-ui="vt" style="background-color: lightskyblue;">{{prop.jugador}}</div>
+          </div>
 
       </div>
       <ng-container *ngFor="let other_player of other_players_list; let i = index">
@@ -403,15 +405,13 @@
           <span class="player-name">{{other_player[0]}}</span>
           <span class="player-money" data-ui="1400" style="color: rgb(0, 0, 0);">{{other_player[1]}}€</span>
 
-          <div *ngIf="propiedad_comprada" class="player-properties">
-            <div class="player-property" data-ui="vt" style="background-color: lightskyblue;">Vermont Avenue</div>
-          </div>
+
           <!--<div *ngFor="let property of obtener_asignaturas_lista()">
             <div *ngIf="property_comprada === property" class="player-properties">
               <div class="player-property" data-ui="vt" style="background-color: lightskyblue;">{{ property }}</div>
             </div>
           </div>-->
-          
+
         </div>
       </ng-container>
     </div>

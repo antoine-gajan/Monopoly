@@ -1,20 +1,21 @@
-import {Component, ComponentFactoryResolver, ElementRef, ViewContainerRef} from '@angular/core';
+import {Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
 import { GameService} from "../game.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../user/user.service";
 import {InteractionCardComponent} from "../../card/interaction-card/interaction-card.component";
 import {ChanceCardComponent} from "../../card/chance-card/chance-card.component";
 import {CommunityCardComponent} from "../../card/community-card/community-card.component";
-import {EMPTY, interval, switchMap, takeWhile} from "rxjs";
+import {EMPTY, firstValueFrom, interval, startWith, switchMap, takeWhile} from "rxjs";
 import {InfoCardComponent} from "../../card/info-card/info-card.component";
 import {JailCardComponent} from "../../card/jail-card/jail-card.component";
+import {PropertiesBoughtResponse} from "../Player";
 
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss']
 })
-export class BoardComponent {
+export class BoardComponent implements OnInit, OnDestroy {
   game_id : number;
   dices: number[] = [];
   position_player: number = 0;
@@ -26,7 +27,7 @@ export class BoardComponent {
   chance_cards: number[] = [7, 22, 36];
   community_cards: number[] = [2, 17, 33];
   taxes_cards: number[] = [4, 38];
-  propiedad_comprada = true; // Supongamos que esta variable contiene información sobre si se ha comprado o no una propiedad
+  player_properties: PropertiesBoughtResponse;
   diceImages = [
     "../../../assets/images/dice/1.png",
     "../../../assets/images/dice/2.png",
@@ -35,7 +36,9 @@ export class BoardComponent {
     "../../../assets/images/dice/5.png",
     "../../../assets/images/dice/6.png"
   ];
+  // Variables for the game component
   message: string;
+  interval: any;
 
   constructor(private gameService: GameService, private userService: UserService, private route: ActivatedRoute,
               private router: Router, private componentFactoryResolver: ComponentFactoryResolver,
@@ -60,6 +63,11 @@ export class BoardComponent {
     this.load_game();
   }
 
+  ngOnDestroy() {
+    // Destroy the interval
+    clearInterval(this.interval);
+  }
+
 
   load_game(){
     // Block buttons to avoid risks
@@ -78,7 +86,7 @@ export class BoardComponent {
         // Delete client from other_players_list
         this.delete_client_from_other_list();
         // Get every properties of each player
-        //this.get_every_properties_of_players();
+        this.get_properties();
         // Show position of the players
         this.show_position_every_players();
         // Indicate that the game is loaded
@@ -92,20 +100,20 @@ export class BoardComponent {
   get_properties(): void {
     // Get every properties of the player
     this.gameService.get_all_properties_of_player(this.game_id, this.player[0]).subscribe({
-      next: (data: any) => {
-        console.log(data);
+      next: (data: PropertiesBoughtResponse) => {
+        this.player_properties = data;
+        console.log(this.player_properties);
       },
       error: (error) => {
         console.error(error);
-      },
-      complete: () => {
-        /// TODO: Store in variable
       }
     })
   }
   async play(): Promise<void> {
+    // Ensure to execute the interval only once
+    this.current_player = "";
     // Check if the player can play or not
-    interval(5000)
+    this.interval = interval(5000)
       .pipe(
         // Take while the current player is not the current user's player
         takeWhile(() => this.current_player !== this.player[0]),
@@ -171,12 +179,14 @@ export class BoardComponent {
     // Function to play the turn of a player
     // Roll dices
     this.move_dices_action();
-    await this.gameService.roll_dices("antoine", 0).subscribe( {
+    this.gameService.roll_dices(this.player[0], this.game_id).subscribe( {
       next: (data: any) => {
       this.dices[0] = data.dado1;
       this.dices[1] = data.dado2;
     },
-    error: (error) => {
+    error: async (error) => {
+      // Wait 1 second
+      await this.sleep(1000);
       // Try again
       this.play_turn_player();
     },
@@ -196,78 +206,73 @@ export class BoardComponent {
     });
   }
 
-  card_action(is_in_jail: boolean){
+  async card_action(is_in_jail: boolean) {
     let position_v_h = this.convert_id_to_position(this.position_player);
     // Get card information
-      let owner_of_card : string | null = null;
-      let money_to_pay : number | null = null;
-      this.gameService.get_card(this.player[0], this.game_id, position_v_h[0], position_v_h[1]).subscribe({
-        next: (data: any) => {
-          owner_of_card = data.jugador;
-          money_to_pay = data.dinero;
-        },
-        error: (error) => {
-          console.error(error);
-          // Try again
-          this.card_action(is_in_jail);
-        },
-        complete: async () => {
+    let owner_of_card: string | null = null;
+    let money_to_pay: number | null = null;
+    this.gameService.get_card(this.player[0], this.game_id, position_v_h[0], position_v_h[1]).subscribe({
+      next: (data: any) => {
+        owner_of_card = data.jugador;
+        money_to_pay = data.dinero;
+      },
+      error: (error) => {
+        console.error(error);
+        // Try again
+        this.card_action(is_in_jail);
+      },
+      complete: async () => {
+        // Wait 0.5 seconds
+        await this.sleep(500);
+        // Display a buy card component
+        if (is_in_jail) {
+          // Display a jail card component
+          this.createJailCardComponent();
+        }
+        if (this.nothing_cards.includes(this.position_player)) {
+          this.message = "No pasa nada";
+          // End turn
+          this.end_turn();
+        } else if (this.chance_cards.includes(this.position_player)) {
           // Wait 0.5 seconds
           await this.sleep(500);
-          // Display a buy card component
-          if (is_in_jail){
-            // Display a jail card component
-            this.createJailCardComponent();
-          }
-          if (this.nothing_cards.includes(this.position_player)){
-            this.message = "No pasa nada";
-            // End turn
-            this.end_turn();
-          }
-          else if (this.chance_cards.includes(this.position_player)){
-            // Wait 0.5 seconds
-            await this.sleep(500);
-            this.message = "Toma una carta de suerte";
-            this.createChanceCardComponent();
-          }
-          else if (this.community_cards.includes(this.position_player)){
-            // Wait 0.5 seconds
-            await this.sleep(500);
-            this.message = "Toma una carta de comunidad";
-            this.createCommunityCardComponent();
-          }
-          else if (this.taxes_cards.includes(this.position_player)){
-            this.message = "Tienes que pagar...";
-            if (this.position_player == 38){
-              this.createInfoCardComponent("SEGURO ESCOLAR", "Tienes que pagar el seguro escolar : 133€", "Pagar 133€");
-            }
-            else if (this.position_player == 4){
-              this.createInfoCardComponent("APERTURA DE EXPEDIENTE", "Tienes que pagar la apertura de expediente : 267€", "Pagar 267€");
-            }
-          }
-          // If it's a normal card
-          else {
-            if (owner_of_card == null){
-              // Display buy card
-              this.createBuyCardComponent(position_v_h[0], position_v_h[1], "Quieres comprar ?", this.player[1], this.dices[0] == this.dices[1]);
-            }
-            else if (owner_of_card == this.player[0]){
-              /// TODO : Display a buy card component to ask if the player wants to buy credit
-              console.log("You own this property", position_v_h);
-            }
-            else if (owner_of_card != this.player[0] && money_to_pay != null && money_to_pay <= this.player[1]){
-              console.log("Display pay card", position_v_h);
-              this.createPayCardComponent(position_v_h[0], position_v_h[1], "La tarjeta pertenece a " + owner_of_card, this.player[1], money_to_pay);
-            }
-            else if(owner_of_card != this.player[0] && money_to_pay != null && money_to_pay > this.player[1]){
-              this.createInfoCardComponent("BANCARROTA", "Has perdido...<br>No tienes suficiente dinero para pagar " + money_to_pay + "€ a " + owner_of_card + " !", "Vale");
-            }
+          this.message = "Toma una carta de suerte";
+          this.createChanceCardComponent();
+        } else if (this.community_cards.includes(this.position_player)) {
+          // Wait 0.5 seconds
+          await this.sleep(500);
+          this.message = "Toma una carta de comunidad";
+          this.createCommunityCardComponent();
+        } else if (this.taxes_cards.includes(this.position_player)) {
+          this.message = "Tienes que pagar...";
+          if (this.position_player == 38) {
+            this.createInfoCardComponent("SEGURO ESCOLAR", "Tienes que pagar el seguro escolar : 133€", "Pagar 133€");
+          } else if (this.position_player == 4) {
+            this.createInfoCardComponent("APERTURA DE EXPEDIENTE", "Tienes que pagar la apertura de expediente : 267€", "Pagar 267€");
           }
         }
-      });
+        // If it's a normal card
+        else {
+          if (owner_of_card == null) {
+            // Display buy card
+            this.createBuyCardComponent(position_v_h[0], position_v_h[1], "Quieres comprar ?", this.player[1], this.dices[0] == this.dices[1]);
+          } else if (owner_of_card == this.player[0]) {
+            /// TODO : Display a buy card component to ask if the player wants to buy credit
+            console.log("You own this property", position_v_h);
+          } else if (owner_of_card != this.player[0] && money_to_pay != null && money_to_pay <= this.player[1]) {
+            console.log("Display pay card", position_v_h);
+            this.createPayCardComponent(position_v_h[0], position_v_h[1], "La tarjeta pertenece a " + owner_of_card, this.player[1], money_to_pay);
+          } else if (owner_of_card != this.player[0] && money_to_pay != null && money_to_pay > this.player[1]) {
+            this.createInfoCardComponent("BANCARROTA", "Has perdido...<br>No tienes suficiente dinero para pagar " + money_to_pay + "€ a " + owner_of_card + " !", "Vale");
+          }
+        }
+      }
+    });
   }
 
   end_turn(): void {
+    // Update properties
+    this.get_properties();
     // Delete the pop-up-card component
     const old_buy_card_component_element = document.getElementById('pop-up-card');
     if (old_buy_card_component_element != null) {
