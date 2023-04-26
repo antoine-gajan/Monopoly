@@ -3,7 +3,14 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {map, Observable, tap} from "rxjs";
 import { environment } from 'enviroment/enviroment';
-import {PlayerResponse, PropertiesBoughtResponse, Party, Propriety, RandomCard} from "./response-type";
+import {
+  PlayerResponse,
+  PropertiesBoughtResponse,
+  Party,
+  Propriety,
+  RandomCard,
+  PlayerListResponse
+} from "./response-type";
 @Injectable({
   providedIn: 'root'
 })
@@ -23,11 +30,11 @@ export class GameService {
     ));
   }
 
-  get_list_players(idPartida : Number): Observable<String[]>{
+  get_list_players(idPartida : Number): Observable<PlayerListResponse>{
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     let body = JSON.stringify({"idPartida": idPartida});
 
-    return this.http.put<String[]>(environment.listaJugadores, body, httpOptions).pipe(
+    return this.http.put<PlayerListResponse>(environment.listaJugadores, body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response);

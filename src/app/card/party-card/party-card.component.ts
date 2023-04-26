@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Party} from "../party";
-import {Propriety} from "../propriety";
 import {GameService} from "../../game/game.service";
+import {Party} from "../../game/response-type";
 
 @Component({
   selector: 'app-party-card',

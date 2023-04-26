@@ -2,6 +2,17 @@ export class PlayerResponse {
     jugador: string;
 }
 
+export class PlayerListResponse {
+  listaJugadores: string[];
+  listaDinero: number[];
+  listaPosiciones: Coordenadas[];
+}
+
+export interface Coordenadas {
+  h: number;
+  v: number;
+  _id: string;
+}
 export class PropertiesBoughtResponse {
   casillas:
     [
@@ -15,6 +26,7 @@ export class PropertiesBoughtResponse {
       jugador: string;
       partida: number;
       precio: number;
+      nombre: string;
       __v: number;
       _id: string;
       }

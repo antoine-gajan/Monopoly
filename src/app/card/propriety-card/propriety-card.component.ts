@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Propriety} from "../propriety";
 import {GameService} from "../../game/game.service";
+import {Propriety} from "../../game/response-type";
 
 @Component({
   selector: 'app-propriety-card',

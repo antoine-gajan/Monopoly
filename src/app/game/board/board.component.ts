@@ -8,7 +8,7 @@ import {CommunityCardComponent} from "../../card/community-card/community-card.c
 import {EMPTY, interval, switchMap, takeWhile} from "rxjs";
 import {InfoCardComponent} from "../../card/info-card/info-card.component";
 import {JailCardComponent} from "../../card/jail-card/jail-card.component";
-import {PropertiesBoughtResponse} from "../response-type";
+import {Coordenadas, PlayerListResponse, PropertiesBoughtResponse} from "../response-type";
 
 @Component({
   selector: 'app-board',
@@ -18,10 +18,9 @@ import {PropertiesBoughtResponse} from "../response-type";
 export class BoardComponent implements OnInit, OnDestroy {
   game_id : number;
   dices: number[] = [];
-  position_player: number = 0;
   current_player: string;
-  player: [string, number] = ["antoine", 200];
-  other_players_list: [string, number][] = [];
+  player: [string, number, Coordenadas];
+  other_players_list: [string, number, Coordenadas][];
   nothing_cards: number[] = [0, 10, 20];
   prison_cards: number[] = [30];
   chance_cards: number[] = [7, 22, 36];
@@ -55,11 +54,12 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.router.navigate(['/error']);
     }
     // Get name of the player
-    this.player[0] = this.userService.getUsername();
+    let username = this.userService.getUsername();
     // If undefined, redirect to error page
-    if (this.player[0] === undefined) {
+    if (username === undefined) {
       this.router.navigate(['/error']);
     }
+    this.player[0] = username;
     // Load game
     this.load_game();
   }
@@ -77,15 +77,29 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.message = "Cargando la partida..."
     // Get list of players
     this.gameService.get_list_players(this.game_id).subscribe({
-      next: (data: any) => {
-        this.other_players_list = data.listaTuplas;
+      next: (data: PlayerListResponse) => {
+        let listaJugadores = data.listaJugadores;
+        let listaDineros = data.listaDinero;
+        let listaPosiciones = data.listaPosiciones;
+        let result : [string, number, Coordenadas][] = [];
+        for (let i = 0; i < listaJugadores.length; i++) {
+          if (listaJugadores[i][0] !== this.player[0]) {
+            let jugador = listaJugadores[i];
+            let dinero = listaDineros[i];
+            let posicion = listaPosiciones[i];
+            result.push([jugador, dinero, posicion]);
+          }
+          else {
+            this.player[1] = listaDineros[i];
+            this.player[2] = listaPosiciones[i];
+          }
+        }
+        this.other_players_list = result;
       },
       error: (error) => {
         console.error(error);
       },
       complete: () => {
-        // Delete client from other_players_list
-        this.delete_client_from_other_list();
         // Get every properties of each player
         this.get_properties();
         // Show position of the players
@@ -137,7 +151,23 @@ export class BoardComponent implements OnInit, OnDestroy {
   )
   .subscribe({
     next : (data: any) => {
-      this.other_players_list = data.listaTuplas;
+      let listaJugadores = data.listaJugadores;
+        let listaDineros = data.listaDinero;
+        let listaPosiciones = data.listaPosiciones;
+        let result : [string, number, Coordenadas][] = [];
+        for (let i = 0; i < listaJugadores.length; i++) {
+          if (listaJugadores[i][0] !== this.player[0]) {
+            let jugador = listaJugadores[i];
+            let dinero = listaDineros[i];
+            let posicion = listaPosiciones[i];
+            result.push([jugador, dinero, posicion]);
+          }
+          else {
+            this.player[1] = listaDineros[i];
+            this.player[2] = listaPosiciones[i];
+          }
+          this.other_players_list = result;
+        }
     },
     error: (error) => {
       console.error(error);
@@ -145,8 +175,6 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.play();
     },
     complete: () => {
-      // Delete client from other_players_list
-      this.delete_client_from_other_list();
       // TODO : Update position of the players
       this.show_position_every_players();
     }
@@ -167,10 +195,10 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   show_position_every_players(): void {
     // Show position of the player
-    this.show_position(this.player[0], this.position_player,0);
+    this.show_position(this.player[0], this.player[2],0);
     // Show position of the other players
     for (let i = 0; i < this.other_players_list.length; i++) {
-      this.show_position(this.other_players_list[i][0], 0, i + 1);
+      this.show_position(this.other_players_list[i][0], this.other_players_list[i][2], i + 1);
     }
   }
 
@@ -201,7 +229,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.message = this.player[0] + ", has sacado " + this.dices[0] + " y " + this.dices[1];
       }
       // Update player position
-      let jail = await this.update_local_player_position(this.player[0], this.position_player, this.dices);
+      let jail = await this.update_local_player_position(this.player[0], this.player[2], this.dices);
       // Action of the card
       this.card_action(jail);
     }
@@ -209,11 +237,10 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   async card_action(is_in_jail: boolean) {
-    let position_v_h = this.convert_id_to_position(this.position_player);
     // Get card information
     let owner_of_card: string | null = null;
     let money_to_pay: number | null = null;
-    this.gameService.get_card(this.player[0], this.game_id, position_v_h[0], position_v_h[1]).subscribe({
+    this.gameService.get_card(this.player[0], this.game_id, this.player[2].v, this.player[2].h).subscribe({
       next: (data: any) => {
         owner_of_card = data.jugador;
         money_to_pay = data.dinero;
@@ -224,6 +251,8 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.card_action(is_in_jail);
       },
       complete: async () => {
+        // Get position with id
+        let position_id = this.convert_position_to_id(this.player[2]);
         // Wait 0.5 seconds
         await this.sleep(500);
         // Display a buy card component
@@ -231,25 +260,25 @@ export class BoardComponent implements OnInit, OnDestroy {
           // Display a jail card component
           this.createJailCardComponent();
         }
-        if (this.nothing_cards.includes(this.position_player)) {
+        if (this.nothing_cards.includes(position_id)) {
           this.message = "No pasa nada";
           // End turn
           this.end_turn();
-        } else if (this.chance_cards.includes(this.position_player)) {
+        } else if (this.chance_cards.includes(position_id)) {
           // Wait 0.5 seconds
           await this.sleep(500);
           this.message = "Toma una carta de suerte";
           this.createChanceCardComponent();
-        } else if (this.community_cards.includes(this.position_player)) {
+        } else if (this.community_cards.includes(position_id)) {
           // Wait 0.5 seconds
           await this.sleep(500);
           this.message = "Toma una carta de comunidad";
           this.createCommunityCardComponent();
-        } else if (this.taxes_cards.includes(this.position_player)) {
+        } else if (this.taxes_cards.includes(position_id)) {
           this.message = "Tienes que pagar...";
-          if (this.position_player == 38) {
+          if (position_id == 38) {
             this.createInfoCardComponent("SEGURO ESCOLAR", "Tienes que pagar el seguro escolar : 133€", "Pagar 133€");
-          } else if (this.position_player == 4) {
+          } else if (position_id == 4) {
             this.createInfoCardComponent("APERTURA DE EXPEDIENTE", "Tienes que pagar la apertura de expediente : 267€", "Pagar 267€");
           }
         }
@@ -257,13 +286,11 @@ export class BoardComponent implements OnInit, OnDestroy {
         else {
           if (owner_of_card == null) {
             // Display buy card
-            this.createBuyCardComponent(position_v_h[0], position_v_h[1], "Quieres comprar ?", this.player[1], this.dices[0] == this.dices[1]);
+            this.createBuyCardComponent(this.player[2].v, this.player[2].h, "Quieres comprar ?", this.player[1], this.dices[0] == this.dices[1]);
           } else if (owner_of_card == this.player[0]) {
             /// TODO : Display a buy card component to ask if the player wants to buy credit
-            console.log("You own this property", position_v_h);
           } else if (owner_of_card != this.player[0] && money_to_pay != null && money_to_pay <= this.player[1]) {
-            console.log("Display pay card", position_v_h);
-            this.createPayCardComponent(position_v_h[0], position_v_h[1], "La tarjeta pertenece a " + owner_of_card, this.player[1], money_to_pay);
+            this.createPayCardComponent(this.player[2].v, this.player[2].h, "La tarjeta pertenece a " + owner_of_card, this.player[1], money_to_pay);
           } else if (owner_of_card != this.player[0] && money_to_pay != null && money_to_pay > this.player[1]) {
             this.createInfoCardComponent("BANCARROTA", "Has perdido...<br>No tienes suficiente dinero para pagar " + money_to_pay + "€ a " + owner_of_card + " !", "Vale");
           }
@@ -281,15 +308,15 @@ export class BoardComponent implements OnInit, OnDestroy {
       old_buy_card_component_element.remove();
     }
     /// TODO: Get the position of the player from the backend
-    let old_position_player = this.position_player;
+    let old_position_player = this.player[2];
     // If the player can play again, activate the button to play again
     if (this.dices[0] === this.dices[1]) {
       this.message = this.player[0] + ", puedes volver a tirar los dados";
       document.getElementById("tirar-dados")!.removeAttribute("disabled");
     }
     // If the position of player has changed, launch card action of the new position
-    else if (this.position_player != old_position_player) {
-      if (this.position_player == 10) {
+    else if (this.player[2] != old_position_player) {
+      if (this.convert_position_to_id(this.player[2]) == 10) {
         // Player has be sent to jail-card
         this.card_action(true);
       } else {
@@ -329,9 +356,10 @@ export class BoardComponent implements OnInit, OnDestroy {
       }, 200);
   }
 
-  convert_position_to_id(v: number, h: number): number{
+  convert_position_to_id(coord : Coordenadas): number{
     // Function to convert position (v, h) to number between 0 and 39
-    console.log("convert_to_id", v, h);
+    let v = coord.v;
+    let h = coord.h;
     if (v == 10 && h == 10) {
       return 0;
     }
@@ -402,12 +430,21 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
-  async update_local_player_position(id_player: string, old_position: number, dices: number[]) {
+  async update_local_player_position(id_player: string, old_position: Coordenadas, dices: number[]) {
     // Function to update the position of a player
+    // Get old position id
+    let old_id = this.convert_position_to_id(old_position);
     // Update position attribute
-    let change_turn = this.position_player + dices[0] + dices[1] >= 40;
-    this.position_player = (this.position_player + dices[0] + dices[1]) % 40;
-    let jail = this.position_player == 30;
+    let change_turn = old_id + dices[0] + dices[1] >= 40;
+    // Get new position id
+    let new_id = (old_id + dices[0] + dices[1]) % 40;
+    // Get position from id
+    let new_position = this.convert_id_to_position(new_id);
+    // Update position
+    this.player[2].v = new_position[0];
+    this.player[2].h = new_position[1];
+    // Check if is in jail
+    let jail = new_id == 30;
     // If change turn, receive 200
     if (change_turn){
       this.message = "Has pasado por la salida";
@@ -416,20 +453,24 @@ export class BoardComponent implements OnInit, OnDestroy {
       await this.sleep(500);
     }
     // If player has to go to jail-card
-    if (this.position_player == 30) {
-      this.show_position(id_player, this.position_player, 0);
+    if (jail) {
+      this.show_position(id_player, this.player[2], 0);
       this.message = "Has ido en julio";
       // Wait 0.5 seconds
       await this.sleep(500);
-      this.position_player = 10;
+      // Go to jail
+      this.player[2].v = 10;
+      this.player[2].h = 0;
     }
     // Show position
-    this.show_position(id_player, this.position_player, 0);
+    this.show_position(id_player, this.player[2], 0);
     return jail;
   }
 
-  show_position(id_player: string, property_id: number, index_color: number): void{
+  show_position(id_player: string, position: Coordenadas, index_color: number): void{
     // Function to display position of id_player in the board
+    // Get the id of property with position
+    let property_id = this.convert_position_to_id(position);
     this.remove_position(id_player);
     this.add_position(id_player, property_id, index_color);
   }

@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {GameService} from "../../game/game.service";
-import {RandomCard} from "../chance";
+import {RandomCard} from "../../game/response-type";
 
 @Component({
   selector: 'app-community-card',
