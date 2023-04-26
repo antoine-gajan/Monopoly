@@ -26,7 +26,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   chance_cards: number[] = [7, 22, 36];
   community_cards: number[] = [2, 17, 33];
   taxes_cards: number[] = [4, 38];
-  player_properties: PropertiesBoughtResponse;
+  player_properties: string[] = [];
   diceImages = [
     "../../../assets/images/dice/1.png",
     "../../../assets/images/dice/2.png",
@@ -100,8 +100,10 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Get every properties of the player
     this.gameService.get_all_properties_of_player(this.game_id, this.player[0]).subscribe({
       next: (data: PropertiesBoughtResponse) => {
-        //console.log(data);
-        this.player_properties = data;
+        this.player_properties = [];
+        for (let i = 0; i < data.casillas.length; i++) {
+          this.player_properties.push(data.casillas[i].nombre);
+        }
       },
       error: (error) => {
         console.error(error);
@@ -320,24 +322,24 @@ export class BoardComponent implements OnInit, OnDestroy {
     });
   }
 
-  actualize_game_info(data : PlayerListResponse):void {
+  actualize_game_info(data : PlayerListResponse): void {
     let listaJugadores = data.listaJugadores;
-        let listaDineros = data.listaDineros;
-        let listaPosiciones = data.listaPosiciones;
-        let result : [string, number, Coordenadas][] = [];
-        for (let i = 0; i < listaJugadores.length; i++) {
-          if (listaJugadores[i][0] !== this.player[0]) {
-            let jugador = listaJugadores[i];
-            let dinero = listaDineros[i];
-            let posicion = listaPosiciones[i];
-            result.push([jugador, dinero, posicion]);
-          }
-          else {
-            this.player[1] = listaDineros[i];
-            this.player[2] = listaPosiciones[i];
-          }
-          this.other_players_list = result;
-        }
+    let listaDineros = data.listaDineros;
+    let listaPosiciones = data.listaPosiciones;
+    let result : [string, number, Coordenadas][] = [];
+    for (let i = 0; i < listaJugadores.length; i++) {
+      if (listaJugadores[i] !== this.player[0]) {
+        let jugador = listaJugadores[i];
+        let dinero = listaDineros[i];
+        let posicion = listaPosiciones[i];
+        result.push([jugador, dinero, posicion]);
+      }
+      else {
+        this.player[1] = listaDineros[i];
+        this.player[2] = listaPosiciones[i];
+      }
+      this.other_players_list = result;
+    }
   }
 
   move_dices_action(): void{

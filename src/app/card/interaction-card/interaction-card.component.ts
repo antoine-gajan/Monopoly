@@ -48,7 +48,6 @@ export class InteractionCardComponent {
     },
     error: (error) => {
       console.log(error);
-      alert("You don't have enough money to buy this card");
       this.callback_end_turn();
     }
     });

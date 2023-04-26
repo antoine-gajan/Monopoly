@@ -392,8 +392,8 @@
         <span class="player-name">{{player[0]}}</span>
         <span class="player-money" data-ui="1500" style="color: rgb(0, 0, 0);">{{player[1]}}€</span>
 
-        <div class ="player-properties" *ngFor="let property of player_properties.casillas">
-              <div class="player-property" data-ui="vt" style="background-color: lightskyblue;">{{ property.nombre }}</div>
+        <div class ="player-properties" *ngFor="let property of player_properties">
+              <div class="player-property" data-ui="vt" style="background-color: lightskyblue;">{{ property }}</div>
           </div>
 
       </div>
