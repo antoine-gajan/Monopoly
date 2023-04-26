@@ -8,10 +8,9 @@ export class PlayerListResponse {
   listaPosiciones: Coordenadas[];
 }
 
-export interface Coordenadas {
+export class Coordenadas{
   h: number;
   v: number;
-  _id: string;
 }
 export class PropertiesBoughtResponse {
   casillas:

@@ -19,7 +19,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   game_id : number;
   dices: number[] = [];
   current_player: string;
-  player: [string, number, Coordenadas] = ["", 0, {h: 10, v: 10, _id: ""}];
+  player: [string, number, Coordenadas] = ["", 0, {h: 10, v: 10}];
   other_players_list: [string, number, Coordenadas][] = [];
   nothing_cards: number[] = [0, 10, 20];
   prison_cards: number[] = [30];
@@ -199,7 +199,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Get card information
     let owner_of_card: string | null = null;
     let money_to_pay: number | null = null;
-    this.gameService.get_card(this.player[0], this.game_id, this.player[2].v, this.player[2].h).subscribe({
+    this.gameService.get_card(this.player[0], this.game_id, this.player[2].h, this.player[2].v).subscribe({
       next: (data: any) => {
         owner_of_card = data.jugador;
         money_to_pay = data.dinero;
@@ -285,7 +285,7 @@ export class BoardComponent implements OnInit, OnDestroy {
           document.getElementById("tirar-dados")!.removeAttribute("disabled");
         }
         // If the position of player has changed, launch card action of the new position
-        else if (this.player[2] != old_position_player) {
+        else if (this.convert_position_to_id(this.player[2]) != this.convert_position_to_id(old_position_player)) {
           if (this.convert_position_to_id(this.player[2]) == 10) {
             // Player has be sent to jail-card
             this.card_action(true);
