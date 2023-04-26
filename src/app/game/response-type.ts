@@ -4,7 +4,7 @@ export class PlayerResponse {
 
 export class PlayerListResponse {
   listaJugadores: string[];
-  listaDinero: number[];
+  listaDineros: number[];
   listaPosiciones: Coordenadas[];
 }
 

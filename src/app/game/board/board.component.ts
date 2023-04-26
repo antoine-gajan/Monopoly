@@ -19,8 +19,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   game_id : number;
   dices: number[] = [];
   current_player: string;
-  player: [string, number, Coordenadas];
-  other_players_list: [string, number, Coordenadas][];
+  player: [string, number, Coordenadas] = ["", 0, {h: 10, v: 10, _id: ""}];
+  other_players_list: [string, number, Coordenadas][] = [];
   nothing_cards: number[] = [0, 10, 20];
   prison_cards: number[] = [30];
   chance_cards: number[] = [7, 22, 36];
@@ -79,7 +79,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.gameService.get_list_players(this.game_id).subscribe({
       next: (data: PlayerListResponse) => {
         let listaJugadores = data.listaJugadores;
-        let listaDineros = data.listaDinero;
+        let listaDineros = data.listaDineros;
         let listaPosiciones = data.listaPosiciones;
         let result : [string, number, Coordenadas][] = [];
         for (let i = 0; i < listaJugadores.length; i++) {
@@ -98,6 +98,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error(error);
+        this.load_game();
       },
       complete: () => {
         // Get every properties of each player
@@ -116,11 +117,13 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Get every properties of the player
     this.gameService.get_all_properties_of_player(this.game_id, this.player[0]).subscribe({
       next: (data: PropertiesBoughtResponse) => {
-        this.player_properties = data;
-        console.log(this.player_properties);
+        console.log(data);
+        //this.player_properties = data;
+        //console.log(this.player_properties);
       },
       error: (error) => {
         console.error(error);
+        this.get_properties();
       }
     })
   }
@@ -152,7 +155,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   .subscribe({
     next : (data: any) => {
       let listaJugadores = data.listaJugadores;
-        let listaDineros = data.listaDinero;
+        let listaDineros = data.listaDineros;
         let listaPosiciones = data.listaPosiciones;
         let result : [string, number, Coordenadas][] = [];
         for (let i = 0; i < listaJugadores.length; i++) {
