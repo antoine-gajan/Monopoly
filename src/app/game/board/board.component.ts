@@ -54,12 +54,11 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.router.navigate(['/error']);
     }
     // Get name of the player
-    let username = this.userService.getUsername();
+    this.player[0] = this.userService.getUsername();
     // If undefined, redirect to error page
-    if (username === undefined) {
+    if (this.player[0] === undefined) {
       this.router.navigate(['/error']);
     }
-    this.player[0] = username;
     // Load game
     this.load_game();
   }
@@ -78,23 +77,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Get list of players
     this.gameService.get_list_players(this.game_id).subscribe({
       next: (data: PlayerListResponse) => {
-        let listaJugadores = data.listaJugadores;
-        let listaDineros = data.listaDineros;
-        let listaPosiciones = data.listaPosiciones;
-        let result : [string, number, Coordenadas][] = [];
-        for (let i = 0; i < listaJugadores.length; i++) {
-          if (listaJugadores[i][0] !== this.player[0]) {
-            let jugador = listaJugadores[i];
-            let dinero = listaDineros[i];
-            let posicion = listaPosiciones[i];
-            result.push([jugador, dinero, posicion]);
-          }
-          else {
-            this.player[1] = listaDineros[i];
-            this.player[2] = listaPosiciones[i];
-          }
-        }
-        this.other_players_list = result;
+        this.actualize_game_info(data);
       },
       error: (error) => {
         console.error(error);
@@ -117,9 +100,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Get every properties of the player
     this.gameService.get_all_properties_of_player(this.game_id, this.player[0]).subscribe({
       next: (data: PropertiesBoughtResponse) => {
-        console.log(data);
-        //this.player_properties = data;
-        //console.log(this.player_properties);
+        //console.log(data);
+        this.player_properties = data;
       },
       error: (error) => {
         console.error(error);
@@ -153,24 +135,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     })
   )
   .subscribe({
-    next : (data: any) => {
-      let listaJugadores = data.listaJugadores;
-        let listaDineros = data.listaDineros;
-        let listaPosiciones = data.listaPosiciones;
-        let result : [string, number, Coordenadas][] = [];
-        for (let i = 0; i < listaJugadores.length; i++) {
-          if (listaJugadores[i][0] !== this.player[0]) {
-            let jugador = listaJugadores[i];
-            let dinero = listaDineros[i];
-            let posicion = listaPosiciones[i];
-            result.push([jugador, dinero, posicion]);
-          }
-          else {
-            this.player[1] = listaDineros[i];
-            this.player[2] = listaPosiciones[i];
-          }
-          this.other_players_list = result;
-        }
+    next : (data: PlayerListResponse) => {
+      this.actualize_game_info(data);
     },
     error: (error) => {
       console.error(error);
@@ -178,22 +144,10 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.play();
     },
     complete: () => {
-      // TODO : Update position of the players
+      // Show position of the players
       this.show_position_every_players();
     }
     });
-  }
-
-  delete_client_from_other_list(): void {
-    // Get money of player_name and delete player from other_players_list
-    for (let i = 0; i < this.other_players_list.length; i++) {
-      if (this.other_players_list[i][0] === this.player[0]) {
-        // Get money of the player
-        this.player[1] = this.other_players_list[i][1];
-        // Remove client from other_players_list
-        this.other_players_list.splice(i, 1);
-      }
-    }
   }
 
   show_position_every_players(): void {
@@ -205,7 +159,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
-  async play_turn_player() {
+  play_turn_player() {
     // Disable play button to avoid double click
     document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
     // Function to play the turn of a player
@@ -310,41 +264,80 @@ export class BoardComponent implements OnInit, OnDestroy {
     if (old_buy_card_component_element != null) {
       old_buy_card_component_element.remove();
     }
-    /// TODO: Get the position of the player from the backend
+    // Get old position of player
     let old_position_player = this.player[2];
-    // If the player can play again, activate the button to play again
-    if (this.dices[0] === this.dices[1]) {
-      this.message = this.player[0] + ", puedes volver a tirar los dados";
-      document.getElementById("tirar-dados")!.removeAttribute("disabled");
-    }
-    // If the position of player has changed, launch card action of the new position
-    else if (this.player[2] != old_position_player) {
-      if (this.convert_position_to_id(this.player[2]) == 10) {
-        // Player has be sent to jail-card
-        this.card_action(true);
-      } else {
-        this.card_action(false);
-      }
-    }
-    else {
-      this.message = "Has terminado tu turno";
-      // Indicate to backend that the player has finished his turn
-      this.gameService.next_turn(this.game_id).subscribe({
-        next: (data) => {
-          this.current_player = data.jugador;
-          console.log(data);
-        },
-        error: (error) => {
-          console.error(error);
-          this.end_turn();
-        },
-        complete: () => {
-          this.message = "Es el turno de " + this.current_player;
-          // Go back to play to wait next time to play
-          this.play();
+    // Get new position of player by updating game information
+    this.gameService.get_list_players(this.game_id).subscribe({
+      next: (data: PlayerListResponse) => {
+        this.actualize_game_info(data);
+      },
+      error: (error) => {
+        console.error(error);
+        // Try again
+        this.end_turn();
+      },
+      complete: () => {
+        // If the player can play again, activate the button to play again
+        if (this.dices[0] === this.dices[1]) {
+          this.message = this.player[0] + ", puedes volver a tirar los dados";
+          document.getElementById("tirar-dados")!.removeAttribute("disabled");
         }
-      });
-    }
+        // If the position of player has changed, launch card action of the new position
+        else if (this.player[2] != old_position_player) {
+          if (this.convert_position_to_id(this.player[2]) == 10) {
+            // Player has be sent to jail-card
+            this.card_action(true);
+          }
+          else {
+            this.card_action(false);
+          }
+        }
+        else {
+          // Go next turn
+          this.go_next_turn();
+          }
+        }
+    });
+  }
+
+  go_next_turn() : void {
+    this.message = "Has terminado tu turno";
+    // Indicate to backend that the player has finished his turn
+    this.gameService.next_turn(this.game_id).subscribe({
+      next: (data) => {
+        this.current_player = data.jugador;
+        console.log(data);
+      },
+      error: (error) => {
+        console.error(error);
+        this.go_next_turn();
+      },
+      complete: () => {
+        this.message = "Es el turno de " + this.current_player;
+        // Go back to play to wait next time to play
+        this.play();
+      }
+    });
+  }
+
+  actualize_game_info(data : PlayerListResponse):void {
+    let listaJugadores = data.listaJugadores;
+        let listaDineros = data.listaDineros;
+        let listaPosiciones = data.listaPosiciones;
+        let result : [string, number, Coordenadas][] = [];
+        for (let i = 0; i < listaJugadores.length; i++) {
+          if (listaJugadores[i][0] !== this.player[0]) {
+            let jugador = listaJugadores[i];
+            let dinero = listaDineros[i];
+            let posicion = listaPosiciones[i];
+            result.push([jugador, dinero, posicion]);
+          }
+          else {
+            this.player[1] = listaDineros[i];
+            this.player[2] = listaPosiciones[i];
+          }
+          this.other_players_list = result;
+        }
   }
 
   move_dices_action(): void{
