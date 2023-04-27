@@ -1,5 +1,5 @@
 {
-  "name": "monopoly",
+  "name": "web-front-end",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -18,19 +18,15 @@
     "@angular/platform-browser": "^15.1.0",
     "@angular/platform-browser-dynamic": "^15.1.0",
     "@angular/router": "^15.1.0",
-    "bootstrap": "^5.2.3",
-    "express": "^4.18.2",
-    "materialize-css": "^1.0.0",
-    "mongoose": "^7.0.3",
-    "ngx-bootstrap": "^10.2.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "yup": "^1.1.0",
-    "zone.js": "~0.12.0"
+    "zone.js": "~0.12.0",
+    "chokidar": "^3.5.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^15.1.5",
-    "@angular/cli": "~15.1.5",
+    "@angular-devkit/build-angular": "^15.1.6",
+    "@angular/cli": "~15.1.6",
     "@angular/compiler-cli": "^15.1.0",
     "@types/jasmine": "~4.3.0",
     "jasmine-core": "~4.5.0",
