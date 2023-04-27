@@ -43,12 +43,20 @@ export class InteractionCardComponent {
   buy_card() {
     this.gameService.buy_card(this.username, this.game_id, this.h, this.v).subscribe({
       next: (data) => {
+        console.log("You have bought the card");
         console.log(data);
         this.callback_end_turn();
     },
     error: (error) => {
       console.log(error);
-      this.callback_end_turn();
+      if (error.status == 400) {
+        alert("No tienes suficiente dinero para comprar esta casilla");
+        this.callback_end_turn();
+      }
+      else {
+        // Try again to buy
+        this.buy_card();
+      }
     }
     });
   }
