@@ -1,0 +1,43 @@
+<header id="header" class="fixed-top">
+  <div style="display: flex; justify-content: space-between;">
+    <img class="volver_boton" src="../../../assets/images/voler_boton.png" onclick="window.history.back();" />
+    <h4><a style="color: #080808" routerLink="/">MONOPOLY VERSIÓN INFORMÁTICA</a></h4>
+    <img class="inicio_boton" src="../../../assets/images/home_boton.png" routerLink="/">
+  </div>
+  <div style="text-align: center;">
+    <h4><a style="color: #080808">Cambio contraseña usuario</a></h4>
+  </div>
+</header>
+
+<br><br>
+
+<form [formGroup]="form" (ngSubmit)="guardar_cambio_password()">
+  <h5> Introduzca la contraseña nueva </h5>
+  <br>
+  <!--------------------campo comtraseña usuario-------------------->
+  <div class="formulario-nombre-usuario" >
+    <input type="password" formControlName="password" id="password" name="password" placeholder="escribe la contraseña" class="formulario-nombre-usuario-input"/>
+    <div *ngIf="form?.get('password')?.invalid && (form?.get('password')?.dirty || form?.get('password')?.touched)">
+      <div *ngIf="form?.get('password')?.errors?.['required']" style="color: red;">Este campo es obligatorio</div>
+      <div *ngIf="form?.get('password')?.errors?.['minlength']" style="color: red;">La contraseña debe tener al menos 8 caracteres</div>
+    </div>
+  </div>
+
+  <br><br>
+  <h5> Repita la contraseña</h5>
+  <br>
+  <!--------------------campo confirmación constraseña usuario-------------------->
+  <div class="formulario-nombre-usuario" >
+    <input type="password" formControlName="confirm_password" id="confirm_password" name="confirm_password" placeholder="repita la contraseña" class="formulario-nombre-usuario-input"/>
+    <div *ngIf="confirm_password?.touched && confirm_password?.errors">
+      <div *ngIf="form?.get('confirm_password')?.errors?.['required']" style="color: red;">Este campo es obligatorio</div>
+      <div *ngIf="confirm_password?.errors?.['oneOf']" style="color: red;">Las contraseñas deben coincidir</div>
+    </div>
+  </div>
+  <br><br>
+  <div class="opciones">
+    <button class="boton_si" type="submit">Guardar</button>
+    <button class="boton_no" onclick="window.history.back();">Cancelar</button>
+  </div>
+</form>
+<br>

@@ -1,0 +1,24 @@
+<!--------------------CABECERA WEB-------------------->
+<header id="header">
+  <div class="texto_cabecera">
+    <img class="volver_boton" src="../../../assets/images/voler_boton.png" onclick="window.history.back();" />
+    <h4><a style="cursor: pointer;" style="color: #080808" routerLink="/">MONOPOLY VERSIÓN INFORMÁTICA</a></h4>
+    <img class="inicio_boton" src="../../../assets/images/home_boton.png" routerLink="/">
+  </div>
+</header>
+<br>
+<!--------------------CREAR SALA-------------------->
+<section class="services">
+  <div class="icon-box iconbox-blue">
+    <!--------------------mensaje para unirse a partida-------------------->
+    <div class="titulo">
+      <h2>ÚNETE A UNA SALA</h2>
+      <p>Introduzca el número de la partida en la que desea ingresar.</p>
+    </div>
+    <div class="input-partida">
+      <input type="number" class="id_partida" placeholder="#ID PARTIDA" [(ngModel)]="idPartida"/>
+    </div>
+    <button class="boton-jugar" (click)="unirseSalaInvitado()">Unirse a la sala</button>   
+  </div>
+</section>
+<br><br><br><br><br><br>

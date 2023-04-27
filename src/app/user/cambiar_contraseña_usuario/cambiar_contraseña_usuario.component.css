@@ -1,0 +1,107 @@
+* {
+  font-family: "Inter", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.volver_boton,
+.inicio_boton{
+  height: 40px;
+  cursor: pointer;
+}
+
+.formulario-nombre-usuario{
+  text-align: center;
+}
+
+.boton{
+  padding: 2rem 3rem;
+  margin: auto;
+  border-radius: 2.5rem;
+  box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #ffffff;
+  color: black;
+  text-transform: uppercase;
+  border: none;
+  font-weight: bold;
+  background-color: #bcd8c1;
+  display: block;
+  cursor: pointer;
+}
+
+.filas{
+  margin-bottom: 20px;
+}
+
+.campo{
+  display: block;
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 14px;
+  margin-top: 10px;
+}
+
+.formulario-nombre-usuario-input{
+  padding: 12px 24px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  background: rgb(237, 235, 235);
+  font-weight: 500;
+  font-size: 16px;
+  color: #6b7280;
+  text-align: center;
+}
+/*-------------------BODY-----------------*/
+body{
+    font-family: "Open Sans", sans-serif;
+    color: #444444;
+} 
+
+a, a:hover{
+    text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Raleway", sans-serif;
+}
+
+h5{
+  text-align: center;
+}
+
+.opciones{
+  display: flex;
+}
+.boton_si, .boton_no{
+  padding: 2rem 3rem;
+  margin: auto;
+  border-radius: 2.5rem;
+  box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #ffffff;
+  color: black;
+  text-transform: uppercase;
+  border: none;
+  font-weight: bold;
+  display: block;
+  cursor: pointer;
+}
+
+.boton_si {
+  background-color: #bcd8c1;
+}
+
+.boton_no{
+  background-color: #d8bcbc; 
+}
+
+.form-input{
+  width: 100%;
+  padding: 12px 24px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  background: white;
+  font-weight: 500;
+  font-size: 16px;
+  color: #6b7280;
+  outline: none;
+  resize: none;
+}

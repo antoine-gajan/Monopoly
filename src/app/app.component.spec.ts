@@ -16,16 +16,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'Web-Front-End'`, () => {
+  it(`should have as title 'monopoly'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('Web-Front-End');
+    expect(app.title).toEqual('monopoly');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('Web-Front-End app is running!');
+    expect(compiled.querySelector('.content span')?.textContent).toContain('monopoly app is running!');
   });
 });

@@ -1,0 +1,101 @@
+
+* {
+    font-family: "Inter", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#heather{
+    background: #BFDBAE;
+    box-shadow: 0px 0px 25px 0 rgba(0, 0, 0, 0.08);
+    z-index: 997;
+    padding: 15px 0;
+}
+
+.imagen_logo_juego{
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    height: 150px;
+}
+
+.volver_boton,
+.inicio_boton{
+    height: 40px;
+}
+
+.formulario-nombre-usuario{
+  text-align: center;
+}
+
+.formulario-nombre-usuario-input{
+  padding: 12px 24px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  background: rgb(237, 235, 235);
+  font-weight: 500;
+  font-size: 16px;
+  color: #6b7280;
+  text-align: center;
+  margin-right: 1%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Raleway", sans-serif;
+}
+
+/*------------------------------------
+ * CARDS
+ *-----------------------------------*/  
+
+
+.material-icons{
+  fill: #888;
+  width: 24px;
+  height: 24px;
+}
+
+.icono-tienda, 
+.icono-reglas {
+  border: #222222;
+  width: 24px;
+  height: 24px;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+.card {
+    all: unset;
+    border-radius: 4px;
+    border: 1px solid #eee;
+    background-color: #f6ee02;
+    height: 40px;
+    width: 200px;
+    margin: 0 8px 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease-in-out;
+    line-height: 24px;
+}
+
+.card-container .card:not(.highlight-card) {
+    cursor: pointer;
+}
+    
+.card-container .card:not(.highlight-card):hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 17px rgba(0, 0, 0, 0.35);
+}
+
+.mensaje_bienvenida{
+    text-align: center;
+}

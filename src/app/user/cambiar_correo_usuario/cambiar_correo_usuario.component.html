@@ -1,0 +1,34 @@
+<header id="header" class="fixed-top">
+  <div style="display: flex; justify-content: space-between;">
+    <img class="volver_boton" src="../../../assets/images/voler_boton.png" onclick="window.history.back();" />
+    <h4><a style="color: #080808" routerLink="/">MONOPOLY VERSIÓN INFORMÁTICA</a></h4>
+    <img class="inicio_boton" src="../../../assets/images/home_boton.png" routerLink="/">
+  </div>
+  <div style="text-align: center;">
+    <h4><a style="color: #080808">Cambio correo usuario</a></h4>
+  </div>
+</header>
+
+<form [formGroup]="form" (ngSubmit)="guardar_nuevo_correo()">
+  <br><br><br>
+  <!--<h1>HOLA {{username}}</h1>-->
+  <!--<h1>HOLA {{old_email}}</h1>-->
+  <h5> Correo electrónico actual: {{old_email}} </h5>
+
+  <h5> Introduzca el nuevo correo del usuario </h5>
+  <div class="formulario-nombre-usuario" >
+    <!--<input placeholder="nuevo correo electrónnico" class="formulario-nombre-usuario-input" required/>-->
+    
+      <input type="text" formControlName="new_email" id="new_email" name="new_email" placeholder="nuevo correo electrónico" class="formulario-nombre-usuario-input" required/>
+      <div *ngIf="form?.get('new_email')?.invalid && (form?.get('new_email')?.dirty || form?.get('new_email')?.touched)">
+        <div *ngIf="form?.get('new_email')?.errors?.['required']" style="color: red;">Este campo es obligatorio</div>
+      </div>
+    
+  </div>
+  <br><br>
+  <div class="opciones">
+    <button class="boton_si" type="submit">Guardar</button>
+    <button class="boton_no" onclick="window.history.back();">Cancelar</button>
+  </div>
+</form>
+<br><br>

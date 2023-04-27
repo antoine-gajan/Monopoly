@@ -1,0 +1,17 @@
+<div class="chance-card">
+  <h3 class="title-card">
+    CHANCE
+  </h3>
+  <div class="info-container">
+    <div class="info" *ngIf="chance">
+      {{chance.descripcion}}
+    </div>
+    <app-loader *ngIf="!chance" class="load-center"></app-loader>
+    <img src='../../../assets/images/perso_right.png'>
+  </div>
+  <div class="list-button" *ngIf="chance">
+    <button *ngIf="chance.cobrarPagarNada === 'pagar'" class="button-action pagar" (click)="validate()">Pagar {{chance.dinero}}€</button>
+    <button *ngIf="chance.cobrarPagarNada === 'cobrar'" class="button-action cobrar" (click)="validate()">Cobrar{{chance.dinero}}€</button>
+    <button *ngIf="chance.cobrarPagarNada === 'nada'" class="button-action nada" (click)="validate()">Vale</button>
+  </div>
+</div>

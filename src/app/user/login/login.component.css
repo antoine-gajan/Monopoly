@@ -1,0 +1,94 @@
+* {
+  font-family: "Inter", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.texto_cabecera{
+  display: flex;
+  justify-content: space-between;
+}
+
+.volver_boton, 
+.home_boton{
+  height: 40px;
+  cursor: pointer;
+}
+
+.formulario-login input {
+  display: block;
+  margin: 2rem 0;
+  width: 100%;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  border: none;
+  box-shadow: inset -5px -5px 15px rgba(255, 255, 255, 0.8), inset 5px 5px 10px rgba(0, 0, 0, 0.1);
+  background: #ebf5fc;
+}
+
+.formulario-login{
+  max-width: 60%;
+  margin: 0px auto;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 2rem 3rem;
+  border-radius: 2.5rem;
+  background-color: #ecf0f3;
+  box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #ffffff;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.filas{
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font: 1rem 'Fira Sans', sans-serif;
+}
+
+.campo{
+  display: block;
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 14px;
+  margin-top: 10px;
+}
+
+.form-input{
+  width: 100%;
+  padding: 12px 24px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  background: white;
+  font-weight: 500;
+  font-size: 16px;
+  color: #6b7280;
+  outline: none;
+  resize: none;
+}
+
+.formulario{
+  padding: 32px 36px;
+  background-color: white;
+}
+
+.boton{
+  padding: 2rem 3rem;
+  margin: auto;
+  border-radius: 2.5rem;
+  box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #ffffff;
+  color: black;
+  text-transform: uppercase;
+  border: none;
+  font-weight: bold;
+  background-color: #bcd8c1;
+  display: block;
+  cursor: pointer;
+}
+
+.link{
+  margin-top: 6px;
+  text-align: center;
+}
