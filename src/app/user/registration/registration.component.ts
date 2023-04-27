@@ -19,7 +19,7 @@ export class RegistrationComponent implements OnInit{
       confirm_password: ['', [Validators.required]]
     });
   }
-  
+
   get username() {
     return this.form.get('username');
   }
@@ -37,6 +37,10 @@ export class RegistrationComponent implements OnInit{
   }
 
   ngOnInit() {
+    // If user is already logged in, redirect to home
+    if (this.userService.getUsername()) {
+      //this.router.navigate(['/pantalla']);
+    }
     const schema = yup.object().shape({
       username: yup.string().required(),
       email: yup.string().email().required(),

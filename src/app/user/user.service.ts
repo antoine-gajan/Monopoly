@@ -37,7 +37,15 @@ export class UserService {
   }
 
   getUsername(): string {
-    return this.username;
+    // Get username from browser
+    let username_browser = localStorage.getItem('username');
+    let username_client = this.username;
+    if (username_browser) {
+      return username_browser;
+    }
+    else {
+      return username_client;
+    }
   }
 
   hacerPeticion() {

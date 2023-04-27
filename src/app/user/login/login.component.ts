@@ -15,7 +15,7 @@ import * as yup from 'yup';
 })
 export class LoginComponent implements OnInit{
   form: FormGroup;
-  
+
   constructor(private fb: FormBuilder,public userService: UserService, private router: Router) {
     this.form = this.fb.group({
       username: ['', [Validators.required]],
@@ -23,6 +23,10 @@ export class LoginComponent implements OnInit{
     });
   }
   ngOnInit() {
+    // If user is already logged in, redirect to home
+    if (this.userService.getUsername()) {
+      this.router.navigate(['/pantalla']);
+    }
     //console.log("He llegado al inicio de sesion");
     const schema = yup.object().shape({
       username: yup.string().required(),

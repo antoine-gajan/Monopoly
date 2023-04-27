@@ -26,7 +26,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   chance_cards: number[] = [7, 22, 36];
   community_cards: number[] = [2, 17, 33];
   taxes_cards: number[] = [4, 38];
-  player_properties: string[] = [];
+  player_properties: [string, Coordenadas][] = [];
   diceImages = [
     "../../../assets/images/dice/1.png",
     "../../../assets/images/dice/2.png",
@@ -69,6 +69,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     // Destroy the interval
     clearInterval(this.interval);
+    clearInterval(this.dices_interval);
   }
 
 
@@ -105,7 +106,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       next: (data: PropertiesBoughtResponse) => {
         this.player_properties = [];
         for (let i = 0; i < data.casillas.length; i++) {
-          this.player_properties.push(data.casillas[i].nombre);
+          this.player_properties.push([data.casillas[i].nombre, data.casillas[i].coordenadas]);
         }
       },
       error: (error) => {
@@ -226,17 +227,20 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.message = "No pasa nada";
           // End turn
           this.end_turn();
-        } else if (this.chance_cards.includes(position_id)) {
+        }
+        else if (this.chance_cards.includes(position_id)) {
           // Wait 0.5 seconds
           await this.sleep(500);
           this.message = "Toma una carta de suerte";
           this.createChanceCardComponent();
-        } else if (this.community_cards.includes(position_id)) {
+        }
+        else if (this.community_cards.includes(position_id)) {
           // Wait 0.5 seconds
           await this.sleep(500);
           this.message = "Toma una carta de comunidad";
           this.createCommunityCardComponent();
-        } else if (this.taxes_cards.includes(position_id)) {
+        }
+        else if (this.taxes_cards.includes(position_id)) {
           this.message = "Tienes que pagar...";
           if (position_id == 38) {
             this.createInfoCardComponent("SEGURO ESCOLAR", "Tienes que pagar el seguro escolar : 133€", "Pagar 133€");
@@ -249,11 +253,18 @@ export class BoardComponent implements OnInit, OnDestroy {
           if (owner_of_card == null) {
             // Display buy card
             this.createBuyCardComponent(this.player[2].v, this.player[2].h, "Quieres comprar ?", this.player[1], this.dices[0] == this.dices[1]);
-          } else if (owner_of_card == this.player[0]) {
+          }
+          else if (owner_of_card == this.player[0]) {
             /// TODO : Display a buy card component to ask if the player wants to buy credit
-          } else if (owner_of_card != this.player[0] && money_to_pay != null && money_to_pay <= this.player[1]) {
+          }
+          else if (owner_of_card != this.player[0] && money_to_pay != null && money_to_pay <= this.player[1]) {
             this.createPayCardComponent(this.player[2].v, this.player[2].h, "La tarjeta pertenece a " + owner_of_card, this.player[1], money_to_pay);
-          } else if (owner_of_card != this.player[0] && money_to_pay != null && money_to_pay > this.player[1]) {
+          }
+          else if (owner_of_card != this.player[0] && money_to_pay != null && money_to_pay > this.player[1]) {
+            /// TODO : Display a devolve form to ask if the player wants to devolve properties
+          }
+          else{
+            // User is bankrupt
             this.createInfoCardComponent("BANCARROTA", "Has perdido...<br>No tienes suficiente dinero para pagar " + money_to_pay + "€ a " + owner_of_card + " !", "Vale");
           }
         }

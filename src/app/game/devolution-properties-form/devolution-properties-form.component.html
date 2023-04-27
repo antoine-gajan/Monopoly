@@ -1,0 +1,9 @@
+<form>
+  <div *ngFor="let property of list_properties">
+    <label>
+      <input type="checkbox" [value]="property" (change)="updateSelectedProperties(property)">
+      {{ property[0] }}
+    </label>
+  </div>
+  <button class="button-action" [disabled]="selected_properties.length === 0" (click)="devolve()">Devolver {{selected_properties.length}} asignaturas</button>
+</form>
