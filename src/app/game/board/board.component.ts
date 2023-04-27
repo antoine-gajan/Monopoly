@@ -54,7 +54,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.router.navigate(['/error']);
     }
     // Get name of the player
-    let username = localStorage.getItem('username');
+    let username = this.userService.getUsername();
     // If undefined, redirect to error page
     if (username == null) {
       this.router.navigate(['/error']);
