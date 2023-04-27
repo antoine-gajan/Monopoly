@@ -255,7 +255,7 @@ export class BoardComponent implements OnInit, OnDestroy {
             this.createBuyCardComponent(this.player[2].v, this.player[2].h, "Quieres comprar ?", this.player[1], this.dices[0] == this.dices[1]);
           }
           else if (owner_of_card == this.player[0]) {
-            /// TODO : Display a buy card component to ask if the player wants to buy credit
+            this.createBuyCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.player[1], this.dices[0] == this.dices[1], true);
           }
           else if (owner_of_card != this.player[0] && money_to_pay != null && money_to_pay <= this.player[1]) {
             this.createPayCardComponent(this.player[2].v, this.player[2].h, "La tarjeta pertenece a " + owner_of_card, this.player[1], money_to_pay);
