@@ -16,6 +16,7 @@ export class InteractionCardComponent {
   @Input() player_money : number = 0;
   @Input() message: string;
   @Input() play_again: boolean = false;
+  @Input() increase_credit: boolean = false;
 
   // Define an EventEmitter to emit the "end turn" event of BoardComponent
   @Output() end_turn = new EventEmitter();
@@ -56,6 +57,27 @@ export class InteractionCardComponent {
       else {
         // Try again to buy
         this.buy_card();
+      }
+    }
+    });
+  }
+
+  increase_credit_property(): void {
+    this.gameService.increase_credit_property(this.username, this.game_id, this.h, this.v).subscribe({
+      next: (data) => {
+        console.log("You have increased the card");
+        console.log(data);
+        this.callback_end_turn();
+    },
+    error: (error) => {
+      console.log(error);
+      if (error.status == 400) {
+        alert("No tienes suficiente dinero para aumentar el numero de credito de esta casilla");
+        this.callback_end_turn();
+      }
+      else {
+        // Try again to buy
+        this.increase_credit_property();
       }
     }
     });

@@ -70,6 +70,33 @@ export class GameService {
     ));
   }
 
+  increase_credit_property(username: string, idPartida : Number, h : Number, v : Number){
+    const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
+    let body = JSON.stringify({  "username": username,
+                                                    "coordenadas":{"h": h,"v": v},
+                                                    "idPartida": idPartida})
+
+    return this.http.put(environment.aumentar, body, httpOptions).pipe(
+      tap(
+        (response) => {
+          console.log(response);
+        }
+    ));
+  }
+
+  declare_bankruptcy(username: string, idPartida : Number){
+    const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
+    let body = JSON.stringify({  "username": username,
+                                                    "idPartida": idPartida})
+
+    return this.http.put(environment.bancarrota, body, httpOptions).pipe(
+      tap(
+        (response) => {
+          console.log(response);
+        }
+    ));
+  }
+
   actualize(idPartida : Number, nJugadores : Number, dineroInicial : Number){
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     let body = JSON.stringify({"idPartida": idPartida, "nJugadores": nJugadores, "dineroInicial": dineroInicial});

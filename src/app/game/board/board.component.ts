@@ -265,6 +265,14 @@ export class BoardComponent implements OnInit, OnDestroy {
           }
           else{
             // User is bankrupt
+            this.gameService.declare_bankruptcy(this.player[0], this.game_id).subscribe({
+              next: (data: any) => {
+                console.log(data);
+              },
+              error: (error) => {
+                console.error(error);
+              }
+            });
             this.createInfoCardComponent("BANCARROTA", "Has perdido...<br>No tienes suficiente dinero para pagar " + money_to_pay + "€ a " + owner_of_card + " !", "Vale");
           }
         }
@@ -497,7 +505,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.add_position(id_player, property_id, index_color);
   }
 
-  createBuyCardComponent(v: number, h: number, message: string = "Quieres comprar", money: number, play_again: boolean = false): void {
+  createBuyCardComponent(v: number, h: number, message: string = "Quieres comprar", money: number, play_again: boolean = false, increase_credit: boolean = false,): void {
     // Assure to delete the old buy card component
     const old_buy_card_component_element = document.getElementById('pop-up-card');
     if (old_buy_card_component_element != null){
@@ -512,6 +520,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     componentRef.instance.message = message;
     componentRef.instance.play_again = play_again;
     componentRef.instance.player_money = money;
+    componentRef.instance.increase_credit = increase_credit;
     componentRef.instance.type = "buy";
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     // Give an id to the component html

@@ -41,7 +41,9 @@ export const environment = {
     tarjetaAleatoria: 'http://localhost:8080/partida/tarjeta/',
     siguienteTurno: 'http://localhost:8080/partida/siguienteTurno/',
     listaAsignaturas: 'http://localhost:8080/partida/listaAsignaturasC/',
-    turnoActual: 'http://localhost:8080/partida/turnoActual/'
+    turnoActual: 'http://localhost:8080/partida/turnoActual/',
+    bancarrota: 'http://localhost:8080/partida/bancarrota/',
+    aumentar: 'http://localhost:8080/partida/aumentar/',
 
 
     /*login: 'http://localhost:3000/users/login',
