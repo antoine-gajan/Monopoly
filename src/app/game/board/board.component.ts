@@ -54,10 +54,13 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.router.navigate(['/error']);
     }
     // Get name of the player
-    this.player[0] = this.userService.getUsername();
+    let username = localStorage.getItem('username');
     // If undefined, redirect to error page
-    if (this.player[0] === undefined) {
+    if (username == null) {
       this.router.navigate(['/error']);
+    }
+    else {
+      this.player[0] = username;
     }
     // Load game
     this.load_game();
@@ -326,14 +329,20 @@ export class BoardComponent implements OnInit, OnDestroy {
     let listaJugadores = data.listaJugadores;
     let listaDineros = data.listaDineros;
     let listaPosiciones = data.listaPosiciones;
+    // Result table with other players
     let result : [string, number, Coordenadas][] = [];
     for (let i = 0; i < listaJugadores.length; i++) {
       if (listaJugadores[i] !== this.player[0]) {
+        // Get information of other players
         let jugador = listaJugadores[i];
         let dinero = listaDineros[i];
         let posicion = listaPosiciones[i];
-        result.push([jugador, dinero, posicion]);
+        // Add to other_players_list if no error
+        if (jugador != null && dinero != null && posicion != null){
+          result.push([jugador, dinero, posicion]);
+        }
       }
+      // Info of client player
       else {
         this.player[1] = listaDineros[i];
         this.player[2] = listaPosiciones[i];
@@ -343,12 +352,16 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   move_dices_action(): void{
+    // Delete previous interval for safety
+    if (this.dices_interval != null) {
+      clearInterval(this.dices_interval);
+    }
     let count = 0;
       this.dices_interval = setInterval(() => {
         this.dices[0] = Math.floor(Math.random() * 6) + 1;
         this.dices[1] = Math.floor(Math.random() * 6) + 1;
         count++;
-        if (count === 10) {
+        if (count >= 10) {
           clearInterval(this.dices_interval);
         }
       }, 200);

@@ -13,7 +13,7 @@ interface EmailInt {
 
 })
 export class UserService {
-  
+
   private username: string;
   private newusername: string;
   private email: string;
@@ -25,6 +25,7 @@ export class UserService {
 
 
   setUsername(username: string): void {
+    localStorage.setItem('username', username);
     this.username = username;
   }
   setEmail(email: string): void {
@@ -44,11 +45,11 @@ export class UserService {
       map((response: any) => response.username)
     );
   }
-  
+
   login(user: any){
     console.log(user);
     this.setUsername(user.username);
-    
+
     return this.http.post(environment.login, user, {responseType: 'text', observe: 'response'})
                     .subscribe(
                       (response) => {
@@ -87,8 +88,8 @@ export class UserService {
     //this.setUsername(user.username);
     // return this.http.get('/http://localhost:8080/users/devolverCorreo').pipe(
     //   map((response: any) => response.email)
-    // ); 
-    return this.http.post<EmailInt>(environment.devolver_correo, user, {observe: 'response'}) 
+    // );
+    return this.http.post<EmailInt>(environment.devolver_correo, user, {observe: 'response'})
   }
 
   guardar_nuevo_correo(user: any){

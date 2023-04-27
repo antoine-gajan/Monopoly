@@ -1,9 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Route} from "@angular/router";
-import {Location} from "@angular/common";
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { UserService } from 'app/user/user.service';
-import { Router } from 'express';
+import {Router, ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-pantalla',
@@ -11,13 +8,20 @@ import { Router } from 'express';
   styleUrls: ['./pantalla.component.css']
 })
 
-export class PantallaComponent {
+export class PantallaComponent implements OnInit{
 
-  username: string;
+  username: string | null;
   id_partida_nueva: number;
 
-  constructor(private userService: UserService) {
-    this.username = userService.getUsername();
+  constructor(private userService: UserService, private router: Router, private route: ActivatedRoute) {
+  }
+
+  ngOnInit() {
+    // Get username from browser
+    this.username = localStorage.getItem('username');
+    if (this.username == null) {
+      this.router.navigate(['/error']);
+    }
   }
 
   /*username: any;
@@ -32,7 +36,7 @@ export class PantallaComponent {
   /*hacerPeticion(){
     this.userService.hacerPeticion();
   }
-  
+
   ajustes_usuario(){
     this.userService.hacerPeticion();
   }*/
