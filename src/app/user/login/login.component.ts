@@ -15,6 +15,7 @@ import * as yup from 'yup';
 })
 export class LoginComponent implements OnInit{
   form: FormGroup;
+  passwordShow: boolean = false;
 
   constructor(private fb: FormBuilder,public userService: UserService, private router: Router) {
     this.form = this.fb.group({
@@ -49,5 +50,9 @@ export class LoginComponent implements OnInit{
     else {
       console.log("Valores mal introducidos");
     }
+  }
+
+  passwordMostrarOcultar(){
+    this.passwordShow = !this.passwordShow;
   }
 }

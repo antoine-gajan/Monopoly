@@ -29,6 +29,7 @@ import {InteractionCardComponent} from "./card/interaction-card/interaction-card
 import {LoaderComponent} from "./game/loader/loader.component";
 import { PantallaInvitadoComponent } from './pantalla_invitado/pantalla_invitado.component';
 import { UnirseSalaInvitadoComponent } from './unirse_sala_invitado/unirse_sala_invitado.component';
+import { EsperarSalaComponent } from './esperar_sala/esperar_sala.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -56,6 +57,7 @@ const routes: Routes = [
   { path: 'delete_user', component: DeleteUserComponent},
   { path: 'pantalla_invitado', component: PantallaInvitadoComponent},
   { path: 'unirse_sala_invitado', component: UnirseSalaInvitadoComponent},
+  { path: 'esperar_sala', component: EsperarSalaComponent },
   { path: '', pathMatch: "full", redirectTo: '/home' },
   { path: '**', component: ErrorPageComponent }
 ];

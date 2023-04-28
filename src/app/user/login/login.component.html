@@ -20,10 +20,14 @@
   <!--------------------campo comtraseña usuario-------------------->
   <div class="filas">
     <label for="password" class="campo"> Contraseña* </label>
-    <input type="password" id="password" formControlName="password" name="password" placeholder="escribe la contraseña" class="form-input" required/>
+    <div class="input-campo">
+      <input type="{{ passwordShow ? 'text' : 'password' }}" id="password" formControlName="password" name="password" placeholder="escribe la contraseña" class="form-input" required/>
+      <i class="bi bi-eye" (click)="passwordMostrarOcultar()" [ngClass]="{'bi-eye-slash': passwordShow, 'bi-eye': !passwordShow}"></i>
+    </div>
     <div *ngIf="form?.get('password')?.invalid && (form?.get('password')?.dirty || form?.get('password')?.touched)">
       <div *ngIf="form?.get('password')?.errors?.['required']" style="color: red;">Este campo es obligatorio</div>
       <div *ngIf="form?.get('password')?.errors?.['minlength']" style="color: red;">La contraseña debe tener al menos 8 caracteres</div>
+      
     </div>
   </div>
   <!--------------------botón confirmación crear cuenta-------------------->

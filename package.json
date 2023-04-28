@@ -18,11 +18,13 @@
     "@angular/platform-browser": "^15.1.0",
     "@angular/platform-browser-dynamic": "^15.1.0",
     "@angular/router": "^15.1.0",
+    "bootstrap": "^5.2.3",
+    "chokidar": "^3.5.2",
+    "materialize-css": "^1.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "yup": "^1.1.0",
-    "zone.js": "~0.12.0",
-    "chokidar": "^3.5.2"
+    "zone.js": "~0.12.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^15.1.6",
