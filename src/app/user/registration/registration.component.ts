@@ -10,6 +10,8 @@ import * as yup from 'yup';
 })
 export class RegistrationComponent implements OnInit{
   form: FormGroup;
+  passwordShow: boolean = false;
+  confirmPasswordShow: boolean = false;
 
   constructor(private fb: FormBuilder,public userService: UserService) {
     this.form = this.fb.group({
@@ -67,4 +69,10 @@ export class RegistrationComponent implements OnInit{
     }
   }
 
+  passwordMostrarOcultarRegistration(){
+    this.passwordShow = !this.passwordShow;
+  }
+  confirmPasswordMostrarOcultarRegistration(){
+    this.confirmPasswordShow = !this.confirmPasswordShow;
+  }
 }
