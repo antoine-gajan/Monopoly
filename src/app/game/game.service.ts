@@ -9,7 +9,8 @@ import {
   Party,
   Propriety,
   RandomCard,
-  PlayerListResponse
+  PlayerListResponse,
+  PlayerListResponseEspera
 } from "./response-type";
 @Injectable({
   providedIn: 'root'
@@ -40,6 +41,19 @@ export class GameService {
           console.log(response);
         }
     ));
+  }
+
+  get_list_players_esperar(idPartida: number): Observable<string[]> {
+    let nombresUsuarios: string[] = [];
+    const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
+    let body = JSON.stringify({"idPartida": idPartida});
+    // Hacer una consulta a la base de datos o una API para obtener los nombres de usuarios
+    // y guardarlos en la variable nombresUsuarios
+  
+    return this.http.put<PlayerListResponseEspera>(environment.listaJugadores, body, httpOptions).pipe(
+      map(response => response.nombresUsuarios),
+      tap(players => console.log(players))
+    );
   }
 
   get_card(username: string, idPartida : number, h : Number, v : number){

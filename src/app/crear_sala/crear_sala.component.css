@@ -39,12 +39,14 @@
 }
 
 .dinero {
-  width: 30%; 
+  width: 40px; 
   height: 40px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .jugadores {
-  width: 10px; 
   height: 40px; 
 }
 
@@ -56,7 +58,7 @@
   border: 1px solid #e0e0e0;
   background: rgb(237, 235, 235);
   font-size: 16px;
-  color: #6b7280;
+  color: black;
   flex-wrap: nowrap;
 }
 
@@ -65,7 +67,7 @@
   font-size: 16px;
   border-radius: 6px;
   padding: 14px 32px;
-  margin-top: 9%;
+  margin-top: 30px;
   border: none;
   font-weight: 600;
   background-color: #6a64f1;
@@ -115,12 +117,21 @@
 .ajustar-dinero{
   display: flex;
   justify-content: center;
-  /*display: flex;
-  text-align: center;
-  align-items: center;*/
   margin-bottom: 5px;
 }
 
 .etiqueta{
   margin-right: 10px;
+}
+
+.seleccionar{
+  width: 130px;
+  height: 40px;
+  text-align: center;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  background: rgb(237, 235, 235);
+  font-size: 16px;
+  color: black;
+  flex-wrap: nowrap;
 }

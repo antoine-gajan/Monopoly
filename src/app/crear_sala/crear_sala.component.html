@@ -13,15 +13,16 @@
           <p>Configura las siguientes opciones para poder crear una partida nueva.</p>
         </div>
         <div class="espaciar">
-          <form><label class="etiqueta">Número de jugadores</label>
-            <select name="jugadores" [(ngModel)]="numJugadores" class="jugadores" name="numJugadores">
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
+          <form>
+            <label for="numero" class="etiqueta">Número de jugadores</label>
+            <select [(ngModel)]="numJugadores" class="jugadores" id="numJugadores" name="numJugadores">
+              <option value="2" [selected]="numJugadores == 2">2</option>
+              <option value="3" [selected]="numJugadores == 3">3</option>
+              <option value="4" [selected]="numJugadores == 4">4</option>
+              <option value="5" [selected]="numJugadores == 5">5</option>
+              <option value="6" [selected]="numJugadores == 6">6</option>
+              <option value="7" [selected]="numJugadores == 7">7</option>
+              <option value="8" [selected]="numJugadores == 8">8</option>
             </select>
           </form>
         </div>
@@ -30,13 +31,13 @@
           <label class="etiqueta">Dinero inicial</label>
           <div class="dinero">
             <div class="input-campo">
-              <i class="bi bi-plus-square-fill" (click)="incrementar()"></i>
-              <span>{{ dineroJugador }}€</span>
-              <i class="bi bi-dash-square-fill" (click)="decrementar()"></i>
+              <i class="bi bi-plus-square-fill" (click)="incrementarDinero()"></i>
+              <span class="texto">{{ dineroJugador }}€</span>
+              <i class="bi bi-dash-square-fill" (click)="decrementarDinero()"></i>
             </div>
           </div>
         </div>
-        
-        <button (click)="esperarSala()" class="boton-jugar">Jugar</button>
+
+        <button (click)="crearPartidaDatos()" class="boton-jugar">Jugar</button>
     </div>
 </section>

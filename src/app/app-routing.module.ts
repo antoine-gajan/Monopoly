@@ -57,7 +57,7 @@ const routes: Routes = [
   { path: 'delete_user', component: DeleteUserComponent},
   { path: 'pantalla_invitado', component: PantallaInvitadoComponent},
   { path: 'unirse_sala_invitado', component: UnirseSalaInvitadoComponent},
-  { path: 'esperar_sala', component: EsperarSalaComponent },
+  { path: 'esperar_sala/:id', component: EsperarSalaComponent },
   { path: '', pathMatch: "full", redirectTo: '/home' },
   { path: '**', component: ErrorPageComponent }
 ];

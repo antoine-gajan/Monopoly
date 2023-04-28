@@ -8,6 +8,9 @@ export class PlayerListResponse {
   listaPosiciones: Coordenadas[];
 }
 
+export class PlayerListResponseEspera{
+  nombresUsuarios: string[];
+}
 export class Coordenadas{
   h: number;
   v: number;

@@ -148,8 +148,10 @@ export class UserService {
                           idPartida = JSON.parse(response.body).idPartida;
                         }
                         user.idPartida = idPartida;
-                        const ruta = '/game/' + idPartida;
+                        const ruta = '/esperar_sala/' + idPartida;
                         this.router.navigateByUrl(ruta);
+                        //const navigationExtras = {state: {idPartida: idPartida}};
+                        //this.router.navigateByUrl('/esperar_sala', navigationExtras);
                       },
                       (error) => {
                         console.log(error);
