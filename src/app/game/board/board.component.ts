@@ -20,6 +20,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   dices: number[] = [];
   current_player: string;
   player: [string, number, Coordenadas] = ["", 0, {h: 10, v: 10}];
+  nb_doubles: number = 0;
   other_players_list: [string, number, Coordenadas][] = [];
   nothing_cards: number[] = [0, 10, 20];
   prison_cards: number[] = [30];
@@ -187,6 +188,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       // Update message
       if (this.dices[0] === this.dices[1]){
         this.message = this.player[0] + ", has sacado dobles " + this.dices[0];
+        this.nb_doubles += 1;
       }
       else {
         this.message = this.player[0] + ", has sacado " + this.dices[0] + " y " + this.dices[1];
@@ -260,7 +262,7 @@ export class BoardComponent implements OnInit, OnDestroy {
           else if (owner_of_card != this.player[0] && money_to_pay != null && money_to_pay <= this.player[1]) {
             this.createPayCardComponent(this.player[2].v, this.player[2].h, "La tarjeta pertenece a " + owner_of_card, this.player[1], money_to_pay);
           }
-          else if (owner_of_card != this.player[0] && money_to_pay != null && money_to_pay > this.player[1]) {
+          else if (owner_of_card != this.player[0] && money_to_pay != null && money_to_pay > this.player[1] && this.player_properties.length > 0) {
             /// TODO : Display a devolve form to ask if the player wants to devolve properties
           }
           else{
@@ -268,6 +270,8 @@ export class BoardComponent implements OnInit, OnDestroy {
             this.gameService.declare_bankruptcy(this.player[0], this.game_id).subscribe({
               next: (data: any) => {
                 console.log(data);
+                // Update player money to 0
+                this.player[1] = 0;
               },
               error: (error) => {
                 console.error(error);
@@ -326,6 +330,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   go_next_turn() : void {
     this.message = "Has terminado tu turno";
+    this.nb_doubles = 0;
     // Indicate to backend that the player has finished his turn
     this.gameService.next_turn(this.game_id).subscribe({
       next: (data) => {
@@ -474,18 +479,24 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.player[2].v = new_position[0];
     this.player[2].h = new_position[1];
     // Check if is in jail
-    let jail = new_id == 30;
-    // If change turn, receive 200
+    let jail = (new_id == 30) || this.nb_doubles == 3;
+    // If change turn, receive 267
     if (change_turn){
       this.message = "Has pasado por la salida";
-      this.player[1] += 200;
+      this.player[1] += 267;
       // Wait 0.5 seconds
       await this.sleep(500);
     }
     // If player has to go to jail-card
     if (jail) {
       this.show_position(id_player, this.player[2], 0);
-      this.message = "Has ido en julio";
+      // Message in function of the manner to go to jail
+      if (this.nb_doubles == 3){
+        this.message = "Has ido en julio por tirar 3 dobles";
+      }
+      else{
+        this.message = "Has ido en julio";
+      }
       // Wait 0.5 seconds
       await this.sleep(500);
       // Go to jail

@@ -1,5 +1,6 @@
 <form>
-  <div *ngFor="let property of list_properties">
+  <h3 class="title-devolution">ASIGNATURAS A DEVOLVER</h3>
+  <div *ngFor="let property of list_properties" class="list-properties">
     <label>
       <input type="checkbox" [value]="property" (change)="updateSelectedProperties(property)">
       {{ property[0] }}
