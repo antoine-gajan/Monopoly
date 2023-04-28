@@ -20,12 +20,6 @@ export class CrearSalaComponent {
   crearPartidaDatos(){
     console.log("Crear partida: ", this.numJugadores, this.dineroJugador, this.username);
     const datos = {username: this.username, dineroInicial: this.dineroJugador, normas: this.normas, nJugadores: this.numJugadores};
-    //this.userService.crearPartida(datos);
-  }
-
-  esperarSala() {
-    const datos = {username: this.username, dineroInicial: this.dineroJugador, normas: this.normas, nJugadores: this.numJugadores};
-    console.log("ESPERAR SALA", datos);
-    this.userService.esperarSala(datos);
+    this.userService.crearPartida(datos);
   }
 }
