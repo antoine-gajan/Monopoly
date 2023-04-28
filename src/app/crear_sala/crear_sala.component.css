@@ -1,15 +1,8 @@
 * {
-    font-family: "Inter", sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-#heather{
-  background: #BFDBAE;
-  box-shadow: 0px 0px 25px 0 rgba(0, 0, 0, 0.08);
-  z-index: 997;
-  padding: 15px 0;
+  font-family: "Inter", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .titulo h2 {
@@ -18,11 +11,11 @@
   position: relative;
 }
 
-.volver_boton, .inicio_boton{
+.volver_boton, 
+.inicio_boton{
     height: 40px;
+    cursor: pointer;
 }
-
-
 
 .services .icon-box {
   text-align: center;
@@ -48,31 +41,21 @@
   margin-bottom: 0;
 }
 
-
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
-  height: 100vh; 
-  background-color: #f1f1f1;
-}
-
-
 label {
-  display: inline;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
-  padding-right: 10px; /* Ajusta el valor para agregar el espacio deseado */
+  margin-right: 6px;
 }
 
-.dinero{
-  padding: 10px 0.7px;
+.dinero {
+  position: relative;
+  width: 30%; /* el ancho será la mitad del contenedor */
+  height: 40px; /* la altura será de 2 veces el tamaño de la letra */
+  padding: 10px 65px;
 }
+
 
 .jugadores{
   padding: 10px 65px;
+  position: relative;
 }
 
 .dinero, .jugadores{
@@ -82,7 +65,10 @@ label {
   background: rgb(237, 235, 235);
   font-size: 16px;
   color: #6b7280;
+  flex-wrap: nowrap;
 }
+
+
 
 .boton-jugar {
   text-align: center;
@@ -95,4 +81,66 @@ label {
   background-color: #6a64f1;
   color: white;
   cursor: pointer;
+}
+
+.bi {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  position: absolute; 
+  top: 50%; 
+  transform: translateY(-50%); 
+  cursor: pointer;
+}
+
+.bi-plus-square-fill {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16"><path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  right: 10px;
+  order: 1;
+  right: 0;
+}
+
+.bi-dash-square-fill {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-square-fill" viewBox="0 0 16 16"><path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm2.5 7.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  left: 10px;
+  order: 3;
+  right: 0;
+}
+
+.input-campo{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 14px;
+}
+
+.ajustar-dinero{
+  display: flex;
+  align-items: center;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.contenedor label {
+  flex-basis: 200px;
+  margin-right: 10px;
+}
+
+span{
+  order: 2;
+  margin: 0 10px;
+  font-size: 14px;
 }

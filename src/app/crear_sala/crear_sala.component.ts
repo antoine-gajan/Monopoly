@@ -8,8 +8,8 @@ import { UserService } from 'app/user/user.service';
   styleUrls: ['./crear_sala.component.css']
 })
 export class CrearSalaComponent {
-  numJugadores: number = 1500;
-  dineroJugador: number;
+  numJugadores: number;
+  dineroJugador: number = 1500;
   username: string;
   normas: string = "";
 
@@ -21,5 +21,23 @@ export class CrearSalaComponent {
     console.log("Crear partida: ", this.numJugadores, this.dineroJugador, this.username);
     const datos = {username: this.username, dineroInicial: this.dineroJugador, normas: this.normas, nJugadores: this.numJugadores};
     this.userService.crearPartida(datos);
+  }
+
+  esperarSala() {
+    const datos = {username: this.username, dineroInicial: this.dineroJugador, normas: this.normas, nJugadores: this.numJugadores};
+    console.log("ESPERAR SALA", datos);
+    this.userService.esperarSala(datos);
+  }
+
+  incrementar() {
+    if (this.dineroJugador + 100 <= 3500) {
+      this.dineroJugador += 100;
+    }
+  }
+
+  decrementar() {
+    if (this.dineroJugador - 100 >= 1500) {
+      this.dineroJugador -= 100;
+    }
   }
 }

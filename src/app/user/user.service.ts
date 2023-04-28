@@ -157,6 +157,11 @@ export class UserService {
                     );
   }
 
+  esperarSala(user: any) {
+    const navigationExtras = { state: { user } };
+    this.router.navigate(['/esperar_sala'], navigationExtras);
+  }
+
   unirseSala(user: any){
     console.log(user);
     return this.http.put(environment.unirJugador, user, {responseType: 'text', observe: 'response'})
