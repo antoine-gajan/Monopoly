@@ -43,19 +43,6 @@ export class GameService {
     ));
   }
 
-  get_list_players_esperar(idPartida: number): Observable<string[]> {
-    let nombresUsuarios: string[] = [];
-    const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
-    let body = JSON.stringify({"idPartida": idPartida});
-    // Hacer una consulta a la base de datos o una API para obtener los nombres de usuarios
-    // y guardarlos en la variable nombresUsuarios
-  
-    return this.http.put<PlayerListResponseEspera>(environment.listaJugadores, body, httpOptions).pipe(
-      map(response => response.nombresUsuarios),
-      tap(players => console.log(players))
-    );
-  }
-
   get_card(username: string, idPartida : number, h : Number, v : number){
     // Function which return the card information (owner, price to pay) and update position
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
