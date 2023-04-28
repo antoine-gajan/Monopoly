@@ -10,12 +10,17 @@
 <section class="services">
   <div class="icon-box iconbox-blue">
     <div class="titulo" style="text-align: center;"><!--</div>"section-title">-->
-      <h2>Partida número: {{game_id}}</h2>
-      <p>Esperando al resto de jugadores ...</p>
-      <p *ngIf="nb_players_connected != 0">{{nb_players_connected}} / {{nb_players_total}}</p>
+      <h2>Partida #{{game_id}}</h2>
+      <p class="info-wait">Esperando al resto de jugadores ...</p>
     </div>
-    <button id="start" *ngIf="username === player_creator_of_game && nb_players_connected == nb_players_total" class="btn btn-primary" (click)="start_game()">Empezar la partida</button>
-    <button id="join" *ngIf="username !== player_creator_of_game && nb_players_connected == nb_players_total" class="btn btn-primary" (click)="join_game()">Jugar</button>
+    <div class="players-list" *ngIf="list_players.length > 0">
+      <h3>Jugadores conectados : </h3>
+      <div *ngFor="let player of list_players" class="player-name">
+        {{player}}
+      </div>
+    </div>
+    <button id="start" *ngIf="username === player_creator_of_game" class="play" (click)="start_game()">Empezar la partida</button>
+    <button id="join" *ngIf="username !== player_creator_of_game" class="play" (click)="join_game()">Jugar</button>
 
 </div>
 <br><br><br><br><br><br><br><br><br>
