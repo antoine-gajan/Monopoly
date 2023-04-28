@@ -12,21 +12,22 @@
           <h2>CREAR SALA</h2>
           <p>Configura las siguientes opciones para poder crear una partida nueva.</p>
         </div>
-        <h4>PARTIDA #XXXXX</h4>
-        <form><label>Número de jugadores</label>
-          <select name="jugadores" [(ngModel)]="numJugadores" class="jugadores" name="numJugadores">
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-          </select>
-        </form>
+        <div class="espaciar">
+          <form><label class="etiqueta">Número de jugadores</label>
+            <select name="jugadores" [(ngModel)]="numJugadores" class="jugadores" name="numJugadores">
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+            </select>
+          </form>
+        </div>
 
         <div class="ajustar-dinero">
-          <label>Dinero inicial</label>
+          <label class="etiqueta">Dinero inicial</label>
           <div class="dinero">
             <div class="input-campo">
               <i class="bi bi-plus-square-fill" (click)="incrementar()"></i>
@@ -35,50 +36,6 @@
             </div>
           </div>
         </div>
-        
-
-
-        <div class="ajustar-dinero">
-          <label>Dinero inicial</label>
-          <div class="dinero">
-            <div class="input-campo">
-              <i class="bi bi-plus-square-fill" (click)="incrementar()"></i>
-              <span>{{ dineroJugador }}€</span>
-              <i class="bi bi-dash-square-fill" (click)="decrementar()"></i>
-            </div>
-          </div>
-        </div>
-        <div class="ajustar-dinero">
-          <label>Dinero inicial (€)</label>
-          <div class="input-campo">
-            <div class="dinero">
-            
-              <i class="bi bi-plus-square-fill" (click)="incrementar()"></i>
-              <span>{{ dineroJugador }}€</span>
-              <i class="bi bi-dash-square-fill" (click)="decrementar()"></i>
-            </div>
-          </div>
-        </div>
-        <div>
-          <label>Dinero inicial (€)</label>
-          <input type="number" class="dinero" [(ngModel)]="dineroJugador" placeholder="1500€" />
-        </div>
-
-        <div>
-          <label>Dinero inicial (€)</label>
-          <input type="number" class="dinero" [(ngModel)]="dineroJugador" placeholder="1500€" />
-        </div>
-        <div class="ajustar-dinero">
-          <label>Dinero inicial (€)</label>
-          <div class="dinero">
-            <div class="input-campo">
-              <i class="bi bi-plus-square-fill" (click)="incrementar()"></i>
-              <span>{{ dineroJugador }}€</span>
-              <i class="bi bi-dash-square-fill" (click)="decrementar()"></i>
-            </div>
-          </div>
-        </div>
-        
         
         <button (click)="esperarSala()" class="boton-jugar">Jugar</button>
     </div>
