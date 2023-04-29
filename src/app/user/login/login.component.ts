@@ -39,6 +39,7 @@ export class LoginComponent implements OnInit{
   }
 
   login(){
+    console.log("LOGIN", this.form.valid);
     if (this.form.valid) {
       this.userService.setUsername(this.form.value.username);
       //this.router.navigate(['/pantalla', { username: this.username }]);
