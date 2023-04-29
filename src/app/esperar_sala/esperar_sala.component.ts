@@ -21,6 +21,8 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
   nb_players_connected: number = 0;
   interval: any;
   boton_empezar_partida: boolean = false;
+  showSpinner = false;
+  infoUpdated: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -31,17 +33,16 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
   ) {}
 
   ngOnInit() {
-    // Get id of the game
-    let idPartida = this.route.snapshot.paramMap.get('id');
-    // Get player name
-    this.username = this.userService.getUsername();
-    // Disable every button while info is not loaded
-    document.getElementById("start")?.setAttribute("disabled", "true");
-    document.getElementById("join")?.setAttribute("disabled", "true");
-    // Actualize information of game
-    if (idPartida != null && this.username != null) {
+    let idPartida = this.route.snapshot.paramMap.get('id'); // Se obtiene id de la partida
+    this.username = this.userService.getUsername(); // Se obtiene el nombre del usuario actual
+    document.getElementById("start")?.setAttribute("disabled", "true"); // Se desactiva el botón cuando la información no está actualizada
+    document.getElementById("join")?.setAttribute("disabled", "true");  // Se desactiva el botón cuando la información no está actualizada
+    if (idPartida != null && this.username != null) { // Actualiza la información del juego
       this.game_id = +idPartida;
-      this.actualize_game_info();
+      if (!this.infoUpdated) {
+        this.actualize_game_info();
+        this.infoUpdated = true;
+      }
     } else {
       this.router.navigate(['/error']);
     }
@@ -52,7 +53,6 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
     this.interval.unsubscribe();
     clearInterval(this.interval);
   }
-
   volver_atras(){
     // Stop interval
     this.interval.unsubscribe();
@@ -102,5 +102,32 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
     clearInterval(this.interval);
     // Navigate to /game/game_id
     this.router.navigate(['/game', this.game_id]);
+  }
+
+  /* 
+   * Genera el movimiento de reload al hacer click sobre el icono
+   * y devuelve la lista de jugadores actualizada
+   */
+  onRefreshClick(event: any) {
+    this.showSpinner = true;
+    setTimeout(() => {
+      this.showSpinner = false;
+    }, 2500);
+    this.gameService.get_list_players(this.game_id).subscribe((response: PlayerListResponse) => {
+      this.list_players = response.listaJugadores;          // Se obtiene la lista de jugadores
+      this.nb_players_connected = this.list_players.length; // Se obtiene el numero de jugadores conectado
+      this.player_creator_of_game = this.list_players[0];   // Se obtiene el nombre del usuario del jugadore creador de la partida
+
+      if (this.nb_players_connected === this.nb_players_total) {
+        if (this.username === this.player_creator_of_game) {
+          // Get button with id = "start" from html and activate it
+          document.getElementById("start")?.setAttribute("disabled", "false");
+          this.boton_empezar_partida = true;
+        } else {
+          // Activate join game button
+          document.getElementById("join")?.setAttribute("disabled", "false");
+        }
+      }
+    });
   }
 }

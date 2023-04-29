@@ -11,10 +11,14 @@
   <div class="icon-box iconbox-blue">
     <!--------------------titulo id partida-------------------->
     <div class="titulo" style="text-align: center;">
-      <h2>Partida #{{game_id}}</h2>
+      <h2>Partida #{{game_id}}<i class="bi bi-arrow-repeat clickable" (click)="onRefreshClick($event)"
+        [ngClass]="{'rotate': showSpinner}">
+      </i></h2>
       <!--<p class="info-wait" *ngIf="username !== player_creator_of_game">Esperando a que el creador inicie la partida</p>-->
       <p class="info-wait">Esperando al resto de jugadores ...</p>
     </div>
+    
+    <!--<i class="bi bi-eye" (click)="passwordMostrarOcultar()" [ngClass]="{'bi-eye-slash': passwordShow, 'bi-eye': !passwordShow}"></i>-->
     <!--------------------lista jugadores conectados-------------------->
     <div class="lista_jugadores" *ngIf="list_players.length > 0">
       <p>Jugadores conectados:</p>
@@ -26,7 +30,7 @@
     <button id="start" *ngIf="username === player_creator_of_game && list_players.length > 1" class="boton-jugar" (click)="start_game()">Empezar la partida</button>
     <button id="join" *ngIf="username !== player_creator_of_game" class="boton-jugar" (click)="join_game()">Unirse a la partida</button>
     <button id="join" *ngIf="boton_empezar_partida === true" class="boton-jugar" (click)="join_game()">Unirse a la partida</button>
-
+    
 </div>
 <br><br><br><br><br><br><br><br><br>
 </section>

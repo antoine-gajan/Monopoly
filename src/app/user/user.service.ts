@@ -140,23 +140,23 @@ export class UserService {
   crearPartida(user: any){
     console.log(user);
     return this.http.post(environment.crearPartida, user, {responseType: 'text', observe: 'response'})
-                    .subscribe(
-                      (response) => {
-                        console.log(response.status);
-                        let idPartida = '';
-                        if (response.body !== null) {
-                          idPartida = JSON.parse(response.body).idPartida;
-                        }
-                        user.idPartida = idPartida;
-                        const ruta = '/esperar_sala/' + idPartida;
-                        this.router.navigateByUrl(ruta);
-                        //const navigationExtras = {state: {idPartida: idPartida}};
-                        //this.router.navigateByUrl('/esperar_sala', navigationExtras);
-                      },
-                      (error) => {
-                        console.log(error);
-                      }
-                    );
+      .subscribe(
+        (response) => {
+          console.log(response.status);
+          let idPartida = '';
+          if (response.body !== null && response.body !== undefined) {
+            idPartida = JSON.parse(response.body).idPartida;
+          }
+          user.idPartida = idPartida;
+          const ruta = '/esperar_sala/' + idPartida;
+          this.router.navigateByUrl(ruta);
+          //const navigationExtras = {state: {idPartida: idPartida}};
+          //this.router.navigateByUrl('/esperar_sala', navigationExtras);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 
   esperarSala(user: any) {
