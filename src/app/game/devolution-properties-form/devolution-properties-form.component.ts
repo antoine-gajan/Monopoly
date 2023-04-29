@@ -20,10 +20,6 @@ export class DevolutionPropertiesFormComponent {
   constructor(private gameService: GameService) {
   }
 
-  ngOnInit(): void {
-
-  }
-
   devolve() {
     console.log("Devolution of properties");
     let observables: ObservableInput<any> = [];
@@ -40,12 +36,12 @@ export class DevolutionPropertiesFormComponent {
     /*forkJoin(observables).subscribe(results => {
       console.log('All requests completed:', results);
       if (!this.is_in_jail) {
-        this.callback_end_turn();
+        this.go_next_step();
       }
     }, error => {
       console.error('Error occurred:', error);
       if (!this.is_in_jail) {
-        this.callback_end_turn();
+        this.go_next_step();
       }
     });*/
   }

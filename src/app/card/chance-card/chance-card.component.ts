@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {GameService} from "../../game/game.service";
 import {RandomCard} from "../../game/response-type";
 
@@ -7,7 +7,7 @@ import {RandomCard} from "../../game/response-type";
   templateUrl: './chance-card.component.html',
   styleUrls: ['./chance-card.component.css']
 })
-export class ChanceCardComponent {
+export class ChanceCardComponent implements OnInit{
   @Input() idPartida : number;
   @Input() username : string;
   @Output() end_turn = new EventEmitter();

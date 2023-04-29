@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/user/user.service';
 import { ActivatedRoute,Router } from '@angular/router';
@@ -12,7 +12,7 @@ import { PlayerListResponse } from "../game/response-type";
   styleUrls: ['./esperar_sala.component.css']
 })
 
-export class EsperarSalaComponent {
+export class EsperarSalaComponent implements OnInit, OnDestroy{
   username: string = " ";
   game_id: number;
   list_players: string[];
@@ -21,7 +21,6 @@ export class EsperarSalaComponent {
   nb_players_connected: number = 0;
   interval: any;
   boton_empezar_partida: boolean = false;
-  intervalStopped: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -50,24 +49,18 @@ export class EsperarSalaComponent {
 
   ngOnDestroy() {
     // Delete interval
+    this.interval.unsubscribe();
     clearInterval(this.interval);
   }
 
   volver_atras(){
+    // Stop interval
+    this.interval.unsubscribe();
+    clearInterval(this.interval);
     window.history.back();
-  }
-  stop_interval(){
-    console.log("STOP INTERVAL", this.intervalStopped);
-    if (!this.intervalStopped) {
-      clearInterval(this.interval);
-      this.interval = null; // Desasignamos la variable
-      this.intervalStopped = true;
-      console.log("STOP INTERVAL", this.intervalStopped);
-    }
   }
 
   actualize_game_info() {
-    if (!this.intervalStopped && this.interval == null) {
     this.interval = interval(2000)
       .pipe(
         // Take while everyone is not connected
@@ -93,15 +86,20 @@ export class EsperarSalaComponent {
           }
         });
       });
-    }
   }
 
   start_game(): void {
+    // Stop interval
+    this.interval.unsubscribe();
+    clearInterval(this.interval);
     // Navigate to /game/game_id
     this.router.navigate(['/game', this.game_id]);
   }
 
   join_game(): void {
+    // Stop interval
+    this.interval.unsubscribe();
+    clearInterval(this.interval);
     // Navigate to /game/game_id
     this.router.navigate(['/game', this.game_id]);
   }

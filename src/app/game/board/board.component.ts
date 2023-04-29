@@ -71,6 +71,8 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // Destroy the interval
+    this.interval.unsubscribe();
+    this.dices_interval.unsubscribe();
     clearInterval(this.interval);
     clearInterval(this.dices_interval);
   }

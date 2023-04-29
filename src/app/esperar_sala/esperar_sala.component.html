@@ -1,9 +1,9 @@
 <!--------------------CABECERA WEB-------------------->
 <header id="header" class="fixed-top">
   <div style="display: flex; justify-content: space-between;">
-    <img class="volver_boton" src="../../../assets/images/voler_boton.png"(click)="stop_interval(); volver_atras();" />
-    <h4><a style="color: #080808" routerLink="/" (clic)="stop_interval">MONOPOLY VERSIÓN INFORMÁTICA</a></h4>
-    <img class="inicio_boton" src="../../../assets/images/home_boton.png" routerLink="/" (click)="stop_interval">
+    <img class="volver_boton" src="../../../assets/images/voler_boton.png"; (click)="volver_atras()"/>
+    <h4><a style="color: #080808" routerLink="/" >MONOPOLY VERSIÓN INFORMÁTICA</a></h4>
+    <img class="inicio_boton" src="../../../assets/images/home_boton.png" routerLink="/">
   </div>
 </header>
 <!--------------------CONTENIDO ESPERAR SALA JUEGO-------------------->
@@ -23,7 +23,7 @@
       </div>
     </div>
     <!--------------------botón iniciar partida-------------------->
-    <button id="start" *ngIf="username === player_creator_of_game" class="boton-jugar" (click)="start_game()">Empezar la partida</button>
+    <button id="start" *ngIf="username === player_creator_of_game && list_players.length > 1" class="boton-jugar" (click)="start_game()">Empezar la partida</button>
     <!--<button id="join" *ngIf="username !== player_creator_of_game" class="boton-jugar" (click)="join_game()">Unirse a la partida</button>-->
     <button id="join" *ngIf="boton_empezar_partida === true" class="boton-jugar" (click)="join_game()">Unirse a la partida</button>
 
