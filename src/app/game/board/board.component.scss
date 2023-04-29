@@ -48,7 +48,6 @@ h1, h2, h3, h4, h5, h6 {
 /***********************MAIN CONTAINER***********************/
 .main-container{
   width: 100%;
-  height: auto;     // Ajusta la altura automáticamente
   overflow: hidden;
   flex-wrap: wrap;  // Los elementos se pueden ajustar en nuevas líneas cuando no hay espacio suficiente en horizontal
 }
@@ -833,4 +832,14 @@ h1, h2, h3, h4, h5, h6 {
 #tirar-dados:enabled{
   background-color: orange;
   font-weight: bold;
+}
+
+.btn-jail-devolve{
+  background-color: darkgrey;
+  font-weight: bold;
+  border: 1px solid black;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 10px;
+  cursor: pointer;
 }

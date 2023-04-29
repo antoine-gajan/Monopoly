@@ -9,6 +9,7 @@ import {EMPTY, interval, switchMap, takeWhile} from "rxjs";
 import {InfoCardComponent} from "../../card/info-card/info-card.component";
 import {JailCardComponent} from "../../card/jail-card/jail-card.component";
 import {Coordenadas, PlayerListResponse, PropertiesBoughtResponse} from "../response-type";
+import {DevolutionPropertiesFormComponent} from "../devolution-properties-form/devolution-properties-form.component";
 
 @Component({
   selector: 'app-board',
@@ -21,6 +22,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   current_player: string;
   player: [string, number, Coordenadas] = ["", 0, {h: 10, v: 10}];
   nb_doubles: number = 0;
+  is_in_jail: boolean = false;
   other_players_list: [string, number, Coordenadas][] = [];
   nothing_cards: number[] = [0, 10, 20];
   prison_cards: number[] = [30];
@@ -128,7 +130,8 @@ export class BoardComponent implements OnInit, OnDestroy {
         switchMap((playerResponse) => {
           this.current_player = playerResponse.jugador;
       if (this.current_player === this.player[0]) {
-        // When he can play, activate button
+        // When he can play, activate button and remove is_in_jail for safety
+        this.is_in_jail = false;
         this.message = this.player[0] + ", es tu turno";
         document.getElementById("tirar-dados")!.removeAttribute("disabled");
         // Return empty observable to stop the interval
@@ -194,14 +197,14 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.message = this.player[0] + ", has sacado " + this.dices[0] + " y " + this.dices[1];
       }
       // Update player position
-      let jail = await this.update_local_player_position(this.player[0], this.player[2], this.dices);
+      await this.update_local_player_position(this.player[0], this.player[2], this.dices);
       // Action of the card
-      this.card_action(jail);
+      this.card_action();
     }
     });
   }
 
-  async card_action(is_in_jail: boolean) {
+  async card_action() {
     // Get card information
     let owner_of_card: string | null = null;
     let money_to_pay: number | null = null;
@@ -213,7 +216,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       error: (error) => {
         console.error(error);
         // Try again
-        this.card_action(is_in_jail);
+        this.card_action();
       },
       complete: async () => {
         // Get position with id
@@ -221,7 +224,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         // Wait 0.5 seconds
         await this.sleep(500);
         // Display a buy card component
-        if (is_in_jail) {
+        if (this.is_in_jail) {
           // Display a jail card component
           this.createJailCardComponent();
         }
@@ -263,7 +266,8 @@ export class BoardComponent implements OnInit, OnDestroy {
             this.createPayCardComponent(this.player[2].v, this.player[2].h, "La tarjeta pertenece a " + owner_of_card, this.player[1], money_to_pay);
           }
           else if (owner_of_card != this.player[0] && money_to_pay != null && money_to_pay > this.player[1] && this.player_properties.length > 0) {
-            /// TODO : Display a devolve form to ask if the player wants to devolve properties
+            // Devolution form
+            this.createDevolutionFormComponent();
           }
           else{
             // User is bankrupt
@@ -313,11 +317,13 @@ export class BoardComponent implements OnInit, OnDestroy {
         // If the position of player has changed, launch card action of the new position
         else if (this.convert_position_to_id(this.player[2]) != this.convert_position_to_id(old_position_player)) {
           if (this.convert_position_to_id(this.player[2]) == 10) {
-            // Player has be sent to jail-card
-            this.card_action(true);
+            // Player has be sent to jail
+            this.is_in_jail = true;
+            this.card_action();
           }
           else {
-            this.card_action(false);
+            this.is_in_jail = false;
+            this.card_action();
           }
         }
         else {
@@ -479,7 +485,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.player[2].v = new_position[0];
     this.player[2].h = new_position[1];
     // Check if is in jail
-    let jail = (new_id == 30) || this.nb_doubles == 3;
+    this.is_in_jail = (new_id == 30) || this.nb_doubles == 3;
     // If change turn, receive 267
     if (change_turn){
       this.message = "Has pasado por la salida";
@@ -488,7 +494,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       await this.sleep(500);
     }
     // If player has to go to jail-card
-    if (jail) {
+    if (this.is_in_jail) {
       this.show_position(id_player, this.player[2], 0);
       // Message in function of the manner to go to jail
       if (this.nb_doubles == 3){
@@ -505,7 +511,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
     // Show position
     this.show_position(id_player, this.player[2], 0);
-    return jail;
   }
 
   show_position(id_player: string, position: Coordenadas, index_color: number): void{
@@ -518,10 +523,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   createBuyCardComponent(v: number, h: number, message: string = "Quieres comprar", money: number, play_again: boolean = false, increase_credit: boolean = false,): void {
     // Assure to delete the old buy card component
-    const old_buy_card_component_element = document.getElementById('pop-up-card');
-    if (old_buy_card_component_element != null){
-      old_buy_card_component_element.remove();
-    }
+    this.delete_pop_up_component();
     const factory = this.componentFactoryResolver.resolveComponentFactory(InteractionCardComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
     componentRef.instance.h = h;
@@ -542,10 +544,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   createPayCardComponent(v: number, h: number, message: string = "Debes pagar...", money: number, amount_to_pay: number): void {
     // Assure to delete the old buy card component
-    const old_buy_card_component_element = document.getElementById('pop-up-card');
-    if (old_buy_card_component_element != null){
-      old_buy_card_component_element.remove();
-    }
+    this.delete_pop_up_component();
     const factory = this.componentFactoryResolver.resolveComponentFactory(InteractionCardComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
     componentRef.instance.h = h;
@@ -565,10 +564,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   createChanceCardComponent(): void {
     // Assure to delete the old buy card component
-    const old_buy_card_component_element = document.getElementById('pop-up-card');
-    if (old_buy_card_component_element != null){
-      old_buy_card_component_element.remove();
-    }
+    this.delete_pop_up_component();
     const factory = this.componentFactoryResolver.resolveComponentFactory(ChanceCardComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
     // Inputs
@@ -583,11 +579,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   createCommunityCardComponent(): void {
-    // Assure to delete the old buy card component
-    const old_buy_card_component_element = document.getElementById('pop-up-card');
-    if (old_buy_card_component_element != null){
-      old_buy_card_component_element.remove();
-    }
+    // Assure to delete the old pop up card component
+    this.delete_pop_up_component();
     const factory = this.componentFactoryResolver.resolveComponentFactory(CommunityCardComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
     // Inputs
@@ -602,16 +595,15 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   createInfoCardComponent(title : string, description: string, button_text : string): void {
-    // Assure to delete the old buy card component
-    const old_buy_card_component_element = document.getElementById('pop-up-card');
-    if (old_buy_card_component_element != null){
-      old_buy_card_component_element.remove();
-    }
+    // Assure to delete the old pop up card component
+    this.delete_pop_up_component();
     const factory = this.componentFactoryResolver.resolveComponentFactory(InfoCardComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
+    // Inputs
     componentRef.instance.title = title;
     componentRef.instance.description = description;
     componentRef.instance.button_message = button_text;
+    // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";
@@ -620,19 +612,44 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   createJailCardComponent(): void {
-    // Assure to delete the old buy card component
-    const old_buy_card_component_element = document.getElementById('pop-up-card');
-    if (old_buy_card_component_element != null){
-      old_buy_card_component_element.remove();
-    }
+    // Assure to delete the old pup up card component
+    this.delete_pop_up_component();
     const factory = this.componentFactoryResolver.resolveComponentFactory(JailCardComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
+    // Inputs
     componentRef.instance.player_money = this.player[1];
+    // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";
     // Center the component at the middle of the page
     componentRef.location.nativeElement.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);";
+  }
+
+  createDevolutionFormComponent(): void {
+    // Assure to delete the old pup up card component
+    this.delete_pop_up_component();
+    const factory = this.componentFactoryResolver.resolveComponentFactory(DevolutionPropertiesFormComponent);
+    const componentRef = this.viewContainerRef.createComponent(factory);
+    // Inputs
+    componentRef.instance.idPartida = this.game_id;
+    componentRef.instance.player_username = this.player[0];
+    componentRef.instance.list_properties = this.player_properties;
+    componentRef.instance.is_in_jail = this.is_in_jail;
+    // Outputs
+    if (!this.is_in_jail){
+      // If not in jail, devolve button can call to end turn
+      componentRef.instance.next_step.subscribe(() => {this.end_turn()});
+    }
+    else{
+      // If in jail, next step will just close the pop up card
+      componentRef.instance.next_step.subscribe(() => {this.delete_pop_up_component()});
+    }
+    // Give an id to the component html
+    componentRef.location.nativeElement.id = "pop-up-card";
+    // Center the component at the middle of the page
+    componentRef.location.nativeElement.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);";
+
   }
 
   get_token_color_from_index(index: number): string{
@@ -661,5 +678,13 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   sleep(ms : number) {
     return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  private delete_pop_up_component() {
+    // Assure to delete the old pup up card component
+    const old_pop_up_component_element = document.getElementById('pop-up-card');
+    if (old_pop_up_component_element != null){
+      old_pop_up_component_element.remove();
+    }
   }
 }
