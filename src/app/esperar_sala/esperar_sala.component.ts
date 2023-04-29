@@ -61,7 +61,7 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
   }
 
   actualize_game_info() {
-    this.interval = interval(2000)
+    this.interval = interval(5000)
       .pipe(
         // Take while everyone is not connected
         takeWhile(() => this.nb_players_connected !== this.nb_players_total))

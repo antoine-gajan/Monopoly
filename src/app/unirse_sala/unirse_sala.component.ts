@@ -19,10 +19,11 @@ export class UnirseSalaComponent {
     this.username = userService.getUsername();
   }
 
-  uniseSalaDatos(){
+  unirseSalaDatosEsperar(){
     console.log("Unirse partida: ", this.username, this.idPartida);
     const datos = {idPartida: this.idPartida, username: this.username};
     this.userService.unirseSalaEsperar(datos);
+    console.log("salir unirseSalaDatosEsperar()", this.username, this.idPartida);
   }
 
 }
