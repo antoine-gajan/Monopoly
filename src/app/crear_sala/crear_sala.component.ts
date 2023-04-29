@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/user/user.service';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { GameService } from 'app/game/game.service';
+import { DatosSalaService } from 'app/user/datos.service';
 
 
 @Component({
@@ -11,7 +12,7 @@ import { GameService } from 'app/game/game.service';
   styleUrls: ['./crear_sala.component.css']
 })
 export class CrearSalaComponent {
-  numJugadores: number = 2;
+  numJugadores: number = 2; 
   dineroJugador: number = 1500;
   username: string;
   normas: string = "";
@@ -21,14 +22,23 @@ export class CrearSalaComponent {
   interval: any;
   jugadoresConectados: string[] = [];
 
-  constructor(private gameService: GameService, private userService: UserService, private route: ActivatedRoute,
-              private router: Router, private componentFactoryResolver: ComponentFactoryResolver,
-              private viewContainerRef: ViewContainerRef, private elRef: ElementRef) {
+  constructor(
+    private gameService: GameService,
+    private userService: UserService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private viewContainerRef: ViewContainerRef,
+    private elRef: ElementRef,
+    private datosSalaService: DatosSalaService
+  ){
     this.username = userService.getUsername();
+    this.datosSalaService.numJugadores = this.numJugadores;
   }
 
   ngOnInit() {
     let username = this.userService.getUsername();
+    this.datosSalaService.numJugadores = this.numJugadores;
   }
 
   crearPartidaDatos() {

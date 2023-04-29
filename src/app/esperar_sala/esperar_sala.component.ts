@@ -5,6 +5,7 @@ import { ActivatedRoute,Router } from '@angular/router';
 import { GameService } from 'app/game/game.service';
 import { takeWhile, interval } from "rxjs";
 import { PlayerListResponse } from "../game/response-type";
+import { DatosSalaService } from 'app/user/datos.service';
 
 @Component({
   selector: 'app-esperar_sala',
@@ -23,16 +24,21 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
   boton_empezar_partida: boolean = false;
   showSpinner = false;
   infoUpdated: boolean = false;
+  jugadoresSeleccionados: number[];
 
   constructor(
     private http: HttpClient,
     private userService: UserService,
     private gameService: GameService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private datosSalaService: DatosSalaService
   ) {}
 
   ngOnInit() {
+    const numJugadores = this.datosSalaService.numJugadores;
+    this.jugadoresSeleccionados = [/* jugadores seleccionados */];
+
     let idPartida = this.route.snapshot.paramMap.get('id'); // Se obtiene id de la partida
     this.username = this.userService.getUsername(); // Se obtiene el nombre del usuario actual
     document.getElementById("start")?.setAttribute("disabled", "true"); // Se desactiva el botón cuando la información no está actualizada

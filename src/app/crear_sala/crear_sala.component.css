@@ -4,12 +4,12 @@
   padding: 0;
   box-sizing: border-box;
 }
-
+/**/
 .titulo h2 {
   font-size: 32px;
   margin-bottom: 10px;
   position: relative;
-}
+} 
 
 .titulo{
   margin-bottom: 10px;
