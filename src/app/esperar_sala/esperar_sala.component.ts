@@ -4,7 +4,7 @@ import { UserService } from 'app/user/user.service';
 import { ActivatedRoute,Router } from '@angular/router';
 import { GameService } from 'app/game/game.service';
 import { takeWhile, interval } from "rxjs";
-import {PlayerListResponse} from "../game/response-type";
+import { PlayerListResponse } from "../game/response-type";
 
 @Component({
   selector: 'app-esperar_sala',
@@ -20,11 +20,16 @@ export class EsperarSalaComponent {
   nb_players_total: number = 8;
   nb_players_connected: number = 0;
   interval: any;
+  boton_empezar_partida: boolean = false;
+  intervalStopped: boolean = false;
 
-  constructor(private http: HttpClient, private userService: UserService, private gameService: GameService,
-              private route: ActivatedRoute, private router: Router) {
-
-  }
+  constructor(
+    private http: HttpClient,
+    private userService: UserService,
+    private gameService: GameService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     // Get id of the game
@@ -41,7 +46,6 @@ export class EsperarSalaComponent {
     } else {
       this.router.navigate(['/error']);
     }
-
   }
 
   ngOnDestroy() {
@@ -49,8 +53,21 @@ export class EsperarSalaComponent {
     clearInterval(this.interval);
   }
 
+  volver_atras(){
+    window.history.back();
+  }
+  stop_interval(){
+    console.log("STOP INTERVAL", this.intervalStopped);
+    if (!this.intervalStopped) {
+      clearInterval(this.interval);
+      this.interval = null; // Desasignamos la variable
+      this.intervalStopped = true;
+      console.log("STOP INTERVAL", this.intervalStopped);
+    }
+  }
 
   actualize_game_info() {
+    if (!this.intervalStopped && this.interval == null) {
     this.interval = interval(2000)
       .pipe(
         // Take while everyone is not connected
@@ -68,6 +85,7 @@ export class EsperarSalaComponent {
             if (this.username === this.player_creator_of_game) {
               // Get button with id = "start" from html and activate it
               document.getElementById("start")?.setAttribute("disabled", "false");
+              this.boton_empezar_partida = true;
             } else {
               // Activate join game button
               document.getElementById("join")?.setAttribute("disabled", "false");
@@ -75,6 +93,7 @@ export class EsperarSalaComponent {
           }
         });
       });
+    }
   }
 
   start_game(): void {

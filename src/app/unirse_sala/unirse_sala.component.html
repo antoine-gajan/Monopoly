@@ -8,17 +8,17 @@
 </header>
 <br>
 <!--------------------CREAR SALA-------------------->
-<section class="services">
-  <div class="icon-box iconbox-blue">
-    <!--------------------mensaje para unirse a partida-------------------->
-    <div class="titulo" style="text-align: center;">
-      <h2>ÚNETE A UNA SALA</h2>
-      <p>introduzca el número de la sala a la que desea unirse.</p>
-    </div>
-    <div class="input-partida">
-      <input type="number" class="id_partida" placeholder="#ID PARTIDA" [(ngModel)]="idPartida"/>
-    </div>
-    <button class="boton-jugar" (click)="uniseSalaDatos()">Unirse a la sala</button>   
+<div class="box">
+  <!--------------------mensaje para unirse a partida-------------------->
+  <div class="titulo">
+    <h2>ÚNETE A UNA SALA</h2>
+    <p>introduzca el número de la sala a la que desea unirse.</p>
   </div>
-</section>
+  <!--------------------input para introducir id partida-------------------->
+  <div class="input-partida"> 
+    <input type="number" class="id_partida" placeholder="#ID PARTIDA" [(ngModel)]="idPartida" min="0" step="1"/>
+  </div>
+  <!--------------------botón para jugar partida-------------------->
+  <button class="boton-jugar" (click)="uniseSalaDatos()">Unirse a la sala</button>   
+</div>
 <br><br><br><br><br><br>

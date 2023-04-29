@@ -11,8 +11,9 @@ import { UserService } from 'app/user/user.service';
 })
 export class UnirseSalaComponent {
 
-  idPartida: number;
+  idPartida: number = 1;
   username: string;
+  
 
   constructor(private http: HttpClient, private userService: UserService) {
     this.username = userService.getUsername();
@@ -21,7 +22,7 @@ export class UnirseSalaComponent {
   uniseSalaDatos(){
     console.log("Unirse partida: ", this.username, this.idPartida);
     const datos = {idPartida: this.idPartida, username: this.username};
-    this.userService.unirseSala(datos);
+    this.userService.unirseSalaEsperar(datos);
   }
 
 }

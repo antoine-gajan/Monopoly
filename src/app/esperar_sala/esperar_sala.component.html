@@ -1,26 +1,31 @@
+<!--------------------CABECERA WEB-------------------->
 <header id="header" class="fixed-top">
   <div style="display: flex; justify-content: space-between;">
-    <img class="voler_boton" src="../../../assets/images/voler_boton.png" class="volver_boton" style="cursor: pointer;" onclick="window.history.back();" />
-    <h4><a style="color: #080808" routerLink="/">MONOPOLY VERSIÓN INFORMÁTICA</a></h4>
-    <img class="home_boton" src="../../../assets/images/home_boton.png" routerLink="/" class="volver_boton">
+    <img class="volver_boton" src="../../../assets/images/voler_boton.png"(click)="stop_interval(); volver_atras();" />
+    <h4><a style="color: #080808" routerLink="/" (clic)="stop_interval">MONOPOLY VERSIÓN INFORMÁTICA</a></h4>
+    <img class="inicio_boton" src="../../../assets/images/home_boton.png" routerLink="/" (click)="stop_interval">
   </div>
 </header>
-
-
+<!--------------------CONTENIDO ESPERAR SALA JUEGO-------------------->
 <section class="services">
   <div class="icon-box iconbox-blue">
-    <div class="titulo" style="text-align: center;"><!--</div>"section-title">-->
+    <!--------------------titulo id partida-------------------->
+    <div class="titulo" style="text-align: center;">
       <h2>Partida #{{game_id}}</h2>
+      <!--<p class="info-wait" *ngIf="username !== player_creator_of_game">Esperando a que el creador inicie la partida</p>-->
       <p class="info-wait">Esperando al resto de jugadores ...</p>
     </div>
-    <div class="players-list" *ngIf="list_players.length > 0">
-      <h3>Jugadores conectados : </h3>
+    <!--------------------lista jugadores conectados-------------------->
+    <div class="lista_jugadores" *ngIf="list_players.length > 0">
+      <p>Jugadores conectados:</p>
       <div *ngFor="let player of list_players" class="player-name">
         {{player}}
       </div>
     </div>
-    <button id="start" *ngIf="username === player_creator_of_game" class="play" (click)="start_game()">Empezar la partida</button>
-    <button id="join" *ngIf="username !== player_creator_of_game" class="play" (click)="join_game()">Jugar</button>
+    <!--------------------botón iniciar partida-------------------->
+    <button id="start" *ngIf="username === player_creator_of_game" class="boton-jugar" (click)="start_game()">Empezar la partida</button>
+    <!--<button id="join" *ngIf="username !== player_creator_of_game" class="boton-jugar" (click)="join_game()">Unirse a la partida</button>-->
+    <button id="join" *ngIf="boton_empezar_partida === true" class="boton-jugar" (click)="join_game()">Unirse a la partida</button>
 
 </div>
 <br><br><br><br><br><br><br><br><br>
