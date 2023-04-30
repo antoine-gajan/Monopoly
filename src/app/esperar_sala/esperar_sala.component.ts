@@ -32,6 +32,9 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
   mostrarBotonEmpezar: boolean = false;
   mostrarBotonUnirse: boolean = false;
   mostrarListaJugadores: boolean = false;
+  esperarListaJugadores: boolean = false;
+  numJugadoresConectados: number = 0;
+
 
   constructor(
     private http: HttpClient,
@@ -46,26 +49,34 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
     console.log("ACTUALIZA INFO");
 
     let idPartida = this.route.snapshot.paramMap.get('id'); // Se obtiene id de la partida
-    if(idPartida != null){
-      this.game_id = +idPartida;
-      console.log("idPartida: ", this.game_id);
-    }
-    if(this.veces==0){
-      console.log("esperar sala: ", this.game_id);
-      const datos = { idPartida: this.game_id };
-      this.userService.getNumJugadores(datos);
-    
-
-      this.veces = 1;
-    }
-    this.username = this.userService.getUsername(); // Se obtiene el nombre del usuario actual
-    //document.getElementById("start")?.setAttribute("disabled", "true"); // Se desactiva el botón cuando la información no está actualizada
-    //document.getElementById("join")?.setAttribute("disabled", "true");  // Se desactiva el botón cuando la información no está actualizada
-    if (idPartida != null && this.username != null) { // Actualiza la información del juego
+    this.username = this.userService.getUsername();         // Se obtiene el nombre del usuario actual
+    if (idPartida != null && this.username != null) {       // Actualiza la información del juego
       this.game_id = +idPartida;
     } else {
       this.router.navigate(['/error']);
     }
+    if(this.veces==0){
+      this.mostrarListaJugadores = true;
+      console.log("esperar sala: ", this.game_id);
+      const datos = { idPartida: this.game_id };
+      this.userService.getNumJugadores(datos).subscribe((numJugadores) => {
+        this.maxPlayers = numJugadores;
+        console.log("maxPlayers: ", this.maxPlayers);
+      });
+      this.veces = 1;
+    }
+    
+    if(this.nb_players_connected < this.maxPlayers){
+      console.log("NOLIMITE-nb_players_connected: ", this.nb_players_connected);
+    }else{
+      console.log("SILIMITE-nb_players_connected: ", this.nb_players_connected);
+      this.mostrarBotonEmpezar = true;
+      this.mostrarBotonUnirse = true;
+    }
+    //document.getElementById("start")?.setAttribute("disabled", "true"); // Se desactiva el botón cuando la información no está actualizada
+    //document.getElementById("join")?.setAttribute("disabled", "true");  // Se desactiva el botón cuando la información no está actualizada
+    
+    
     /*if (idPartida != null && this.username != null) { // Actualiza la información del juego
       this.game_id = +idPartida;
       if (!this.infoUpdated) {
@@ -90,32 +101,27 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
   }
 
   actualize_game_info() {
-    this.interval = interval(5000)
-      .pipe(
-        // Take while everyone is not connected
-        takeWhile(() => this.nb_players_connected !== this.nb_players_total))
-      .subscribe(() => {
-        this.gameService.get_list_players(this.game_id).subscribe((response: PlayerListResponse) => {
-          // Get list of players
-          this.list_players = response.listaJugadores;
-          // Get number of players connected
-          this.nb_players_connected = this.list_players.length;
-          // Get creator of game
-          this.player_creator_of_game = this.list_players[0];
+    this.gameService.get_list_players(this.game_id).subscribe((response: PlayerListResponse) => {
+        // Get list of players
+        this.list_players = response.listaJugadores;
+        // Get number of players connected
+        this.nb_players_connected = this.list_players.length;
+        // Get creator of game
+        this.player_creator_of_game = this.list_players[0];
 
-          if (this.nb_players_connected === this.nb_players_total) {
-            if (this.username === this.player_creator_of_game) {
+        if (this.nb_players_connected === this.nb_players_total) {
+          if (this.username === this.player_creator_of_game) {
               // Get button with id = "start" from html and activate it
               document.getElementById("start")?.setAttribute("disabled", "false");
               this.boton_empezar_partida = true;
-            } else {
+          } else {
               // Activate join game button
               document.getElementById("join")?.setAttribute("disabled", "false");
-            }
           }
-        });
-      });
-  }
+        }
+    });
+}
+
 
   start_game(): void {
     // Stop interval

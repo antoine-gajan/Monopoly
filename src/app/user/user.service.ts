@@ -215,59 +215,22 @@ export class UserService {
   }
 
   // Función que realiza una consulta para saber el numero de jugadores unidos a un id de partida
-  getNumJugadores(datos: any) {
+  getNumJugadores(datos: any): Observable<number> {
     console.log("getnumJugadoresID PARTIDA: ", datos.idPartida);
     return this.http.post(environment.numJugadores, datos, {responseType: 'text', observe: 'response'})
-        .subscribe(
-          (response) => {
+      .pipe(
+        map((response) => {
+          let max = 0;
+          if (response !== null && response !== undefined) {
             console.log(response.status);
-            let max = 0;
             if (response.body !== null && response.body !== undefined) {
               max = JSON.parse(response.body).jugadores;
             }
-            datos.numJugadores = max;
-            console.log("NUMERO DE JUGADORES: ", max);
-
-          },
-          (error) => {
-            console.log(error);
           }
-        );
-  }
-
-
-/**crearPartida(user: any){
-    console.log("CREAR PARTIDA", user);
-    return this.http.post(environment.crearPartida, user, {responseType: 'text', observe: 'response'})
-      .subscribe(
-        (response) => {
-          console.log(response.status);
-          let idPartida = '';
-          if (response.body !== null && response.body !== undefined) {
-            idPartida = JSON.parse(response.body).idPartida;
-          }
-          user.idPartida = idPartida;
-          const ruta = '/esperar_sala/' + idPartida;
-          this.router.navigateByUrl(ruta);
-          //const navigationExtras = {state: {idPartida: idPartida}};
-          //this.router.navigateByUrl('/esperar_sala', navigationExtras);
-        },
-        (error) => {
-          console.log(error);
-
-        }
+          console.log("NUMERO DE JUGADORES: ", max);
+          return max;
+        })
       );
-  } */
-
-  /**get_list_players(idPartida : Number): Observable<PlayerListResponse>{
-    const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
-    let body = JSON.stringify({"idPartida": idPartida});
-
-    return this.http.put<PlayerListResponse>(environment.listaJugadores, body, httpOptions).pipe(
-      tap(
-        (response) => {
-          console.log(response);
-        }
-    ));
-  } */
+  }
+  
 }
