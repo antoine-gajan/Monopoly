@@ -140,7 +140,7 @@ export class UserService {
   }
 
   crearPartida(user: any){
-    console.log(user);
+    console.log("CREAR PARTIDA", user);
     return this.http.post(environment.crearPartida, user, {responseType: 'text', observe: 'response'})
       .subscribe(
         (response) => {
@@ -157,6 +157,7 @@ export class UserService {
         },
         (error) => {
           console.log(error);
+
         }
       );
   }

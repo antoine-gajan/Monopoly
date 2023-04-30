@@ -16,7 +16,7 @@ import { DatosSalaService } from 'app/user/datos.service';
 export class EsperarSalaComponent implements OnInit, OnDestroy{
   username: string = "";
   game_id: number;
-  list_players: string[];
+  list_players: string[] = [];
   player_creator_of_game: string = "";
   nb_players_total: number = 8;
   nb_players_connected: number = 0;
@@ -25,6 +25,10 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
   showSpinner = false;
   infoUpdated: boolean = false;
   jugadoresSeleccionados: number[];
+
+  //--
+  maxPlayers: number;
+  veces: number = 0;
 
   constructor(
     private http: HttpClient,
@@ -36,8 +40,20 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
   ) {}
 
   ngOnInit() {
-    const numJugadores = this.datosSalaService.numJugadores;
-    this.jugadoresSeleccionados = [/* jugadores seleccionados */];
+
+    if(this.veces==0){
+      this.userService.getNumJugadores(this.game_id).subscribe(
+        (numJugadores) => {
+          this.maxPlayers = numJugadores;
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
+      this.veces = 1;
+      console.log("maxPlayers: ", this.maxPlayers);
+    }
+    console.log("ACTUALIZA INFO");
 
     let idPartida = this.route.snapshot.paramMap.get('id'); // Se obtiene id de la partida
     this.username = this.userService.getUsername(); // Se obtiene el nombre del usuario actual
@@ -45,13 +61,18 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
     document.getElementById("join")?.setAttribute("disabled", "true");  // Se desactiva el botón cuando la información no está actualizada
     if (idPartida != null && this.username != null) { // Actualiza la información del juego
       this.game_id = +idPartida;
+    } else {
+      this.router.navigate(['/error']);
+    }
+    /*if (idPartida != null && this.username != null) { // Actualiza la información del juego
+      this.game_id = +idPartida;
       if (!this.infoUpdated) {
         this.actualize_game_info();
         this.infoUpdated = true;
       }
     } else {
       this.router.navigate(['/error']);
-    }
+    }*/
   }
 
   ngOnDestroy() {
