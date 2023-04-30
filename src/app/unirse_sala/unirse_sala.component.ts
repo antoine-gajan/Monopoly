@@ -23,16 +23,9 @@ export class UnirseSalaComponent {
     console.log("1", this.username, this.idPartida);
     console.log("2");
     //this.userService.getNumJugadores(this.idPartida);
-    this.userService.getNumJugadores(this.idPartida).subscribe(
-      (numJugadores) => {
-        this.numJugadores = numJugadores;
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
+    this.userService.getNumJugadores(this.idPartida);
     console.log("3-Numero de jugadores: ", this.numJugadores);
-          
+
     //get_list_players
     //console.log("Unirse partida: ", this.username, this.idPartida);
     /**const datos = {idPartida: this.idPartida, username: this.username};

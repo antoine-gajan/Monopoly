@@ -51,16 +51,11 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
       console.log("idPartida: ", this.game_id);
     }
     if(this.veces==0){
+      console.log("esperar sala: ", this.game_id);
+      const datos = { idPartida: this.game_id };
+      this.userService.getNumJugadores(datos);
+    
 
-      this.userService.getNumJugadores(this.game_id).subscribe(
-        (numJugadores) => {
-          this.maxPlayers = numJugadores;
-          console.log("maxPlayers: ", this.maxPlayers);
-        },
-        (error) => {
-          console.error(error);
-        }
-      );
       this.veces = 1;
     }
     this.username = this.userService.getUsername(); // Se obtiene el nombre del usuario actual
