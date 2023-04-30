@@ -29,6 +29,9 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
   //--
   maxPlayers: number;
   veces: number = 0;
+  mostrarBotonEmpezar: boolean = false;
+  mostrarBotonUnirse: boolean = false;
+  mostrarListaJugadores: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -40,25 +43,29 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
   ) {}
 
   ngOnInit() {
+    console.log("ACTUALIZA INFO");
 
+    let idPartida = this.route.snapshot.paramMap.get('id'); // Se obtiene id de la partida
+    if(idPartida != null){
+      this.game_id = +idPartida;
+      console.log("idPartida: ", this.game_id);
+    }
     if(this.veces==0){
+
       this.userService.getNumJugadores(this.game_id).subscribe(
         (numJugadores) => {
           this.maxPlayers = numJugadores;
+          console.log("maxPlayers: ", this.maxPlayers);
         },
         (error) => {
           console.error(error);
         }
       );
       this.veces = 1;
-      console.log("maxPlayers: ", this.maxPlayers);
     }
-    console.log("ACTUALIZA INFO");
-
-    let idPartida = this.route.snapshot.paramMap.get('id'); // Se obtiene id de la partida
     this.username = this.userService.getUsername(); // Se obtiene el nombre del usuario actual
-    document.getElementById("start")?.setAttribute("disabled", "true"); // Se desactiva el botón cuando la información no está actualizada
-    document.getElementById("join")?.setAttribute("disabled", "true");  // Se desactiva el botón cuando la información no está actualizada
+    //document.getElementById("start")?.setAttribute("disabled", "true"); // Se desactiva el botón cuando la información no está actualizada
+    //document.getElementById("join")?.setAttribute("disabled", "true");  // Se desactiva el botón cuando la información no está actualizada
     if (idPartida != null && this.username != null) { // Actualiza la información del juego
       this.game_id = +idPartida;
     } else {

@@ -216,12 +216,23 @@ export class UserService {
 
   // Función que realiza una consulta para saber el numero de jugadores unidos a un id de partida
   getNumJugadores(idPartida: number): Observable<number> {
-    const body =  JSON.stringify({"idPartida": idPartida});
+    console.log("ID PARTIDA: ", idPartida);
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-    
-    return this.http.put<RespuestaNumJugadores>(environment.numJugadores, body, httpOptions).pipe(
+    return this.http.get<RespuestaNumJugadores>(environment.numJugadores, httpOptions).pipe(
       map((response) => response.numJugadores)
     );
-
   }
+
+
+  /**get_list_players(idPartida : Number): Observable<PlayerListResponse>{
+    const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
+    let body = JSON.stringify({"idPartida": idPartida});
+
+    return this.http.put<PlayerListResponse>(environment.listaJugadores, body, httpOptions).pipe(
+      tap(
+        (response) => {
+          console.log(response);
+        }
+    ));
+  } */
 }

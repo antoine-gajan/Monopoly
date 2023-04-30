@@ -32,7 +32,7 @@ export class UnirseSalaComponent {
       }
     );
     console.log("3-Numero de jugadores: ", this.numJugadores);
-
+          
     //get_list_players
     //console.log("Unirse partida: ", this.username, this.idPartida);
     /**const datos = {idPartida: this.idPartida, username: this.username};
