@@ -14,7 +14,7 @@ import { DatosSalaService } from 'app/user/datos.service';
 })
 
 export class EsperarSalaComponent implements OnInit, OnDestroy{
-  username: string = " ";
+  username: string = "";
   game_id: number;
   list_players: string[];
   player_creator_of_game: string = "";

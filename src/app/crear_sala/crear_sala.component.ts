@@ -50,6 +50,7 @@ export class CrearSalaComponent {
       nJugadores: this.numJugadores
     };
     this.userService.crearPartida(datos);
+    
 
   }
 
@@ -62,6 +63,7 @@ export class CrearSalaComponent {
     };
     console.log("ESPERAR SALA", datos);
     this.userService.esperarSala(datos);
+    
   }
 
   incrementarDinero() {
