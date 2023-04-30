@@ -13,17 +13,31 @@ export class UnirseSalaComponent {
 
   idPartida: number = 1;
   username: string;
-  
+  numJugadores: number;
 
   constructor(private http: HttpClient, private userService: UserService) {
     this.username = userService.getUsername();
   }
 
   unirseSalaDatosEsperar(){
-    console.log("Unirse partida: ", this.username, this.idPartida);
-    const datos = {idPartida: this.idPartida, username: this.username};
+    console.log("1", this.username, this.idPartida);
+    console.log("2");
+    //this.userService.getNumJugadores(this.idPartida);
+    this.userService.getNumJugadores(this.idPartida).subscribe(
+      (numJugadores) => {
+        this.numJugadores = numJugadores;
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+    console.log("3-Numero de jugadores: ", this.numJugadores);
+
+    //get_list_players
+    //console.log("Unirse partida: ", this.username, this.idPartida);
+    /**const datos = {idPartida: this.idPartida, username: this.username};
     this.userService.unirseSalaEsperar(datos);
-    console.log("salir unirseSalaDatosEsperar()", this.username, this.idPartida);
+    console.log("salir unirseSalaDatosEsperar()", this.username, this.idPartida);*/
   }
 
 }

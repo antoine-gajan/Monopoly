@@ -66,5 +66,6 @@ export const environment = {
     listaAsignaturas: 'http://localhost:3000/partida/listaAsignaturasC/',
     turnoActual: 'http://localhost:3000/partida/turnoActual/',
     bancarrota: 'http://localhost:3000/partida/bancarrota/',
-    aumentar: 'http://localhost:3000/partida/aumentar/'
+    aumentar: 'http://localhost:3000/partida/aumentar/',
+    numJugadores: 'http://localhost:3000/partida/numJugadores/'
 };

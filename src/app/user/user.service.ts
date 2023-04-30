@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, map, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from 'enviroment/enviroment';
 
 interface EmailInt {
   email: string;
 }
-
+interface RespuestaNumJugadores {
+  numJugadores: number;
+}
 @Injectable({
   providedIn: "root"
 
@@ -209,5 +211,16 @@ export class UserService {
                         console.log(error);
                       }
                     );
+  }
+
+  // Función que realiza una consulta para saber el numero de jugadores unidos a un id de partida
+  getNumJugadores(idPartida: number): Observable<number> {
+    const body =  JSON.stringify({"idPartida": idPartida});
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    
+    return this.http.put<RespuestaNumJugadores>(environment.numJugadores, body, httpOptions).pipe(
+      map((response) => response.numJugadores)
+    );
+
   }
 }
