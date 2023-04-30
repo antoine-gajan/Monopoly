@@ -147,8 +147,26 @@ export class BoardComponent implements OnInit, OnDestroy {
     })
   )
   .subscribe({
-    next : (data: PlayerListResponse) => {
+    next : async (data: PlayerListResponse) => {
       this.actualize_game_info(data);
+      // If there is only one player, display the winner
+      if (data.listaJugadores.length === 1) {
+        if (data.listaJugadores[0] === this.player[0]) {
+          this.message = "¡Has ganado!";
+        }
+        else {
+          this.message = "El ganador es " + data.listaJugadores[0];
+        }
+        // Wait 10 seconds
+        await this.sleep(10000);
+        // Stop the interval
+        this.interval.unsubscribe();
+        this.message = "Redirigiendo a la página principal en 30 segundos...";
+        // Redirect to home page automatically in 30 seconds
+        setTimeout(() => {
+          this.router.navigate(['/home']);
+        }, 30000);
+      }
     },
     error: (error) => {
       console.error(error);
@@ -294,10 +312,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Update properties
     this.get_properties();
     // Delete the pop-up-card component
-    const old_buy_card_component_element = document.getElementById('pop-up-card');
-    if (old_buy_card_component_element != null) {
-      old_buy_card_component_element.remove();
-    }
+    this.delete_pop_up_component();
     // Get old position of player
     let old_position_player = this.player[2];
     // Get new position of player by updating game information
