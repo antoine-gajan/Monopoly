@@ -21,7 +21,6 @@
             <img class="dice" [src]="diceImages[dices[1] - 1]">
           </div>
           <button class="btn-roll-dice" id="tirar-dados" (click)="play_turn_player()">Tirar dados</button>
-          <button class="btn-jail-devolve" *ngIf="player_properties.length > 0 && is_in_jail" (click)="createDevolutionFormComponent()">Devolver asignaturas</button>
         </div>
       </div>
       <!-- *************** CASILLA SALIDA *************** -->
@@ -394,7 +393,7 @@
         <span class="player-money" data-ui="1500" style="color: rgb(0, 0, 0);">{{player[1]}}€</span>
 
         <div class ="player-properties" *ngFor="let property of player_properties">
-              <div class="player-property" data-ui="vt" style="background-color: lightskyblue;">{{ property }}</div>
+              <div class="player-property" data-ui="vt" style="background-color: lightskyblue;" (click)="createCardComponent(property[1].v, property[1].h, 'Quieres vender ?', player[1], false, 'sell')">{{ property[0] }}</div>
           </div>
 
       </div>

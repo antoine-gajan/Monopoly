@@ -115,8 +115,15 @@ export class BoardComponent implements OnInit, OnDestroy {
         }
       },
       error: (error) => {
-        console.error(error);
-        this.get_properties();
+        // If error is not 404, reload the function
+        if (error.status != 404) {
+          this.get_properties();
+          console.error(error);
+        }
+        // If the player has no properties, set the array to empty
+        else {
+          this.player_properties = [];
+        }
       }
     })
   }
@@ -149,6 +156,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   .subscribe({
     next : async (data: PlayerListResponse) => {
       this.actualize_game_info(data);
+      // Show position of the players
+      this.show_position_every_players();
       // If there is only one player, display the winner
       if (data.listaJugadores.length === 1) {
         if (data.listaJugadores[0] === this.player[0]) {
@@ -176,10 +185,6 @@ export class BoardComponent implements OnInit, OnDestroy {
       console.error(error);
       // Try again
       this.play();
-    },
-    complete: () => {
-      // Show position of the players
-      this.show_position_every_players();
     }
     });
   }
@@ -281,17 +286,13 @@ export class BoardComponent implements OnInit, OnDestroy {
         else {
           if (owner_of_card == null) {
             // Display buy card
-            this.createBuyCardComponent(this.player[2].v, this.player[2].h, "Quieres comprar ?", this.player[1], this.dices[0] == this.dices[1]);
+            this.createCardComponent(this.player[2].v, this.player[2].h, "Quieres comprar ?", this.player[1], this.dices[0] == this.dices[1], "buy");
           }
           else if (owner_of_card == this.player[0]) {
-            this.createBuyCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.player[1], this.dices[0] == this.dices[1], true);
+            this.createCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.player[1], this.dices[0] == this.dices[1], "increase");
           }
           else if (owner_of_card != this.player[0] && money_to_pay != null && money_to_pay <= this.player[1]) {
-            this.createPayCardComponent(this.player[2].v, this.player[2].h, "La tarjeta pertenece a " + owner_of_card, this.player[1], money_to_pay);
-          }
-          else if (owner_of_card != this.player[0] && money_to_pay != null && money_to_pay > this.player[1] && this.player_properties.length > 0) {
-            // Devolution form
-            this.createDevolutionFormComponent();
+            this.createCardComponent(this.player[2].v, this.player[2].h, "La tarjeta pertenece a " + owner_of_card, this.player[1], this.dices[0] == this.dices[1], "pay", money_to_pay);
           }
           else{
             // User is bankrupt
@@ -542,41 +543,24 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.add_position(id_player, property_id, index_color);
   }
 
-  createBuyCardComponent(v: number, h: number, message: string = "Quieres comprar", money: number, play_again: boolean = false, increase_credit: boolean = false,): void {
+  createCardComponent(v: number, h: number, message: string, player_money: number, play_again: boolean = false, type: string, money_to_pay: number=0): void {
     // Assure to delete the old buy card component
     this.delete_pop_up_component();
     const factory = this.componentFactoryResolver.resolveComponentFactory(InteractionCardComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
+    // Inputs
     componentRef.instance.h = h;
     componentRef.instance.v = v;
     componentRef.instance.game_id = this.game_id;
     componentRef.instance.username = this.player[0];
     componentRef.instance.message = message;
     componentRef.instance.play_again = play_again;
-    componentRef.instance.player_money = money;
-    componentRef.instance.increase_credit = increase_credit;
-    componentRef.instance.type = "buy";
+    componentRef.instance.player_money = player_money;
+    componentRef.instance.amount_to_pay = money_to_pay;
+    componentRef.instance.type = type;
+    // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
-    // Give an id to the component html
-    componentRef.location.nativeElement.id = "pop-up-card";
-    // Center the component at the middle of the page
-    componentRef.location.nativeElement.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);";
-  }
-
-  createPayCardComponent(v: number, h: number, message: string = "Debes pagar...", money: number, amount_to_pay: number): void {
-    // Assure to delete the old buy card component
-    this.delete_pop_up_component();
-    const factory = this.componentFactoryResolver.resolveComponentFactory(InteractionCardComponent);
-    const componentRef = this.viewContainerRef.createComponent(factory);
-    componentRef.instance.h = h;
-    componentRef.instance.v = v;
-    componentRef.instance.game_id = this.game_id;
-    componentRef.instance.username = this.player[0];
-    componentRef.instance.message = message;
-    componentRef.instance.type = "pay";
-    componentRef.instance.player_money = money;
-    componentRef.instance.amount_to_pay = amount_to_pay;
-    componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
+    componentRef.instance.close_card.subscribe(() => {this.delete_pop_up_component()});
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";
     // Center the component at the middle of the page

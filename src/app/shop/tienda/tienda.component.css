@@ -14,6 +14,9 @@
 
 .titulo{
   text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  color: #2D3748;
 }
 
 .volver_boton,
@@ -24,8 +27,18 @@
 .list-products{
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
   align-items: center;
   max-width: 90%;
   margin: 0 auto;
+}
+
+.title-list-products{
+  padding: 50px;
+  margin: 20px 0;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.product{
+  padding: 20px;
 }

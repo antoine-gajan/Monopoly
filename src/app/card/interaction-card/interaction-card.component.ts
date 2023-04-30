@@ -16,10 +16,10 @@ export class InteractionCardComponent {
   @Input() player_money : number = 0;
   @Input() message: string;
   @Input() play_again: boolean = false;
-  @Input() increase_credit: boolean = false;
 
   // Define an EventEmitter to emit the "end turn" event of BoardComponent
   @Output() end_turn = new EventEmitter();
+  @Output() close_card = new EventEmitter();
 
   constructor(private gameService : GameService) {
 
@@ -91,5 +91,14 @@ export class InteractionCardComponent {
     // Call end turn of BoardComponent
     console.log("You have paid " + this.amount_to_pay + "€");
     this.callback_end_turn();
+  }
+
+  sell_card() : void {
+    /// TODO : Sell card with link to backend
+  }
+
+  callback_close_card() {
+    // Function to close the card only if the player isn't playing
+    this.close_card.emit();
   }
 }

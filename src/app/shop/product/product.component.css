@@ -108,3 +108,8 @@ body {
   max-height: 200px;
   width: auto;
 }
+
+.buy{
+  cursor: pointer;
+}
+
