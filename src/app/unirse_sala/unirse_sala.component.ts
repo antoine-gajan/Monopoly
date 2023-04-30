@@ -21,6 +21,7 @@ export class UnirseSalaComponent {
   maxJugadores: number;
   conectarse: number = 0;
 
+
   constructor(
     private http: HttpClient, 
     private userService: UserService,
@@ -29,20 +30,28 @@ export class UnirseSalaComponent {
     this.username = userService.getUsername();
   }
 
-  
-  comprobarUnirseSalaDatosEsperar(): number{
+  saberJugadoresConectados(){
+    console.log("saberJugadoresConectados()");
+    this.gameService.get_list_players(this.idPartida).subscribe((response: PlayerListResponse) => {
+      this.jugadoresConectadosPartida = response.listaJugadores;
+      this.numeroJugadoresConectados = this.jugadoresConectadosPartida.length;
+      console.log("CONECTADOS: ", this.numeroJugadoresConectados);
+      console.log("1", this.username, this.idPartida, this.numeroJugadoresConectados);
+    });  
+  }
+
+  async comprobarUnirseSalaDatosEsperar(): Promise<number>{
+    await this.saberJugadoresConectados();
     
-    console.log("1", this.username, this.idPartida);
-    console.log("2");
-    //this.userService.getNumJugadores(this.idPartida);
-    //this.userService.getNumJugadores(this.idPartida);
-    //console.log("3-Numero de jugadores: ", this.numJugadores);
     const datos = { idPartida: this.idPartida };
+    console.log("2", datos);
+/*
     this.userService.getNumJugadores(datos).subscribe((numJugadores) => {
       this.maxJugadores = numJugadores;
       console.log("maxPlayers: ", this.maxJugadores);
     });
-    console.log("4", this.maxJugadores, this.numeroJugadoresConectados);
+    
+    
     if(this.numeroJugadoresConectados < this.maxJugadores){
       console.log("SE PUEDE CONECTAR");
       //this.userService.unirseSalaEsperar(this.idPartida, this.username);
@@ -50,32 +59,22 @@ export class UnirseSalaComponent {
       this.conectarse = 0;
     }else{
       console.log("NO SE PUEDE CONECTAR");
-      this.conectarse = 1;
+      this.conectarse = 0;
     }
     return this.conectarse;
-    //get_list_players
-    //console.log("Unirse partida: ", this.username, this.idPartida);
-    /**const datos = {idPartida: this.idPartida, username: this.username};
-    this.userService.unirseSalaEsperar(datos);
-    console.log("salir unirseSalaDatosEsperar()", this.username, this.idPartida);*/
+*/
+    return 0;
   }
 
-  unirseSalaDatosEsperar(){
-    if(this.comprobarUnirseSalaDatosEsperar() == 1){
-      const datos = {idPartida: this.idPartida, username: this.username};
-      this.userService.unirseSalaEsperar(datos);
+  async unirseSalaDatosEsperar() {
+    const numeroJugadoresConectados = await this.comprobarUnirseSalaDatosEsperar();
+    if (numeroJugadoresConectados == 1) {
+      const datos = { idPartida: this.idPartida, username: this.username };
+      await this.userService.unirseSalaEsperar(datos);
     }
-
   }
-  saberJugadoresConectados(): number{
-    console.log("saberJugadoresConectados()");
-    this.gameService.get_list_players(this.idPartida).subscribe((response: PlayerListResponse) => {
-      this.jugadoresConectadosPartida = response.listaJugadores;
-      this.numeroJugadoresConectados = this.jugadoresConectadosPartida.length;
-      console.log("CONECTADOS: ", this.jugadoresConectadosPartida);
-    });
-    return this.numeroJugadoresConectados;
-  }
+  
+  
 
 
 }
