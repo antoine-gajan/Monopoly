@@ -15,7 +15,7 @@ import {CommunityCardComponent} from "./card/community-card/community-card.compo
 import {ChanceCardComponent} from "./card/chance-card/chance-card.component";
 import { CrearSalaComponent } from './crear_sala/crear_sala.component';
 import { UnirseSalaComponent } from './unirse_sala/unirse_sala.component';
-import { TiendaComponent } from './tienda/tienda.component';
+import { TiendaComponent } from './shop/tienda/tienda.component';
 import { ProfileComponent } from './user/profile/profile.component';
 import { AjustesUsuarioComponent } from './user/ajustes_usuario/ajustes_usuario.component';
 import { CambiarUsernameComponent } from './user/cambiar_nombre_usuario/cambiar_nombre_usuario.component';

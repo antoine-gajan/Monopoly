@@ -20,3 +20,12 @@
 .inicio_boton{
     height: 40px;
 }
+
+.list-products{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  max-width: 90%;
+  margin: 0 auto;
+}

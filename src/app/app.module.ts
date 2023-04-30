@@ -29,6 +29,9 @@ import { UnirseSalaComponent } from './unirse_sala/unirse_sala.component';
 import { PantallaInvitadoComponent } from './pantalla_invitado/pantalla_invitado.component';
 import { UnirseSalaInvitadoComponent } from './unirse_sala_invitado/unirse_sala_invitado.component';
 import { EsperarSalaComponent } from './esperar_sala/esperar_sala.component';
+import {ProductComponent} from "./shop/product/product.component";
+import {TiendaComponent} from "./shop/tienda/tienda.component";
+import {NgOptimizedImage} from "@angular/common";
 @NgModule({
     declarations: [
         LoginComponent,
@@ -50,18 +53,21 @@ import { EsperarSalaComponent } from './esperar_sala/esperar_sala.component';
         UnirseSalaComponent,
         PantallaInvitadoComponent,
         UnirseSalaInvitadoComponent,
-        EsperarSalaComponent
+        EsperarSalaComponent,
+        ProductComponent,
+        TiendaComponent
     ],
-    imports: [
-        FormsModule,
-        BrowserModule,
-        HttpClientModule,
-        GameModule,
-        //CardModule,
-        AppRoutingModule,
-        ReactiveFormsModule,
-        RouterModule
-    ],
+  imports: [
+    FormsModule,
+    BrowserModule,
+    HttpClientModule,
+    GameModule,
+    //CardModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
+    RouterModule,
+    NgOptimizedImage
+  ],
     providers: [UserService],
     bootstrap: [AppComponent],
     entryComponents: [InteractionCardComponent]
