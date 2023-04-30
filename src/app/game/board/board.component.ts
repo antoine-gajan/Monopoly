@@ -153,9 +153,13 @@ export class BoardComponent implements OnInit, OnDestroy {
       if (data.listaJugadores.length === 1) {
         if (data.listaJugadores[0] === this.player[0]) {
           this.message = "¡Has ganado!";
+          // Create a info card component
+          this.createInfoCardComponent("¡Felicitaciones!", "Has ganado la partida", "Genial", false);
         }
         else {
           this.message = "El ganador es " + data.listaJugadores[0];
+          // Create a info card component
+          this.createInfoCardComponent("¡Lo sentimos!", "El ganador es " + data.listaJugadores[0], "Vaya", false);
         }
         // Wait 10 seconds
         await this.sleep(10000);
@@ -301,7 +305,7 @@ export class BoardComponent implements OnInit, OnDestroy {
                 console.error(error);
               }
             });
-            this.createInfoCardComponent("BANCARROTA", "Has perdido...<br>No tienes suficiente dinero para pagar " + money_to_pay + "€ a " + owner_of_card + " !", "Vale");
+            this.createInfoCardComponent("BANCARROTA", "Has perdido...<br>No tienes suficiente dinero para pagar " + money_to_pay + "€ a " + owner_of_card + " !", "Vale", false);
           }
         }
       }
@@ -611,7 +615,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     componentRef.location.nativeElement.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);";
   }
 
-  createInfoCardComponent(title : string, description: string, button_text : string): void {
+  createInfoCardComponent(title : string, description: string, button_text : string, trigger_end_turn: boolean = true): void {
     // Assure to delete the old pop up card component
     this.delete_pop_up_component();
     const factory = this.componentFactoryResolver.resolveComponentFactory(InfoCardComponent);
@@ -620,8 +624,10 @@ export class BoardComponent implements OnInit, OnDestroy {
     componentRef.instance.title = title;
     componentRef.instance.description = description;
     componentRef.instance.button_message = button_text;
+    componentRef.instance.trigger_end_turn = trigger_end_turn;
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
+    componentRef.instance.delete_card.subscribe(() => {this.delete_pop_up_component()});
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";
     // Center the component at the middle of the page
