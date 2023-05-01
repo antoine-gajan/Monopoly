@@ -139,7 +139,7 @@ export class UserService {
                     );
   }
 
-  crearPartida(user: any){
+  crearSala(user: any){
     console.log("CREAR PARTIDA", user);
     return this.http.post(environment.crearPartida, user, {responseType: 'text', observe: 'response'})
       .subscribe(
@@ -167,20 +167,22 @@ export class UserService {
     this.router.navigate(['/esperar_sala'], navigationExtras);
   }
 
-  unirseSala(user: any){
+  
+
+  /*crearSala(user: any){
     console.log(user);
     return this.http.put(environment.unirJugador, user, {responseType: 'text', observe: 'response'})
-                    .subscribe(
-                      (response) => {
-                        console.log(response.status);
-                        const ruta = '/game/' + user.idPartida;
-                        this.router.navigateByUrl(ruta);
-                      },
-                      (error) => {
-                        console.log(error);
-                      }
-                    );
-  }
+      .subscribe(
+        (response) => {
+          console.log(response.status);
+          const ruta = '/game/' + user.idPartida;
+          this.router.navigateByUrl(ruta);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }*/
 
   unirseSalaEsperar(user: any){
     console.log(user);

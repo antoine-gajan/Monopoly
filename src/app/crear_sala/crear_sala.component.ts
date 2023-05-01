@@ -49,7 +49,7 @@ export class CrearSalaComponent {
       normas: this.normas,
       nJugadores: this.numJugadores
     };
-    this.userService.crearPartida(datos);
+    this.userService.crearSala(datos);
   }
 
   esperarSala() {

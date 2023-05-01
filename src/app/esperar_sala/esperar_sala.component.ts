@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/user/user.service';
-import { ActivatedRoute,Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GameService } from 'app/game/game.service';
 import { takeWhile, interval } from "rxjs";
 import { PlayerListResponse } from "../game/response-type";
@@ -70,7 +70,7 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
           this.mostrarBotonUnirse = false;
       } else {
           this.mostrarBotonEmpezar = false;
-          this.mostrarBotonUnirse = true;
+          //this.mostrarBotonUnirse = true;
         }
     }
   }
@@ -100,7 +100,7 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
 
           } else {
               this.mostrarBotonEmpezar = false;
-              this.mostrarBotonUnirse = true;
+              //this.mostrarBotonUnirse = true;
             }
         }
     });
@@ -108,17 +108,23 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
 
 
   start_game(): void {
-    // Stop interval
-    // Navigate to /game/game_id
-    this.router.navigate(['/game', this.game_id]);
+    console.log("start game: ", this.game_id);
+    this.mostrarBotonUnirse = true;
+    this.router.navigate(['/game', this.game_id]);    
   }
 
   join_game(): void {
-    // Stop interval
-    this.interval.unsubscribe();
-    clearInterval(this.interval);
-    // Navigate to /game/game_id
+    console.log("join game: ", this.game_id);
+    this.mostrarBotonUnirse = true;
     this.router.navigate(['/game', this.game_id]);
+    /*let idPartida = this.route.snapshot.paramMap.get('id'); // Se obtiene id de la partida
+    if (idPartida != null && this.username != null) {       // Actualiza la información del juego
+      this.game_id = +idPartida;
+      console.log("start game: ", this.game_id);
+      this.router.navigate(['/game', this.game_id]);
+    } else {
+      this.router.navigate(['/error']);
+    }*/
   }
 
   /* 
@@ -139,10 +145,9 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
         if (this.username === this.player_creator_of_game) {
             this.mostrarBotonEmpezar = true;
             this.mostrarBotonUnirse = false;
-
         } else {
             this.mostrarBotonEmpezar = false;
-            this.mostrarBotonUnirse = true;
+            //this.mostrarBotonUnirse = true;
           }
       }
     });
