@@ -26,7 +26,21 @@
       <div *ngIf="form_unirse_invitado?.get('idPartida')?.errors?.['required']" style="color: red;">Este campo es obligatorio</div>
     </div>
     <button class="boton-jugar">Unirse a la sala</button>  
+    
+    <div *ngIf="loading && !finMensaje" class="load-center">
+      <app-loader></app-loader>
+    </div>
+    <div *ngIf="mensajeNoPuedeConectarse && finMensaje" class="text-center">
+      <div class="titulo">
+        <h2>Ups, no puedes unirte a la partida.</h2>
+        <p>La partida está completa</p>
+      </div>
+      <button class="boton_si" (click)="volverUnirseSala()">Unirte a otra partida</button>
+    </div>
+
   </div>
+  
+
 </form>
 
 <br><br><br><br><br><br>
