@@ -73,12 +73,8 @@ export class InteractionCardComponent {
       console.log(error);
       if (error.status == 400) {
         alert("No tienes suficiente dinero para aumentar el numero de credito de esta casilla");
-        this.callback_end_turn();
       }
-      else {
-        // Try again to buy
-        this.increase_credit_property();
-      }
+      this.callback_end_turn();
     }
     });
   }

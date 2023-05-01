@@ -81,7 +81,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // Destroy the interval
+    // Destroy the intervals for safety
     this.interval.unsubscribe();
     this.dices_interval.unsubscribe();
     clearInterval(this.interval);
@@ -165,8 +165,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   async play(): Promise<void> {
     // Ensure to execute the interval only once
     this.current_player = "";
-    // Check if the player can play or not
-    this.interval = interval(5000)
+    // Check if the player can play or not every 2 seconds
+    this.interval = interval(2000)
       .pipe(
         // Take while the current player is not the current user's player
         takeWhile(() => this.current_player !== this.player[0]),
@@ -174,10 +174,19 @@ export class BoardComponent implements OnInit, OnDestroy {
         switchMap((playerResponse) => {
           this.current_player = playerResponse.jugador;
       if (this.current_player === this.player[0]) {
-        // When he can play, activate button and remove is_in_jail for safety
-        this.is_in_jail = false;
-        this.message = this.player[0] + ", es tu turno";
-        document.getElementById("tirar-dados")!.removeAttribute("disabled");
+        // Check if the player has win the game (only player in the game)
+        if (this.other_players_list.length === 0) {
+          this.message = "¡Has ganado!";
+          // Create a info card component
+          this.createInfoCardComponent("¡Felicitaciones!", "Has ganado la partida", "Genial", false);
+        }
+        // If there are other players, play his turn
+        else {
+          // When he can play, activate button and remove is_in_jail for safety
+          this.is_in_jail = false;
+          this.message = this.player[0] + ", es tu turno";
+          document.getElementById("tirar-dados")!.removeAttribute("disabled");
+        }
         // Return empty observable to stop the interval
         return EMPTY;
       } else {
@@ -191,7 +200,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   .subscribe({
     next : async (data: PlayerListResponse) => {
       this.actualize_game_info(data);
-      // Update properties of other players while client is waiting
+      // Update properties of players while client is waiting
+      this.get_properties();
       this.get_properties_of_other_players();
       // Show position of the players
       this.show_position_every_players();
@@ -260,6 +270,8 @@ export class BoardComponent implements OnInit, OnDestroy {
       else {
         console.log(error);
       }
+      // Try again
+      this.play_turn_player();
     },
     complete: async () => {
       // Update message
@@ -297,7 +309,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         let position_id = this.convert_position_to_id(this.player[2]);
         // Wait 0.5 seconds
         await this.sleep(500);
-        // Display a buy card component
+        // Check where is the player and special actions linked to the position
         if (this.is_in_jail) {
           // Display a jail card component
           this.createJailCardComponent();
@@ -329,16 +341,20 @@ export class BoardComponent implements OnInit, OnDestroy {
         }
         // If it's a normal card
         else {
+          // If no owner, can buy
           if (owner_of_card == null) {
             // Display buy card
             this.createCardComponent(this.player[2].v, this.player[2].h, "Quieres comprar ?", this.player[1], this.dices[0] == this.dices[1], "buy");
           }
+          // If owner is the player, can increase the number of credit only if it is a "asignatura" (verification done in interaction card component)
           else if (owner_of_card == this.player[0]) {
             this.createCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.player[1], this.dices[0] == this.dices[1], "increase");
           }
+          // If owner is another player, pay if you have enough money
           else if (owner_of_card != this.player[0] && money_to_pay != null && money_to_pay <= this.player[1]) {
             this.createCardComponent(this.player[2].v, this.player[2].h, "La tarjeta pertenece a " + owner_of_card, this.player[1], this.dices[0] == this.dices[1], "pay", money_to_pay);
           }
+          // Else, you are bankrupt
           else{
             // User is bankrupt
             this.gameService.declare_bankruptcy(this.player[0], this.game_id).subscribe({

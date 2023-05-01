@@ -26,7 +26,7 @@
     <button *ngIf="type === 'sell'" class="button-action sell" (click)="sell_card()">Vender</button>
     <button *ngIf="type === 'sell'" class="button-action stop" (click)="callback_close_card()">Cancelar</button>
 
-    <button *ngIf="type == 'increase'" class="button-action buy" (click)="increase_credit_property()">Aumentar de 1 credito</button>
+    <button *ngIf="type == 'increase' && get_type_casilla() === 'propriety'" class="button-action buy" (click)="increase_credit_property()">Aumentar de 1 credito</button>
     <button *ngIf="play_again && type === 'increase'" class="button-action play-again" (click)="callback_end_turn()">Jugar otra vez</button>
     <button *ngIf="!play_again && type === 'increase'" class="button-action stop" (click)="callback_end_turn()">Cancelar</button>
 

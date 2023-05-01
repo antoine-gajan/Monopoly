@@ -81,5 +81,6 @@ export interface Propriety {
       _id: string;
     };
     cuatrisemestre: number;
+    precioCompraCreditos: number;
   }
 }
