@@ -8,17 +8,25 @@
 </header>
 <br>
 <!--------------------CREAR SALA-------------------->
-<section class="services">
+<form [formGroup]="form_unirse_invitado" (ngSubmit)="unirseSalaInvitado()" class="services">
+
   <div class="icon-box iconbox-blue">
-    <!--------------------mensaje para unirse a partida-------------------->
     <div class="titulo">
       <h2>ÚNETE A UNA SALA</h2>
       <p>Introduzca el número de la partida en la que desea ingresar.</p>
     </div>
     <div class="input-partida">
-      <input type="number" class="id_partida" placeholder="#ID PARTIDA" [(ngModel)]="idPartida"/>
+      <input type="text" class="id_partida" placeholder="Nombre de jugador" formControlName="username" id="username" name="username" required/>
+      <div *ngIf="form_unirse_invitado?.get('username')?.invalid && (form_unirse_invitado?.get('username')?.dirty || form_unirse_invitado?.get('username')?.touched)"></div>
+      <div *ngIf="form_unirse_invitado?.get('username')?.errors?.['required']" style="color: red;">Este campo es obligatorio</div>
     </div>
-    <button class="boton-jugar" (click)="unirseSalaInvitado()">Unirse a la sala</button>   
+    <div class="input-partida">
+      <input type="number" class="id_partida" placeholder="#ID PARTIDA" formControlName="idPartida" id="idPartida" name="idPartida" required/>
+      <div *ngIf="form_unirse_invitado?.get('idPartida')?.invalid && (form_unirse_invitado?.get('idPartida')?.dirty || form_unirse_invitado?.get('id_partida')?.touched)"></div>
+      <div *ngIf="form_unirse_invitado?.get('idPartida')?.errors?.['required']" style="color: red;">Este campo es obligatorio</div>
+    </div>
+    <button class="boton-jugar">Unirse a la sala</button>  
   </div>
-</section>
+</form>
+
 <br><br><br><br><br><br>
