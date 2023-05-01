@@ -1,11 +1,8 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {Component, OnInit} from '@angular/core';
 import { UserService } from 'app/user/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GameService } from 'app/game/game.service';
-import { takeWhile, interval } from "rxjs";
 import { PlayerListResponse } from "../game/response-type";
-import { DatosSalaService } from 'app/user/datos.service';
 
 @Component({
   selector: 'app-esperar_sala',
@@ -13,28 +10,18 @@ import { DatosSalaService } from 'app/user/datos.service';
   styleUrls: ['./esperar_sala.component.css']
 })
 
-export class EsperarSalaComponent implements OnInit, OnDestroy{
+export class EsperarSalaComponent implements OnInit{
   username: string = "";
   game_id: number;
   list_players: string[] = [];
   player_creator_of_game: string = "";
-  nb_players_total: number = 8;
   nb_players_connected: number = 0;
-  interval: any;
-  boton_empezar_partida: boolean = false;
   showSpinner = false;
-  infoUpdated: boolean = false;
-  jugadoresSeleccionados: number[];
-
-  //--
   maxPlayers: number;
   veces: number = 0;
   mostrarBotonEmpezar: boolean = false;
   mostrarBotonUnirse: boolean = false;
   mostrarListaJugadores: boolean = false;
-  esperarListaJugadores: boolean = false;
-  numJugadoresConectados: number = 0;
-
 
   constructor(
     private userService: UserService,
@@ -70,16 +57,12 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
           this.mostrarBotonUnirse = false;
       } else {
           this.mostrarBotonEmpezar = false;
-          //this.mostrarBotonUnirse = true;
+          this.mostrarBotonUnirse = true;
         }
     }
   }
 
-  ngOnDestroy() {
-    // Delete interval
-    this.interval.unsubscribe();
-    clearInterval(this.interval);
-  }
+ 
   volver_atras(){
     window.history.back();
   }
@@ -100,31 +83,25 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
 
           } else {
               this.mostrarBotonEmpezar = false;
-              //this.mostrarBotonUnirse = true;
+              this.mostrarBotonUnirse = true;
             }
         }
     });
 }
 
-
+  // Función para acceder al tablero de juego para el creador de la partida
   start_game(): void {
     console.log("start game: ", this.game_id);
     this.mostrarBotonUnirse = true;
-    this.router.navigate(['/game', this.game_id]);    
+    const ruta = '/game/' + this.game_id;
+    this.router.navigateByUrl(ruta);
   }
 
+  // Función para acceder al tablero de juego para el resto de jugadores
   join_game(): void {
     console.log("join game: ", this.game_id);
-    this.mostrarBotonUnirse = true;
-    this.router.navigate(['/game', this.game_id]);
-    /*let idPartida = this.route.snapshot.paramMap.get('id'); // Se obtiene id de la partida
-    if (idPartida != null && this.username != null) {       // Actualiza la información del juego
-      this.game_id = +idPartida;
-      console.log("start game: ", this.game_id);
-      this.router.navigate(['/game', this.game_id]);
-    } else {
-      this.router.navigate(['/error']);
-    }*/
+    const ruta = '/game/' + this.game_id;
+    this.router.navigateByUrl(ruta);
   }
 
   /* 
@@ -147,7 +124,7 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
             this.mostrarBotonUnirse = false;
         } else {
             this.mostrarBotonEmpezar = false;
-            //this.mostrarBotonUnirse = true;
+            this.mostrarBotonUnirse = true;
           }
       }
     });
