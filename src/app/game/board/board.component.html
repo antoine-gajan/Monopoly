@@ -407,11 +407,9 @@
           <span class="player-money" data-ui="1400" style="color: rgb(0, 0, 0);">{{other_player[1]}}€</span>
 
 
-          <!--<div *ngFor="let property of obtener_asignaturas_lista()">
-            <div *ngIf="property_comprada === property" class="player-properties">
-              <div class="player-property" data-ui="vt" style="background-color: lightskyblue;">{{ property }}</div>
-            </div>
-          </div>-->
+          <div class ="player-properties" *ngFor="let property of other_player_properties[other_player[0]]">
+              <div class="player-property" data-ui="vt" style="background-color: lightskyblue;">{{ property[0] }}</div>
+          </div>
 
         </div>
       </ng-container>

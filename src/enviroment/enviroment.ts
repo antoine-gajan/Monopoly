@@ -67,5 +67,7 @@ export const environment = {
     turnoActual: 'http://localhost:3000/partida/turnoActual/',
     bancarrota: 'http://localhost:3000/partida/bancarrota/',
     aumentar: 'http://localhost:3000/partida/aumentar/',
-    numJugadores: 'http://localhost:3000/partida/numJugadores/'
+    numJugadores: 'http://localhost:3000/partida/numJugadores/',
+    cartaJulio: 'http://localhost:3000/partida/cartaJulio/',
+    usarCartaJulio: 'http://localhost:3000/partida/usarCartaJulio/',
 };

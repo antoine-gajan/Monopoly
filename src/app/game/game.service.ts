@@ -194,5 +194,29 @@ export class GameService {
           console.log(response)})
       );
   }
-  
+
+  has_card_to_go_out_of_jail(idPartida: number, username: string){
+    const body =  JSON.stringify({  "idPartida": idPartida,
+                                            "username": username
+                                        });
+
+    return this.http.post(environment.cartaJulio, body, { observe: 'response' }).pipe(
+      tap(
+        (response) => {
+          console.log(response)})
+      );
+  }
+
+  use_card_go_out_of_jail(idPartida: number, username: string){
+    const body =  JSON.stringify({  "idPartida": idPartida,
+                                            "username": username
+                                        });
+
+    return this.http.post(environment.usarCartaJulio, body, { observe: 'response' }).pipe(
+      tap(
+        (response) => {
+          console.log(response)})
+      );
+  }
+
 }

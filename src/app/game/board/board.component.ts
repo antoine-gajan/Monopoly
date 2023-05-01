@@ -1,5 +1,5 @@
 import {Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
-import { GameService} from "../game.service";
+import {GameService} from "../game.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../user/user.service";
 import {InteractionCardComponent} from "../../card/interaction-card/interaction-card.component";
@@ -17,19 +17,29 @@ import {DevolutionPropertiesFormComponent} from "../devolution-properties-form/d
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent implements OnInit, OnDestroy {
+  // Game variables
   game_id : number;
   dices: number[] = [];
   current_player: string;
+
+  // Relative to client player
   player: [string, number, Coordenadas] = ["", 0, {h: 10, v: 10}];
   nb_doubles: number = 0;
   is_in_jail: boolean = false;
+  player_properties: [string, Coordenadas][] = [];
+
+  // Relative to other players
   other_players_list: [string, number, Coordenadas][] = [];
+  other_player_properties: {[player_username: string]: [string, Coordenadas][]} = {};
+
+  // Relative to the board and cards positions
   nothing_cards: number[] = [0, 10, 20];
   prison_cards: number[] = [30];
   chance_cards: number[] = [7, 22, 36];
   community_cards: number[] = [2, 17, 33];
   taxes_cards: number[] = [4, 38];
-  player_properties: [string, Coordenadas][] = [];
+
+  // Relative to dices
   diceImages = [
     "../../../assets/images/dice/1.png",
     "../../../assets/images/dice/2.png",
@@ -38,7 +48,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     "../../../assets/images/dice/5.png",
     "../../../assets/images/dice/6.png"
   ];
-  // Variables for the game component
+
+  // Variables for the game functionning
   message: string;
   interval: any;
   dices_interval: any;
@@ -95,6 +106,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       complete: () => {
         // Get every properties of each player
         this.get_properties();
+        this.get_properties_of_other_players();
         // Show position of the players
         this.show_position_every_players();
         // Indicate that the game is loaded
@@ -109,24 +121,47 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Get every properties of the player
     this.gameService.get_all_properties_of_player(this.game_id, this.player[0]).subscribe({
       next: (data: PropertiesBoughtResponse) => {
-        this.player_properties = [];
+        let  properties: [string, Coordenadas][] = [];
         for (let i = 0; i < data.casillas.length; i++) {
-          this.player_properties.push([data.casillas[i].nombre, data.casillas[i].coordenadas]);
+          properties.push([data.casillas[i].nombre, data.casillas[i].coordenadas]);
         }
+        this.player_properties = properties;
       },
       error: (error) => {
         // If error is not 404, reload the function
         if (error.status != 404) {
-          this.get_properties();
           console.error(error);
         }
-        // If the player has no properties, set the array to empty
-        else {
-          this.player_properties = [];
-        }
+        // Set the properties to empty
+        this.player_properties = [];
       }
     })
   }
+
+  get_properties_of_other_players(): void {
+    for (let other_player of this.other_players_list) {
+      let username = other_player[0];
+      // Get every properties of the player with username
+      this.gameService.get_all_properties_of_player(this.game_id, username).subscribe({
+        next: (data: PropertiesBoughtResponse) => {
+          let  properties: [string, Coordenadas][] = [];
+          for (let i = 0; i < data.casillas.length; i++) {
+            properties.push([data.casillas[i].nombre, data.casillas[i].coordenadas]);
+          }
+          this.other_player_properties[username] = properties;
+        },
+        error: (error) => {
+          // If error is not 404, print status
+          if (error.status != 404) {
+            console.error(error);
+          }
+          // Set the properties to empty
+          this.other_player_properties[username] = [];
+        }
+      });
+    }
+  }
+
   async play(): Promise<void> {
     // Ensure to execute the interval only once
     this.current_player = "";
@@ -156,6 +191,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   .subscribe({
     next : async (data: PlayerListResponse) => {
       this.actualize_game_info(data);
+      // Update properties of other players while client is waiting
+      this.get_properties_of_other_players();
       // Show position of the players
       this.show_position_every_players();
       // If there is only one player, display the winner
@@ -213,8 +250,16 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.dices[1] = data.dado2;
     },
     error: async (error) => {
-      // Try again
-      this.play_turn_player();
+      // Print error
+      if (error.status == 404) {
+        console.log("Partida no encontrada");
+      }
+      else if (error.status == 500){
+        console.log("Error interno del servidor");
+      }
+      else {
+        console.log(error);
+      }
     },
     complete: async () => {
       // Update message
@@ -625,6 +670,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     const componentRef = this.viewContainerRef.createComponent(factory);
     // Inputs
     componentRef.instance.player_money = this.player[1];
+    componentRef.instance.player_name = this.player[0];
+    componentRef.instance.game_id = this.game_id;
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     // Give an id to the component html
