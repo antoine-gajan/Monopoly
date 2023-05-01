@@ -5,7 +5,19 @@
     z-index: 997;
     padding: 15px 0;
 }
+#floating-image {
+    width: 550px;
+    height: 400px;
 
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.5s ease-in-out;
+  }
+  #main{
+    opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.5s ease-in-out;
+  }
 .section-text{
     text-align: center;
 }
@@ -33,3 +45,27 @@
 }
 
     
+/* --------------BOTÓN VOLVER PARTE SUPERIOR PANTALLA-------------- */
+.btn-flotante {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ff7b00;
+    color: #fff;
+    border-radius: 50%;
+    border: none;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+}
+  
+.btn-flotante i {
+    line-height: 50px;
+    text-align: center;
+}
+
+  
+
+  

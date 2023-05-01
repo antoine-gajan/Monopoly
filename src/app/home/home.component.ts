@@ -7,4 +7,8 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent {
 
+  // función que permite volver arriba en la página
+  volverArriba() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 }
