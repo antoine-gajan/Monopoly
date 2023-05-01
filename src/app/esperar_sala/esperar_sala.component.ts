@@ -37,17 +37,14 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
 
 
   constructor(
-    private http: HttpClient,
     private userService: UserService,
     private gameService: GameService,
     private route: ActivatedRoute,
-    private router: Router,
-    private datosSalaService: DatosSalaService
+    private router: Router
   ) {}
 
   ngOnInit() {
     console.log("ACTUALIZA INFO");
-
     let idPartida = this.route.snapshot.paramMap.get('id'); // Se obtiene id de la partida
     this.username = this.userService.getUsername();         // Se obtiene el nombre del usuario actual
     if (idPartida != null && this.username != null) {       // Actualiza la información del juego
@@ -65,27 +62,17 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
       });
       this.veces = 1;
     }
-    
-    if(this.nb_players_connected < this.maxPlayers){
-      console.log("NOLIMITE-nb_players_connected: ", this.nb_players_connected);
-    }else{
-      console.log("SILIMITE-nb_players_connected: ", this.nb_players_connected);
-      this.mostrarBotonEmpezar = true;
-      this.mostrarBotonUnirse = true;
+
+    if (this.nb_players_connected === this.maxPlayers) {
+      if (this.username === this.player_creator_of_game) {
+          // Get button with id = "start" from html and activate it
+          this.mostrarBotonEmpezar = true;
+          this.mostrarBotonUnirse = false;
+      } else {
+          this.mostrarBotonEmpezar = false;
+          this.mostrarBotonUnirse = true;
+        }
     }
-    //document.getElementById("start")?.setAttribute("disabled", "true"); // Se desactiva el botón cuando la información no está actualizada
-    //document.getElementById("join")?.setAttribute("disabled", "true");  // Se desactiva el botón cuando la información no está actualizada
-    
-    
-    /*if (idPartida != null && this.username != null) { // Actualiza la información del juego
-      this.game_id = +idPartida;
-      if (!this.infoUpdated) {
-        this.actualize_game_info();
-        this.infoUpdated = true;
-      }
-    } else {
-      this.router.navigate(['/error']);
-    }*/
   }
 
   ngOnDestroy() {
@@ -94,9 +81,6 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
     clearInterval(this.interval);
   }
   volver_atras(){
-    // Stop interval
-    this.interval.unsubscribe();
-    clearInterval(this.interval);
     window.history.back();
   }
 
@@ -108,16 +92,16 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
         this.nb_players_connected = this.list_players.length;
         // Get creator of game
         this.player_creator_of_game = this.list_players[0];
-
-        if (this.nb_players_connected === this.nb_players_total) {
+        console.log("ACTUALIZA INFO: ", this.nb_players_connected, this.maxPlayers);
+        if (this.nb_players_connected === this.maxPlayers) {
           if (this.username === this.player_creator_of_game) {
-              // Get button with id = "start" from html and activate it
-              document.getElementById("start")?.setAttribute("disabled", "false");
-              this.boton_empezar_partida = true;
+              this.mostrarBotonEmpezar = true;
+              this.mostrarBotonUnirse = false;
+
           } else {
-              // Activate join game button
-              document.getElementById("join")?.setAttribute("disabled", "false");
-          }
+              this.mostrarBotonEmpezar = false;
+              this.mostrarBotonUnirse = true;
+            }
         }
     });
 }
@@ -125,8 +109,6 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
 
   start_game(): void {
     // Stop interval
-    this.interval.unsubscribe();
-    clearInterval(this.interval);
     // Navigate to /game/game_id
     this.router.navigate(['/game', this.game_id]);
   }
@@ -152,16 +134,16 @@ export class EsperarSalaComponent implements OnInit, OnDestroy{
       this.list_players = response.listaJugadores;          // Se obtiene la lista de jugadores
       this.nb_players_connected = this.list_players.length; // Se obtiene el numero de jugadores conectado
       this.player_creator_of_game = this.list_players[0];   // Se obtiene el nombre del usuario del jugadore creador de la partida
-
-      if (this.nb_players_connected === this.nb_players_total) {
+      console.log("REFRESH: ", this.nb_players_connected, this.maxPlayers);
+      if (this.nb_players_connected === this.maxPlayers) {
         if (this.username === this.player_creator_of_game) {
-          // Get button with id = "start" from html and activate it
-          document.getElementById("start")?.setAttribute("disabled", "false");
-          this.boton_empezar_partida = true;
+            this.mostrarBotonEmpezar = true;
+            this.mostrarBotonUnirse = false;
+
         } else {
-          // Activate join game button
-          document.getElementById("join")?.setAttribute("disabled", "false");
-        }
+            this.mostrarBotonEmpezar = false;
+            this.mostrarBotonUnirse = true;
+          }
       }
     });
   }

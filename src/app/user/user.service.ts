@@ -214,7 +214,7 @@ export class UserService {
                     );
   }
 
-  // Función que realiza una consulta para saber el numero de jugadores unidos a un id de partida
+  // Función que realiza una consulta para saber el numero maximo de jugadores que se pueden unir a una partida
   getNumJugadores(datos: any): Observable<number> {
     console.log("getnumJugadoresID PARTIDA: ", datos.idPartida);
     return this.http.post(environment.numJugadores, datos, {responseType: 'text', observe: 'response'})
@@ -233,4 +233,5 @@ export class UserService {
       );
   }
   
+
 }

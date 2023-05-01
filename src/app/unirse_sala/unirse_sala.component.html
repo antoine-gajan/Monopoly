@@ -9,16 +9,29 @@
 <br>
 <!--------------------CREAR SALA-------------------->
 <div class="box">
-  <!--------------------mensaje para unirse a partida-------------------->
-  <div class="titulo">
-    <h2>ÚNETE A UNA SALA</h2>
-    <p>introduzca el número de la sala a la que desea unirse.</p>
+  <div *ngIf="!loading && !finMensaje">
+    <!--------------------mensaje para unirse a partida-------------------->
+    <div class="titulo">
+      <h2>ÚNETE A UNA SALA</h2>
+      <p>introduzca el número de la sala a la que desea unirse.</p>
+    </div>
+    <!--------------------input para introducir id partida-------------------->
+    <div class="input-partida"> 
+      <input type="number" class="id_partida" placeholder="#ID PARTIDA" [(ngModel)]="idPartida" min="0" step="1"/>
+    </div>
+    <!--------------------botón para jugar partida-------------------->
+    <button class="boton-jugar" (click)="unirseSalaDatosEsperar()">Unirse a la sala</button> 
+  </div>  
+  <div *ngIf="loading && !finMensaje" class="load-center">
+    <app-loader></app-loader>
   </div>
-  <!--------------------input para introducir id partida-------------------->
-  <div class="input-partida"> 
-    <input type="number" class="id_partida" placeholder="#ID PARTIDA" [(ngModel)]="idPartida" min="0" step="1"/>
+  <div *ngIf="mensajeNoPuedeConectarse && finMensaje" class="text-center">
+    <div class="titulo">
+      <h2>Ups, no puedes unirte a la partida.</h2>
+      <p>La partida está completa</p>
+    </div>
+    <button class="boton_si" (click)="volverUnirseSala()">Unirte a otra partida</button>
   </div>
-  <!--------------------botón para jugar partida-------------------->
-  <button class="boton-jugar" (click)="unirseSalaDatosEsperar()">Unirse a la sala</button>   
 </div>
+
 <br><br><br><br><br><br>

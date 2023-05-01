@@ -50,8 +50,6 @@ export class CrearSalaComponent {
       nJugadores: this.numJugadores
     };
     this.userService.crearPartida(datos);
-    
-
   }
 
   esperarSala() {
