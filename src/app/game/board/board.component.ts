@@ -299,10 +299,15 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Get card information
     let owner_of_card: string | null = null;
     let money_to_pay: number | null = null;
+    let increase_credit_possible: boolean = false;
     this.gameService.get_card(this.player[0], this.game_id, this.player[2].h, this.player[2].v).subscribe({
       next: (data: any) => {
         owner_of_card = data.jugador;
         money_to_pay = data.dinero;
+        // If player owns the card, check if increase is possible
+        if (owner_of_card == this.player[0]) {
+          if (data.aumento) increase_credit_possible = true;
+        }
       },
       error: (error) => {
         console.error(error);
@@ -351,9 +356,16 @@ export class BoardComponent implements OnInit, OnDestroy {
             // Display buy card
             this.createCardComponent(this.player[2].v, this.player[2].h, "Quieres comprar ?", this.player[1], this.dices[0] == this.dices[1], "buy");
           }
-          // If owner is the player, can increase the number of credit only if it is a "asignatura" (verification done in interaction card component)
-          else if (owner_of_card == this.player[0]) {
-            this.createCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.player[1], this.dices[0] == this.dices[1], "increase");
+          // If owner is the player
+          else if (owner_of_card == this.player[0] && increase_credit_possible) {
+            // If can increase the number of credit
+            if (increase_credit_possible) {
+              this.createCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.player[1], this.dices[0] == this.dices[1], "increase");
+            }
+            // If can't increase the number of credit, propose to sell the card
+            else {
+              this.createCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.player[1], this.dices[0] == this.dices[1], "sell");
+            }
           }
           // If owner is another player, pay if you have enough money
           else if (owner_of_card != this.player[0] && money_to_pay != null && money_to_pay <= this.player[1]) {
@@ -614,7 +626,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.add_position(id_player, property_id, index_color);
   }
 
-  createCardComponent(v: number, h: number, message: string, player_money: number, play_again: boolean = false, type: string, money_to_pay: number=0): void {
+  createCardComponent(v: number, h: number, message: string, player_money: number, play_again: boolean = false, type: string, money_to_pay: number=0, trigger_end_turn: boolean = true): void {
     // Assure to delete the old buy card component
     this.delete_pop_up_component();
     const factory = this.componentFactoryResolver.resolveComponentFactory(InteractionCardComponent);
@@ -629,6 +641,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     componentRef.instance.player_money = player_money;
     componentRef.instance.amount_to_pay = money_to_pay;
     componentRef.instance.type = type;
+    componentRef.instance.trigger_end_turn = trigger_end_turn;
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     componentRef.instance.close_card.subscribe(() => {this.delete_pop_up_component()});

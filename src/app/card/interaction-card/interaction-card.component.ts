@@ -16,6 +16,7 @@ export class InteractionCardComponent {
   @Input() player_money : number = 0;
   @Input() message: string;
   @Input() play_again: boolean = false;
+  @Input() trigger_end_turn: boolean = true;
 
   // Define an EventEmitter to emit the "end turn" event of BoardComponent
   @Output() end_turn = new EventEmitter();
@@ -46,13 +47,13 @@ export class InteractionCardComponent {
       next: (data) => {
         console.log("You have bought the card");
         console.log(data);
-        this.callback_end_turn();
+        this.callback();
     },
     error: (error) => {
       console.log(error);
       if (error.status == 400) {
         alert("No tienes suficiente dinero para comprar esta casilla");
-        this.callback_end_turn();
+        this.callback();
       }
       else {
         // Try again to buy
@@ -67,26 +68,22 @@ export class InteractionCardComponent {
       next: (data) => {
         console.log("You have increased the card");
         console.log(data);
-        this.callback_end_turn();
+        this.callback();
     },
     error: (error) => {
       console.log(error);
       if (error.status == 400) {
         alert("No puedes aumentar el numero de credito de esta casilla");
       }
-      this.callback_end_turn();
+      this.callback();
     }
     });
-  }
-
-  callback_end_turn() {
-    this.end_turn.emit();
   }
 
   pay_card() {
     // Call end turn of BoardComponent
     console.log("You have paid " + this.amount_to_pay + "€");
-    this.callback_end_turn();
+    this.callback();
   }
 
   sell_card() : void {
@@ -95,22 +92,26 @@ export class InteractionCardComponent {
       next: (data) => {
         console.log("Has vendido la casilla");
         console.log(data);
-        // Close the card
-        this.callback_close_card();
+        // Callback function
+        this.callback();
       },
       error: (error) => {
         console.log(error);
         if (error.status == 400) {
           alert("No puedes vender esta casilla");
         }
-        // Close the card
-        this.callback_close_card();
+        // Callback function
+        this.callback();
       }
     });
   }
 
-  callback_close_card() {
-    // Function to close the card only if the player isn't playing
-    this.close_card.emit();
+  callback(){
+    if (this.trigger_end_turn) {
+      this.end_turn.emit();
+    }
+    else {
+      this.close_card.emit();
+    }
   }
 }

@@ -20,15 +20,15 @@
   </div>
   <div class="list-button">
     <button *ngIf="type == 'buy'" class="button-action buy" (click)="buy_card()">Comprar</button>
-    <button *ngIf="play_again && type === 'buy'" class="button-action play-again" (click)="callback_end_turn()">Jugar otra vez</button>
-    <button *ngIf="!play_again && type === 'buy'" class="button-action stop" (click)="callback_end_turn()">Cancelar</button>
+    <button *ngIf="play_again && type === 'buy'" class="button-action play-again" (click)="callback()">Jugar otra vez</button>
+    <button *ngIf="!play_again && type === 'buy'" class="button-action stop" (click)="callback()">Cancelar</button>
 
     <button *ngIf="type === 'sell'" class="button-action sell" (click)="sell_card()">Vender</button>
-    <button *ngIf="type === 'sell'" class="button-action stop" (click)="callback_close_card()">Cancelar</button>
+    <button *ngIf="type === 'sell'" class="button-action stop" (click)="callback()">Cancelar</button>
 
     <button *ngIf="type == 'increase' && get_type_casilla() === 'propriety'" class="button-action buy" (click)="increase_credit_property()">Aumentar de 1 credito</button>
-    <button *ngIf="play_again && type === 'increase'" class="button-action play-again" (click)="callback_end_turn()">Jugar otra vez</button>
-    <button *ngIf="!play_again && type === 'increase'" class="button-action stop" (click)="callback_end_turn()">Cancelar</button>
+    <button *ngIf="play_again && type === 'increase'" class="button-action play-again" (click)="callback()">Jugar otra vez</button>
+    <button *ngIf="!play_again && type === 'increase'" class="button-action stop" (click)="callback()">Cancelar</button>
 
     <button *ngIf="type == 'pay' && player_money > amount_to_pay" class="button-action pay" (click)="pay_card()">Pagar {{amount_to_pay}}€</button>
   </div>
