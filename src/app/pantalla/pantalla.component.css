@@ -13,6 +13,15 @@
     padding: 15px 0;
 }
 
+body {
+    margin-top: 85px;
+    background-image: url('../../assets/images/logo_juego.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-blend-mode: lighten;
+}
+
+  
 .imagen_logo_juego{
     display: flex;
     justify-content: center;
@@ -96,7 +105,60 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 4px 17px rgba(0, 0, 0, 0.35);
 }
 
+.card-container .card:hover::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.5;
+    z-index: -1;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.card-container .card:hover::before {
+    background-position: calc((100% / 200px) * var(--x)) calc((100% / 40px) * var(--y));
+    background-size: 200px 40px;
+    background-image: linear-gradient(
+        45deg,
+        #fafaf8 25%,
+        #b02f7c 25%,
+        #00ff00 50%,
+        #ff0000 50%,
+        #fafaf8 75%,
+        #b02f7c 75%,
+        #00ff00 100%
+    );
+}
+
+.card-container .card:hover {
+    --x: calc((100% / 200px) * (event.clientX - this.offsetLeft));
+    --y: calc((100% / 40px) * (event.clientY - this.offsetTop));
+}
+
 .mensaje_bienvenida{
     text-align: center;
 }
 
+
+/* --------------BOTÓN VOLVER PARTE SUPERIOR PANTALLA-------------- */
+.btn-flotante {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ff7b00;
+    color: #fff;
+    border-radius: 50%;
+    border: none;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+}
+  
+.btn-flotante i {
+    line-height: 50px;
+    text-align: center;
+}

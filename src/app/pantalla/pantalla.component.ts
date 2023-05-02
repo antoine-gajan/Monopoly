@@ -15,6 +15,12 @@ export class PantallaComponent implements OnInit{
 
   constructor(private userService: UserService, private router: Router, private route: ActivatedRoute) {
   }
+  
+// función que permite volver arriba en la página
+volverArriba() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 
   ngOnInit() {
     // Get username from browser
@@ -23,21 +29,4 @@ export class PantallaComponent implements OnInit{
       this.router.navigate(['/error']);
     }
   }
-
-  /*username: any;
-  constructor(private route: ActivatedRoute, private userService: UserService) {
-    //this.username = this.route.snapshot.paramMap.get('username') ?? 'usuario';
-  }
-  ngOnInit() {
-    this.userService.getUsername();
-    //this.hacerPeticion();
-  }
-*/
-  /*hacerPeticion(){
-    this.userService.hacerPeticion();
-  }
-
-  ajustes_usuario(){
-    this.userService.hacerPeticion();
-  }*/
 }
