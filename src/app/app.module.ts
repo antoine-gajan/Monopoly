@@ -32,6 +32,7 @@ import { EsperarSalaComponent } from './esperar_sala/esperar_sala.component';
 import {ProductComponent} from "./shop/product/product.component";
 import {TiendaComponent} from "./shop/tienda/tienda.component";
 import {NgOptimizedImage} from "@angular/common";
+import { DatosUsuarioComponent } from './user/datos_usuario/datos_usuario.component';
 @NgModule({
     declarations: [
         LoginComponent,
@@ -55,7 +56,8 @@ import {NgOptimizedImage} from "@angular/common";
         UnirseSalaInvitadoComponent,
         EsperarSalaComponent,
         ProductComponent,
-        TiendaComponent
+        TiendaComponent,
+        DatosUsuarioComponent
     ],
   imports: [
     FormsModule,

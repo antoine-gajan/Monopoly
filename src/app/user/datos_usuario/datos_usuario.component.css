@@ -39,13 +39,11 @@ body{
 .user {
   width: 120px;
   height: 120px;
-  cursor: pointer;
 }
 
 .user img {
   display: block;
   margin: auto;
-  cursor: pointer;
 }
 
 a, a:hover{
@@ -55,10 +53,6 @@ a, a:hover{
 h1, h2, h3, h4, h5, h6 {
   font-family: "Raleway", sans-serif;
   color: black;
-  text-align: center;
-}
-.saludo{
-  margin-bottom: 5px;
 }
 
 /*****************CARDS*****************/
@@ -94,80 +88,6 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateY(-3px);
   box-shadow: 0 4px 17px rgba(0, 0, 0, 0.35);
 }
-
-.bi-bi-pencil-square{
-  width: 16px;
-  height: 16px;
-  fill: currentColor;
-  viewBox: 0 0 16 16;
-  cursor: pointer;
-}
-
-.bi-bi-file-earmark-fill, .bi-bi-file-earmark-bar-graph-fill {
-  width: 16px;
-  height: 16px;
-  fill: currentColor;
-  viewBox: 0 0 16 16;
-}
-
-.datos_box{
-  display: inline;
-  margin-bottom: 1%;
-  
-}
-.panel-usuarios{
-  margin-left: 5%;
-  width: max-content;
-  padding: 20px;
-  align-items: center;
-  align-self: center;
-  justify-content: center;
-  align-items: center;
-}
-
-.lista_jugadores{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 50px auto;
-  padding: 20px;
-  border: 2px solid #BFDBAE;
-  border-radius: 20px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-  background-color: #F3F4F6;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
