@@ -553,6 +553,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   add_position(id_player: string, id_property: number, index_color: number): void{
     // Function to display position (x, y) in the board
     // Get the property of the element with id = position
+    // If the position is 30, it's the go to jail position, so we put it in 10
+    if (id_property  == 30) id_property = 10;
     let property = document.getElementById(id_property.toString());
     if (property != null){
       let container_property : Element = property.getElementsByClassName("list-players")[0];
