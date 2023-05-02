@@ -90,7 +90,23 @@ export class InteractionCardComponent {
   }
 
   sell_card() : void {
-    /// TODO : Sell card with link to backend
+    // Sell card with database
+    this.gameService.sell_card(this.game_id, this.username, this.h, this.v).subscribe({
+      next: (data) => {
+        console.log("Has vendido la casilla");
+        console.log(data);
+        // Close the card
+        this.callback_close_card();
+      },
+      error: (error) => {
+        console.log(error);
+        if (error.status == 400) {
+          alert("No puedes vender esta casilla");
+        }
+        // Close the card
+        this.callback_close_card();
+      }
+    });
   }
 
   callback_close_card() {

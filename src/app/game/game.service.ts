@@ -219,4 +219,13 @@ export class GameService {
       );
   }
 
+  sell_card(idPartida: number, username: string, h: number, v: number){
+    const url = `${environment.vender}?idPartida=${idPartida}&username=${username}&h=${h}&v=${v}`;
+    return this.http.delete(url).pipe(
+      tap(
+        (response) => {
+          console.log(response)})
+      );
+  }
+
 }
