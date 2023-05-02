@@ -72,7 +72,7 @@ export class InteractionCardComponent {
     error: (error) => {
       console.log(error);
       if (error.status == 400) {
-        alert("No tienes suficiente dinero para aumentar el numero de credito de esta casilla");
+        alert("No puedes aumentar el numero de credito de esta casilla");
       }
       this.callback_end_turn();
     }

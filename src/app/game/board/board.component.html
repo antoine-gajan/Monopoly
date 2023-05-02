@@ -392,9 +392,11 @@
         <span class="player-name">{{player[0]}}</span>
         <span class="player-money" data-ui="1500" style="color: rgb(0, 0, 0);">{{player[1]}}€</span>
 
-        <div class ="player-properties" *ngFor="let property of player_properties">
+        <ng-container *ngIf="!is_bankrupt">
+          <div class ="player-properties" *ngFor="let property of player_properties">
               <div class="player-property" data-ui="vt" style="background-color: lightskyblue;" (click)="createCardComponent(property[1].v, property[1].h, 'Quieres vender ?', player[1], false, 'sell')">{{ property[0] }}</div>
           </div>
+        </ng-container>
 
       </div>
       <ng-container *ngFor="let other_player of other_players_list; let i = index">

@@ -26,6 +26,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   player: [string, number, Coordenadas] = ["", 0, {h: 10, v: 10}];
   nb_doubles: number = 0;
   is_in_jail: boolean = false;
+  is_bankrupt: boolean = false;
   player_properties: [string, Coordenadas][] = [];
 
   // Relative to other players
@@ -118,24 +119,26 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   get_properties(): void {
-    // Get every properties of the player
-    this.gameService.get_all_properties_of_player(this.game_id, this.player[0]).subscribe({
-      next: (data: PropertiesBoughtResponse) => {
-        let  properties: [string, Coordenadas][] = [];
-        for (let i = 0; i < data.casillas.length; i++) {
-          properties.push([data.casillas[i].nombre, data.casillas[i].coordenadas]);
+    // Get every properties of the player if he is not bankrupt
+    if (!this.is_bankrupt) {
+      this.gameService.get_all_properties_of_player(this.game_id, this.player[0]).subscribe({
+        next: (data: PropertiesBoughtResponse) => {
+          let properties: [string, Coordenadas][] = [];
+          for (let i = 0; i < data.casillas.length; i++) {
+            properties.push([data.casillas[i].nombre, data.casillas[i].coordenadas]);
+          }
+          this.player_properties = properties;
+        },
+        error: (error) => {
+          // If error is not 404, reload the function
+          if (error.status != 404) {
+            console.error(error);
+          }
+          // Set the properties to empty
+          this.player_properties = [];
         }
-        this.player_properties = properties;
-      },
-      error: (error) => {
-        // If error is not 404, reload the function
-        if (error.status != 404) {
-          console.error(error);
-        }
-        // Set the properties to empty
-        this.player_properties = [];
-      }
-    })
+      });
+    }
   }
 
   get_properties_of_other_players(): void {
@@ -237,8 +240,10 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   show_position_every_players(): void {
-    // Show position of the player
-    this.show_position(this.player[0], this.player[2],0);
+    // Show position of the player if he is not bankrupt
+    if (!this.is_bankrupt) {
+      this.show_position(this.player[0], this.player[2], 0);
+    }
     // Show position of the other players
     for (let i = 0; i < this.other_players_list.length; i++) {
       this.show_position(this.other_players_list[i][0], this.other_players_list[i][2], i + 1);
@@ -357,6 +362,7 @@ export class BoardComponent implements OnInit, OnDestroy {
           // Else, you are bankrupt
           else{
             // User is bankrupt
+            this.is_bankrupt = true;
             this.gameService.declare_bankruptcy(this.player[0], this.game_id).subscribe({
               next: (data: any) => {
                 console.log(data);
@@ -461,6 +467,10 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.player[2] = listaPosiciones[i];
       }
       this.other_players_list = result;
+    }
+    // If user not in list, it's because he is bankrupt
+    if (!listaJugadores.includes(this.player[0])) {
+      this.is_bankrupt = true;
     }
   }
 
