@@ -134,8 +134,6 @@ export class BoardComponent implements OnInit, OnDestroy {
           if (error.status != 404) {
             console.error(error);
           }
-          // Set the properties to empty
-          this.player_properties = [];
         }
       });
     }
