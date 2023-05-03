@@ -56,4 +56,10 @@ export class LoginComponent implements OnInit{
   passwordMostrarOcultar(){
     this.passwordShow = !this.passwordShow;
   }
+  
+  // función que permite volver arriba en la página
+  volverArriba() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
 }
