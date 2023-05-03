@@ -656,6 +656,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     componentRef.instance.close_card.subscribe(() => {this.delete_pop_up_component()});
+    componentRef.instance.update_properties.subscribe(() => {this.get_properties()});
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";
     // Center the component at the middle of the page
@@ -784,7 +785,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  private delete_pop_up_component() {
+  delete_pop_up_component() {
     // Assure to delete the old pup up card component
     const old_pop_up_component_element = document.getElementById('pop-up-card');
     if (old_pop_up_component_element != null){
