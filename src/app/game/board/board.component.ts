@@ -5,7 +5,7 @@ import {UserService} from "../../user/user.service";
 import {InteractionCardComponent} from "../../card/interaction-card/interaction-card.component";
 import {ChanceCardComponent} from "../../card/chance-card/chance-card.component";
 import {CommunityCardComponent} from "../../card/community-card/community-card.component";
-import {EMPTY, interval, switchMap, takeWhile} from "rxjs";
+import {EMPTY, forkJoin, interval, switchMap, takeWhile} from "rxjs";
 import {InfoCardComponent} from "../../card/info-card/info-card.component";
 import {JailCardComponent} from "../../card/jail-card/jail-card.component";
 import {Coordenadas, PlayerListResponse, PropertiesBoughtResponse} from "../response-type";
@@ -140,20 +140,22 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   get_properties_of_other_players(): void {
-    for (let other_player of this.other_players_list) {
-      let username = other_player[0];
-      // Get every properties of the player with username
-      this.gameService.get_all_properties_of_player(this.game_id, username).subscribe({
-        next: (data: PropertiesBoughtResponse) => {
-          let  properties: [string, Coordenadas][] = [];
-          for (let i = 0; i < data.casillas.length; i++) {
-            properties.push([data.casillas[i].nombre, data.casillas[i].coordenadas]);
-          }
-          this.other_player_properties[username] = properties;
-        }
-      });
-    }
-  }
+  const requests = this.other_players_list.map(other_player => {
+    const username = other_player[0];
+    return this.gameService.get_all_properties_of_player(this.game_id, username);
+  });
+
+  forkJoin(requests).subscribe(responses => {
+    responses.forEach((data: PropertiesBoughtResponse, i) => {
+      const username = this.other_players_list[i][0];
+      const properties: [string, Coordenadas][] = [];
+      for (let i = 0; i < data.casillas.length; i++) {
+        properties.push([data.casillas[i].nombre, data.casillas[i].coordenadas]);
+      }
+      this.other_player_properties[username] = properties;
+    });
+  });
+}
 
   async play(): Promise<void> {
     // Ensure to execute the interval only once
