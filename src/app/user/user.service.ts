@@ -60,6 +60,7 @@ export class UserService {
   login(user: any){
     console.log(user);
     const nuevo_password = CryptoJS.SHA512(user.password).toString();
+    console.log(user);
     user.password = nuevo_password;
     this.setUsername(user.username);
 
@@ -75,6 +76,12 @@ export class UserService {
                     );
   }
   registro(user: any){
+    console.log(user);
+    const nuevo_password = CryptoJS.SHA512(user.password).toString();
+    const nuevo_confirm_password = CryptoJS.SHA512(user.confirm_password).toString();
+    console.log(user);
+    user.password = nuevo_password;
+    user.confirm_password = nuevo_confirm_password;
     console.log(user);
     this.setUsername(user.username);
     this.setEmail(user.email);
