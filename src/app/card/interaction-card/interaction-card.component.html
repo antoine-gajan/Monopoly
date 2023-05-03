@@ -30,6 +30,6 @@
     <button *ngIf="play_again && type === 'increase'" class="button-action play-again" (click)="callback()">Jugar otra vez</button>
     <button *ngIf="!play_again && type === 'increase'" class="button-action stop" (click)="callback()">Cancelar</button>
 
-    <button *ngIf="type == 'pay' && player_money > amount_to_pay" class="button-action pay" (click)="pay_card()">Pagar {{amount_to_pay}}€</button>
+    <button *ngIf="type == 'pay'" class="button-action pay" (click)="pay_card()">Pagar {{amount_to_pay}}€</button>
   </div>
 </div>

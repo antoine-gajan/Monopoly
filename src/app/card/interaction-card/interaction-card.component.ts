@@ -57,7 +57,7 @@ export class InteractionCardComponent {
       }
       else {
         // Try again to buy
-        this.buy_card();
+        //this.buy_card();
       }
     }
     });
