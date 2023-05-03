@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, map, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from 'enviroment/enviroment';
+import * as CryptoJS from 'crypto-js';
 
 interface EmailInt {
   email: string;
@@ -58,6 +59,8 @@ export class UserService {
 
   login(user: any){
     console.log(user);
+    const nuevo_password = CryptoJS.SHA512(user.password).toString();
+    user.password = nuevo_password;
     this.setUsername(user.username);
 
     return this.http.post(environment.login, user, {responseType: 'text', observe: 'response'})
