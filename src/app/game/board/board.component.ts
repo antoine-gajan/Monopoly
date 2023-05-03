@@ -434,7 +434,10 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   go_next_turn() : void {
+    // Indicate to backend that the player has finished his turn
     this.message = "Has terminado tu turno";
+    // Disable button to end turn
+    document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
     this.is_playing = false;
     this.nb_doubles = 0;
     // Indicate to backend that the player has finished his turn
