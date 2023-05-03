@@ -53,7 +53,8 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   // Variables for the game functionning
   message: string;
-  interval: any;
+  interval_play: any;
+  interval_update_position: any;
   dices_interval: any;
 
   constructor(private gameService: GameService, private userService: UserService, private route: ActivatedRoute,
@@ -84,10 +85,12 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // Destroy the intervals for safety
-    this.interval.unsubscribe();
+    this.interval_play.unsubscribe();
     this.dices_interval.unsubscribe();
-    clearInterval(this.interval);
+    this.interval_update_position.unsubscribe();
+    clearInterval(this.interval_play);
     clearInterval(this.dices_interval);
+    clearInterval(this.interval_update_position);
   }
 
 
@@ -156,7 +159,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Ensure to execute the interval only once
     this.current_player = "";
     // Check if the player can play or not every 2 seconds
-    this.interval = interval(2000)
+    this.interval_play = interval(3000)
       .pipe(
         // Take while the current player is not the current user's player
         takeWhile(() => this.current_player !== this.player[0]),
@@ -191,9 +194,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   .subscribe({
     next : async (data: PlayerListResponse) => {
       this.actualize_game_info(data);
-      // Update properties of players while client is waiting
-      this.get_properties();
-      this.get_properties_of_other_players();
       // Show position of the players
       this.show_position_every_players();
       // If there is only one player, display the winner
@@ -211,7 +211,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         // Wait 10 seconds
         await this.sleep(10000);
         // Stop the interval
-        this.interval.unsubscribe();
+        this.interval_play.unsubscribe();
         this.message = "Redirigiendo a la página principal en 30 segundos...";
         // Redirect to home page automatically in 30 seconds
         setTimeout(() => {
@@ -224,6 +224,12 @@ export class BoardComponent implements OnInit, OnDestroy {
       // Try again
       this.play();
     }
+    });
+
+    // Interval for update properties of every player every 3 seconds
+    this.interval_update_position = interval(3000).subscribe(() => {
+      this.get_properties();
+      this.get_properties_of_other_players();
     });
   }
 
@@ -390,8 +396,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   end_turn(): void {
-    // Update properties
-    this.get_properties();
     // Delete the pop-up-card component
     this.delete_pop_up_component();
     // Get old position of player
@@ -447,7 +451,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         console.log(data);
       },
       error: (error) => {
-        console.error(error);
+        //console.error(error);
         this.go_next_turn();
       },
       complete: () => {
