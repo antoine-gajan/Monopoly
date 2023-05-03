@@ -94,6 +94,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   load_game(){
     // Block buttons to avoid risks
     document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
+    document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
+
     // Indicate that the game is loading
     this.message = "Cargando la partida..."
     // Get list of players
@@ -279,6 +281,8 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.play_turn_player();
     },
     complete: async () => {
+      // Close button to avoid end turn
+      document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
       // Update message
       if (this.dices[0] === this.dices[1]){
         this.message = this.player[0] + ", has sacado dobles " + this.dices[0];
@@ -435,8 +439,9 @@ export class BoardComponent implements OnInit, OnDestroy {
           }
         }
         else {
-          // Go next turn
-          this.go_next_turn();
+          // End of turn : open button to go next turn
+          this.message = "Pulsa el botón para terminar tu turno"
+          document.getElementById("button-end-turn")!.removeAttribute("disabled");
           }
         }
     });

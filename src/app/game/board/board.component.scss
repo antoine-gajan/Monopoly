@@ -848,3 +848,12 @@ h1, h2, h3, h4, h5, h6 {
 .get_color_property{
 	background-color: #f3f3f3;
 }
+
+#button-end-turn:disabled{
+  background-color: darkgrey;
+}
+
+#button-end-turn:enabled{
+  background-color: orange;
+  font-weight: bold;
+}
