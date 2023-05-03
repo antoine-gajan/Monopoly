@@ -32,9 +32,11 @@ import { UnirseSalaInvitadoComponent } from './unirse_sala_invitado/unirse_sala_
 import { EsperarSalaComponent } from './esperar_sala/esperar_sala.component';
 import { DevolutionPropertiesFormComponent} from "./game/devolution-properties-form/devolution-properties-form.component";
 import { DatosUsuarioComponent } from './user/datos_usuario/datos_usuario.component';
+import {JailCardComponent} from "./card/jail-card/jail-card.component";
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
+  {path: 'jail', component: JailCardComponent},
   { path: 'propriety_card', component : ProprietyCardComponent },
   { path: 'chance_card', component : ChanceCardComponent },
   { path: 'community_card', component : CommunityCardComponent },

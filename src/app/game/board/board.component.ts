@@ -308,6 +308,10 @@ export class BoardComponent implements OnInit, OnDestroy {
         if (owner_of_card == this.player[0]) {
           if (data.aumento) increase_credit_possible = true;
         }
+        // If player doesn't own the card, check if he is bankrupt when he has to pay
+        else if (owner_of_card != null && owner_of_card != this.player[0]) {
+          if (data.bancarrota) this.is_bankrupt = true;
+        }
       },
       error: (error) => {
         console.error(error);
@@ -345,11 +349,12 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.message = "Tienes que pagar...";
           if (position_id == 38) {
             this.createInfoCardComponent("SEGURO ESCOLAR", "Tienes que pagar el seguro escolar : 133€", "Pagar 133€");
-          } else if (position_id == 4) {
+          }
+          else if (position_id == 4) {
             this.createInfoCardComponent("APERTURA DE EXPEDIENTE", "Tienes que pagar la apertura de expediente : 267€", "Pagar 267€");
           }
         }
-        // If it's a normal card
+        // If it's a normal card, check if it's owned and what to do
         else {
           // If no owner, can buy
           if (owner_of_card == null) {
@@ -357,7 +362,7 @@ export class BoardComponent implements OnInit, OnDestroy {
             this.createCardComponent(this.player[2].v, this.player[2].h, "Quieres comprar ?", this.player[1], this.dices[0] == this.dices[1], "buy");
           }
           // If owner is the player
-          else if (owner_of_card == this.player[0] && increase_credit_possible) {
+          else if (owner_of_card == this.player[0]) {
             // If can increase the number of credit
             if (increase_credit_possible) {
               this.createCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.player[1], this.dices[0] == this.dices[1], "increase");
@@ -367,25 +372,27 @@ export class BoardComponent implements OnInit, OnDestroy {
               this.createCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.player[1], this.dices[0] == this.dices[1], "sell");
             }
           }
-          // If owner is another player, pay if you have enough money
-          else if (owner_of_card != this.player[0] && money_to_pay != null && money_to_pay <= this.player[1]) {
-            this.createCardComponent(this.player[2].v, this.player[2].h, "La tarjeta pertenece a " + owner_of_card, this.player[1], this.dices[0] == this.dices[1], "pay", money_to_pay);
-          }
-          // Else, you are bankrupt
-          else{
-            // User is bankrupt
-            this.is_bankrupt = true;
-            this.gameService.declare_bankruptcy(this.player[0], this.game_id).subscribe({
-              next: (data: any) => {
-                console.log(data);
-                // Update player money to 0
-                this.player[1] = 0;
-              },
-              error: (error) => {
-                console.error(error);
-              }
-            });
-            this.createInfoCardComponent("BANCARROTA", "Has perdido...<br>No tienes suficiente dinero para pagar " + money_to_pay + "€ a " + owner_of_card + " !", "Vale", false);
+          // If owner is another player
+          else if (owner_of_card != this.player[0] && money_to_pay != null) {
+            // Pay if you are not bankrupt
+            if (!this.is_bankrupt) {
+              this.createCardComponent(this.player[2].v, this.player[2].h, "La tarjeta pertenece a " + owner_of_card, this.player[1], this.dices[0] == this.dices[1], "pay", money_to_pay);
+            }
+            // Else, you are bankrupt
+            else {
+              // Declare bankruptcy to backend
+              this.gameService.declare_bankruptcy(this.player[0], this.game_id).subscribe({
+                next: (data: any) => {
+                  console.log(data);
+                  // Update player money to 0
+                  this.player[1] = 0;
+                },
+                error: (error) => {
+                  console.error(error);
+                }
+              });
+              this.createInfoCardComponent("BANCARROTA", "Has perdido...<br>No tienes suficiente dinero para pagar " + money_to_pay + "€ a " + owner_of_card + " !", "Vale", false);
+            }
           }
         }
       }

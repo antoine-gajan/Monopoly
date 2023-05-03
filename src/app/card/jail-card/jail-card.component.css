@@ -2,7 +2,6 @@
   border: 2px black solid;
   border-radius: 10px;
   max-width : 400px;
-  max-height : 300px;
   padding-top: 10px;
   padding-right: 10px;
   display: flex;
@@ -77,4 +76,23 @@ img{
 
 .card{
   background-color: #00ff00;
+}
+
+.dice-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.dices-values{
+  display: flex;
+}
+
+.dice{
+  display: block;
+  max-width:50px;
+  max-height:50px;
+  width: auto;
+  height: auto;
 }
