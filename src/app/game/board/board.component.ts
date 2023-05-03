@@ -131,12 +131,6 @@ export class BoardComponent implements OnInit, OnDestroy {
             properties.push([data.casillas[i].nombre, data.casillas[i].coordenadas]);
           }
           this.player_properties = properties;
-        },
-        error: (error) => {
-          // If error is not 404, reload the function
-          if (error.status != 404) {
-            console.error(error);
-          }
         }
       });
     }
@@ -153,14 +147,6 @@ export class BoardComponent implements OnInit, OnDestroy {
             properties.push([data.casillas[i].nombre, data.casillas[i].coordenadas]);
           }
           this.other_player_properties[username] = properties;
-        },
-        error: (error) => {
-          // If error is not 404, print status
-          if (error.status != 404) {
-            console.error(error);
-          }
-          // Set the properties to empty
-          this.other_player_properties[username] = [];
         }
       });
     }
@@ -234,7 +220,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       }
     },
     error: (error) => {
-      console.error(error);
+      //console.error(error);
       // Try again
       this.play();
     }
@@ -275,7 +261,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         console.log("Error interno del servidor");
       }
       else {
-        console.log(error);
+        //console.log(error);
       }
       // Try again
       this.play_turn_player();
@@ -318,7 +304,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         }
       },
       error: (error) => {
-        console.error(error);
+        //console.error(error);
         // Try again
         this.card_action();
       },
