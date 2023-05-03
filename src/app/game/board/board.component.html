@@ -394,7 +394,9 @@
 
         <ng-container *ngIf="!is_bankrupt">
           <div class ="player-properties" *ngFor="let property of player_properties">
-              <div class="player-property" data-ui="vt"  [attr.backgroundColor]="get_color_property(property[1])" (click)="createCardComponent(property[1].v, property[1].h, 'Quieres vender ?', player[1], false, 'sell', 0, false)">{{ property[0] }}</div>
+              <div class="player-property" data-ui="vt"  [attr.style.background-color]="get_color_property(property[1])" (click)="createCardComponent(property[1].v, property[1].h, 'Quieres vender ?', player[1], false, 'sell', 0, false)">
+                {{ property[0] }}
+              </div>
           </div>
         </ng-container>
 
