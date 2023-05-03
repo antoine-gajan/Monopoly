@@ -220,12 +220,21 @@ export class GameService {
   }
 
   sell_card(idPartida: number, username: string, h: number, v: number){
-    const url = `${environment.vender}?idPartida=${idPartida}&username=${username}&h=${h}&v=${v}`;
-    return this.http.delete(url).pipe(
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+      body: {
+        coordenadas: {
+          h: h,
+          v: v
+        }
+      },
+    };
+    return this.http.delete(environment.vender, options).pipe(
       tap(
         (response) => {
           console.log(response)})
       );
   }
-
 }
