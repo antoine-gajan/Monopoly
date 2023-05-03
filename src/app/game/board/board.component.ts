@@ -288,7 +288,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.message = this.player[0] + ", has sacado " + this.dices[0] + " y " + this.dices[1];
       }
       // Update player position
-      await this.update_local_player_position(this.player[0], this.player[2], this.dices);
+      await this.update_local_player_position(this.dices);
       // Action of the card
       this.card_action();
     }
@@ -585,10 +585,10 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
-  async update_local_player_position(id_player: string, old_position: Coordenadas, dices: number[]) {
+  async update_local_player_position(dices: number[]) {
     // Function to update the position of a player
     // Get old position id
-    let old_id = this.convert_position_to_id(old_position);
+    let old_id = this.convert_position_to_id(this.player[2]);
     // Update position attribute
     let change_turn = old_id + dices[0] + dices[1] >= 40;
     // Get new position id
@@ -609,7 +609,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
     // If player has to go to jail-card
     if (this.is_in_jail) {
-      this.show_position(id_player, this.player[2], 0);
+      this.show_position(this.player[0], this.player[2], 0);
       // Message in function of the manner to go to jail
       if (this.nb_doubles == 3){
         this.message = "Has ido en julio por tirar 3 dobles";
@@ -624,7 +624,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.player[2].h = 0;
     }
     // Show position
-    this.show_position(id_player, this.player[2], 0);
+    this.show_position(this.player[0], this.player[2], 0);
   }
 
   show_position(id_player: string, position: Coordenadas, index_color: number): void{
