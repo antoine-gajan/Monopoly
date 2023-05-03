@@ -25,6 +25,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   // Relative to client player
   player: [string, number, Coordenadas] = ["", 0, {h: 10, v: 10}];
   nb_doubles: number = 0;
+  is_playing: boolean = false;
   is_in_jail: boolean = false;
   is_bankrupt: boolean = false;
   player_properties: [string, Coordenadas][] = [];
@@ -184,6 +185,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         // If there are other players, play his turn
         else {
           // When he can play, activate button and remove is_in_jail for safety
+          this.is_playing = true;
           this.is_in_jail = false;
           this.message = this.player[0] + ", es tu turno";
           document.getElementById("tirar-dados")!.removeAttribute("disabled");
@@ -442,6 +444,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   go_next_turn() : void {
     this.message = "Has terminado tu turno";
+    this.is_playing = false;
     this.nb_doubles = 0;
     // Indicate to backend that the player has finished his turn
     this.gameService.next_turn(this.game_id).subscribe({
@@ -633,7 +636,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.add_position(id_player, property_id, index_color);
   }
 
-  createCardComponent(v: number, h: number, message: string, player_money: number, play_again: boolean = false, type: string, money_to_pay: number=0, trigger_end_turn: boolean = true): void {
+  createCardComponent(v: number, h: number, message: string, player_money: number, play_again: boolean = false, type: string, money_to_pay: number=0, trigger_end_turn: boolean = true, is_playing: boolean = false): void {
     // Assure to delete the old buy card component
     this.delete_pop_up_component();
     const factory = this.componentFactoryResolver.resolveComponentFactory(InteractionCardComponent);
@@ -649,6 +652,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     componentRef.instance.amount_to_pay = money_to_pay;
     componentRef.instance.type = type;
     componentRef.instance.trigger_end_turn = trigger_end_turn;
+    componentRef.instance.is_playing = is_playing;
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     componentRef.instance.close_card.subscribe(() => {this.delete_pop_up_component()});

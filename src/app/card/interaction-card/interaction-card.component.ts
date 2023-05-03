@@ -17,6 +17,7 @@ export class InteractionCardComponent {
   @Input() message: string;
   @Input() play_again: boolean = false;
   @Input() trigger_end_turn: boolean = true;
+  @Input() is_playing: boolean = false;
 
   // Define an EventEmitter to emit the "end turn" event of BoardComponent
   @Output() end_turn = new EventEmitter();
