@@ -789,4 +789,52 @@ export class BoardComponent implements OnInit, OnDestroy {
       old_pop_up_component_element.remove();
     }
   }
+
+  get_type_casilla(coord: Coordenadas) {
+    if (coord.h == 5 || coord.v == 5){
+      return "party";
+    }
+    else if (coord.h == 0 && coord.v == 8){
+      return "electricity"
+    }
+    else if (coord.h == 8 && coord.v == 0){
+      return "heat";
+    }
+    else{
+      return "propriety";
+    }
+  }
+
+  get_color_property(coord: Coordenadas){
+    let id_position = this.convert_position_to_id(coord);
+    if (this.get_type_casilla(coord) == 'propriety'){
+      if (id_position < 5){
+        return "#b02f7c";
+      }
+      else if (id_position < 10){
+        return "#5e3577";
+      }
+      else if (id_position < 15){
+        return "#5a6dba";
+      }
+      else if (id_position < 20){
+        return "#d2eaf5";
+      }
+      else if (id_position < 25){
+        return "#41994e";
+      }
+      else if (id_position < 30){
+        return "#ffed20";
+      }
+      else if (id_position < 35){
+        return "#fa811d";
+      }
+      else {
+        return "#f50c2b";
+      }
+    }
+    else {
+      return "#fafaf8";
+    }
+  }
 }
