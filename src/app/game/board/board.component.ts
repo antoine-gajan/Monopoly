@@ -54,7 +54,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   // Variables for the game functionning
   message: string;
   interval_play: any;
-  interval_update_position: any;
   dices_interval: any;
 
   constructor(private gameService: GameService, private userService: UserService, private route: ActivatedRoute,
@@ -87,10 +86,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Destroy the intervals for safety
     this.interval_play.unsubscribe();
     this.dices_interval.unsubscribe();
-    this.interval_update_position.unsubscribe();
     clearInterval(this.interval_play);
     clearInterval(this.dices_interval);
-    clearInterval(this.interval_update_position);
   }
 
 
@@ -196,6 +193,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   .subscribe({
     next : async (data: PlayerListResponse) => {
       this.actualize_game_info(data);
+      this.get_properties_of_other_players();
       // Show position of the players
       this.show_position_every_players();
       // If there is only one player, display the winner
@@ -222,16 +220,10 @@ export class BoardComponent implements OnInit, OnDestroy {
       }
     },
     error: (error) => {
-      //console.error(error);
       // Try again
+      this.interval_play.unsubscribe();
       this.play();
     }
-    });
-
-    // Interval for update properties of every player every 3 seconds
-    this.interval_update_position = interval(3000).subscribe(() => {
-      this.get_properties();
-      this.get_properties_of_other_players();
     });
   }
 
@@ -636,7 +628,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.add_position(id_player, property_id, index_color);
   }
 
-  createCardComponent(v: number, h: number, message: string, player_money: number, play_again: boolean = false, type: string, money_to_pay: number=0, trigger_end_turn: boolean = true, is_playing: boolean = false): void {
+  createCardComponent(v: number, h: number, message: string, player_money: number, play_again: boolean = false, type: string, money_to_pay: number=0, trigger_end_turn: boolean = true): void {
     // Assure to delete the old buy card component
     this.delete_pop_up_component();
     const factory = this.componentFactoryResolver.resolveComponentFactory(InteractionCardComponent);
@@ -652,7 +644,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     componentRef.instance.amount_to_pay = money_to_pay;
     componentRef.instance.type = type;
     componentRef.instance.trigger_end_turn = trigger_end_turn;
-    componentRef.instance.is_playing = is_playing;
+    componentRef.instance.is_playing = this.is_playing;
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     componentRef.instance.close_card.subscribe(() => {this.delete_pop_up_component()});
