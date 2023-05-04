@@ -79,6 +79,7 @@ export class InteractionCardComponent {
       console.log(error);
       if (error.status == 400) {
         alert("No puedes aumentar el numero de credito de esta casilla");
+        this.callback();
       }
       this.increase_credit_property();
     }
@@ -106,6 +107,7 @@ export class InteractionCardComponent {
         console.log(error);
         if (error.status == 400) {
           alert("No puedes vender esta casilla");
+          this.callback();
         }
         // Try again
         this.sell_card();
