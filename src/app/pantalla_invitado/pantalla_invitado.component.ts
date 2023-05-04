@@ -15,5 +15,9 @@ export class PantallaInvitadoComponent {
   constructor(private userService: UserService) {
     this.username = userService.getUsername();
   }
+  // función que permite volver arriba en la página
+  volverArriba() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
 }

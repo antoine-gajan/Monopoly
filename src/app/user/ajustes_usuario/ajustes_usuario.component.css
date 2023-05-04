@@ -1,12 +1,17 @@
-.gradient-custom {
-/* fallback for old browsers */
-background: #f6d365;
+/*------------------------------------
+ * HEADER
+ *-----------------------------------*/
+ #header {
+  background: #BFDBAE;
+  box-shadow: 0px 0px 25px 0 rgba(0, 0, 0, 0.08);
+  z-index: 997;
+  padding: 15px 0;
+}
 
-/* Chrome 10-25, Safari 5.1-6 */
-background: -webkit-linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1));
-
-/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-background: linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1))
+.volver_boton,
+.inicio_boton{
+  height: 40px;
+  cursor: pointer;
 }
 
 * {
@@ -16,40 +21,9 @@ background: linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 1
   box-sizing: border-box;
 }
 
-.volver_boton,
-.inicio_boton{
-  height: 40px;
-  cursor: pointer;
-}
-
-/*****************BODY*****************/
 body{
-  font-family: "Open Sans", sans-serif;
-  color: #444444;
-  margin-top: 1%;
-} 
-
-.user-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 200px; /* ajusta la altura del contenedor según sea necesario */
-}
-
-.user {
-  width: 120px;
-  height: 120px;
-  cursor: pointer;
-}
-
-.user img {
-  display: block;
-  margin: auto;
-  cursor: pointer;
-}
-
-a, a:hover{
-  text-decoration: none;
+  margin-top:100px;
+  background:#F0F8FF;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -57,124 +31,51 @@ h1, h2, h3, h4, h5, h6 {
   color: black;
   text-align: center;
 }
-.saludo{
-  margin-bottom: 5px;
-}
 
-/*****************CARDS*****************/
-.card-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 16px;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .card {
-  all: unset;
-  border-radius: 4px;
-  border: 1px solid #eee;
-  background-color: #dc92c2;
-  height: 40px;
-  width: 200px;
-  margin: 0 8px 16px;
-  padding: 16px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 15px 1px rgba(52,40,104,.08);
+}
+.card {
+  position: relative;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.2s ease-in-out;
-  line-height: 24px;
-}
-
-.card-container .card:not(.highlight-card) {
-  cursor: pointer;
-}
-  
-.card-container .card:not(.highlight-card):hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 17px rgba(0, 0, 0, 0.35);
-}
-
-.bi-bi-pencil-square{
-  width: 16px;
-  height: 16px;
-  fill: currentColor;
-  viewBox: 0 0 16 16;
-  cursor: pointer;
-}
-
-.bi-bi-file-earmark-fill, .bi-bi-file-earmark-bar-graph-fill {
-  width: 16px;
-  height: 16px;
-  fill: currentColor;
-  viewBox: 0 0 16 16;
-}
-
-.datos_box{
-  display: inline;
-  margin-bottom: 1%;
-  
-}
-.panel-usuarios{
-  margin-left: 5%;
-  width: max-content;
-  padding: 20px;
-  align-items: center;
-  align-self: center;
-  justify-content: center;
-  align-items: center;
-}
-
-.lista_jugadores{
-  display: flex;
+  -ms-flex-direction: column;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 50px auto;
-  padding: 20px;
-  border: 2px solid #BFDBAE;
-  border-radius: 20px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-  background-color: #F3F4F6;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid #e5e9f2;
+  border-radius: .2rem;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.card-header:first-child {
+  border-radius: calc(.2rem - 1px) calc(.2rem - 1px) 0 0;
+}
+.card-header {
+  border-bottom-width: 1px;
+}
+.card-header {
+  padding: .75rem 1.25rem;
+  margin-bottom: 0;
+  color: inherit;
+  background-color: #fff;
+  border-bottom: 1px solid #e5e9f2;
+}

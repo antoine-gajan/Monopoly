@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 export class AjustesUsuarioComponent {
   username: string;
   email: string;
+
   constructor(private userService: UserService, private route: ActivatedRoute) {
     this.username = userService.getUsername();
     console.log("Entra página ajustes usuario: ", this.username, this.email);
