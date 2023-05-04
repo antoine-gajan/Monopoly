@@ -225,6 +225,8 @@ export class GameService {
         'Content-Type': 'application/json',
       }),
       body: {
+        idPartida: idPartida,
+        username: username,
         coordenadas: {
           h: h,
           v: v
