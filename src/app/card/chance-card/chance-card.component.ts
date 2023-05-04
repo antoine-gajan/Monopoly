@@ -18,9 +18,18 @@ export class ChanceCardComponent implements OnInit{
   constructor(private gameService: GameService) { }
 
   ngOnInit() {
-    this.gameService.get_random_suerte_card(this.idPartida, this.username).subscribe((chance) => {
-      console.log(chance);
-      this.chance = chance[0];
+    this.gameService.get_random_suerte_card(this.idPartida, this.username).subscribe({
+      next:
+        (cards) => {
+          this.chance = cards[0];
+          console.log(this.chance);
+        },
+      error:
+        (error) => {
+          //console.log(error);
+          // Try again
+          this.ngOnInit();
+        }
     });
   }
 

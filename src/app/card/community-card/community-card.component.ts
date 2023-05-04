@@ -25,9 +25,9 @@ export class CommunityCardComponent implements OnInit{
       },
     error:
       (error) => {
-        console.log(error);
+        //console.log(error);
         // Try again in 3 seconds
-        setTimeout(() => this.ngOnInit(), 3000);
+        this.ngOnInit();
       }
     });
   }

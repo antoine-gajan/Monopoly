@@ -23,7 +23,7 @@ export const environment = {
 
 
     //--API servidor local -> cuando funcione cambiarlo
-    /*login: 'http://localhost:8080/users/login',
+    login: 'http://localhost:8080/users/login',
     registration: 'http://localhost:8080/users/register',
     delete: 'http://localhost:8080/users/delete',
     get_ner_username: 'http://localhost:8080/users/updateUsername',
@@ -43,10 +43,15 @@ export const environment = {
     listaAsignaturas: 'http://localhost:8080/partida/listaAsignaturasC/',
     turnoActual: 'http://localhost:8080/partida/turnoActual/',
     bancarrota: 'http://localhost:8080/partida/bancarrota/',
-    aumentar: 'http://localhost:8080/partida/aumentar/',*/
+    aumentar: 'http://localhost:8080/partida/aumentar/',
+    numJugadores: 'http://localhost:8080/partida/numJugadores/',
+    cartaJulio: 'http://localhost:8080/partida/cartaJulio/',
+    usarCartaJulio: 'http://localhost:8080/partida/usarCartaJulio/',
+    vender: 'http://localhost:8080/partida/vender/',
+    accionCarta: 'http://localhost:8080/partida/accionCarta/',
 
 
-    login: 'http://localhost:3000/users/login',
+    /*login: 'http://localhost:3000/users/login',
     registration: 'http://localhost:3000/users/register',
     delete: 'http://localhost:3000/users/delete',
     get_ner_username: 'http://localhost:3000/users/updateUsername',
@@ -71,5 +76,5 @@ export const environment = {
     cartaJulio: 'http://localhost:3000/partida/cartaJulio/',
     usarCartaJulio: 'http://localhost:3000/partida/usarCartaJulio/',
     vender: 'http://localhost:3000/partida/vender/',
-    accionCarta: 'http://localhost:3000/partida/accionCarta/',
+    accionCarta: 'http://localhost:3000/partida/accionCarta/',*/
 };
