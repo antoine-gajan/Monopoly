@@ -92,6 +92,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
 
   load_game(){
+    console.log("Loading game...");
     // Block buttons to avoid risks
     document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
     document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
@@ -193,6 +194,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   .subscribe({
     next : async (data: PlayerListResponse) => {
       this.actualize_game_info(data);
+      this.get_properties();
       this.get_properties_of_other_players();
       // Show position of the players
       this.show_position_every_players();
@@ -302,6 +304,10 @@ export class BoardComponent implements OnInit, OnDestroy {
         else if (owner_of_card != null && owner_of_card != this.player[0]) {
           if (data.bancarrota) this.is_bankrupt = true;
         }
+        // Console log to debug
+        console.log("Owner of card: " + owner_of_card);
+        console.log("Money to pay: " + money_to_pay);
+        console.log("Increase credit possible: " + increase_credit_possible);
       },
       error: (error) => {
         //console.error(error);
@@ -390,14 +396,18 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   end_turn(): void {
+    console.log("===END TURN===");
     // Delete the pop-up-card component
     this.delete_pop_up_component();
     // Get old position of player
     let old_position_player = this.player[2];
+    console.log("old position player : " + old_position_player);
     // Get new position of player by updating game information
     this.gameService.get_list_players(this.game_id).subscribe({
       next: (data: PlayerListResponse) => {
         this.actualize_game_info(data);
+        console.log("new position player : " + this.player[2]);
+        this.show_position_every_players();
       },
       error: (error) => {
         console.error(error);
@@ -433,6 +443,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   go_next_turn() : void {
+    console.log("===GO NEXT TURN===");
     // Indicate to backend that the player has finished his turn
     this.message = "Has terminado tu turno";
     // Disable button to end turn
