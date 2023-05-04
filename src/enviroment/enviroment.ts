@@ -70,5 +70,6 @@ export const environment = {
     numJugadores: 'http://localhost:3000/partida/numJugadores/',
     cartaJulio: 'http://localhost:3000/partida/cartaJulio/',
     usarCartaJulio: 'http://localhost:3000/partida/usarCartaJulio/',
-    vender: 'http://localhost:3000/partida/vender/'
+    vender: 'http://localhost:3000/partida/vender/',
+    accionCarta: 'http://localhost:3000/partida/accionCarta/',
 };

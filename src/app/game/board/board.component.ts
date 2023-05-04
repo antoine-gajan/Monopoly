@@ -405,22 +405,23 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.end_turn();
       },
       complete: () => {
-        // If the player can play again, activate the button to play again
-        if (this.dices[0] === this.dices[1]) {
-          this.message = this.player[0] + ", puedes volver a tirar los dados";
-          document.getElementById("tirar-dados")!.removeAttribute("disabled");
-        }
         // If the position of player has changed, launch card action of the new position
-        else if (this.convert_position_to_id(this.player[2]) != this.convert_position_to_id(old_position_player)) {
+        if (this.convert_position_to_id(this.player[2]) != this.convert_position_to_id(old_position_player)) {
           if (this.convert_position_to_id(this.player[2]) == 10) {
             // Player has be sent to jail
             this.is_in_jail = true;
-            this.card_action();
+            this.message = "Has caído en julio";
           }
           else {
             this.is_in_jail = false;
-            this.card_action();
           }
+          // Trigger action of the card linked to the new position
+          this.card_action();
+        }
+        // If the player can play again, activate the button to play again
+        else if (this.dices[0] === this.dices[1] && !this.is_in_jail) {
+          this.message = this.player[0] + ", puedes volver a tirar los dados";
+          document.getElementById("tirar-dados")!.removeAttribute("disabled");
         }
         else {
           // End of turn : open button to go next turn
@@ -663,6 +664,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Inputs
     componentRef.instance.idPartida = this.game_id;
     componentRef.instance.username = this.player[0];
+    componentRef.instance.coordenadas = this.player[2];
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     // Give an id to the component html
@@ -679,6 +681,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Inputs
     componentRef.instance.idPartida = this.game_id;
     componentRef.instance.username = this.player[0];
+    componentRef.instance.coordenadas = this.player[2];
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     // Give an id to the component html

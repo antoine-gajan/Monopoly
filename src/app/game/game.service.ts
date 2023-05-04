@@ -237,4 +237,22 @@ export class GameService {
           console.log(response)})
       );
   }
+
+  action_of_card(idPartida: number, username: string, tarjeta:string, h: number, v: number){
+    const body =  JSON.stringify({  "idPartida": idPartida,
+                                            "username": username,
+                                            "tarjeta": tarjeta,
+                                            "coordenadas": {
+                                              "h": h,
+                                              "v": v
+                                            }
+                                        });
+
+    return this.http.put(environment.accionCarta, body, { observe: 'response' }).pipe(
+      tap(
+        (response) => {
+          console.log(response)})
+      );
+
+  }
 }
