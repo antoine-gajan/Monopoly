@@ -19,7 +19,7 @@ export class GameService {
   constructor(private http: HttpClient,
               private router: Router)  {}
 
-  roll_dices(username: string, idPartida: Number){
+  roll_dices(username: string, idPartida: number){
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     let body = JSON.stringify({"idPartida": idPartida, "username": username});
 
@@ -31,7 +31,7 @@ export class GameService {
     ));
   }
 
-  get_list_players(idPartida : Number): Observable<PlayerListResponse>{
+  get_list_players(idPartida : number): Observable<PlayerListResponse>{
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     let body = JSON.stringify({"idPartida": idPartida});
 
@@ -43,7 +43,7 @@ export class GameService {
     ));
   }
 
-  get_card(username: string, idPartida : number, h : Number, v : number){
+  get_card(username: string, idPartida : number, h : number, v : number){
     // Function which return the card information (owner, price to pay) and update position
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     let body = JSON.stringify({  "username": username,
@@ -57,7 +57,7 @@ export class GameService {
     ));
   }
 
-  buy_card(username: string, idPartida : Number, h : Number, v : Number){
+  buy_card(username: string, idPartida : number, h : number, v : number){
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     let body = JSON.stringify({  "username": username,
                                                     "coordenadas":{"h": h,"v": v},
@@ -71,7 +71,7 @@ export class GameService {
     ));
   }
 
-  increase_credit_property(username: string, idPartida : Number, h : Number, v : Number){
+  increase_credit_property(username: string, idPartida : number, h : number, v : number){
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     let body = JSON.stringify({  "username": username,
                                                     "coordenadas":{"h": h,"v": v},
@@ -85,7 +85,7 @@ export class GameService {
     ));
   }
 
-  declare_bankruptcy(username: string, idPartida : Number){
+  declare_bankruptcy(username: string, idPartida : number){
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     let body = JSON.stringify({  "username": username,
                                                     "idPartida": idPartida})
@@ -98,7 +98,7 @@ export class GameService {
     ));
   }
 
-  actualize(idPartida : Number, nJugadores : Number, dineroInicial : Number){
+  actualize(idPartida : number, nJugadores : number, dineroInicial : number){
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     let body = JSON.stringify({"idPartida": idPartida, "nJugadores": nJugadores, "dineroInicial": dineroInicial});
     return this.http.put(environment.actualizarPartida, body, httpOptions).pipe(
