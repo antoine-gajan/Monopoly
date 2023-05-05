@@ -505,12 +505,9 @@ export class BoardComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         this.update_player_info();
-      },
-      complete: () => {
-        // Update player properties
-        this.get_properties();
       }
     });
+    this.get_properties();
   }
 
   move_dices_action(): void{
