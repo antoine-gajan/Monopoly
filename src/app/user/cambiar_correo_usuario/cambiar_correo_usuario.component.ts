@@ -11,9 +11,14 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 export class CambiarCorreoComponent {
   form: FormGroup;
   username: string;
-  old_email: string;
+  old_email: string | null = null;
+  loading = true;
   //new_email: string;
-  constructor(private fb: FormBuilder, public userService: UserService, private router: Router){
+  constructor(
+    private fb: FormBuilder,
+    public userService: UserService,
+    private router: Router
+  ){
     this.form = this.fb.group({
       new_email: ['', [Validators.required]]
     });
@@ -25,15 +30,18 @@ export class CambiarCorreoComponent {
         userService.setEmail(response.body?.email ?? '');
         this.old_email = userService.getEmail();
         console.log(this.old_email);
+        this.loading = false;
         //this.router.navigate(['/ajustes_usuario']);
       },
       (error) => {
         console.log(error);
+        this.loading = false;
       }
     );  
     
     //this.old_email = this.route.snapshot.paramMap.get('email') ?? 'correo';
   }
+
   get new_email() {
     return this.form.get('new_email');
   }

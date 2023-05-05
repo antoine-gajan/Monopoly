@@ -123,6 +123,7 @@ p{
 }
   .opciones{
     display: flex;
+    margin-bottom: 40px;
   }
   .boton_si, .boton_no{
     padding: 0.375rem 0.75rem;

@@ -32,41 +32,14 @@
 
       <div class="card">
         <div class="card-header">
-          <h5 class="card-title mb-0">Perfil del usuario</h5>
+          <h5 class="card-title mb-0">CAMBIAR CORREO ELECTRÓNICO</h5>
         </div>
         <div class="card-body">
-          <!--<form [formGroup]="form" (ngSubmit)="guardar_new_username()" class="form">-->
-            <p><b>Su nombre de usuario actual es:</b></p>
-            <p><b>Introduzca el nuevo nombre del usuario </b></p>
-            <div class="formulario-nombre-usuario" >
-              <input type="text" formControlName="new_username" id="new_username" name="new_username" placeholder="nombre de usuario" class="formulario-nombre-usuario-input" required/>
-              <div *ngIf="form?.get('new_username')?.invalid && (form?.get('new_username')?.dirty || form?.get('new_username')?.touched)">
-                <div *ngIf="form?.get('new_username')?.errors?.['required']" style="color: red;">Este campo es obligatorio</div>
-              </div>
-            </div>
-            
-            <div class="opciones">
-              <button class="boton_si" type="submit">Guardar</button>
-              <button class="boton_no" onclick="window.history.back();">Cancelar</button>
-            </div>
-          <!--</form>-->
-
-
-
-
-
-
-
-
-
-
           <form [formGroup]="form" (ngSubmit)="guardar_nuevo_correo()">
-            <br><br><br>
-            <!--<h1>HOLA {{username}}</h1>-->
-            <!--<h1>HOLA {{old_email}}</h1>-->
-            <h5> Correo electrónico actual: {{old_email}} </h5>
-          
-            <h5> Introduzca el nuevo correo del usuario </h5>
+            <p><b>Correo electrónico actual:</b> <span id="email">{{old_email ? old_email : 'Cargando...'}}</span>
+            
+            
+            <p><b>Introduzca el nuevo correo eléctronico del usuario </b></p>
             <div class="formulario-nombre-usuario" >
               <!--<input placeholder="nuevo correo electrónnico" class="formulario-nombre-usuario-input" required/>-->
               
@@ -76,12 +49,13 @@
                 </div>
               
             </div>
-            <br><br>
             <div class="opciones">
               <button class="boton_si" type="submit">Guardar</button>
               <button class="boton_no" onclick="window.history.back();">Cancelar</button>
             </div>
+           
           </form>
+
         </div>
       </div>  
 

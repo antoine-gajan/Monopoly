@@ -109,7 +109,7 @@ export class UserService {
     // return this.http.get('/http://localhost:8080/users/devolverCorreo').pipe(
     //   map((response: any) => response.email)
     // );
-    return this.http.post<EmailInt>(environment.devolver_correo, user, {observe: 'response'})
+    return this.http.post<EmailInt>(environment.devolver_correo, user, {observe: 'response'});
   }
 
   guardar_nuevo_correo(user: any){
