@@ -22,7 +22,7 @@ export class InteractionCardComponent {
   // Define an EventEmitter to emit the "end turn" event of BoardComponent
   @Output() end_turn = new EventEmitter();
   @Output() close_card = new EventEmitter();
-  @Output() update_properties = new EventEmitter();
+  @Output() update_player_info = new EventEmitter();
 
   constructor(private gameService : GameService) {
 
@@ -50,7 +50,7 @@ export class InteractionCardComponent {
         console.log("You have bought the card");
         console.log(data);
         // Update properties of player
-        this.update_properties.emit();
+        this.update_player_info.emit();
         // Callback function to come back to board
         this.callback();
     },
@@ -99,7 +99,7 @@ export class InteractionCardComponent {
         console.log("Has vendido la casilla");
         console.log(data);
         // Update properties of player
-        this.update_properties.emit();
+        this.update_player_info.emit();
         // Callback function
         this.callback();
       },

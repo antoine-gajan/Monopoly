@@ -498,6 +498,21 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
+  update_player_info(): void {
+    this.gameService.get_list_players(this.game_id).subscribe({
+      next: (data: PlayerListResponse) => {
+        this.actualize_game_info(data);
+      },
+      error: (error) => {
+        this.update_player_info();
+      },
+      complete: () => {
+        // Update player properties
+        this.get_properties();
+      }
+    });
+  }
+
   move_dices_action(): void{
     // Delete previous interval for safety
     if (this.dices_interval != null) {
@@ -660,7 +675,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     componentRef.instance.close_card.subscribe(() => {this.delete_pop_up_component()});
-    componentRef.instance.update_properties.subscribe(() => {this.get_properties()});
+    componentRef.instance.update_player_info.subscribe(() => {this.update_player_info()});
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";
     // Center the component at the middle of the page
