@@ -46,6 +46,8 @@ export class JailCardComponent {
         }
         else {
           console.log("Error al comprobar si tiene carta Julio");
+          // Try again
+          this.has_card_to_go_out();
         }
       }
     );

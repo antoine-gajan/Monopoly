@@ -828,6 +828,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #tirar-dados:disabled{
   background-color: darkgrey;
+  cursor: not-allowed;
 }
 
 #tirar-dados:enabled{
@@ -849,8 +850,18 @@ h1, h2, h3, h4, h5, h6 {
 	background-color: #f3f3f3;
 }
 
+.btn-end-turn{
+  background-color: transparent;
+  border: 1px solid black;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
 #button-end-turn:disabled{
   background-color: darkgrey;
+  cursor: not-allowed;
 }
 
 #button-end-turn:enabled{
@@ -858,6 +869,19 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
 }
 
+.leave{
+  float: right;
+  margin-left: 450px;
+}
+
+.btn-stop-play{
+  background-color: #FC8585;
+  border: 1px solid #FC8585;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
 
 /* === CSS FOR THE TIMER === */
 .timer{
