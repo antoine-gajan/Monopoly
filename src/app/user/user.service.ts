@@ -118,7 +118,8 @@ export class UserService {
                     .subscribe(
                       (response) => {
                         console.log(response.status);
-                          this.router.navigateByUrl('/ajustes_usuario');
+                          //this.router.navigateByUrl('/ajustes_usuario');
+                          location.reload();
                       },
                       (error) => {
                         console.log(error);

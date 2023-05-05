@@ -20,7 +20,7 @@ export class CambiarCorreoComponent {
     private router: Router
   ){
     this.form = this.fb.group({
-      new_email: ['', [Validators.required]]
+      new_email: ['', [Validators.email, Validators.required]]
     });
     this.username = userService.getUsername();
     userService.leer_email({username: this.username})

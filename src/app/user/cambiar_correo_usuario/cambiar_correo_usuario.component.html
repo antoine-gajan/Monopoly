@@ -22,7 +22,7 @@
         <a class="list-group-item list-group-item-action" data-toggle="list" href="#password" role="tab" routerLink="/cambiar_username"> Cambiar nombre de usuario </a> 
         <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" routerLink="/cambiar_contraseña"> Cambiar contraseña </a>
         <a class="list-group-item list-group-item-action active" data-toggle="list" role="tab"> Cambiar correo electrónico </a>
-        <a class="list-group-item list-group-item-action" data-toggle="list"  role="tab" routerLink="/"> Cerrar sesión </a> 
+        <a class="list-group-item list-group-item-action" data-toggle="list"  role="tab" routerLink="/cerrar_sesion"> Cerrar sesión </a> 
         <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" routerLink="/delete_user"> Eliminar cuenta </a>   
       </div>
   
@@ -46,6 +46,7 @@
                 <input type="text" formControlName="new_email" id="new_email" name="new_email" placeholder="nuevo correo electrónico" class="formulario-nombre-usuario-input" required/>
                 <div *ngIf="form?.get('new_email')?.invalid && (form?.get('new_email')?.dirty || form?.get('new_email')?.touched)">
                   <div *ngIf="form?.get('new_email')?.errors?.['required']" style="color: red;">Este campo es obligatorio</div>
+                  <div *ngIf="form?.get('new_email')?.errors?.['email']" style="color: red;">Formato de email incorrecto</div>
                 </div>
               
             </div>

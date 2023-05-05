@@ -33,6 +33,7 @@ import {ProductComponent} from "./shop/product/product.component";
 import {TiendaComponent} from "./shop/tienda/tienda.component";
 import {NgOptimizedImage} from "@angular/common";
 import { DatosUsuarioComponent } from './user/datos_usuario/datos_usuario.component';
+import { CerrarSesionComponentAjustes } from './user/cerrar_sesion/cerrar_sesion.component';
 @NgModule({
     declarations: [
         LoginComponent,
@@ -57,7 +58,8 @@ import { DatosUsuarioComponent } from './user/datos_usuario/datos_usuario.compon
         EsperarSalaComponent,
         ProductComponent,
         TiendaComponent,
-        DatosUsuarioComponent
+        DatosUsuarioComponent,
+        CerrarSesionComponentAjustes
     ],
   imports: [
     FormsModule,

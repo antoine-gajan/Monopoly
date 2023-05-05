@@ -31,6 +31,7 @@ import { PantallaInvitadoComponent } from './pantalla_invitado/pantalla_invitado
 import { UnirseSalaInvitadoComponent } from './unirse_sala_invitado/unirse_sala_invitado.component';
 import { EsperarSalaComponent } from './esperar_sala/esperar_sala.component';
 import { DatosUsuarioComponent } from './user/datos_usuario/datos_usuario.component';
+import { CerrarSesionComponentAjustes } from './user/cerrar_sesion/cerrar_sesion.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -60,6 +61,7 @@ const routes: Routes = [
   { path: 'unirse_sala_invitado', component: UnirseSalaInvitadoComponent},
   { path: 'esperar_sala/:id', component: EsperarSalaComponent },
   { path: 'datos_usuario', component: DatosUsuarioComponent},
+  { path: 'cerrar_sesion', component: CerrarSesionComponentAjustes},
   { path: '', pathMatch: "full", redirectTo: '/home' },
   { path: '**', component: ErrorPageComponent }
 ];

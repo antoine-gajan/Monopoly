@@ -9,13 +9,49 @@
   </div>
 </header>
 
-<form>
-  <h5>¿Está seguro que desea eliminar su cuenta?</h5>
-  <div class="opciones">
-    <button class="boton_si"(click)="onDeleteUser()" type="submit">Sí</button>
-    <button class="boton_no" type="submit" routerLink="/ajustes_usuario">No</button>
-  </div>
-  <br><br><br>
+<body>
 
-</form>
-<br><br><br><br><br><br>
+  <div class="row">
+    <div class="col-md-4 col-xl-1">
+    
+      <div class="card-header">
+        <b><h5 class="card-title mb-0">Ajustes de usuario</h5></b>
+      </div>
+      <div class="list-group list-group-flush" role="tablist">
+        <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" routerLink="/ajustes_usuario"> Perfil del usuario </a> 
+        <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" routerLink="/cambiar_username"> Cambiar nombre de usuario </a> 
+        <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" routerLink="/cambiar_contraseña"> Cambiar contraseña </a>
+        <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" routerLink="/cambiar_correo"> Cambiar correo electrónico </a>
+        <a class="lista-group-item lista-group-item-action " data-toggle="list" role="tab" routerLink="/cerrar_sesion"> Cerrar sesión </a> 
+        <a class="list-group-item list-group-item-action active" data-toggle="list"  role="tab"> Eliminar cuenta </a>   
+      </div>
+  
+    </div>
+
+    <div class="col-md-4 col-xl-1">
+
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">ELIMINAR CUENTA</h5>
+        </div>
+        <div class="card-body">
+            
+            <form>
+              <p><b>¿Está seguro que desea eliminar su cuenta?</b></p>
+              <div class="opciones">
+                <button class="boton_si"(click)="onDeleteUser()" type="submit">Sí</button>
+                <button class="boton_no" type="submit" routerLink="/ajustes_usuario">No</button>
+              </div>
+
+            
+            </form>
+
+        </div>
+      </div>  
+
+      
+
+    </div> 
+
+  </div>
+</body>
