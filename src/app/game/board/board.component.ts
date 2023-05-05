@@ -88,10 +88,10 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // Destroy the intervals for safety
-    if (this.interval_play != null){
+    if (this.interval_play != undefined){
       this.interval_play.unsubscribe();
     }
-    if (this.dices_interval != null){
+    if (this.dices_interval != undefined){
       this.dices_interval.unsubscribe();
     }
   }
@@ -154,22 +154,17 @@ export class BoardComponent implements OnInit, OnDestroy {
   get_properties_of_other_players(): void {
     // Get every properties of the other players
     console.log("Get properties of other players");
-    // Prepare requests
-    const requests = this.other_players_list.map(other_player => {
-      const username = other_player[0];
-      return this.gameService.get_all_properties_of_player(this.game_id, username);
-    });
-    // Execute all requests in parallel
-    forkJoin(requests).subscribe(responses => {
-      responses.forEach((data: PropertiesBoughtResponse, i) => {
-        const username = this.other_players_list[i][0];
-        const properties: [string, Coordenadas][] = [];
-        for (let i = 0; i < data.casillas.length; i++) {
-          properties.push([data.casillas[i].nombre, data.casillas[i].coordenadas]);
+    for (let player of this.other_players_list) {
+      this.gameService.get_all_properties_of_player(this.game_id, player[0]).subscribe({
+        next: (data: PropertiesBoughtResponse) => {
+          let properties: [string, Coordenadas][] = [];
+          for (let i = 0; i < data.casillas.length; i++) {
+            properties.push([data.casillas[i].nombre, data.casillas[i].coordenadas]);
+          }
+          this.other_player_properties[player[0]] = properties;
         }
-        this.other_player_properties[username] = properties;
       });
-    });
+    }
   }
 
     /* === FUNCTIONS TO PLAY === */

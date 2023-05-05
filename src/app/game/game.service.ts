@@ -220,20 +220,15 @@ export class GameService {
   }
 
   sell_card(idPartida: number, username: string, h: number, v: number){
-    const options = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-      body: {
-        idPartida: idPartida,
-        username: username,
-        coordenadas: {
-          h: h,
-          v: v
-        }
-      },
-    };
-    return this.http.delete(environment.vender, options).pipe(
+    const body =  JSON.stringify({  "idPartida": idPartida,
+                                            "username": username,
+                                            "coordenadas": {
+                                              "h": h,
+                                              "v": v
+                                            }
+                                        });
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    return this.http.post(environment.vender, body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response)})
@@ -250,7 +245,9 @@ export class GameService {
                                             }
                                         });
 
-    return this.http.put(environment.accionCarta, body, { observe: 'response' }).pipe(
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+
+    return this.http.put(environment.accionCarta, body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response)})
