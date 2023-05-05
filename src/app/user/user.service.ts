@@ -127,12 +127,21 @@ export class UserService {
   }
 
   guardar_cambio_password(user: any){
+    console.log("GUARDAR CAMBIO PASSWORD");
     console.log(user);
+    console.log(user);
+    const nuevo_password = CryptoJS.SHA512(user.password).toString();
+    const nuevo_confirm_password = CryptoJS.SHA512(user.confirm_password).toString();
+    console.log(user);
+    user.password = nuevo_password;
+    user.confirm_password = nuevo_confirm_password;
+    console.log(user);
+    
     return this.http.put(environment.update_password, user, {responseType: 'text', observe: 'response'})
                     .subscribe(
                       (response) => {
                         console.log(response.status);
-                          this.router.navigateByUrl('/ajustes_usuario');
+                          //this.router.navigateByUrl('/ajustes_usuario');
                       },
                       (error) => {
                         console.log(error);

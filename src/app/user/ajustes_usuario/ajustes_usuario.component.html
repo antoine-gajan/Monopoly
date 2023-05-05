@@ -1,4 +1,4 @@
-<header id="header" class="fixed-top">
+<header id="header">
   <div style="display: flex; justify-content: space-between;">
     <img class="volver_boton" src="../../../assets/images/voler_boton.png" onclick="window.history.back();" />
     <h4><a style="color: #080808" routerLink="/">MONOPOLY VERSIÓN INFORMÁTICA</a></h4>
@@ -10,63 +10,54 @@
 </header>
 
 <body>
-  <div id="snippetContent">
-    <div class="container p-0">
 
-      <div class="row">
-        <div class="col-md-5 col-xl-4">
-          
-          <div class="card">
-            <div class="card-header">
-              <b><h5 class="card-title mb-0">Ajustes de usuario</h5></b>
-            </div>
-            <div class="list-group list-group-flush" role="tablist">
-              <a class="lista-group-item lista-group-item-action active" data-toggle="list" role="tab"> Perfil del usuario </a> 
-              <a class="list-group-item list-group-item-action" data-toggle="list" href="#password" role="tab"> Cambiar nombre de usuario </a> 
-              <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab"> Cambiar contraseña </a>
-              <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab"> Cambiar correo electrónico </a>
-              <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab"> Cerrar sesión </a> 
-              <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab"> Eliminar cuenta </a>   
-            </div>
-          </div>
-        
-        </div>
-
-        <div class="col-md-7 col-xl-8">
-        
-          <div class="card">
-            <div class="card-header">
-              <h5 class="card-title mb-0">Perfil del usuario</h5>
-            </div>
-            <div class="card-body">
-              <form>
-                <div class="row">
-                  <div class="col-md-8">
-                      <p><b>Nombre de usuario: </b>{{username}}</p>
-                      <p><b>Correo electrónico: </b>{{email}}</p>
-                      <p>------------</p>
-                      <B><p>ESTADÍSTICAS</p></B>
-                      <p><b>Partidas ganadas: </b> XXXXX</p>
-                      <p><b>Juegos jugados: </b> XXXXX</p>
-                      <p><b>Ratio: </b> XXXXX</p>
-                  </div>
-
-                  <div class="col-md-4">
-                    <div class="text-center">
-                      <img alt="Andrew Jones" src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle img-responsive mt-2" width="128" height="128">
-                    </div>
-                  </div>
-
-                </div>
-              </form>
-            </div>
-
-          </div>
-          
-         </div> 
-
+  <div class="row">
+    <div class="col-md-4 col-xl-1">
+    
+      <div class="card-header">
+        <b><h5 class="card-title mb-0">Ajustes de usuario</h5></b>
       </div>
-
+      <div class="list-group list-group-flush" role="tablist">
+        <a class="lista-group-item lista-group-item-action active" data-toggle="list" role="tab" > Perfil del usuario </a> 
+        <a class="list-group-item list-group-item-action" data-toggle="list" href="#password" role="tab" routerLink="/cambiar_username"> Cambiar nombre de usuario </a> 
+        <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab" routerLink="/cambiar_contraseña"> Cambiar contraseña </a>
+        <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab" routerLink="/cambiar_correo"> Cambiar correo electrónico </a>
+        <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab" routerLink="/"> Cerrar sesión </a> 
+        <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab" routerLink="/delete_user"> Eliminar cuenta </a>   
+      </div>
+  
     </div>
+
+    <div class="col-md-4 col-xl-1">
+
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Perfil del usuario</h5>
+        </div>
+        <div class="card-body">
+          
+          <div class="row">
+            <div class="col-md-4">
+              <p><b>Nombre de usuario: </b>{{username}}</p>
+              <p><b>Correo electrónico: </b>{{email}}</p>
+              <p>------------</p>
+              <B><p>ESTADÍSTICAS</p></B>
+              <p><b>Partidas ganadas: </b> XXXXX</p>
+              <p><b>Juegos jugados: </b> XXXXX</p>
+              <p><b>Ratio: </b> XXXXX</p>
+            </div>
+
+            <div class="col-md-4">
+              <div class="text-center">
+                <img alt="Andrew Jones" src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle img-responsive mt-2" width="128" height="128">
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>  
+
+    </div> 
+
   </div>
 </body>

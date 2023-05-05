@@ -10,6 +10,9 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 export class CambiarContraseñaComponent implements OnInit {
   form: FormGroup;
+  passwordShow: boolean = false;
+  confirmPasswordShow: boolean = false;
+  mensajeCambiado: boolean = false;
   //password: string;
   //confirm_password: string;
   username: string;
@@ -33,5 +36,18 @@ export class CambiarContraseñaComponent implements OnInit {
     const user = {username: this.username, password: this.form.value.password, confirm_password: this.form.value.confirm_password};
     console.log(user);
     this.userService.guardar_cambio_password(user);
+    this.mensajeCambiado = !this.mensajeCambiado;
+    
+  }
+  passwordMostrarOcultar(){
+    this.passwordShow = !this.passwordShow;
+  }
+  confirmPasswordMostrarOcultar(){
+    this.confirmPasswordShow = !this.confirmPasswordShow;
+  }
+  pulsarBoton(){
+    console.log("pulsado");
+    location.reload();
+    this.mensajeCambiado = !this.mensajeCambiado;
   }
 }
