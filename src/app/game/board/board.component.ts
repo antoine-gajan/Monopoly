@@ -29,6 +29,9 @@ export class BoardComponent implements OnInit, OnDestroy {
   is_in_jail: boolean = false;
   is_bankrupt: boolean = false;
   player_properties: [string, Coordenadas][] = [];
+  timer: any;
+  is_timer_active: boolean = false;
+  remaining_time: number = 0;
 
   // Relative to other players
   other_players_list: [string, number, Coordenadas][] = [];
@@ -105,7 +108,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.actualize_game_info(data);
       },
       error: (error) => {
-        console.error(error);
+        //console.error(error);
         this.load_game();
       },
       complete: () => {
@@ -127,11 +130,17 @@ export class BoardComponent implements OnInit, OnDestroy {
     if (!this.is_bankrupt) {
       this.gameService.get_all_properties_of_player(this.game_id, this.player[0]).subscribe({
         next: (data: PropertiesBoughtResponse) => {
+          console.log("Get properties of player realized successfully");
           let properties: [string, Coordenadas][] = [];
           for (let i = 0; i < data.casillas.length; i++) {
             properties.push([data.casillas[i].nombre, data.casillas[i].coordenadas]);
           }
           this.player_properties = properties;
+        },
+        error: (error) => {
+          //console.error(error);
+          // Try again
+          this.get_properties();
         }
       });
     }
@@ -180,6 +189,8 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.is_in_jail = false;
           this.message = this.player[0] + ", es tu turno";
           document.getElementById("tirar-dados")!.removeAttribute("disabled");
+          // Start timer
+          this.startTimer();
         }
         // Return empty observable to stop the interval
         return EMPTY;
@@ -241,6 +252,9 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   play_turn_player() {
+    console.log("=== PLAY TURN ===");
+    // Cancel the timer
+    this.cancelTimer();
     // Disable play button to avoid double click
     document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
     // Function to play the turn of a player
@@ -288,6 +302,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   async card_action() {
+    console.log("=== CARD ACTION ===");
     // Get card information
     let owner_of_card: string | null = null;
     let money_to_pay: number | null = null;
@@ -410,7 +425,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.show_position_every_players();
       },
       error: (error) => {
-        console.error(error);
+        //console.error(error);
         // Try again
         this.end_turn();
       },
@@ -502,12 +517,12 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.gameService.get_list_players(this.game_id).subscribe({
       next: (data: PlayerListResponse) => {
         this.actualize_game_info(data);
+        this.get_properties();
       },
       error: (error) => {
         this.update_player_info();
       }
     });
-    this.get_properties();
   }
 
   move_dices_action(): void{
@@ -858,4 +873,37 @@ export class BoardComponent implements OnInit, OnDestroy {
       return "#fafaf8";
     }
   }
+
+  /* === FUNCTIONS DEL TIMER === */
+  startTimer() {
+    console.log("=== START TIMER ===");
+    // Set timer as active
+    this.is_timer_active = true;
+    this.remaining_time = 90;
+    // Time limit in seconds
+    const time_limit = 90;
+    // calculate the turn end time in milliseconds
+    const end_time = Date.now() + time_limit * 1000;
+    this.timer = setInterval(() => {
+    // Calculate remaining time in seconds
+    this.remaining_time = Math.floor((end_time - Date.now()) / 1000);
+    // Check if the turn hasn't already ended
+    if (this.remaining_time <= 0) {
+      // End the turn and perform any necessary actions
+      console.log("90 SECONDS WAITED");
+      alert("Se te acaba el tiempo, vas a estar desconectado del juego.")
+      // TODO: DELETE PLAYER FROM GAME
+      // Clear interval
+      clearInterval(this.timer);
+    }
+    }, 1000);
+  }
+
+  cancelTimer() {
+    console.log("=== CANCEL TIMER ===");
+    // Set timer as inactive
+    this.is_timer_active = false;
+    clearInterval(this.timer);
+  }
+
 }
