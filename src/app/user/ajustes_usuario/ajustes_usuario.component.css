@@ -101,6 +101,7 @@ h1, h2, h3, h4, h5, h6 {
   padding-left: 0;
   margin-bottom: 0;
 }
+
 .card {
   position: relative;
   display: -ms-flexbox;
@@ -141,13 +142,13 @@ html {
 *, ::after, ::before {
   box-sizing: border-box;
 }
-.card-header+.list-group .list-group-item:first-child {
+.card-header+.list-group .list-group-item:first-child, .lista-group-item:first-child {
   border-top: 0;
   border-top-width: 0px;
   border-top-style: initial;
   border-top-color: initial;
 }
-.list-group-flush .list-group-item {
+.list-group-flush .list-group-item .lista-group-item {
   border-right: 0;
   border-right-width: 0px;
   border-right-style: initial;
@@ -168,11 +169,21 @@ html {
   border-bottom-color: rgb(0, 123, 255);
   border-left-color: rgb(0, 123, 255);
 }
-.list-group-item:first-child {
+.lista-group-item.active {
+  z-index: 2;
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+  border-top-color: rgb(0, 123, 255);
+  border-right-color: rgb(0, 123, 255);
+  border-bottom-color: rgb(0, 123, 255);
+  border-left-color: rgb(0, 123, 255);
+}
+.list-group-item:first-child,  .lista-group-item:first-child{
   border-top-left-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
 }
-.list-group-item {
+.list-group-item, .lista-group-item {
   position: relative;
   display: block;
   padding: 0.75rem 1.25rem;
@@ -197,7 +208,7 @@ html {
   border-image-outset: initial;
   border-image-repeat: initial;
 }
-.list-group-item-action {
+.list-group-item-action, .lista-group-item-action  {
   width: 100%;
   color: #495057;
   text-align: inherit;
