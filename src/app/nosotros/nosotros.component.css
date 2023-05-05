@@ -6,20 +6,25 @@
     padding: 15px 0;
 }
 #floating-image {
-    width: 550px;
-    height: 400px;
-
+    width: 400px;
+    height: 300px;
+    size: 10%;
     opacity: 0;
     transform: translateY(50px);
     transition: all 0.5s ease-in-out;
+    float: left;
   }
-  #main{
-    opacity: 0;
+#main{
+  opacity: 0;
   transform: translateY(50px);
   transition: all 0.5s ease-in-out;
-  }
+  
+  
+  
+}
 .section-text{
     text-align: center;
+    margin-top: 0%;
 }
 
 .texto-menor{
@@ -65,7 +70,8 @@
     line-height: 50px;
     text-align: center;
 }
-
   
-
-  
+.seccion {
+    display: flex;
+    flex-direction: row;
+}

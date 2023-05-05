@@ -75,4 +75,9 @@ export class RegistrationComponent implements OnInit{
   confirmPasswordMostrarOcultarRegistration(){
     this.confirmPasswordShow = !this.confirmPasswordShow;
   }
+  // función que permite volver arriba en la página
+  volverArriba() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
 }
