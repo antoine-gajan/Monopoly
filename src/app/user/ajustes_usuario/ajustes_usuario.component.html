@@ -9,71 +9,60 @@
   </div>
 </header>
 
+<body>
+  <div id="snippetContent">
+    <div class="container p-0">
 
-<body><div id="snippetContent">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/css/bootstrap.min.css"> 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/js/bootstrap.bundle.min.js"></script>
-   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-   <div class="container p-0">
-    
-    <div class="row">
-      <div class="col-md-5 col-xl-4">
-        <div class="card">
-          <div class="card-header">
-          <b><h5 class="card-title mb-0">Ajustes de usuario</h5></b>
-          </div>
-          <div class="list-group list-group-flush" role="tablist">
-            <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account" role="tab"> Perfil del usuario </a> 
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#password" role="tab"> Cambiar nombre de usuario </a> 
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab"> Cambiar contraseña </a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab"> Cambiar correo electrónico </a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab"> Cerrar sesión </a> 
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab"> Eliminar cuenta </a> 
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-7 col-xl-8">
-        <div class="tab-content">
-          <div class="tab-pane fade show active" id="account" role="tabpanel">
-            <div class="card">
-              <div class="card-header">
-                <h5 class="card-title mb-0">Perfil del usuario</h5>
-              </div>
-              <div class="card-body">
-                <form>
-                  <div class="row">
-                    <div class="col-md-8">
-                      <div class="form-group"> 
-                        <p><b>Nombre de usuario: </b>{{username}}</p>
-                        <p><b>Correo electrónico: </b>{{email}}</p>
-                        <p>------------</p>
-                        <B><p>ESTADÍSTICAS</p></B>
-                        <p><b>Partidas ganadas: </b> XXXXX</p>
-                        <p><b>Juegos jugados: </b> XXXXX</p>
-                        <p><b>Ratio: </b> XXXXX</p>
-                      </div>
-                    
-                    </div>
-                    <div class="col-md-4">
-                      <div class="text-center"> 
-                        <img alt="Andrew Jones" src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle img-responsive mt-2" width="128" height="128">
-                        <!--<div class="mt-2"> 
-                          <span class="btn btn-primary">
-                            <i class="fa fa-upload"></i>
-                          </span>
-                        </div> -->
-                      </div>
-                    </div>
-                  </div>
-                  <!--<button type="submit" class="btn btn-primary">Save changes</button>-->
-                </form>
-              </div>
+      <div class="row">
+        <div class="col-md-5 col-xl-4">
+          
+          <div class="card">
+            <div class="card-header">
+              <b><h5 class="card-title mb-0">Ajustes de usuario</h5></b>
+            </div>
+            <div class="list-group list-group-flush" role="tablist">
+              <a class="list-group-item list-group-item-action active" data-toggle="list" role="tab"> Perfil del usuario </a> 
+              <a class="list-group-item list-group-item-action" data-toggle="list" href="#password" role="tab"> Cambiar nombre de usuario </a> 
+              <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab"> Cambiar contraseña </a>
+              <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab"> Cambiar correo electrónico </a>
+              <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab"> Cerrar sesión </a> 
+              <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab"> Eliminar cuenta </a>   
             </div>
           </div>
+        
         </div>
+
+        <div class="col-md-7 col-xl-8">
+        
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Perfil del usuario</h5>
+            </div>
+            <div class="card-body">
+              <form>
+                <div class="row">
+                  <div class="col-md-8">
+                      <p><b>Nombre de usuario: </b>{{username}}</p>
+                      <p><b>Correo electrónico: </b>{{email}}</p>
+                      <p>------------</p>
+                      <B><p>ESTADÍSTICAS</p></B>
+                      <p><b>Partidas ganadas: </b> XXXXX</p>
+                      <p><b>Juegos jugados: </b> XXXXX</p>
+                      <p><b>Ratio: </b> XXXXX</p>
+                  
+                  </div>
+                  <div class="col-md-4">
+                    <div class="text-center">
+                      <img alt="Andrew Jones" src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle img-responsive mt-2" width="128" height="128">
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+         </div> 
       </div>
+
     </div>
-    </div>  
-  </div> 
+  </div>
 </body>
