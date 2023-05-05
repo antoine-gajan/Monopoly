@@ -4,6 +4,8 @@ import { Observable, map, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from 'enviroment/enviroment';
 import * as CryptoJS from 'crypto-js';
+//import { io, Socket } from 'socket.io-client';
+
 
 interface EmailInt {
   email: string;
@@ -12,10 +14,12 @@ interface RespuestaNumJugadores {
   numJugadores: number;
 }
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 
 })
 export class UserService {
+  
+  
 
   private username: string;
   private newusername: string;
@@ -24,8 +28,10 @@ export class UserService {
   private confirm_password: string;
 
   constructor(private http: HttpClient,
-    private router: Router)  {}
-
+    private router: Router/*, private socket: Socket*/) {
+      
+      //this.socket = io(environment.socketURL); // Cambia esto por la URL de tu servidor de sockets.io
+    }
 
   setUsername(username: string): void {
     localStorage.setItem('username', username);
@@ -43,12 +49,8 @@ export class UserService {
     // Get username from browser
     let username_browser = localStorage.getItem('username');
     let username_client = this.username;
-    if (username_browser) {
-      return username_browser;
-    }
-    else {
-      return username_client;
-    }
+    return username_browser ? username_browser : username_client;
+  
   }
 
   hacerPeticion() {
@@ -57,7 +59,7 @@ export class UserService {
     );
   }
 
-  login(user: any){
+  /*login(user: any){
     console.log(user);
     const nuevo_password = CryptoJS.SHA512(user.password).toString();
     console.log(user);
@@ -74,6 +76,16 @@ export class UserService {
                         console.log(error);
                       }
                     );
+  }*/
+  login(user: any) {
+    const nuevo_password = CryptoJS.SHA512(user.password).toString();
+    user.password = nuevo_password;
+    this.setUsername(user.username);
+    console.log("LOGIN", user);
+    // Emit a 'login' event with the user object to the server using socket.io
+    //this.socket.emit('login', user);
+
+    //return this.http.post(environment.login, user, {responseType: 'text', observe: 'response'});
   }
   registro(user: any){
     console.log(user);
@@ -109,7 +121,7 @@ export class UserService {
     // return this.http.get('/http://localhost:8080/users/devolverCorreo').pipe(
     //   map((response: any) => response.email)
     // );
-    return this.http.post<EmailInt>(environment.devolver_correo, user, {observe: 'response'})
+    return this.http.post<EmailInt>(environment.devolver_correo, user, {observe: 'response'});
   }
 
   guardar_nuevo_correo(user: any){
@@ -118,7 +130,8 @@ export class UserService {
                     .subscribe(
                       (response) => {
                         console.log(response.status);
-                          this.router.navigateByUrl('/ajustes_usuario');
+                          //this.router.navigateByUrl('/ajustes_usuario');
+                          location.reload();
                       },
                       (error) => {
                         console.log(error);
@@ -127,12 +140,21 @@ export class UserService {
   }
 
   guardar_cambio_password(user: any){
+    console.log("GUARDAR CAMBIO PASSWORD");
     console.log(user);
+    console.log(user);
+    const nuevo_password = CryptoJS.SHA512(user.password).toString();
+    const nuevo_confirm_password = CryptoJS.SHA512(user.confirm_password).toString();
+    console.log(user);
+    user.password = nuevo_password;
+    user.confirm_password = nuevo_confirm_password;
+    console.log(user);
+    
     return this.http.put(environment.update_password, user, {responseType: 'text', observe: 'response'})
                     .subscribe(
                       (response) => {
                         console.log(response.status);
-                          this.router.navigateByUrl('/ajustes_usuario');
+                          //this.router.navigateByUrl('/ajustes_usuario');
                       },
                       (error) => {
                         console.log(error);
