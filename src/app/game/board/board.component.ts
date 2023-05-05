@@ -38,8 +38,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   other_player_properties: {[player_username: string]: [string, Coordenadas][]} = {};
 
   // Relative to the board and cards positions
-  nothing_cards: number[] = [0, 10, 20];
-  prison_cards: number[] = [30];
+  nothing_cards: number[] = [0, 10, 20, 30];
   chance_cards: number[] = [7, 22, 36];
   community_cards: number[] = [2, 17, 33];
   taxes_cards: number[] = [4, 38];
@@ -63,7 +62,9 @@ export class BoardComponent implements OnInit, OnDestroy {
               private router: Router, private componentFactoryResolver: ComponentFactoryResolver,
               private viewContainerRef: ViewContainerRef, private elRef: ElementRef) { }
 
+  /* === FUNCTIONS TO INITIALIZE AND DESTROY THE GAME === */
   ngOnInit() {
+    console.log("Board component initialized");
     // Get id of the game
     const game_id: string | null = this.route.snapshot.paramMap.get('id');
     if (game_id != null) {
@@ -87,10 +88,12 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // Destroy the intervals for safety
-    this.interval_play.unsubscribe();
-    this.dices_interval.unsubscribe();
-    clearInterval(this.interval_play);
-    clearInterval(this.dices_interval);
+    if (this.interval_play != null){
+      this.interval_play.unsubscribe();
+    }
+    if (this.dices_interval != null){
+      this.dices_interval.unsubscribe();
+    }
   }
 
 
@@ -125,12 +128,14 @@ export class BoardComponent implements OnInit, OnDestroy {
     });
   }
 
+  /* === FUNCTIONS TO GET THE PROPERTIES OF THE PLAYERS === */
+
   get_properties(): void {
     // Get every properties of the player if he is not bankrupt
     if (!this.is_bankrupt) {
       this.gameService.get_all_properties_of_player(this.game_id, this.player[0]).subscribe({
         next: (data: PropertiesBoughtResponse) => {
-          console.log("Get properties of player realized successfully");
+          console.log("Get properties of client player realized successfully");
           let properties: [string, Coordenadas][] = [];
           for (let i = 0; i < data.casillas.length; i++) {
             properties.push([data.casillas[i].nombre, data.casillas[i].coordenadas]);
@@ -147,22 +152,27 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   get_properties_of_other_players(): void {
-  const requests = this.other_players_list.map(other_player => {
-    const username = other_player[0];
-    return this.gameService.get_all_properties_of_player(this.game_id, username);
-  });
-
-  forkJoin(requests).subscribe(responses => {
-    responses.forEach((data: PropertiesBoughtResponse, i) => {
-      const username = this.other_players_list[i][0];
-      const properties: [string, Coordenadas][] = [];
-      for (let i = 0; i < data.casillas.length; i++) {
-        properties.push([data.casillas[i].nombre, data.casillas[i].coordenadas]);
-      }
-      this.other_player_properties[username] = properties;
+    // Get every properties of the other players
+    console.log("Get properties of other players");
+    // Prepare requests
+    const requests = this.other_players_list.map(other_player => {
+      const username = other_player[0];
+      return this.gameService.get_all_properties_of_player(this.game_id, username);
     });
-  });
-}
+    // Execute all requests in parallel
+    forkJoin(requests).subscribe(responses => {
+      responses.forEach((data: PropertiesBoughtResponse, i) => {
+        const username = this.other_players_list[i][0];
+        const properties: [string, Coordenadas][] = [];
+        for (let i = 0; i < data.casillas.length; i++) {
+          properties.push([data.casillas[i].nombre, data.casillas[i].coordenadas]);
+        }
+        this.other_player_properties[username] = properties;
+      });
+    });
+  }
+
+    /* === FUNCTIONS TO PLAY === */
 
   async play(): Promise<void> {
     // Ensure to execute the interval only once
@@ -190,7 +200,7 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.message = this.player[0] + ", es tu turno";
           document.getElementById("tirar-dados")!.removeAttribute("disabled");
           // Start timer
-          this.startTimer();
+          this.startTimer("leave_game");
         }
         // Return empty observable to stop the interval
         return EMPTY;
@@ -240,17 +250,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     });
   }
 
-  show_position_every_players(): void {
-    // Show position of the player if he is not bankrupt
-    if (!this.is_bankrupt) {
-      this.show_position(this.player[0], this.player[2], 0);
-    }
-    // Show position of the other players
-    for (let i = 0; i < this.other_players_list.length; i++) {
-      this.show_position(this.other_players_list[i][0], this.other_players_list[i][2], i + 1);
-    }
-  }
-
   play_turn_player() {
     console.log("=== PLAY TURN ===");
     // Cancel the timer
@@ -275,9 +274,6 @@ export class BoardComponent implements OnInit, OnDestroy {
       }
       else if (error.status == 500){
         console.log("Error interno del servidor");
-      }
-      else {
-        //console.log(error);
       }
       // Try again
       this.play_turn_player();
@@ -309,6 +305,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     let increase_credit_possible: boolean = false;
     this.gameService.get_card(this.player[0], this.game_id, this.player[2].h, this.player[2].v).subscribe({
       next: (data: any) => {
+        console.log("Position : " + this.player[2].h + " " + this.player[2].v);
         owner_of_card = data.jugador;
         money_to_pay = data.dinero;
         // If player owns the card, check if increase is possible
@@ -332,6 +329,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       complete: async () => {
         // Get position with id
         let position_id = this.convert_position_to_id(this.player[2]);
+        console.log("Position id: " + position_id);
         // Wait 0.5 seconds
         await this.sleep(500);
         // Check where is the player and special actions linked to the position
@@ -370,38 +368,27 @@ export class BoardComponent implements OnInit, OnDestroy {
           // If no owner, can buy
           if (owner_of_card == null) {
             // Display buy card
-            this.createCardComponent(this.player[2].v, this.player[2].h, "Quieres comprar ?", this.player[1], this.dices[0] == this.dices[1], "buy");
+            this.createCardComponent(this.player[2].v, this.player[2].h, "Quieres comprar ?", this.dices[0] == this.dices[1], "buy");
           }
           // If owner is the player
           else if (owner_of_card == this.player[0]) {
             // If can increase the number of credit
             if (increase_credit_possible) {
-              this.createCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.player[1], this.dices[0] == this.dices[1], "increase");
+              this.createCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.dices[0] == this.dices[1], "increase");
             }
             // If can't increase the number of credit, propose to sell the card
             else {
-              this.createCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.player[1], this.dices[0] == this.dices[1], "sell");
+              this.createCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.dices[0] == this.dices[1], "sell");
             }
           }
           // If owner is another player
           else if (owner_of_card != this.player[0] && money_to_pay != null) {
             // Pay if you are not bankrupt
             if (!this.is_bankrupt) {
-              this.createCardComponent(this.player[2].v, this.player[2].h, "La tarjeta pertenece a " + owner_of_card, this.player[1], this.dices[0] == this.dices[1], "pay", money_to_pay);
+              this.createCardComponent(this.player[2].v, this.player[2].h, "La tarjeta pertenece a " + owner_of_card, this.dices[0] == this.dices[1], "pay", money_to_pay);
             }
             // Else, you are bankrupt
             else {
-              // Declare bankruptcy to backend
-              this.gameService.declare_bankruptcy(this.player[0], this.game_id).subscribe({
-                next: (data: any) => {
-                  console.log(data);
-                  // Update player money to 0
-                  this.player[1] = 0;
-                },
-                error: (error) => {
-                  console.error(error);
-                }
-              });
               this.createInfoCardComponent("BANCARROTA", "Has perdido...<br>No tienes suficiente dinero para pagar " + money_to_pay + "€ a " + owner_of_card + " !", "Vale", false);
             }
           }
@@ -416,7 +403,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.delete_pop_up_component();
     // Get old position of player
     let old_position_player = this.player[2];
-    console.log("old position player : " + old_position_player);
+    console.log("old position player (h,v): " + old_position_player.h + " " + old_position_player.v);
     // Get new position of player by updating game information
     this.gameService.get_list_players(this.game_id).subscribe({
       next: (data: PlayerListResponse) => {
@@ -452,6 +439,8 @@ export class BoardComponent implements OnInit, OnDestroy {
           // End of turn : open button to go next turn
           this.message = "Pulsa el botón para terminar tu turno"
           document.getElementById("button-end-turn")!.removeAttribute("disabled");
+          // Start timer to trigger next turn
+          this.startTimer("next_turn");
           }
         }
     });
@@ -469,7 +458,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.gameService.next_turn(this.game_id).subscribe({
       next: (data) => {
         this.current_player = data.jugador;
-        console.log(data);
+        console.log("Next turn : " + this.current_player);
       },
       error: (error) => {
         //console.error(error);
@@ -482,6 +471,8 @@ export class BoardComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  /* === FUNCTIONS TO UPDATE INFORMATION === */
 
   actualize_game_info(data : PlayerListResponse): void {
     let listaJugadores = data.listaJugadores;
@@ -514,12 +505,15 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   update_player_info(): void {
+    // Get information of player
     this.gameService.get_list_players(this.game_id).subscribe({
       next: (data: PlayerListResponse) => {
+        console.log("===UPDATE PLAYER INFO===");
         this.actualize_game_info(data);
         this.get_properties();
       },
       error: (error) => {
+        // Try again
         this.update_player_info();
       }
     });
@@ -540,6 +534,8 @@ export class BoardComponent implements OnInit, OnDestroy {
         }
       }, 200);
   }
+
+  /* === FUNCTIONS TO MANAGE THE POSITION OF THE PLAYER === */
 
   convert_position_to_id(coord : Coordenadas): number{
     // Function to convert position (v, h) to number between 0 and 39
@@ -589,6 +585,18 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
+  show_position_every_players(): void {
+    console.log("=== POSITION OF PLAYERS ACTUALIZED ===");
+    // Show position of the player if he is not bankrupt
+    if (!this.is_bankrupt) {
+      this.show_position(this.player[0], this.player[2], 0);
+    }
+    // Show position of the other players
+    for (let i = 0; i < this.other_players_list.length; i++) {
+      this.show_position(this.other_players_list[i][0], this.other_players_list[i][2], i + 1);
+    }
+  }
+
   add_position(id_player: string, id_property: number, index_color: number): void{
     // Function to display position (x, y) in the board
     // Get the property of the element with id = position
@@ -619,6 +627,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   async update_local_player_position(dices: number[]) {
     // Function to update the position of a player
+    console.log("===UPDATE LOCAL PLAYER POSITION===");
     // Get old position id
     let old_id = this.convert_position_to_id(this.player[2]);
     // Update position attribute
@@ -667,7 +676,9 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.add_position(id_player, property_id, index_color);
   }
 
-  createCardComponent(v: number, h: number, message: string, player_money: number, play_again: boolean = false, type: string, money_to_pay: number=0, trigger_end_turn: boolean = true): void {
+  /* === FUNCTIONS TO DISPLAY POP UP COMPONENTS === */
+
+  createCardComponent(v: number, h: number, message: string, play_again: boolean = false, type: string, money_to_pay: number=0, trigger_end_turn: boolean = true): void {
     // Assure to delete the old buy card component
     this.delete_pop_up_component();
     const factory = this.componentFactoryResolver.resolveComponentFactory(InteractionCardComponent);
@@ -679,7 +690,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     componentRef.instance.username = this.player[0];
     componentRef.instance.message = message;
     componentRef.instance.play_again = play_again;
-    componentRef.instance.player_money = player_money;
     componentRef.instance.amount_to_pay = money_to_pay;
     componentRef.instance.type = type;
     componentRef.instance.trigger_end_turn = trigger_end_turn;
@@ -826,6 +836,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
+  /* === FUNCTIONS TO KNOW THE TYPE OF A PROPERTY === */
   get_type_casilla(coord: Coordenadas) {
     if (coord.h == 5 || coord.v == 5){
       return "party";
@@ -875,28 +886,43 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   /* === FUNCTIONS DEL TIMER === */
-  startTimer() {
+  startTimer(action: string) {
     console.log("=== START TIMER ===");
-    // Set timer as active
-    this.is_timer_active = true;
-    this.remaining_time = 90;
-    // Time limit in seconds
-    const time_limit = 90;
-    // calculate the turn end time in milliseconds
-    const end_time = Date.now() + time_limit * 1000;
-    this.timer = setInterval(() => {
-    // Calculate remaining time in seconds
-    this.remaining_time = Math.floor((end_time - Date.now()) / 1000);
-    // Check if the turn hasn't already ended
-    if (this.remaining_time <= 0) {
-      // End the turn and perform any necessary actions
-      console.log("90 SECONDS WAITED");
-      alert("Se te acaba el tiempo, vas a estar desconectado del juego.")
-      // TODO: DELETE PLAYER FROM GAME
-      // Clear interval
-      clearInterval(this.timer);
+    // If no active timer, create one
+    if (!this.is_timer_active) {
+      // Set timer as active
+      this.is_timer_active = true;
+      this.remaining_time = 90;
+      // Time limit in seconds
+      const time_limit = 90;
+      // calculate the turn end time in milliseconds
+      const end_time = Date.now() + time_limit * 1000;
+      this.timer = setInterval(() => {
+        // Calculate remaining time in seconds
+        this.remaining_time = Math.floor((end_time - Date.now()) / 1000);
+        // Check if the turn hasn't already ended
+        if (this.remaining_time <= 0) {
+          console.log("90 SECONDS WAITED");
+          if (action == "next_turn") {
+            // Go to next turn
+            this.cancelTimer();
+            this.go_next_turn();
+          } else if (action == "leave_game") {
+            // Leave the game
+            alert("Se te acaba el tiempo, vas a estar desconectado del juego.")
+            // Clear interval
+            clearInterval(this.timer);
+            // Leave the game
+            this.leave_game();
+          }
+        }
+      }, 1000);
     }
-    }, 1000);
+    else {
+      // Delete old timer and create a new one
+      this.cancelTimer();
+      this.startTimer(action);
+    }
   }
 
   cancelTimer() {
@@ -906,4 +932,24 @@ export class BoardComponent implements OnInit, OnDestroy {
     clearInterval(this.timer);
   }
 
+  /* === FUNCTIONS TO LEAVE THE GAME === */
+  leave_game(){
+    // Declare bankruptcy to backend
+    this.gameService.declare_bankruptcy(this.player[0], this.game_id).subscribe({
+      next: (data: any) => {
+        console.log("=== LEAVE GAME ===");
+        // Update player money to 0
+        this.player[1] = 0;
+      },
+      error: (error) => {
+        console.error(error);
+        // Try again
+        this.leave_game();
+      },
+      complete: () => {
+        // Redirect to home page of player
+        this.router.navigate(['/pantalla']);
+      }
+    });
+  }
 }
