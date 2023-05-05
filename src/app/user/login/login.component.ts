@@ -6,7 +6,12 @@ import {ActivatedRoute} from "@angular/router";
 import { Location } from '@angular/common';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import * as yup from 'yup';
+import { environment } from 'enviroment/enviroment';
+import {  Socket } from 'ngx-socket-io';
+import * as io from 'socket.io-client';
+import { SocketIoConfig} from 'ngx-socket-io';
 
 @Component({
   selector: 'app-login',
@@ -16,8 +21,10 @@ import * as yup from 'yup';
 export class LoginComponent implements OnInit{
   form: FormGroup;
   passwordShow: boolean = false;
-
-  constructor(private fb: FormBuilder,public userService: UserService, private router: Router) {
+  
+  //private socket: SocketIoClient.Socket;
+  constructor(private fb: FormBuilder,public userService: UserService, private router: Router, private socket: Socket) {
+    // this.socket = io(environment.socketURL);
     this.form = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.minLength(8),Validators.required]]
@@ -46,7 +53,8 @@ export class LoginComponent implements OnInit{
       console.log(this.form.value.username, this.form.value.password);
       const user = {username: this.form.value.username, password: this.form.value.password};
       console.log(user);
-      this.userService.login(user);
+      //this.userService.login(user);
+      this.socket.emit('login', user);
     }
     else {
       console.log("Valores mal introducidos");

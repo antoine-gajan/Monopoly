@@ -34,6 +34,11 @@ import {TiendaComponent} from "./shop/tienda/tienda.component";
 import {NgOptimizedImage} from "@angular/common";
 import { DatosUsuarioComponent } from './user/datos_usuario/datos_usuario.component';
 import { CerrarSesionComponentAjustes } from './user/cerrar_sesion/cerrar_sesion.component';
+// ... other imports
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { environment } from 'enviroment/enviroment';
+import * as io from 'socket.io-client';
+const config: SocketIoConfig = { url: environment.socketURL, options: {} };
 @NgModule({
     declarations: [
         LoginComponent,
@@ -70,12 +75,16 @@ import { CerrarSesionComponentAjustes } from './user/cerrar_sesion/cerrar_sesion
     AppRoutingModule,
     ReactiveFormsModule,
     RouterModule,
-    NgOptimizedImage
+    NgOptimizedImage,
+    SocketIoModule.forRoot(config)
+    //SocketIOClient.Socket
   ],
     providers: [UserService],
     bootstrap: [AppComponent],
     entryComponents: [InteractionCardComponent]
 })
-export class AppModule { }
+export class AppModule {
+  
+ }
 
 

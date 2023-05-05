@@ -21,7 +21,7 @@ export const environment = {
     infoAsignatura: 'http://nerks.net:7003/partida/infoAsignatura'
     */
 
-
+    socketURL: 'http://localhost:3000',
     //--API servidor local -> cuando funcione cambiarlo
     login: 'http://localhost:8080/users/login',
     registration: 'http://localhost:8080/users/register',
@@ -49,4 +49,5 @@ export const environment = {
     usarCartaJulio: 'http://localhost:8080/partida/usarCartaJulio/',
     vender: 'http://localhost:8080/partida/vender/',
     accionCarta: 'http://localhost:8080/partida/accionCarta/'
+
 };
