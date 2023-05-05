@@ -37,8 +37,6 @@ export class CommunityCardComponent implements OnInit{
       next:
         (data) => {
           console.log(data);
-          // Callback function to come back to board
-          this.callback_end_turn();
         },
       error:
         (error) => {
@@ -47,6 +45,8 @@ export class CommunityCardComponent implements OnInit{
           this.trigger_action();
         }
     });
+    // Callback function to come back to board
+    this.callback_end_turn();
   }
 
   callback_end_turn() {

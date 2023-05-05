@@ -7,6 +7,7 @@
 </header>
 
 <div class="main-info">{{message}}</div>
+<div class="timer {{ remaining_time < 10 ? 'blinking' : '' }}" *ngIf="is_timer_active">Tiempo restante para jugar : {{remaining_time}} segundos</div>
 
 <div class="main-container">
   <div class="table">
