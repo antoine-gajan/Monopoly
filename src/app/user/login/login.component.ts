@@ -8,10 +8,11 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as yup from 'yup';
-import { environment } from 'enviroment/enviroment';
-import {  Socket } from 'ngx-socket-io';
-import * as io from 'socket.io-client';
-import { SocketIoConfig} from 'ngx-socket-io';
+import { WebSocketService } from 'app/web-socket.service';
+import { Socket } from 'ngx-socket-io';
+
+import * as CryptoJS from 'crypto-js';
+
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,7 @@ export class LoginComponent implements OnInit{
   passwordShow: boolean = false;
   
   //private socket: SocketIoClient.Socket;
-  constructor(private fb: FormBuilder,public userService: UserService, private router: Router, private socket: Socket) {
+  constructor(private fb: FormBuilder,public userService: UserService, private router: Router, private socketService: WebSocketService) {
     // this.socket = io(environment.socketURL);
     this.form = this.fb.group({
       username: ['', [Validators.required]],
@@ -51,10 +52,13 @@ export class LoginComponent implements OnInit{
       this.userService.setUsername(this.form.value.username);
       //this.router.navigate(['/pantalla', { username: this.username }]);
       console.log(this.form.value.username, this.form.value.password);
-      const user = {username: this.form.value.username, password: this.form.value.password};
+
+      const nuevo_password = CryptoJS.SHA512(this.form.value.password).toString();
+      const user = {username: this.form.value.username, password: nuevo_password};
+
       console.log(user);
       //this.userService.login(user);
-      this.socket.emit('login', user);
+      this.socketService.login(user);
     }
     else {
       console.log("Valores mal introducidos");

@@ -35,7 +35,10 @@ import {NgOptimizedImage} from "@angular/common";
 import { DatosUsuarioComponent } from './user/datos_usuario/datos_usuario.component';
 import { CerrarSesionComponentAjustes } from './user/cerrar_sesion/cerrar_sesion.component';
 // ... other imports
+
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { WebSocketService } from './web-socket.service';
+
 import { environment } from 'enviroment/enviroment';
 import * as io from 'socket.io-client';
 const config: SocketIoConfig = { url: environment.socketURL, options: {} };
@@ -76,10 +79,10 @@ const config: SocketIoConfig = { url: environment.socketURL, options: {} };
     ReactiveFormsModule,
     RouterModule,
     NgOptimizedImage,
-    SocketIoModule.forRoot(config)
-    //SocketIOClient.Socket
+    SocketIoModule.forRoot(config),
+    // SocketIOClient.Socket
   ],
-    providers: [UserService],
+    providers: [UserService, WebSocketService],
     bootstrap: [AppComponent],
     entryComponents: [InteractionCardComponent]
 })
