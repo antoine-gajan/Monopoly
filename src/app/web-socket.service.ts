@@ -91,6 +91,7 @@ export class WebSocketService {
   });
     
   }
+<<<<<<< HEAD
 
   //Función que recibe la información necesaria para cambiar el nombre de un usuario
   guardar_new_username(old_username:string, new_username:string): Promise<boolean>{
@@ -118,4 +119,6 @@ export class WebSocketService {
   }
   
  
+=======
+>>>>>>> parent of 0cab614f (conexión servidor con sockets con actualizar username)
 }

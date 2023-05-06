@@ -4,7 +4,6 @@ import { FormControl } from '@angular/forms';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { WebSocketService } from 'app/web-socket.service';
 
 @Component({
   selector: 'app-cambiar_nombre_usuario',
@@ -15,16 +14,14 @@ import { WebSocketService } from 'app/web-socket.service';
 export class CambiarUsernameComponent {
   form: FormGroup;
   old_username: string;
+<<<<<<< HEAD
   socketID: string;
   mostrarError: boolean = false;
+=======
+>>>>>>> parent of 0cab614f (conexión servidor con sockets con actualizar username)
   //new_username: string;
   
-  constructor(
-    private fb: FormBuilder, 
-    private userService: UserService, 
-    private router: Router,
-    private socketService: WebSocketService
-  ) {
+  constructor(private fb: FormBuilder, private userService: UserService, private router: Router) {
     this.form = this.fb.group({
       new_username: ['', [Validators.required]]
     });
@@ -33,6 +30,7 @@ export class CambiarUsernameComponent {
   get new_username() {
     return this.form.get('new_username');
   }
+<<<<<<< HEAD
   ngOnInit() {
     //this.old_username = this.socketService.getUsername();
     //this.socketID = this.socketService.getSocketID();
@@ -56,6 +54,13 @@ export class CambiarUsernameComponent {
       })
       .finally(() => {
       });
+=======
+  ngOnInit(): void {}
+  guardar_new_username(){
+    
+    const username_change = {username: this.old_username, newusername: this.form.value.new_username};
+    console.log("CAMBIAR USERNAME", username_change);
+>>>>>>> parent of 0cab614f (conexión servidor con sockets con actualizar username)
     /*this.userService.guardar_new_username(username_change).subscribe(
       (response) => {
         console.log(response.status);
