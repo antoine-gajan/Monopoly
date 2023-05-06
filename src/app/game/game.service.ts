@@ -12,12 +12,18 @@ import {
   PlayerListResponse,
   PlayerListResponseEspera
 } from "./response-type";
+import {Socket} from "ngx-socket-io";
+import {io} from "socket.io-client";
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
+  socket: any;
+
   constructor(private http: HttpClient,
-              private router: Router)  {}
+              private router: Router)  {
+    this.socket = io(environment.socketURL,{ transports: ["websocket"] });
+  }
 
   roll_dices(username: string, idPartida: number){
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
