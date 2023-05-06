@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit{
       this.userService.setUsername(this.form.value.username);
 
       const nuevo_password = CryptoJS.SHA512(this.form.value.password).toString();
-      const user = {username: this.form.value.username, password: nuevo_password};
+      const user = {username: this.form.value.username, password: nuevo_password, shocketID: this.socketService.getSocketID()};
 
       console.log("LOGIN: ",user);
       this.socketService.login(user);

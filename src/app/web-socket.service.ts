@@ -14,6 +14,11 @@ export class WebSocketService {
   constructor(
     private router: Router
   ) {}
+
+  getSocketID() {
+    return this.socket.id;
+  }
+
   public login(user: any) {
     console.log('login: ', user);
     this.socket.emit('login', user);
