@@ -35,7 +35,7 @@
         </div>
         <div class="card-body">
           <form [formGroup]="form" (ngSubmit)="guardar_new_username()" class="form">
-            <p><b>Su nombre de usuario actual es:</b>{{old_username}}</p>
+            <p><b>Su nombre de usuario actual es:</b>{{old_username ? old_username : 'Cargando...'}}</p>
             <p><b>Introduzca el nuevo nombre del usuario </b></p>
             <div class="formulario-nombre-usuario" >
               <input type="text" formControlName="new_username" id="new_username" name="new_username" placeholder="nombre de usuario" class="formulario-nombre-usuario-input" required/>

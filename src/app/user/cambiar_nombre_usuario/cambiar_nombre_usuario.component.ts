@@ -15,7 +15,7 @@ import { WebSocketService } from 'app/web-socket.service';
 export class CambiarUsernameComponent {
   form: FormGroup;
   old_username: string;
-  socketID: string = this.socketService.getSocketID();
+  socketID: string;
   mostrarError: boolean = false;
   //new_username: string;
   
@@ -28,23 +28,24 @@ export class CambiarUsernameComponent {
     this.form = this.fb.group({
       new_username: ['', [Validators.required]]
     });
-    this.old_username = userService.getUsername();
+    this.old_username = socketService.getUsername();
   }
   get new_username() {
     return this.form.get('new_username');
   }
   ngOnInit() {
-    this.socketID = this.socketService.getSocketID();
+    //this.old_username = this.socketService.getUsername();
+    //this.socketID = this.socketService.getSocketID();
   }
   guardar_new_username(){
-    this.socketID = this.socketService.getSocketID();
+    //this.socketID = this.socketService.getSocketID();
     const username_change = {
       username: this.old_username,
       newusername: this.form.value.new_username,
       socketId: this.socketID  
     };
-    console.log("CAMBIAR USERNAME", username_change);
-    this.socketService.guardar_new_username(username_change)
+    console.log("CAMBIAR USERNAME", this.old_username, this.form.value.new_username);
+    this.socketService.guardar_new_username(this.old_username, this.form.value.new_username)
       .then((cambio_username: boolean) => {
         this.mostrarError = !cambio_username;
         console.log("CAMBIAR USERNAME", cambio_username);
@@ -52,6 +53,8 @@ export class CambiarUsernameComponent {
       .catch(() => {
         this.mostrarError = true;
         console.log("CAMBIAR USERNAME", false);
+      })
+      .finally(() => {
       });
     /*this.userService.guardar_new_username(username_change).subscribe(
       (response) => {
