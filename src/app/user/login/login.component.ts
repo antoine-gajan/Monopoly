@@ -24,7 +24,12 @@ export class LoginComponent implements OnInit{
   passwordShow: boolean = false;
   
   //private socket: SocketIoClient.Socket;
-  constructor(private fb: FormBuilder,public userService: UserService, private router: Router, private socketService: WebSocketService) {
+  constructor(
+    private fb: FormBuilder,
+    public userService: UserService, 
+    private router: Router, 
+    private socketService: WebSocketService
+  ) {
     // this.socket = io(environment.socketURL);
     this.form = this.fb.group({
       username: ['', [Validators.required]],
@@ -50,18 +55,15 @@ export class LoginComponent implements OnInit{
     console.log("LOGIN", this.form.valid);
     if (this.form.valid) {
       this.userService.setUsername(this.form.value.username);
-      //this.router.navigate(['/pantalla', { username: this.username }]);
-      console.log(this.form.value.username, this.form.value.password);
 
       const nuevo_password = CryptoJS.SHA512(this.form.value.password).toString();
       const user = {username: this.form.value.username, password: nuevo_password};
 
-      console.log(user);
-      //this.userService.login(user);
+      console.log("LOGIN: ",user);
       this.socketService.login(user);
     }
     else {
-      console.log("Valores mal introducidos");
+      console.log("LOGIN: Valores mal introducidos");
     }
   }
 

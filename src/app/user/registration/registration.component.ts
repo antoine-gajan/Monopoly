@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import { UserService } from '../user.service';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import * as yup from 'yup';
+import { WebSocketService } from 'app/web-socket.service';
 
 @Component({
   selector: 'app-registration',
@@ -13,7 +14,11 @@ export class RegistrationComponent implements OnInit{
   passwordShow: boolean = false;
   confirmPasswordShow: boolean = false;
 
-  constructor(private fb: FormBuilder,public userService: UserService) {
+  constructor(
+    private fb: FormBuilder,
+    public userService: UserService,
+    private socketService: WebSocketService
+  ) {
     this.form = this.fb.group({
       username: ['', [Validators.required]],
       email: ['', [Validators.email, Validators.required]],
@@ -57,7 +62,7 @@ export class RegistrationComponent implements OnInit{
     });
   }
 
-  registro(){
+  /*registro(){
     if (this.form.valid) {
       //console.log(this.form.value.username, this.form.value.email, this.form.value.password, this.form.value.confirm_password);
       const user = {username: this.form.value.username, email: this.form.value.email, password: this.form.value.password, confirm_password: this.form.value.confirm_password};
@@ -66,6 +71,17 @@ export class RegistrationComponent implements OnInit{
     }
     else {
       console.log("Valores mal introducidos");
+    }
+  }*/
+  registro(){
+    if (this.form.valid) {
+      const user = {username: this.form.value.username, email: this.form.value.email, password: this.form.value.password, confirm_password: this.form.value.confirm_password};
+      console.log("CREAR CUENTA", user);
+      //this.userService.registro(user);
+      this.socketService.registro(user);
+    }
+    else {
+      console.log("CREAR CUENTA: Valores mal introducidos");
     }
   }
 
