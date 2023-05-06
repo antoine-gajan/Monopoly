@@ -10,6 +10,7 @@
 <!--------------------FORMULARIO-------------------->
 <form  [formGroup]="form" (ngSubmit)="registro()" class="formulario-login">
     <h1>Crear cuenta</h1><br><br>
+    <div *ngIf="mostrarError" style="color: red;">Ya existe un usuario con el nombre introducido, introduzca otro nombre de usuario</div>        
     <!--------------------campo nombre usuario-------------------->
     <div class="filas">
       <label for="username" class="campo"> Nombre de usuario* </label>
@@ -53,6 +54,7 @@
       </div>
     </div>
     <!--------------------botón confirmación crear cuenta-------------------->
+    <div *ngIf="mostrarError" style="color: red;">Ya existe un usuario con el nombre introducido, introduzca otro nombre de usuario</div>        
     <button class="boton" type="submit">Crear cuenta</button>
     <!--------------------link si ya tiene cuenta-------------------->
     <br>

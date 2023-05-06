@@ -3,6 +3,7 @@ import { UserService } from '../user.service';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import * as yup from 'yup';
 import { WebSocketService } from 'app/web-socket.service';
+import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'app-registration',
@@ -13,6 +14,8 @@ export class RegistrationComponent implements OnInit{
   form: FormGroup;
   passwordShow: boolean = false;
   confirmPasswordShow: boolean = false;
+  mostrarError: boolean = false;
+  socketID: string = this.socketService.getSocketID();
 
   constructor(
     private fb: FormBuilder,
@@ -44,6 +47,7 @@ export class RegistrationComponent implements OnInit{
   }
 
   ngOnInit() {
+    this.mostrarError = false;
     // If user is already logged in, redirect to home
     if (this.userService.getUsername()) {
       //this.router.navigate(['/pantalla']);
@@ -62,23 +66,30 @@ export class RegistrationComponent implements OnInit{
     });
   }
 
-  /*registro(){
-    if (this.form.valid) {
-      //console.log(this.form.value.username, this.form.value.email, this.form.value.password, this.form.value.confirm_password);
-      const user = {username: this.form.value.username, email: this.form.value.email, password: this.form.value.password, confirm_password: this.form.value.confirm_password};
-      console.log(user);
-      this.userService.registro(user);
-    }
-    else {
-      console.log("Valores mal introducidos");
-    }
-  }*/
+  
   registro(){
+    this.mostrarError = false; 
     if (this.form.valid) {
-      const user = {username: this.form.value.username, email: this.form.value.email, password: this.form.value.password, confirm_password: this.form.value.confirm_password};
+      this.socketID = this.socketService.getSocketID();
+      console.log("REGISTRO SOCKET ID", this.socketID);
+      const nuevo_password = CryptoJS.SHA512(this.form.value.password).toString();
+      const nuevo_confirm_password = CryptoJS.SHA512(this.form.value.confirm_password).toString();
+      const user = {
+        username: this.form.value.username,
+        email: this.form.value.email,
+        password: nuevo_password,
+        confirm_password: nuevo_confirm_password,
+        socketId: this.socketID      
+      };
       console.log("CREAR CUENTA", user);
-      //this.userService.registro(user);
-      this.socketService.registro(user);
+      this.socketService.registro(user)
+      .then((resgisterResponse: boolean) => {
+        this.mostrarError = !resgisterResponse;
+      })
+      .catch(() => {
+        console.log("solucion2");
+        this.mostrarError = true;
+      });
     }
     else {
       console.log("CREAR CUENTA: Valores mal introducidos");

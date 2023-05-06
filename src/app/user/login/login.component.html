@@ -31,6 +31,7 @@
       </div>
     </div>
     <!--------------------botón confirmación crear cuenta-------------------->
+    <div *ngIf="mostrarError" style="color: red;">El nombre de usuario o la contraseña son incorrectos</div>        
     <button class="boton" type="submit">Iniciar sesión</button>
     <!--------------------link si ya tiene cuenta-------------------->
     <br>

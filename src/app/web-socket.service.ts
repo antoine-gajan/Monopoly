@@ -15,7 +15,10 @@ export class WebSocketService {
   
   constructor(
     private router: Router
-  ) {}
+  ) {
+    //this.socket = io(environment.socketURL);
+    //console.log('Socket conectado con ID:', this.socket.id);
+  }
 
   getSocketID() {
     this.socket.on('connect', () => {
@@ -24,29 +27,45 @@ export class WebSocketService {
     console.log('getSocketID: ', this.socket.id);
     return this.socket.id;
   }
+
+  //Función que recibe la información necesaria para logear un usuario
   public login(user: any): Promise<boolean> {
     console.log('login: ', user);
     return new Promise<boolean>((resolve, reject) => {
-      this.socket.emit('login', user, (response: any) => {
-      console.log('Login response:', response);
-      console.log('Login response.cod:', response.cod);
+        this.socket.emit('login', user, (response: any) => {
+        console.log('Login response:', response);
+        console.log('Login response.cod:', response.cod);
+        if (response.cod === 0) { // Si el código de confirmación es 200, redirigir a la pantalla de usuario
+          this.router.navigate(['/pantalla']);
+          resolve(true);
+        } else{
+          console.log('Error en el login, usuario o contraseña incorrectos');
+          reject(false);
+        }
+      });
+      
+    });
+
+  }
+
+  //Función que recibe la información necesaria para registrar un usuario
+  public registro(user: any): Promise<boolean>{
+    console.log('registro: ', user);
+    //this.socket.emit('registro', user);
+    return new Promise<boolean>((resolve, reject) => {
+      this.socket.emit('register', user, (response: any) => {
+      console.log('Registro response:', response);
+      console.log('Registro response.cod:', response.cod);
       if (response.cod === 0) { // Si el código de confirmación es 200, redirigir a la pantalla de usuario
         this.router.navigate(['/pantalla']);
         resolve(true);
       } else{
-        console.log('Error en el login, usuario o contraseña incorrectos');
+        console.log('CREAR CUENTA: ya existe un usuario con ese username');
         reject(false);
       }
     });
     
   });
-
-  }
-  
-
-  //Función que recibe la información necesaria para registrar un usuario
-  public registro(user: any) {
-    console.log('registro: ', user);
-    this.socket.emit('registro', user);
+    
   }
 }

@@ -27,13 +27,10 @@ export class CambiarUsernameComponent {
   }
   ngOnInit(): void {}
   guardar_new_username(){
-    console.log("CAMBIAR USERNAME");
-    //this.username_anterior = this.miFormulario.get('nombreCampo').value;
-    // Aquí se actualiza el campo con el nuevo valor
-    //this.username_anterior = this.form.controls['username'].value;
+    
     const username_change = {username: this.old_username, newusername: this.form.value.new_username};
-    //this.userService.guardar_new_username(this.old_username, this.new_username);
-    this.userService.guardar_new_username(username_change).subscribe(
+    console.log("CAMBIAR USERNAME", username_change);
+    /*this.userService.guardar_new_username(username_change).subscribe(
       (response) => {
         console.log(response.status);
         this.userService.setUsername(this.form.value.new_username);
@@ -44,6 +41,6 @@ export class CambiarUsernameComponent {
       (error) => {
         console.log(error);
       }
-    );
+    );*/
   }
 }
