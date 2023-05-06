@@ -1,8 +1,11 @@
 <header id="header" class="fixed-top">
   <div style="display: flex; justify-content: space-between;">
-    <img class="volver_boton" src="../../../assets/images/voler_boton.png" onclick="window.history.back();" />
+    <img class="volver_boton" src="../../../assets/images/voler_boton.png" routerLink="/pantalla" />
     <h4><a style="color: #080808" routerLink="/">MONOPOLY VERSIÓN INFORMÁTICA</a></h4>
     <img class="inicio_boton" src="../../../assets/images/home_boton.png" routerLink="/">
+  </div>
+  <div style="text-align: center;">
+    <h4><a style="color: #080808">Cambiar nombre de usuario</a></h4>
   </div>
 </header>
 <body>
@@ -32,7 +35,7 @@
         </div>
         <div class="card-body">
           <form [formGroup]="form" (ngSubmit)="guardar_new_username()" class="form">
-            <p><b>Su nombre de usuario actual es:</b>{{old_username ? old_username : 'Cargando...'}}</p>
+            <p><b>Su nombre de usuario actual es:</b>{{old_username}}</p>
             <p><b>Introduzca el nuevo nombre del usuario </b></p>
             <div class="formulario-nombre-usuario" >
               <input type="text" formControlName="new_username" id="new_username" name="new_username" placeholder="nombre de usuario" class="formulario-nombre-usuario-input" required/>

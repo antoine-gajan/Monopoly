@@ -83,8 +83,8 @@ const config: SocketIoConfig = { url: environment.socketURL, options: {} };
     // SocketIOClient.Socket
   ],
     providers: [UserService, WebSocketService],
-    bootstrap: [AppComponent]
-    //entryComponents: [InteractionCardComponent]
+    bootstrap: [AppComponent],
+    entryComponents: [InteractionCardComponent]
 })
 export class AppModule {
   
