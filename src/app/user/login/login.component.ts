@@ -22,6 +22,7 @@ import * as CryptoJS from 'crypto-js';
 export class LoginComponent implements OnInit{
   form: FormGroup;
   passwordShow: boolean = false;
+  socketID: string = this.socketService.getSocketID();
   
   //private socket: SocketIoClient.Socket;
   constructor(
@@ -57,7 +58,8 @@ export class LoginComponent implements OnInit{
       this.userService.setUsername(this.form.value.username);
 
       const nuevo_password = CryptoJS.SHA512(this.form.value.password).toString();
-      const user = {username: this.form.value.username, password: nuevo_password, shocketID: this.socketService.getSocketID()};
+      this.socketID = this.socketService.getSocketID();
+      const user = {username: this.form.value.username, password: nuevo_password, socketId: this.socketID};
 
       console.log("LOGIN: ",user);
       this.socketService.login(user);
