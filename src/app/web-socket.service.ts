@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { io } from "socket.io-client";
 import { environment } from 'enviroment/enviroment';
 import { Router } from '@angular/router';
+import { LoginComponent } from './user/login/login.component';
 
 
 @Injectable({
@@ -23,14 +24,23 @@ export class WebSocketService {
     console.log('getSocketID: ', this.socket.id);
     return this.socket.id;
   }
-  public login(user: any) {
+  public login(user: any): Promise<boolean> {
     console.log('login: ', user);
-    this.socket.emit('login', user, (response: any) => {
+    return new Promise<boolean>((resolve, reject) => {
+      this.socket.emit('login', user, (response: any) => {
       console.log('Login response:', response);
+      console.log('Login response.cod:', response.cod);
       if (response.cod === 0) { // Si el código de confirmación es 200, redirigir a la pantalla de usuario
         this.router.navigate(['/pantalla']);
+        resolve(true);
+      } else{
+        console.log('Error en el login, usuario o contraseña incorrectos');
+        reject(false);
       }
     });
+    
+  });
+
   }
   
 

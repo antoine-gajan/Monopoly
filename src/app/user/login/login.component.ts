@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit{
   form: FormGroup;
   passwordShow: boolean = false;
   socketID: string = this.socketService.getSocketID();
+  mostrarError: boolean = false;
   
   //private socket: SocketIoClient.Socket;
   constructor(
@@ -38,6 +39,7 @@ export class LoginComponent implements OnInit{
     });
   }
   ngOnInit() {
+    this.mostrarError = false;
     // If user is already logged in, redirect to home
     //console.log("He llegado al inicio de sesion");
     const schema = yup.object().shape({
@@ -53,6 +55,7 @@ export class LoginComponent implements OnInit{
   }
 
   login(){
+    this.mostrarError = false;
     console.log("LOGIN", this.form.valid);
     if (this.form.valid) {
       this.userService.setUsername(this.form.value.username);
@@ -62,7 +65,13 @@ export class LoginComponent implements OnInit{
       const user = {username: this.form.value.username, password: nuevo_password, socketId: this.socketID};
 
       console.log("LOGIN: ",user);
-      this.socketService.login(user);
+      this.socketService.login(user)
+        .then((loginResponse: boolean) => {
+          this.mostrarError = !loginResponse;
+        })
+        .catch(() => {
+          this.mostrarError = true;
+        });
     }
     else {
       console.log("LOGIN: Valores mal introducidos");
