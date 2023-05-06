@@ -68,4 +68,24 @@ export class WebSocketService {
   });
     
   }
+
+  //Función que recibe la información necesaria para cambiar el nombre de un usuario
+  guardar_new_username(user: any): Promise<boolean>{
+    console.log('guardar_new_username: ', user);
+    //this.socket.emit('updateUsername', user);
+    return new Promise<boolean>((resolve, reject) => {
+      this.socket.emit('updateUsername', user, (response: any) => {
+      console.log('updateUsername response:', response);
+      console.log('updateUsername response.cod:', response.cod);
+      if (response.cod === 0) { // Si el código de confirmación es 200, redirigir a la pantalla de usuario
+        resolve(true);
+        location.reload();
+      } else{
+        console.log('Error al cambiar el nombre de usuario');
+        reject(false);
+      }
+    });
+  });
+  }
+ 
 }
