@@ -19,7 +19,6 @@ export class RegistrationComponent implements OnInit{
 
   constructor(
     private fb: FormBuilder,
-    public userService: UserService,
     private socketService: WebSocketService
   ) {
     this.form = this.fb.group({
@@ -49,7 +48,7 @@ export class RegistrationComponent implements OnInit{
   ngOnInit() {
     this.mostrarError = false;
     // If user is already logged in, redirect to home
-    if (this.userService.getUsername()) {
+    if (this.socketService.getUsername()) {
       //this.router.navigate(['/pantalla']);
     }
     const schema = yup.object().shape({
@@ -75,10 +74,11 @@ export class RegistrationComponent implements OnInit{
       const nuevo_confirm_password = CryptoJS.SHA512(this.form.value.confirm_password).toString();
       const user = {
         username: this.form.value.username,
-        email: this.form.value.email,
+        
         password: nuevo_password,
         confirm_password: nuevo_confirm_password,
-        //socketId: this.socketID      
+        email: this.form.value.email,
+        socketId: this.socketService.socketID
       };
       console.log("CREAR CUENTA", user);
       this.socketService.registro(user)

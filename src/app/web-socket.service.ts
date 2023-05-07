@@ -10,14 +10,13 @@ import { LoginComponent } from './user/login/login.component';
 })
 
 export class WebSocketService {
-
+  localSocketID: string;
   private username: string;
   private email: string;
   private _socketID: string;
   private socket = io(environment.socketURL, { transports: ["websocket"] });
 
   constructor(private router: Router) {
-
     this.socket.on('connect', () => {
       this._socketID = this.socket.id;
       console.log('Socket conectado con ID:', this._socketID);
@@ -65,6 +64,7 @@ export class WebSocketService {
   //Función que recibe la información necesaria para logear un usuario
   public login(user: any): Promise<boolean> {
     console.log('login: ', user);
+    this.localSocketID = user.socketID;
     return new Promise<boolean>((resolve, reject) => {
         this.socket.emit('login', user, (response: any) => {
         console.log('Login response:', response);
@@ -105,6 +105,7 @@ export class WebSocketService {
 
   //Función que recibe la información necesaria para cambiar el nombre de un usuario
   guardar_new_username(user: any): Promise<boolean>{
+    //user.socketID = this.localSocketID;
     console.log('guardar_new_username: ', user);
     //this.socket.emit('updateUsername', user);
     return new Promise<boolean>((resolve, reject) => {
@@ -122,4 +123,17 @@ export class WebSocketService {
   });
   }
  
+  //Función que recibe la infomación necesaria para eliminar a un usuario
+  onDeleteUser(user: any){
+    console.log('onDeleteUser: ', user);
+    this.socket.emit('deleteUser', user, (response: any) => {
+      console.log('deleteUser response:', response);
+      console.log('deleteUser response.cod:', response.cod);
+      if (response.cod === 0) { // Si el código de confirmación es 200, redirigir a la pantalla de usuario
+        this.router.navigate(['/login']);
+      } else{
+        console.log('Error al cambiar el nombre de usuario');
+      }
+    });
+  }
 }

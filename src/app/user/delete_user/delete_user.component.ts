@@ -21,7 +21,9 @@ export class DeleteUserComponent {
   
   onDeleteUser(){
     console.log(this.username);
-    const user = {username: this.username};
+    const user = {username: this.username,  socketId: this.socketService.socketID};
     //this.userService.onDeleteUser(user);
+    this.socketService.onDeleteUser(user);
+
   }
 }
