@@ -19,7 +19,7 @@ interface RespuestaNumJugadores {
 })
 export class UserService {
   
-  
+  id_socket: string;
 
   private username: string;
   private newusername: string;

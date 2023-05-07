@@ -23,7 +23,8 @@ export class CambiarUsernameComponent {
   constructor(
     private fb: FormBuilder, 
     private router: Router,
-    private socketService: WebSocketService
+    private socketService: WebSocketService,
+    private userService: UserService
   ) {
     this.form = this.fb.group({
       new_username: ['', [Validators.required]]
