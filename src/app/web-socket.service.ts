@@ -237,14 +237,39 @@ export class WebSocketService {
     });
   }
 
-  public unirseSalaEsperar(user: any){
+  public unirseSalaEsperar(user: any): Promise<string> {
     console.log("UNIRSE SALA ESPERAR", user);
-    return new Promise<boolean>((resolve, reject) => {
+    
+    
+    return new Promise<string>((resolve, reject) => {
       this.socket.emit('unirJugador', user, (response: any) => {
+        
         console.log('unirJugador response:', response);
         console.log('unirJugador response.cod:', response.cod);
+        if (response.cod === 0) {
+          let idPartida = '';
+          idPartida = user.idPartida;
+          const ruta = '/esperar_sala/' + idPartida;
+          this.router.navigateByUrl(ruta);
+        }  else if (response.cod === 4) { 
+          
+        } else {
+          console.log('Error al obtener la información del usuario');
+          reject(false);
+        }
+      });
+    });
+
+
         if (response.cod === 0) { // Si el código de confirmación es 200, redirigir a la pantalla de usuario
           resolve(true);
+          let idPartida = '';
+          idPartida = user.idPartida;
+          
+          const ruta = '/esperar_sala/' + idPartida;
+          this.router.navigateByUrl(ruta);
+        } else if (response.cod === 4) { 
+          resolve(false);
           let idPartida = '';
           idPartida = user.idPartida;
           
@@ -257,5 +282,5 @@ export class WebSocketService {
       });
     });
   }
-
+  
 }
