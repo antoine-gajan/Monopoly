@@ -14,7 +14,6 @@ export class DeleteUserComponent {
   username: string;
   basura: string;
   constructor( 
-    public userService: UserService,
     public socketService: WebSocketService
   ){
     this.username = socketService.getUsername();
@@ -23,6 +22,6 @@ export class DeleteUserComponent {
   onDeleteUser(){
     console.log(this.username);
     const user = {username: this.username};
-    this.userService.onDeleteUser(user);
+    //this.userService.onDeleteUser(user);
   }
 }

@@ -17,9 +17,11 @@ export class WebSocketService {
   private socket = io(environment.socketURL, { transports: ["websocket"] });
 
   constructor(private router: Router) {
+    let socketID = null;
+
     this.socket.on('connect', () => {
-      this._socketID = this.socket.id;
-      console.log('Socket conectado con ID:', this._socketID);
+      socketID = this.socket.id;
+      console.log('Socket conectado con ID:', socketID);
     });
   }
 
@@ -30,12 +32,34 @@ export class WebSocketService {
   getSocketID() {
     this.socket.on('connect', () => {
       console.log('Socket conectado con ID:', this.socket.id);
+      // Almacenar el ID del socket en una cookie o en el almacenamiento local
+      localStorage.setItem('socketID', this.socket.id);
     });
-    console.log('getSocketID: ', this.socket.id);
-    return this.socket.id;
+    // Obtener el valor del ID del socket desde una cookie o del almacenamiento local
+    this._socketID = localStorage.getItem('socketID') || '';
+    console.log('getSocketID: ', this._socketID);
+    return this._socketID;
   }
-  getUsername() {
-    return this.username;
+
+  setUsername(username: string): void {
+    localStorage.setItem('username', username);
+    this.username = username;
+  }
+
+  setEmail(email: string): void {
+    //localStorage.setItem('email', email);
+    this.email = email;
+  }
+  getUsername(): string {
+    // Get username from browser
+    let username_browser = localStorage.getItem('username');
+    let username_client = this.username;
+    return username_browser ? username_browser : username_client;
+  
+  }
+
+  getEmail(): string {
+    return this.email;
   }
   //Función que recibe la información necesaria para logear un usuario
   public login(user: any): Promise<boolean> {
