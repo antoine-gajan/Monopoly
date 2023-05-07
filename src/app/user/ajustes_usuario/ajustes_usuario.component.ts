@@ -23,6 +23,13 @@ export class AjustesUsuarioComponent {
     this.email = socketService.getEmail();
     console.log("Entra página ajustes usuario: ", this.username, this.email);
   }
+
+  ngOnInit() {
+    this.username = this.socketService.getUsername();
+    this.email = this.socketService.getEmail();
+    console.log("Entra página ajustes usuario: ", this.username, this.email);
+  }
+
   
   leer_email(){
     console.log("entra_leer_email");

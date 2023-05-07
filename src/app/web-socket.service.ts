@@ -112,7 +112,7 @@ export class WebSocketService {
       console.log('updateUsername response.cod:', response.cod);
       if (response.cod === 0) { // Si el código de confirmación es 200, redirigir a la pantalla de usuario
         resolve(true);
-        location.reload();
+        //location.reload();
       } else{
         console.log('Error al cambiar el nombre de usuario');
         reject(false);
