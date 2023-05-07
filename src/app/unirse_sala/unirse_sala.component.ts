@@ -77,7 +77,7 @@ export class UnirseSalaComponent {
   async unirseSalaDatosEsperar() {
     const datos = { idPartida: this.idPartida, socketId: this.socketService.socketID};
     this.socketService.unirseSalaEsperar(datos)
-    .then((unirseSala: boolean) => {
+    .then((unirseSala: string) => {
       console.log("CREAR SALA: ", unirseSala);
     })
     .catch(() => {

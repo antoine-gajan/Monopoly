@@ -251,33 +251,13 @@ export class WebSocketService {
           idPartida = user.idPartida;
           const ruta = '/esperar_sala/' + idPartida;
           this.router.navigateByUrl(ruta);
+          resolve(response.cod);
         }  else if (response.cod === 4) { 
-          
+          console.log("ERROR PARTIDA CON MAXJUGADORES");
+          resolve(response.cod);
         } else {
-          console.log('Error al obtener la información del usuario');
-          reject(false);
-        }
-      });
-    });
-
-
-        if (response.cod === 0) { // Si el código de confirmación es 200, redirigir a la pantalla de usuario
-          resolve(true);
-          let idPartida = '';
-          idPartida = user.idPartida;
-          
-          const ruta = '/esperar_sala/' + idPartida;
-          this.router.navigateByUrl(ruta);
-        } else if (response.cod === 4) { 
-          resolve(false);
-          let idPartida = '';
-          idPartida = user.idPartida;
-          
-          const ruta = '/esperar_sala/' + idPartida;
-          this.router.navigateByUrl(ruta);
-        } else{
           console.log('Error al unirse a la sala');
-          reject(false);
+          resolve(response.cod);
         }
       });
     });
