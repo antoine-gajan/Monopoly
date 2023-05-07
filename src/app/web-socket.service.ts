@@ -237,24 +237,26 @@ export class WebSocketService {
     });
   }
 
-  /**crearSala(user: any){
-    console.log("CREAR PARTIDA", user);
-    return this.http.post(environment.crearPartida, user, {responseType: 'text', observe: 'response'})
-      .subscribe(
-        (response) => {
-          console.log(response.status);
+  public unirseSalaEsperar(user: any){
+    console.log("UNIRSE SALA ESPERAR", user);
+    return new Promise<boolean>((resolve, reject) => {
+      this.socket.emit('unirJugador', user, (response: any) => {
+        console.log('unirJugador response:', response);
+        console.log('unirJugador response.cod:', response.cod);
+        if (response.cod === 0) { // Si el código de confirmación es 200, redirigir a la pantalla de usuario
+          resolve(true);
+          let idPartida = '';
+          idPartida = user.idPartida;
           
-         
-          user.idPartida = idPartida;
           const ruta = '/esperar_sala/' + idPartida;
           this.router.navigateByUrl(ruta);
-          //const navigationExtras = {state: {idPartida: idPartida}};
-          //this.router.navigateByUrl('/esperar_sala', navigationExtras);
-        },
-        (error) => {
-          console.log(error);
-
+        } else{
+          console.log('Error al unirse a la sala');
+          reject(false);
         }
-      );
-  } */
+      });
+    });
+  }
+
+
 }

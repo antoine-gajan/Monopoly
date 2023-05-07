@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/user/user.service';
 import { GameService } from 'app/game/game.service';
+import { WebSocketService } from 'app/web-socket.service';
 
 @Component({
   selector: 'app-unirse_sala',
@@ -23,13 +24,14 @@ export class UnirseSalaComponent {
   constructor(
     private http: HttpClient, 
     private userService: UserService,
-    private gameService: GameService
+    private gameService: GameService,
+    private socketService: WebSocketService
   ) {
-    this.username = userService.getUsername();
+    this.username = socketService.getUsername();
   }
 
   // Función que permitirá o no a un usuario unirse a una sala en función de si hay hueco o no
-  async unirseSalaDatosEsperar() {
+  /*async unirseSalaDatosEsperar() {
     this.loading = true; // Variable de estado que indica si se está cargando o no
     try {
       const datos = { idPartida: this.idPartida };
@@ -70,6 +72,17 @@ export class UnirseSalaComponent {
       // Mostrar un mensaje de error al usuario
       this.finMensaje = true;
     }
+  }*/
+
+  async unirseSalaDatosEsperar() {
+    const datos = { idPartida: this.idPartida, socketId: this.socketService.socketID};
+    this.socketService.unirseSalaEsperar(datos)
+    .then((unirseSala: boolean) => {
+      console.log("CREAR SALA: ", unirseSala);
+    })
+    .catch(() => {
+      console.log("ERROR AL CREAR SALA");
+    });
   }
 
   volverUnirseSala(){
