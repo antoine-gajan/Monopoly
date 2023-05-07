@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit{
   //private socket: SocketIoClient.Socket;
   constructor(
     private fb: FormBuilder,
-    public userService: UserService, 
+    //public userService: UserService, 
     private router: Router, 
     private socketService: WebSocketService
   ) {
@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit{
     this.mostrarError = false;
     console.log("LOGIN", this.form.valid);
     if (this.form.valid) {
-      this.userService.setUsername(this.form.value.username);
+      this.socketService.setUsername(this.form.value.username);
 
       const nuevo_password = CryptoJS.SHA512(this.form.value.password).toString();
       const user = {username: this.form.value.username, password: nuevo_password, socketId: this.socketService.socketID};

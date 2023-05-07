@@ -15,7 +15,7 @@ export class RegistrationComponent implements OnInit{
   passwordShow: boolean = false;
   confirmPasswordShow: boolean = false;
   mostrarError: boolean = false;
-  socketID: string = this.socketService.getSocketID();
+  //socketID: string = this.socketService.getSocketID();
 
   constructor(
     private fb: FormBuilder,
@@ -78,7 +78,7 @@ export class RegistrationComponent implements OnInit{
         email: this.form.value.email,
         password: nuevo_password,
         confirm_password: nuevo_confirm_password,
-        socketId: this.socketID      
+        //socketId: this.socketID      
       };
       console.log("CREAR CUENTA", user);
       this.socketService.registro(user)

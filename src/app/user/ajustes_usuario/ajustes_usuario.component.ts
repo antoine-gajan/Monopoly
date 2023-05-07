@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../user.service';
 import { Router } from '@angular/router';
+import { WebSocketService } from 'app/web-socket.service';
 
 @Component({
   selector: 'app-ajustes_usuario',
@@ -14,10 +15,13 @@ export class AjustesUsuarioComponent {
   username: string;
   email: string;
 
-  constructor(private userService: UserService, private route: ActivatedRoute) {
-    this.username = userService.getUsername();
+  constructor(
+    private route: ActivatedRoute,
+    private socketService: WebSocketService
+  ) {
+    this.username = socketService.getUsername();
     console.log("Entra página ajustes usuario: ", this.username, this.email);
-    this.email = userService.getEmail();
+    this.email = socketService.getEmail();
   }
   
   leer_email(){
