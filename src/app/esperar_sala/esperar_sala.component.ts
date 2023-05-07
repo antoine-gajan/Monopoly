@@ -3,6 +3,7 @@ import { UserService } from 'app/user/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GameService } from 'app/game/game.service';
 import { PlayerListResponse } from "../game/response-type";
+import { WebSocketService } from 'app/web-socket.service';
 
 @Component({
   selector: 'app-esperar_sala',
@@ -19,35 +20,41 @@ export class EsperarSalaComponent implements OnInit{
   showSpinner = false;
   maxPlayers: number;
   veces: number = 0;
-  mostrarBotonEmpezar: boolean = false;
-  mostrarBotonUnirse: boolean = false;
-  mostrarListaJugadores: boolean = false;
+  mostrarBotonEmpezar: boolean = true;
+  mostrarBotonUnirse: boolean = true;
+  mostrarListaJugadores: boolean = true;
 
   constructor(
-    private userService: UserService,
+    //private userService: UserService,
     private gameService: GameService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private socketService: WebSocketService
   ) {}
 
   ngOnInit() {
     console.log("ACTUALIZA INFO");
     let idPartida = this.route.snapshot.paramMap.get('id'); // Se obtiene id de la partida
-    this.username = this.userService.getUsername();         // Se obtiene el nombre del usuario actual
+    this.username = this.socketService.getUsername();         // Se obtiene el nombre del usuario actual
     if (idPartida != null && this.username != null) {       // Actualiza la información del juego
       this.game_id = +idPartida;
     } else {
       this.router.navigate(['/error']);
     }
+
+
+    this.socketService.actualizarUsuariosConectados(this.game_id)
+    .then((usuariosConectados) => {
+      console.log('Usuarios conectados:', usuariosConectados);
+      this.list_players = usuariosConectados;
+      this.mostrarListaJugadores = true;
+    })
+    .catch((error) => {
+      console.error('Error al obtener usuarios conectados:', error);
+    });
+    
     /*
-    console.log("ACTUALIZA INFO");
-    let idPartida = this.route.snapshot.paramMap.get('id'); // Se obtiene id de la partida
-    this.username = this.userService.getUsername();         // Se obtiene el nombre del usuario actual
-    if (idPartida != null && this.username != null) {       // Actualiza la información del juego
-      this.game_id = +idPartida;
-    } else {
-      this.router.navigate(['/error']);
-    }
+    
     if(this.veces==0){
       this.mostrarListaJugadores = true;
       console.log("esperar sala: ", this.game_id);
@@ -79,6 +86,16 @@ export class EsperarSalaComponent implements OnInit{
   }
 
   actualize_game_info() {
+    this.socketService.actualizarUsuariosConectados(this.game_id)
+    .then((usuariosConectados) => {
+      console.log('Usuarios conectados:', usuariosConectados);
+      this.list_players = usuariosConectados;
+      this.mostrarListaJugadores = true;
+    })
+    .catch((error) => {
+      console.error('Error al obtener usuarios conectados:', error);
+    });
+    /*
     this.gameService.get_list_players(this.game_id).subscribe((response: PlayerListResponse) => {
         // Get list of players
         this.list_players = response.listaJugadores;
@@ -98,6 +115,7 @@ export class EsperarSalaComponent implements OnInit{
             }
         }
     });
+    */
 }
 
   // Función para acceder al tablero de juego para el creador de la partida
@@ -119,12 +137,14 @@ export class EsperarSalaComponent implements OnInit{
    * Genera el movimiento de reload al hacer click sobre el icono
    * y devuelve la lista de jugadores actualizada
    */
-  onRefreshClick(event: any) {
+  onRefreshClick() {
     this.showSpinner = true;
     setTimeout(() => {
       this.showSpinner = false;
     }, 2500);
-    this.gameService.get_list_players(this.game_id).subscribe((response: PlayerListResponse) => {
+    this.actualize_game_info();
+    this.mostrarListaJugadores = true;
+    /*this.gameService.get_list_players(this.game_id).subscribe((response: PlayerListResponse) => {
       this.list_players = response.listaJugadores;          // Se obtiene la lista de jugadores
       this.nb_players_connected = this.list_players.length; // Se obtiene el numero de jugadores conectado
       this.player_creator_of_game = this.list_players[0];   // Se obtiene el nombre del usuario del jugadore creador de la partida
@@ -138,6 +158,6 @@ export class EsperarSalaComponent implements OnInit{
             this.mostrarBotonUnirse = true;
           }
       }
-    });
+    });*/
   }
 }

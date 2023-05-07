@@ -56,6 +56,8 @@ export class PantallaInvitadoComponent {
     }*/
     if(this.form_unirse_invitado.valid){
       console.log("CREAR SALA INVITADO: ", this.form_unirse_invitado.value.username);
+      this.socketService.setUsername(this.form_unirse_invitado.value.username);
+      
       //this.datosUser.usrename = this.form_unirse_invitado.value.username;
       //this.datosUser.idSocket = this.socketService.socketID;
       

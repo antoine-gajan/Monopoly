@@ -260,4 +260,18 @@ export class WebSocketService {
     });
   }
   
+  actualizarUsuariosConectados(info: any): Promise<string[]>{
+    return new Promise((resolve, reject) => {
+      this.socket.on('esperaJugadores', (info) => {
+        if (typeof info === 'object' && info !== null) {
+          const keys = Object.keys(info);
+          const usuariosConectados = keys.map((key) => `${key}: ${info[key]}`);
+          resolve(usuariosConectados);
+        } else {
+          reject('La información recibida no es un objeto');
+        }
+      });
+    });
+  }
+  
 }

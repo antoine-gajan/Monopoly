@@ -25,7 +25,7 @@
   <div *ngIf="loading && !finMensaje" class="load-center">
     <app-loader></app-loader>
   </div>
-  <div *ngIf="mensajeNoPuedeConectarse && finMensaje" class="text-center">
+  <div *ngIf="errorPartidaLlena" class="text-center">
     <div class="titulo">
       <h2>Ups, no puedes unirte a la partida.</h2>
       <p>La partida está completa</p>

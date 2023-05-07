@@ -11,7 +11,7 @@
   <div class="icon-box iconbox-blue">
     <!--------------------titulo id partida-------------------->
     <div class="titulo" style="text-align: center;">
-      <h2>Partida #{{game_id}}<i class="bi bi-arrow-repeat clickable" (click)="onRefreshClick($event)"
+      <h2>Partida #{{game_id}}<i class="bi bi-arrow-repeat clickable" (click)="onRefreshClick()"
         [ngClass]="{'rotate': showSpinner}">
       </i></h2>
       <!--<p class="info-wait" *ngIf="username !== player_creator_of_game">Esperando a que el creador inicie la partida</p>-->
@@ -19,7 +19,7 @@
     </div>
     
     <!--------------------lista jugadores conectados-------------------->
-    <div class="lista_jugadores" *ngIf="mostrarListaJugadores === true">
+    <div class="lista_jugadores" *ngIf="mostrarListaJugadores">
       <p>Jugadores conectados:</p>
       <div *ngFor="let player of list_players" class="player-name">
         {{player}}

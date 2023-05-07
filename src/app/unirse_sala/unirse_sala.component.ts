@@ -20,6 +20,7 @@ export class UnirseSalaComponent {
   mensajeNoPuedeConectarse: boolean = false;
   seguirMostrando: boolean = false;
   finMensaje: boolean = false;
+  errorPartidaLlena: boolean = false;
 
   constructor(
     private http: HttpClient, 
@@ -36,6 +37,8 @@ export class UnirseSalaComponent {
     this.socketService.unirseSalaEsperar(datos)
     .then((unirseSala: string) => {
       console.log("CREAR SALA: ", unirseSala);
+      this.finMensaje = true;
+      this.errorPartidaLlena = true;
     })
     .catch(() => {
       console.log("ERROR AL CREAR SALA");
@@ -47,6 +50,7 @@ export class UnirseSalaComponent {
     this.loading=false;
     this.finMensaje=false;
     this.mensajeNoPuedeConectarse=false;
+    this.errorPartidaLlena = false;
   }
   
 }

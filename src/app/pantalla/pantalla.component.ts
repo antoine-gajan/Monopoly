@@ -21,7 +21,6 @@ volverArriba() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-
   ngOnInit() {
     // Get username from browser
     this.username = localStorage.getItem('username');
