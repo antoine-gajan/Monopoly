@@ -252,10 +252,7 @@ export class WebSocketService {
           const ruta = '/esperar_sala/' + idPartida;
           this.router.navigateByUrl(ruta);
           resolve(response.cod);
-        }  else if (response.cod === 4) { 
-          console.log("ERROR PARTIDA CON MAXJUGADORES");
-          resolve(response.cod);
-        } else {
+        }  else {
           console.log('Error al unirse a la sala');
           resolve(response.cod);
         }

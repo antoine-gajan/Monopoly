@@ -21,6 +21,7 @@ export const environment = {
     infoAsignatura: 'http://nerks.net:7003/partida/infoAsignatura'
     */
 
+    // socketURL: 'http://localhost:3000',
     socketURL: 'http://toothless.nerks.net',
     //--API servidor local -> cuando funcione cambiarlo
     login: 'http://localhost:8080/users/login',
