@@ -39,6 +39,15 @@ export class EsperarSalaComponent implements OnInit{
     } else {
       this.router.navigate(['/error']);
     }
+    /*
+    console.log("ACTUALIZA INFO");
+    let idPartida = this.route.snapshot.paramMap.get('id'); // Se obtiene id de la partida
+    this.username = this.userService.getUsername();         // Se obtiene el nombre del usuario actual
+    if (idPartida != null && this.username != null) {       // Actualiza la información del juego
+      this.game_id = +idPartida;
+    } else {
+      this.router.navigate(['/error']);
+    }
     if(this.veces==0){
       this.mostrarListaJugadores = true;
       console.log("esperar sala: ", this.game_id);
@@ -60,6 +69,8 @@ export class EsperarSalaComponent implements OnInit{
           this.mostrarBotonUnirse = true;
         }
     }
+    */
+   
   }
 
  

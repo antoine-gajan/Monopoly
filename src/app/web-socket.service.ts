@@ -142,7 +142,6 @@ export class WebSocketService {
   });
   }
   
- 
   //Función que recibe la infomación necesaria para eliminar a un usuario
   onDeleteUser(user: any){
     console.log('onDeleteUser: ', user);
@@ -156,6 +155,7 @@ export class WebSocketService {
       }
     });
   }
+  
   crearSalaInvitado(user: any): Promise<boolean>{
     //const user = {username: nombreUserInivtado, socketId: this.localSocketID};
     console.log('crearSalaInvitado: ', user);
@@ -257,6 +257,5 @@ export class WebSocketService {
       });
     });
   }
-
 
 }
