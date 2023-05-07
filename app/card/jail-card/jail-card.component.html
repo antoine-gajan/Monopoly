@@ -1,0 +1,22 @@
+<div class="info-card">
+  <h3 class="title-card">
+    SEGUNDA CONVOCATORIA DE JULIO
+  </h3>
+  <div class="info-container">
+    <div class="info">
+      Fuiste convocado a la segunda convocatoria de exámenes de la EINA en julio... Que quieres hacer?
+    </div>
+    <img src='../../../assets/images/card/carcel.png'>
+  </div>
+  <div class="dice-container">
+          <div class="dices-values" *ngIf="dices.length > 1">
+            <img class="dice" [src]="diceImages[dices[0] - 1]">
+            <img class="dice" [src]="diceImages[dices[1] - 1]">
+          </div>
+  </div>
+  <div class="list-button">
+    <button class="button-action pagar" *ngIf="player_money >= 67" (click)="pagar()">Pagar 67€</button>
+    <button class="button-action carta" *ngIf="has_card" (click)="use_card_to_go_out()">Utilizar carta </button>
+    <button class="button-action nada" (click)="roll_dices()">Lanzar los dados</button>
+  </div>
+</div>

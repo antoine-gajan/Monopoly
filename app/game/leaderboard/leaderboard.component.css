@@ -1,0 +1,13 @@
+table{
+  margin: 20px auto;
+}
+
+th{
+  padding: 10px 10px;
+  font-weight: bold;
+}
+
+.thead-dark{
+  background-color: #444444;
+  color: white;
+}

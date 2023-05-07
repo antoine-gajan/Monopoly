@@ -41,7 +41,10 @@ import { WebSocketService } from './web-socket.service';
 
 import { environment } from 'enviroment/enviroment';
 import * as io from 'socket.io-client';
-const config: SocketIoConfig = { url: environment.socketURL, options: {} };
+import 'zone.js';
+
+
+//const config: SocketIoConfig = { url: environment.socketURL, options: {} };
 @NgModule({
     declarations: [
         LoginComponent,
@@ -79,7 +82,7 @@ const config: SocketIoConfig = { url: environment.socketURL, options: {} };
     ReactiveFormsModule,
     RouterModule,
     NgOptimizedImage,
-    SocketIoModule.forRoot(config),
+    SocketIoModule.forRoot({url: environment.socketURL})
     // SocketIOClient.Socket
   ],
     providers: [UserService, WebSocketService],

@@ -1,0 +1,68 @@
+<header id="header" class="fixed-top">
+  <div style="display: flex; justify-content: space-between;">
+    <img class="volver_boton" src="../../../assets/images/voler_boton.png" onclick="window.history.back();" />
+    <h4><a style="color: #080808" routerLink="/">MONOPOLY VERSIÓN INFORMÁTICA</a></h4>
+    <img class="inicio_boton" src="../../../assets/images/home_boton.png" routerLink="/">
+  </div>
+  <div style="text-align: center;">
+    <h4><a style="color: #080808">Cambio correo usuario</a></h4>
+  </div>
+</header>
+
+<body>
+
+  <div class="row">
+    <div class="col-md-4 col-xl-1">
+    
+      <div class="card-header">
+        <b><h5 class="card-title mb-0">Ajustes de usuario</h5></b>
+      </div>
+      <div class="list-group list-group-flush" role="tablist">
+        <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" routerLink="/ajustes_usuario"> Perfil del usuario </a> 
+        <a class="list-group-item list-group-item-action" data-toggle="list" href="#password" role="tab" routerLink="/cambiar_username"> Cambiar nombre de usuario </a> 
+        <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" routerLink="/cambiar_contraseña"> Cambiar contraseña </a>
+        <a class="list-group-item list-group-item-action active" data-toggle="list" role="tab"> Cambiar correo electrónico </a>
+        <a class="list-group-item list-group-item-action" data-toggle="list"  role="tab" routerLink="/cerrar_sesion"> Cerrar sesión </a> 
+        <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" routerLink="/delete_user"> Eliminar cuenta </a>   
+      </div>
+  
+    </div>
+
+    <div class="col-md-4 col-xl-1">
+
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">CAMBIAR CORREO ELECTRÓNICO</h5>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="form" (ngSubmit)="guardar_nuevo_correo()">
+            <p><b>Correo electrónico actual:</b> <span id="email">{{old_email ? old_email : 'Cargando...'}}</span>
+            
+            
+            <p><b>Introduzca el nuevo correo eléctronico del usuario </b></p>
+            <div class="formulario-nombre-usuario" >
+              <!--<input placeholder="nuevo correo electrónnico" class="formulario-nombre-usuario-input" required/>-->
+              
+                <input type="text" formControlName="new_email" id="new_email" name="new_email" placeholder="nuevo correo electrónico" class="formulario-nombre-usuario-input" required/>
+                <div *ngIf="form?.get('new_email')?.invalid && (form?.get('new_email')?.dirty || form?.get('new_email')?.touched)">
+                  <div *ngIf="form?.get('new_email')?.errors?.['required']" style="color: red;">Este campo es obligatorio</div>
+                  <div *ngIf="form?.get('new_email')?.errors?.['email']" style="color: red;">Formato de email incorrecto</div>
+                </div>
+              
+            </div>
+            <div class="opciones">
+              <button class="boton_si" type="submit">Guardar</button>
+              <button class="boton_no" onclick="window.history.back();">Cancelar</button>
+            </div>
+           
+          </form>
+
+        </div>
+      </div>  
+
+      
+
+    </div> 
+
+  </div>
+</body>

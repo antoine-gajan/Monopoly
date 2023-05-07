@@ -11,13 +11,20 @@ import { LoginComponent } from './user/login/login.component';
 
 export class WebSocketService {
 
-  socket = io(environment.socketURL,{ transports: ["websocket"] });
-  
-  constructor(
-    private router: Router
-  ) {
-    //this.socket = io(environment.socketURL);
-    //console.log('Socket conectado con ID:', this.socket.id);
+  private username: string;
+  private email: string;
+  private _socketID: string;
+  private socket = io(environment.socketURL, { transports: ["websocket"] });
+
+  constructor(private router: Router) {
+    this.socket.on('connect', () => {
+      this._socketID = this.socket.id;
+      console.log('Socket conectado con ID:', this._socketID);
+    });
+  }
+
+  get socketID(): string {
+    return this._socketID;
   }
 
   getSocketID() {
@@ -27,7 +34,9 @@ export class WebSocketService {
     console.log('getSocketID: ', this.socket.id);
     return this.socket.id;
   }
-
+  getUsername() {
+    return this.username;
+  }
   //Función que recibe la información necesaria para logear un usuario
   public login(user: any): Promise<boolean> {
     console.log('login: ', user);

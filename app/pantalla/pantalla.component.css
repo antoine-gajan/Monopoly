@@ -1,0 +1,164 @@
+
+* {
+    font-family: "Inter", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#heather{
+    background: #BFDBAE;
+    box-shadow: 0px 0px 25px 0 rgba(0, 0, 0, 0.08);
+    z-index: 997;
+    padding: 15px 0;
+}
+
+body {
+    margin-top: 85px;
+    background-image: url('../../assets/images/logo_juego.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-blend-mode: lighten;
+}
+
+  
+.imagen_logo_juego{
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    height: 150px;
+}
+
+.volver_boton,
+.inicio_boton{
+    height: 40px;
+}
+
+.formulario-nombre-usuario{
+  text-align: center;
+}
+
+.formulario-nombre-usuario-input{
+  padding: 12px 24px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  background: rgb(237, 235, 235);
+  font-weight: 500;
+  font-size: 16px;
+  color: #6b7280;
+  text-align: center;
+  margin-right: 1%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Raleway", sans-serif;
+}
+
+/*------------------------------------
+ * CARDS
+ *-----------------------------------*/  
+
+
+.material-icons{
+  fill: #888;
+  width: 24px;
+  height: 24px;
+}
+
+.icono-tienda, 
+.icono-reglas {
+  border: #222222;
+  width: 24px;
+  height: 24px;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+.card {
+    all: unset;
+    border-radius: 4px;
+    border: 1px solid #eee;
+    background-color: #f6ee02;
+    height: 40px;
+    width: 200px;
+    margin: 0 8px 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease-in-out;
+    line-height: 24px;
+}
+
+.card-container .card:not(.highlight-card) {
+    cursor: pointer;
+}
+    
+.card-container .card:not(.highlight-card):hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 17px rgba(0, 0, 0, 0.35);
+}
+
+.card-container .card:hover::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.5;
+    z-index: -1;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.card-container .card:hover::before {
+    background-position: calc((100% / 200px) * var(--x)) calc((100% / 40px) * var(--y));
+    background-size: 200px 40px;
+    background-image: linear-gradient(
+        45deg,
+        #fafaf8 25%,
+        #b02f7c 25%,
+        #00ff00 50%,
+        #ff0000 50%,
+        #fafaf8 75%,
+        #b02f7c 75%,
+        #00ff00 100%
+    );
+}
+
+.card-container .card:hover {
+    --x: calc((100% / 200px) * (event.clientX - this.offsetLeft));
+    --y: calc((100% / 40px) * (event.clientY - this.offsetTop));
+}
+
+.mensaje_bienvenida{
+    text-align: center;
+}
+
+
+/* --------------BOTÓN VOLVER PARTE SUPERIOR PANTALLA-------------- */
+.btn-flotante {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ff7b00;
+    color: #fff;
+    border-radius: 50%;
+    border: none;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+}
+  
+.btn-flotante i {
+    line-height: 50px;
+    text-align: center;
+}

@@ -1,0 +1,42 @@
+<header id="header" class="fixed-top">
+  <div style="display: flex; justify-content: space-between;">
+    <img class="volver_boton" src="../../../assets/images/voler_boton.png" onclick="window.history.back();" />
+    <h4><a style="color: #080808" routerLink="/">MONOPOLY VERSIÓN INFORMÁTICA</a></h4>
+    <img class="inicio_boton" src="../../../assets/images/home_boton.png" routerLink="/">
+  </div>
+</header>
+<section class="services">
+      <div class="icon-box iconbox-blue">
+        <div class="titulo" style="text-align: center;"><!--</div>"section-title">-->
+          <h2>CREAR SALA</h2>
+          <p>Configura las siguientes opciones para poder crear una partida nueva.</p>
+        </div>
+        <div class="espaciar">
+          <form>
+            <label for="numero" class="etiqueta">Número de jugadores</label>
+            <select [(ngModel)]="numJugadores" class="jugadores" id="numJugadores" name="numJugadores">
+              <option value="2" [selected]="numJugadores == 2">2</option>
+              <option value="3" [selected]="numJugadores == 3">3</option>
+              <option value="4" [selected]="numJugadores == 4">4</option>
+              <option value="5" [selected]="numJugadores == 5">5</option>
+              <option value="6" [selected]="numJugadores == 6">6</option>
+              <option value="7" [selected]="numJugadores == 7">7</option>
+              <option value="8" [selected]="numJugadores == 8">8</option>
+            </select>
+          </form>
+        </div>
+
+        <div class="ajustar-dinero">
+          <label class="etiqueta">Dinero inicial</label>
+          <div class="dinero">
+            <div class="input-campo">
+              <i class="bi bi-plus-square-fill" (click)="incrementarDinero()"></i>
+              <span class="texto">{{ dineroJugador }}€</span>
+              <i class="bi bi-dash-square-fill" (click)="decrementarDinero()"></i>
+            </div>
+          </div>
+        </div>
+
+        <button (click)="crearPartidaDatos()" class="boton-jugar">Crear</button>
+    </div>
+</section>

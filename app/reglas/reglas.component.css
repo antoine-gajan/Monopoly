@@ -1,0 +1,46 @@
+.texto_cabecera{
+  display: flex;
+  justify-content: space-between;
+}
+
+.volver_boton,
+.home_boton {
+  cursor: pointer;
+  height: 40px;
+}
+
+.titulo{
+  text-align: center;
+}
+
+
+.section-text{
+  text-align: center;
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.card-reglas {
+  border: 1px solid #18ca0c;
+  height: 40px;
+  width: 200px;
+  margin: 0 8px 16px;
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.texto-reglas{
+  margin-left: 90px;
+  margin-right: 90px;
+}
+
+* {
+  font-family: "Inter", sans-serif;
+  padding: 0;
+}

@@ -1,0 +1,64 @@
+.propriety-card{
+  padding: 10px 10px;
+  color: black;
+}
+
+.image-company{
+  max-width: 125px;
+  max-height: 125px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.fiesta-title{
+  font-weight: bold;
+  font-size: 20px;
+  padding: 10px 10px;
+  text-align: center;
+  text-transform: uppercase;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.container-info{
+  box-sizing: border-box;
+  padding-top: 10px;
+  text-transform: uppercase;
+}
+
+.rent-info{
+  padding: 5px 5px;
+  width: 85%;
+}
+
+.price-info{
+  padding: 5px 5px;
+  width: 15%;
+}
+
+.box-info{
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+}
+
+.space{
+  padding-left: 20px;
+}
+
+.price-info{
+  text-align: right;
+}
+
+.hipoteca{
+  margin-top: 20px;
+  text-align: center;
+}
+
+.load-center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}

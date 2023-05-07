@@ -1,0 +1,51 @@
+<header id="header" class="fixed-top">
+  <div style="display: flex; justify-content: space-between;">
+    <img class="volver_boton" src="../../../assets/images/voler_boton.png" onclick="window.history.back();" />
+    <h4><a style="color: #080808" routerLink="/">MONOPOLY VERSIÓN INFORMÁTICA</a></h4>
+    <img class="inicio_boton" src="../../../assets/images/home_boton.png" routerLink="/">
+  </div>
+</header>
+<body>
+
+  <div class="row">
+    <div class="col-md-4 col-xl-1">
+    
+      <div class="card-header">
+        <b><h5 class="card-title mb-0">Ajustes de usuario</h5></b>
+      </div>
+      <div class="list-group list-group-flush" role="tablist">
+        <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" routerLink="/ajustes_usuario"> Perfil del usuario </a> 
+        <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" routerLink="/cambiar_username"> Cambiar nombre de usuario </a> 
+        <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" routerLink="/cambiar_contraseña"> Cambiar contraseña </a>
+        <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" routerLink="/cambiar_correo"> Cambiar correo electrónico </a>
+        <a class="lista-group-item lista-group-item-action active" data-toggle="list" role="tab"> Cerrar sesión </a> 
+        <a class="list-group-item list-group-item-action" data-toggle="list"  role="tab" routerLink="/delete_user"> Eliminar cuenta </a>   
+      </div>
+  
+    </div>
+
+    <div class="col-md-4 col-xl-1">
+
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">CERRAR SESIÓN</h5>
+        </div>
+        <div class="card-body">
+            <p><b>¿Desea cerrar sesión? </b></p>
+            
+            
+            <div class="opciones">
+              <button class="boton_si" type="submit" routerLink="/">SÍ</button>
+              <button class="boton_no" routerLink="/ajustes_usuario">NO</button>
+            </div>
+
+
+        </div>
+      </div>  
+
+      
+
+    </div> 
+
+  </div>
+</body>
