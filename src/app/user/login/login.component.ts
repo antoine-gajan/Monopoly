@@ -58,13 +58,14 @@ export class LoginComponent implements OnInit{
     this.mostrarError = false;
     console.log("LOGIN", this.form.valid);
     if (this.form.valid) {
-      this.userService.setUsername(this.form.value.username);
+      this.socketService.setUsername(this.form.value.username);
 
       const nuevo_password = CryptoJS.SHA512(this.form.value.password).toString();
-      this.socketID = this.socketService.getSocketID();
-      const user = {username: this.form.value.username, password: nuevo_password, socketId: this.socketID};
+      //this.socketID = this.socketService.getSocketID();
+      const user = {username: this.form.value.username, password: nuevo_password, socketId: this.socketService.socketID};
 
-      console.log("LOGIN: ",user);
+      console.log("LOGIN: ", {username: this.form.value.username, password: nuevo_password});
+      //this.socketService.login(this.form.value.username, nuevo_password)
       this.socketService.login(user)
         .then((loginResponse: boolean) => {
           this.mostrarError = !loginResponse;

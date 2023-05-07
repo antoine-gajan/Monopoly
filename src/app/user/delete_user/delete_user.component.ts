@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import { UserService } from '../user.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { NgForm } from '@angular/forms';
+import { WebSocketService } from 'app/web-socket.service';
 
 @Component({
   selector: 'app-delete_user',
@@ -12,8 +13,11 @@ import { NgForm } from '@angular/forms';
 export class DeleteUserComponent {
   username: string;
   basura: string;
-  constructor( public userService: UserService){
-    this.username = userService.getUsername();
+  constructor( 
+    public userService: UserService,
+    public socketService: WebSocketService
+  ){
+    this.username = socketService.getUsername();
   }
   
   onDeleteUser(){

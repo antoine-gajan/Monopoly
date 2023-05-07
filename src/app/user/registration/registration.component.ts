@@ -70,7 +70,7 @@ export class RegistrationComponent implements OnInit{
   registro(){
     this.mostrarError = false; 
     if (this.form.valid) {
-      this.socketID = this.socketService.getSocketID();
+      //this.socketID = this.socketService.getSocketID();
       console.log("REGISTRO SOCKET ID", this.socketID);
       const nuevo_password = CryptoJS.SHA512(this.form.value.password).toString();
       const nuevo_confirm_password = CryptoJS.SHA512(this.form.value.confirm_password).toString();
@@ -81,8 +81,8 @@ export class RegistrationComponent implements OnInit{
         confirm_password: nuevo_confirm_password,
         socketId: this.socketID      
       };
-      console.log("CREAR CUENTA", user);
-      this.socketService.registro(user)
+      console.log("CREAR CUENTA", this.form.value.username, this.form.value.email, nuevo_password, nuevo_confirm_password);
+      this.socketService.registro(this.form.value.username, this.form.value.email, nuevo_password, nuevo_confirm_password)
       .then((resgisterResponse: boolean) => {
         this.mostrarError = !resgisterResponse;
       })
