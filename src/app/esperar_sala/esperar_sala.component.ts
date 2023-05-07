@@ -21,7 +21,7 @@ export class EsperarSalaComponent implements OnInit{
   maxPlayers: number;
   veces: number = 0;
   mostrarBotonEmpezar: boolean = true;
-  mostrarBotonUnirse: boolean = true;
+  mostrarBotonUnirse: boolean = false;
   mostrarListaJugadores: boolean = true;
 
   constructor(
