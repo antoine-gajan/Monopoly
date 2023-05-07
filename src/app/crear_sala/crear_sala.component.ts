@@ -5,6 +5,7 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { GameService } from 'app/game/game.service';
 import { DatosSalaService } from 'app/user/datos.service';
 import { WebSocketService } from 'app/web-socket.service';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -37,7 +38,8 @@ export class CrearSalaComponent {
     private viewContainerRef: ViewContainerRef,
     private elRef: ElementRef,
     private datosSalaService: DatosSalaService,
-    private socketService: WebSocketService
+    private socketService: WebSocketService,
+    private location: Location
   ){
     this.username = socketService.getUsername();
     this.datosSalaService.numJugadores = this.numJugadores;

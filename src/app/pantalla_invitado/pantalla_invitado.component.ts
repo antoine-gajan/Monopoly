@@ -41,7 +41,7 @@ export class PantallaInvitadoComponent {
   }
 
   crearSala(){
-    console.log("CREAR SALA INVITADO: ", this.form_unirse_invitado.valid, this.form_unirse_invitado.value.username);
+    /*console.log("CREAR SALA INVITADO: ", this.form_unirse_invitado.valid, this.form_unirse_invitado.value.username);
     if(this.form_unirse_invitado.valid){
       console.log("CREAR SALA INVITADO: ", this.form_unirse_invitado.value.username);
       const user = {username: this.form_unirse_invitado.value.username, socketId: this.socketService.socketID};
@@ -53,6 +53,12 @@ export class PantallaInvitadoComponent {
           console.log("ERROR crear sala invitado");
         }
       );
+    }*/
+    if(this.form_unirse_invitado.valid){
+      console.log("CREAR SALA INVITADO: ", this.form_unirse_invitado.value.username);
+      //this.datosUser.usrename = this.form_unirse_invitado.value.username;
+      //this.datosUser.idSocket = this.socketService.socketID;
+      
     }
   }
 
