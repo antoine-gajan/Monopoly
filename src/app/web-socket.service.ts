@@ -43,20 +43,41 @@ export class WebSocketService {
   }
 
   setEmail(email: string): void {
-    //localStorage.setItem('email', email);
+    localStorage.setItem('email', email);
     this.email = email;
   }
+
   getUsername(): string {
     // Get username from browser
     let username_browser = localStorage.getItem('username');
     let username_client = this.username;
     return username_browser ? username_browser : username_client;
-  
   }
 
   getEmail(): string {
-    return this.email;
+    let email_browser = localStorage.getItem('email');
+    let email_client = this.email;
+    return email_browser ? email_browser : email_client;
   }
+
+  leerEmail(user: any): Promise<string> {
+    console.log("LEER EMAIL");
+    return new Promise<string>((resolve, reject) => {
+      this.socket.emit('infoUsuario', user, (response: any) => {
+        console.log('infoUsuario response:', response);
+        console.log('infoUsuario response.cod:', response.cod);
+        if (response.cod === 0) {
+          console.log('Correo:', response.msg.correo);
+          resolve(response.msg.correo);
+        } else {
+          console.log('Error al obtener la información del usuario');
+          reject(false);
+        }
+      });
+    });
+  }
+  
+
   //Función que recibe la información necesaria para logear un usuario
   public login(user: any): Promise<boolean> {
     console.log('login: ', user);
@@ -120,6 +141,7 @@ export class WebSocketService {
     });
   });
   }
+  
  
   //Función que recibe la infomación necesaria para eliminar a un usuario
   onDeleteUser(user: any){
@@ -171,6 +193,25 @@ export class WebSocketService {
       
     });
 
+  }
+
+  public guardar_nuevo_correo(user: any): Promise<boolean> {
+    console.log('guardar cambio email: ', user);
+    this.localSocketID = user.socketID;
+    return new Promise<boolean>((resolve, reject) => {
+        this.socket.emit('updateCorreo', user, (response: any) => {
+        console.log('guardar cambio email response:', response);
+        console.log('guardar cambio email  response.cod:', response.cod);
+        console.log('guardar cambio email  response.msg:', response.msg);
+        if (response.cod === 0) { // Si el código de confirmación es 200, redirigir a la pantalla de usuario
+          
+          resolve(true);
+        } else{
+          console.log('Error al hacer un update del correo');
+          reject(false);
+        }
+      });
+    });
   }
 
 }
