@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import { environment } from 'enviroment/enviroment';
 import { Router } from '@angular/router';
 import { LoginComponent } from './user/login/login.component';
@@ -11,20 +11,34 @@ import { LoginComponent } from './user/login/login.component';
 
 export class WebSocketService {
                                    
-  private socket = io(environment.socketURL,{ transports: ["websocket"] });
+  //private socket = io(environment.socketURL,{ transports: ["websocket"] });
+  private socket;
   private username: string;
   private email: string;
-   socketID: string;
-  valorSocket: string;
-  valorConstante: string;
+  public socketID: string;
   constructor(
     private router: Router
   ) {
-    //this.socket = io(environment.socketURL);
-    //console.log('Socket conectado con ID:', this.socket.id);
-    this.connect();
-  }
+    const storedSocketId = localStorage.getItem('socketId');
+    if (storedSocketId) {
+      this.socketID = storedSocketId;
+      this.socket = io(environment.socketURL, {
+        query: {
+          socketId: this.socketID
+        },
+        transports: ["websocket"]
+      });
+    } else {
+      this.socket = io(environment.socketURL, {
+        transports: ["websocket"]
+      });
+      this.socket.on('connect', () => {
+        this.socketID = this.socket.id;
+        localStorage.setItem('socketId', this.socketID);
+      });
+    }
 
+  }
   connect() {
     this.socket = io(environment.socketURL, { transports: ["websocket"] });
     this.socket.on('connect', () => {
@@ -35,7 +49,6 @@ export class WebSocketService {
   disconnect() {
     this.socket.disconnect();
   }
-
   //Función para obtener el username
   setUsername(username: string): string {
     localStorage.setItem('username', username);
@@ -56,10 +69,6 @@ export class WebSocketService {
   getEmail(): string {
     return this.email;
   }
-  
-  getSocketID() {
-    return this.socketID
-  }
 
   //Función que recibe la información necesaria para logear un usuario
   public login(user: any/*username: string, nuevo_password: string*/): Promise<boolean> {
@@ -68,11 +77,12 @@ export class WebSocketService {
     //const user = {username: username, password: nuevo_password, socketId: this.getSocketID()};
     console.log('login: ', user);
     return new Promise<boolean>((resolve, reject) => {
-        this.socket.emit('login', user, (response: any) => {
+      this.socket.emit('login', user, (response: any) => {
         console.log('Login response:', response);
         console.log('Login response.cod:', response.cod);
-        if (response.cod === 0) { // Si el código de confirmación es 200, redirigir a la pantalla de usuario
+        if (response.cod === 0) {
           this.setUsername(user.username);
+          localStorage.setItem('socketID', this.socket.id); // almacenar el socketID en el almacenamiento local
           this.router.navigate(['/pantalla']);
           resolve(true);
         } else{
@@ -80,14 +90,14 @@ export class WebSocketService {
           reject(false);
         }
       });
-      
     });
+    
 
   }
 
   //Función que recibe la información necesaria para registrar un usuario
-  public registro(username: string, email: string, nuevo_password: string, nuevo_confirm_password: string): Promise<boolean>{
-    const user = { username: username, email: email, password: nuevo_password, confirm_password: nuevo_confirm_password, socketId: this.getSocketID()};
+  public registro(user: any): Promise<boolean>{
+    //const user = { username: username, email: email, password: nuevo_password, confirm_password: nuevo_confirm_password, socketId: this.getSocketID()};
     console.log('registro: ', user);
     //this.socket.emit('registro', user);
     return new Promise<boolean>((resolve, reject) => {
@@ -105,6 +115,7 @@ export class WebSocketService {
     });
     
   });
+  
     
   }
 
@@ -114,7 +125,7 @@ export class WebSocketService {
     const username_change = {
       username: old_username,
       newusername: new_username,
-      socketId: this.valorConstante  
+      socketId: this.socket  
     };
     console.log('guardar_new_username: ', username_change);
     return new Promise<boolean>((resolve, reject) => {

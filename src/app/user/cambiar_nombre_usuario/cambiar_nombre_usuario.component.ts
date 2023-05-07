@@ -38,21 +38,21 @@ export class CambiarUsernameComponent {
     //this.old_username = this.socketService.getUsername();
     //this.socketID = this.socketService.getSocketID();
     this.socketID = localStorage.getItem('socketID') ?? '';
-    if(!this.socketID){
+    /*if(!this.socketID){
       this.socketService.connect();
       this.socketID = this.socketService.valorConstante;
       localStorage.setItem('socketID', this.socketID);
-    }
+    }*/
   }
   guardar_new_username(){
-    //this.socketID = this.socketService.getSocketID();
+    /*//this.socketID = this.socketService.getSocketID();
     const username_change = {
       username: this.old_username,
       newusername: this.form.value.new_username,
       socketId: this.socketID  
     };
     console.log("CAMBIAR USERNAME", this.old_username, this.form.value.new_username);
-    this.socketService.guardar_new_username(this.old_username, this.form.value.new_username)
+    this.socketService.guardar_new_username(username_change)
       .then((cambio_username: boolean) => {
         this.mostrarError = !cambio_username;
         console.log("CAMBIAR USERNAME", cambio_username);

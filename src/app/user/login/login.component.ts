@@ -22,7 +22,7 @@ import * as CryptoJS from 'crypto-js';
 export class LoginComponent implements OnInit{
   form: FormGroup;
   passwordShow: boolean = false;
-  socketID: string = this.socketService.getSocketID();
+  //socketID: string = this.socketService.getSocketID();
   mostrarError: boolean = false;
   
   //private socket: SocketIoClient.Socket;
