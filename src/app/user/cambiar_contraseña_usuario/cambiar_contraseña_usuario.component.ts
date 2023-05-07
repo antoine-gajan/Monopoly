@@ -3,6 +3,7 @@ import { UserService } from '../user.service';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { WebSocketService } from 'app/web-socket.service';
 import * as CryptoJS from 'crypto-js';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cambiar_contraseña_usuario',
@@ -21,7 +22,8 @@ export class CambiarContraseñaComponent implements OnInit {
   constructor(
     private fb: FormBuilder, 
     //public userService: UserService
-    private socketService: WebSocketService
+    private socketService: WebSocketService,
+    private router: Router
   ){
     this.form = this.fb.group({
       password: ['', [Validators.minLength(8),Validators.required]],
@@ -47,6 +49,7 @@ export class CambiarContraseñaComponent implements OnInit {
     this.socketService.guardar_cambio_password(user)
     .then((loginResponse: boolean) => {
       this.mensajeCambiado = !this.mensajeCambiado;
+      this.router.navigate(['/ajustes_usuario']);
     })
     .catch(() => {
       console.log("Error al cambiar la contraseña");

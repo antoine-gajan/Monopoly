@@ -161,7 +161,7 @@ export class WebSocketService {
         console.log('guardar_cambio_password response:', response);
         console.log('guardar_cambio_password  response.cod:', response.cod);
         if (response.cod === 0) { // Si el código de confirmación es 200, redirigir a la pantalla de usuario
-          location.reload();
+          //location.reload();
           resolve(true);
         } else{
           console.log('Error en el login, usuario o contraseña incorrectos');
