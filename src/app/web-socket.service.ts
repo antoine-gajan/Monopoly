@@ -29,11 +29,7 @@ export class WebSocketService {
   }
 
   getSocketID() {
-    this.socket.on('connect', () => {
-      console.log('Socket conectado con ID:', this.socket.id);
-      // Almacenar el ID del socket en una cookie o en el almacenamiento local
-      localStorage.setItem('socketID', this.socket.id);
-    });
+    localStorage.setItem('socketID', this.socket.id);
     // Obtener el valor del ID del socket desde una cookie o del almacenamiento local
     this._socketID = localStorage.getItem('socketID') || '';
     console.log('getSocketID: ', this._socketID);

@@ -35,14 +35,30 @@ export class CambiarUsernameComponent {
     return this.form.get('new_username');
   }
   ngOnInit() {
+    const flag = localStorage.getItem('ha_entrado');
+    if (flag === null) {
+      this.ha_entrado = false;
+    } else {
+      this.ha_entrado = JSON.parse(flag);
+    }
+  
     if (!this.ha_entrado) {
+      console.log("ha entrado: ", this.ha_entrado, this.socketService.socketID);
       this.ha_entrado = true;
       this.idSocket = this.socketService.socketID;
+      localStorage.setItem('ha_entrado', JSON.stringify(this.ha_entrado));
     }
     this.old_username = this.socketService.getUsername();
     this.mostrarError = false;
     console.log('recarga cambiar username: ', this.idSocket);
   }
+  
+  
+  
+  
+  
+  
+  
   
   guardar_new_username(){
     //this.socketID = this.socketService.getSocketID();

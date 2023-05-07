@@ -20,8 +20,8 @@ export class AjustesUsuarioComponent {
     private socketService: WebSocketService
   ) {
     this.username = socketService.getUsername();
-    console.log("Entra página ajustes usuario: ", this.username, this.email);
     this.email = socketService.getEmail();
+    console.log("Entra página ajustes usuario: ", this.username, this.email);
   }
   
   leer_email(){
