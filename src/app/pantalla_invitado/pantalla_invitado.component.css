@@ -5,7 +5,25 @@
     padding: 0;
     box-sizing: border-box;
 }
+.linea{
+    display: contents;
+}
 
+.input-partida{
+    margin-top: 5px;
+    margin-bottom: 0px;
+    text-align: center;
+  }
+  .id_partida{
+    padding: 10px 0.7px;
+    text-align: center;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+    background: rgb(237, 235, 235);
+    font-size: 16px;
+    color: #6b7280;
+  }
+  
 .texto_header{
     display: flex;
     justify-content: space-between;

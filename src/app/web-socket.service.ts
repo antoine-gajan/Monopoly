@@ -134,4 +134,22 @@ export class WebSocketService {
       }
     });
   }
+  crearSalaInvitado(user: any): Promise<boolean>{
+    //const user = {username: nombreUserInivtado, socketId: this.localSocketID};
+    console.log('crearSalaInvitado: ', user);
+    return new Promise<boolean>((resolve, reject) => {
+        this.socket.emit('nombreInvitado', user, (response: any) => {
+        console.log('unirse sala invitado: ', response);
+        console.log('unirse sala invitado: ', response.cod);
+        if (response.cod === 0) { // Si el código de confirmación es 200, redirigir a la pantalla de usuario
+          this.router.navigate(['/crear_sala']);
+          resolve(true);
+        } else{
+          console.log('al crear la sala invitado');
+          reject(false);
+        }
+      });
+      
+    });
+  }
 }
