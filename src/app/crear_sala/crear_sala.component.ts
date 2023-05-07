@@ -74,20 +74,6 @@ export class CrearSalaComponent {
         });
   }
 
-  esperarSala() {
-
-    
-    const datos = {
-      username: this.username,
-      dineroInicial: this.dineroJugador,
-      normas: this.normas,
-      nJugadores: this.numJugadores
-    };
-    console.log("ESPERAR SALA", datos);
-    this.userService.esperarSala(datos);
-    
-  }
-
   incrementarDinero() {
     if (this.dineroJugador + 100 <= 3500) {
       this.dineroJugador += 100;
