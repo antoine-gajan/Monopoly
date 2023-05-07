@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import { UserService } from '../user.service';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { WebSocketService } from 'app/web-socket.service';
+import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'app-cambiar_contraseña_usuario',
@@ -16,12 +18,16 @@ export class CambiarContraseñaComponent implements OnInit {
   //password: string;
   //confirm_password: string;
   username: string;
-  constructor(private fb: FormBuilder, public userService: UserService){
+  constructor(
+    private fb: FormBuilder, 
+    //public userService: UserService
+    private socketService: WebSocketService
+  ){
     this.form = this.fb.group({
       password: ['', [Validators.minLength(8),Validators.required]],
       confirm_password: ['', [Validators.required]]
     });
-    this.username = userService.getUsername();
+    this.username = socketService.getUsername();
   }
   get password() {
     return this.form.get('password');
@@ -32,10 +38,19 @@ export class CambiarContraseñaComponent implements OnInit {
   }
   ngOnInit(): void {}
   guardar_cambio_password(){
+    const nuevo_password = CryptoJS.SHA512(this.form.value.password).toString();
+    const nuevo_confirm_password = CryptoJS.SHA512(this.form.value.confirm_password).toString();
     console.log(this.username, this.form.value.password, this.form.value.confirm_password);
-    const user = {username: this.username, password: this.form.value.password, confirm_password: this.form.value.confirm_password};
+    const user = {username: this.username, password: nuevo_password, confirm_password: nuevo_confirm_password, socketId: this.socketService.socketID};
     console.log(user);
-    this.userService.guardar_cambio_password(user);
+    //this.userService.guardar_cambio_password(user);
+    this.socketService.guardar_cambio_password(user)
+    .then((loginResponse: boolean) => {
+      this.mensajeCambiado = !this.mensajeCambiado;
+    })
+    .catch(() => {
+      console.log("Error al cambiar la contraseña");
+    });
     this.mensajeCambiado = !this.mensajeCambiado;
     
   }

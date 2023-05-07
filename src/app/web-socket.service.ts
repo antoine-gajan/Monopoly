@@ -152,4 +152,25 @@ export class WebSocketService {
       
     });
   }
+
+  public guardar_cambio_password(user: any): Promise<boolean> {
+    console.log('guardar_cambio_password: ', user);
+    this.localSocketID = user.socketID;
+    return new Promise<boolean>((resolve, reject) => {
+        this.socket.emit('updatePassword', user, (response: any) => {
+        console.log('guardar_cambio_password response:', response);
+        console.log('guardar_cambio_password  response.cod:', response.cod);
+        if (response.cod === 0) { // Si el código de confirmación es 200, redirigir a la pantalla de usuario
+          location.reload();
+          resolve(true);
+        } else{
+          console.log('Error en el login, usuario o contraseña incorrectos');
+          reject(false);
+        }
+      });
+      
+    });
+
+  }
+
 }
