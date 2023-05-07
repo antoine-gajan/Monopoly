@@ -214,4 +214,47 @@ export class WebSocketService {
     });
   }
 
+  public crearSala(user: any){
+    console.log("CREAR PARTIDA-SALA", user);
+    return new Promise<boolean>((resolve, reject) => {
+      this.socket.emit('crearPartida', user, (response: any) => {
+        console.log('crearPartida response:', response);
+        console.log('crearPartida response.cod:', response.cod);
+        if (response.cod === 0) { // Si el código de confirmación es 200, redirigir a la pantalla de usuario
+          //this.router.navigate(['/crear_sala']);
+          resolve(true);
+          let idPartida = '';
+          if (response.msg !== null && response.msg !== undefined) {
+            idPartida = response.msg;
+          }
+          const ruta = '/esperar_sala/' + idPartida;
+          this.router.navigateByUrl(ruta);
+        } else{
+          console.log('Error al crear la sala');
+          reject(false);
+        }
+      });
+    });
+  }
+
+  /**crearSala(user: any){
+    console.log("CREAR PARTIDA", user);
+    return this.http.post(environment.crearPartida, user, {responseType: 'text', observe: 'response'})
+      .subscribe(
+        (response) => {
+          console.log(response.status);
+          
+         
+          user.idPartida = idPartida;
+          const ruta = '/esperar_sala/' + idPartida;
+          this.router.navigateByUrl(ruta);
+          //const navigationExtras = {state: {idPartida: idPartida}};
+          //this.router.navigateByUrl('/esperar_sala', navigationExtras);
+        },
+        (error) => {
+          console.log(error);
+
+        }
+      );
+  } */
 }

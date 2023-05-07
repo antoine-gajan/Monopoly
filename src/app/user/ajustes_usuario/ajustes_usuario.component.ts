@@ -29,7 +29,6 @@ export class AjustesUsuarioComponent {
     this.email = this.socketService.getEmail();
     console.log("Entra página ajustes usuario: ", this.username, this.email);
   }
-
   
   leer_email(){
     console.log("entra_leer_email");
@@ -39,4 +38,6 @@ export class AjustesUsuarioComponent {
     //this.router.navigate(['/cambiar_correo', { email: (this.userService.leer_email(user)).toString()}]);
     console.log("sale: leer_email", this.email);
   }
+
+  
 }

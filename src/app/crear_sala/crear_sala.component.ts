@@ -4,6 +4,7 @@ import { UserService } from 'app/user/user.service';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { GameService } from 'app/game/game.service';
 import { DatosSalaService } from 'app/user/datos.service';
+import { WebSocketService } from 'app/web-socket.service';
 
 
 @Component({
@@ -15,12 +16,17 @@ export class CrearSalaComponent {
   numJugadores: number = 2; 
   dineroJugador: number = 1500;
   username: string;
-  normas: string = "";
+  normas: boolean[] = [];
   idPartida: number;
   current_player: string;
   players_list: [string, number][] = [];
   interval: any;
   jugadoresConectados: string[] = [];
+  cobrarCarcel: boolean = false;
+  cobrarBeca: boolean = false;
+  activarSubasta: boolean = false;
+  aumentarCreditos: boolean = false;
+  reiniciarJuegoBancarrota: boolean = false;  
 
   constructor(
     private gameService: GameService,
@@ -30,29 +36,47 @@ export class CrearSalaComponent {
     private componentFactoryResolver: ComponentFactoryResolver,
     private viewContainerRef: ViewContainerRef,
     private elRef: ElementRef,
-    private datosSalaService: DatosSalaService
+    private datosSalaService: DatosSalaService,
+    private socketService: WebSocketService
   ){
-    this.username = userService.getUsername();
+    this.username = socketService.getUsername();
     this.datosSalaService.numJugadores = this.numJugadores;
   }
 
   ngOnInit() {
-    let username = this.userService.getUsername();
+    let username = this.socketService.getUsername();
     this.datosSalaService.numJugadores = this.numJugadores;
   }
 
   crearPartidaDatos() {
-    console.log("Crear partida: ", this.numJugadores, this.dineroJugador, this.username);
+    
     const datos = {
-      username: this.username,
       dineroInicial: this.dineroJugador,
-      normas: this.normas,
-      nJugadores: this.numJugadores
+      nJugadores: this.numJugadores,
+      normas: {
+        cobrarCarcel: this.cobrarCarcel,
+        cobrarBeca: this.cobrarBeca,
+        activarSubasta: this.activarSubasta,
+        aumentarCreditos: this.aumentarCreditos,
+        reiniciarJuegoBancarrota: this.reiniciarJuegoBancarrota
+      },
+      socketId: this.socketService.socketID     
     };
-    this.userService.crearSala(datos);
+    console.log("CONFIGURACIÓN CREAR PARTIDA: ", datos);
+
+    //this.userService.crearSala(datos);
+    this.socketService.crearSala(datos)
+        .then((crearSala: boolean) => {
+          console.log("CREAR SALA: ", crearSala);
+        })
+        .catch(() => {
+          console.log("ERROR AL CREAR SALA");
+        });
   }
 
   esperarSala() {
+
+    
     const datos = {
       username: this.username,
       dineroInicial: this.dineroJugador,
