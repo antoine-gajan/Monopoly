@@ -74,7 +74,6 @@ export class RegistrationComponent implements OnInit{
       const nuevo_confirm_password = CryptoJS.SHA512(this.form.value.confirm_password).toString();
       const user = {
         username: this.form.value.username,
-        
         password: nuevo_password,
         confirm_password: nuevo_confirm_password,
         email: this.form.value.email,

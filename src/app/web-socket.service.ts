@@ -93,9 +93,11 @@ export class WebSocketService {
       if (response.cod === 0) { // Si el código de confirmación es 200, redirigir a la pantalla de usuario
         this.router.navigate(['/pantalla']);
         resolve(true);
-      } else{
+      } else if(response.cod === 1){
         console.log('CREAR CUENTA: ya existe un usuario con ese username');
         reject(false);
+      } else{
+        console.log('Error en el registro');
       }
     });
     
