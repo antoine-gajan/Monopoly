@@ -15,7 +15,7 @@ export class RegistrationComponent implements OnInit{
   passwordShow: boolean = false;
   confirmPasswordShow: boolean = false;
   mostrarError: boolean = false;
-  //socketID: string = this.socketService.getSocketID();
+  socketID: string = this.socketService.getSocketID();
 
   constructor(
     private fb: FormBuilder,
@@ -70,8 +70,7 @@ export class RegistrationComponent implements OnInit{
   registro(){
     this.mostrarError = false; 
     if (this.form.valid) {
-      //this.socketID = this.socketService.getSocketID();
-      console.log("REGISTRO SOCKET ID", this.socketService.socketID);
+      console.log("REGISTRO SOCKET ID");
       const nuevo_password = CryptoJS.SHA512(this.form.value.password).toString();
       const nuevo_confirm_password = CryptoJS.SHA512(this.form.value.confirm_password).toString();
       const user = {
@@ -79,10 +78,10 @@ export class RegistrationComponent implements OnInit{
         email: this.form.value.email,
         password: nuevo_password,
         confirm_password: nuevo_confirm_password,
-        socketId: this.socketService.socketID   
+        socketId: this.socketID      
       };
-      console.log("CREAR CUENTA", this.form.value.username, this.form.value.email, nuevo_password, nuevo_confirm_password);
-      this.socketService.registro(user/*this.form.value.username, this.form.value.email, nuevo_password, nuevo_confirm_password*/)
+      console.log("CREAR CUENTA", user);
+      this.socketService.registro(user)
       .then((resgisterResponse: boolean) => {
         this.mostrarError = !resgisterResponse;
       })
