@@ -72,8 +72,9 @@ export class CrearSalaComponent {
     console.log("--", this.list_players);
   }
 
-  crearPartidaDatos() {
-    
+  empezarJugar() {
+    console.log("nos vamos al board");
+    this.actualizarDatos();
     const datos = {
       dineroInicial: this.dineroJugador,
       nJugadores: this.numJugadores,
@@ -87,7 +88,10 @@ export class CrearSalaComponent {
       socketId: this.socketService.socketID     
     };
     console.log("CONFIGURACIÓN CREAR PARTIDA: ", datos);
-
+    if(this.router!=null){
+      const ruta = '/game/' + this.idPartida;
+      this.router.navigateByUrl(ruta);
+    }
     //this.userService.crearSala(datos);
     /*this.socketService.crearSala(datos)
         .then((crearSala: number) => {

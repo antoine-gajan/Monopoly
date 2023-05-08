@@ -13,7 +13,7 @@
         </div>
         <div class="espaciar">
           <form>
-            <b><p for="numero" class="etiqueta">Número de jugadores</p></b>
+            <b><label for="numJugadores" class="etiqueta">Número de jugadores:</label></b>
             <select [(ngModel)]="numJugadores" class="jugadores" id="numJugadores" name="numJugadores" (change)="actualizarDatos()">
               <option value="2" [selected]="numJugadores == 2">2</option>
               <option value="3" [selected]="numJugadores == 3">3</option>
@@ -25,9 +25,10 @@
             </select>
           </form>
         </div>
+        
 
         <div class="ajustar-dinero">
-          <b><p class="etiqueta">Dinero inicial</p></b>
+          <b><label class="etiqueta">Dinero inicial</label></b>
           <div class="dinero">
             <div class="input-campo">
               <i class="bi bi-plus-square-fill" (click)="incrementarDinero()"></i>
@@ -36,6 +37,53 @@
             </div>
           </div>
         </div>
+
+        <div>
+          <b><label class="etiqueta">Personalización de normas</label></b>
+          
+          <div class="checkbox-wrapper-20">
+            <div class="switch">
+              <input id="1-20" class="input" type="checkbox" />
+              <label for="1-20" class="slider"></label>
+              <p style="display: inline-flex;">Cobrar alquiler desde la cárcel</p>
+            </div>
+          </div>
+
+          <div class="checkbox-wrapper-20">
+            <div class="switch">
+              <input id="2-20" class="input" type="checkbox" />
+              <label for="2-20" class="slider"></label>
+              <p style="display: inline-flex;">Posibilidad de cobrar dinero al caer en la casilla de beca</p>
+            </div>
+          </div>
+
+          <div class="checkbox-wrapper-20">
+            <div class="switch">
+              <input id="3-20" class="input" type="checkbox" />
+              <label for="3-20" class="slider"></label>
+              <p style="display: inline-flex;">Posibilidad de subastar una asigantura si no la puede comprar un jugador en su turno</p>
+            </div>
+          </div>
+
+          <div class="checkbox-wrapper-20">
+            <div class="switch">
+              <input id="4-20" class="input" type="checkbox" />
+              <label for="4-20" class="slider"></label>
+              <p style="display: inline-flex;">Posibilidad de aumentar el precio de los créditos de una asignatura</p>
+            </div>
+          </div>
+
+          <div class="checkbox-wrapper-20">
+            <div class="switch">
+              <input id="5-20" class="input" type="checkbox" />
+              <label for="5-20" class="slider"></label>
+              <p style="display: inline-flex;">Reiniciar el juego a un jugador si está en bancarrota</p>
+            </div>
+          </div>
+
+
+        </div>
+        
 
 
         <!--
@@ -50,16 +98,6 @@
     <p class="undone" aria-hidden="true">unDone</p>
     <p class="done" aria-hidden="true">Done</p>
 
-    <input id="item1" type="checkbox"  data-var="cobrarCarcel">
-    <label for="item1">Cobrar alquiler desde la cárcel</label>
-
-    <input id="item2" type="checkbox" data-var="cobrarBeca">
-    <label for="item2">Posibilidad de cobrar dinero al caer en la casilla de beca</label>
-
-    <input id="item3" type="checkbox" data-var="activarSubasta">
-    <label for="item3">Posibilidad de subastar una asigantura si no la puede comprar un jugador en su turno</label>
-
-    <input id="item4" type="checkbox" data-var="aumentarCreditos">
     <label for="item4">Posibilidad de aumentar el precio de los créditos de una asignatura</label>
 
     <input id="item5" type="checkbox" data-var="reiniciarJuegoBancarrota">
@@ -71,6 +109,21 @@
 </div>
 
 -->
+
+
+<div class="checkbox-wrapper-20">
+  <div class="switch">
+    <input id="one-20" class="input" type="checkbox" />
+    <label for="one-20" class="slider"></label>
+    <p>Cobrar alquiler desde la cárcel</p>
+  </div>
+</div>
+
+
+
+
+
+
 <h3>ID PARTIDA: {{idPartida}}</h3>
 <div class="lista_jugadores">
   <p>Jugadores conectados:</p>
@@ -79,7 +132,6 @@
   </div>
 </div>
 
-        <div *ngIf="!partidaCreadaBoton"><button (click)="crearPartidaDatos()" class="boton-jugar" >Crear</button></div>
-        <div *ngIf="partidaCreadaBoton"><button class="boton-jugar" >Empezar a partida</button></div>
+        <button (click)="empezarJugar()" class="boton-jugar" >Empezar a partida</button>
       </div>
 </section>
