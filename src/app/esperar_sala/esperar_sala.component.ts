@@ -42,7 +42,7 @@ export class EsperarSalaComponent implements OnInit{
       this.router.navigate(['/error']);
     }
 
-
+    
     this.socketService.actualizarUsuariosConectados()
     .then((usuariosConectados) => {
       console.log('Usuarios conectados:', usuariosConectados);

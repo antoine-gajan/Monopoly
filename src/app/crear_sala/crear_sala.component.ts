@@ -14,6 +14,7 @@ import { Location } from '@angular/common';
   styleUrls: ['./crear_sala.component.css']
 })
 export class CrearSalaComponent {
+  private router: Router | null = null;
   numJugadores: number = 2; 
   dineroJugador: number = 1000;
   username: string;
@@ -32,10 +33,10 @@ export class CrearSalaComponent {
   partidaCreadaBoton: boolean = false;
 
   constructor(
+    router: Router,
     private gameService: GameService,
     private userService: UserService,
     private route: ActivatedRoute,
-    private router: Router,
     private componentFactoryResolver: ComponentFactoryResolver,
     private viewContainerRef: ViewContainerRef,
     private elRef: ElementRef,
@@ -43,6 +44,7 @@ export class CrearSalaComponent {
     private socketService: WebSocketService,
     private location: Location
   ){
+    this.router = router;
     this.username = socketService.getUsername();
     this.datosSalaService.numJugadores = this.numJugadores;
     const checkbox = document.querySelector('input[data-var=cobrarCarcel]') as HTMLInputElement;
@@ -54,14 +56,23 @@ export class CrearSalaComponent {
   ngOnInit() {
     let username = this.socketService.getUsername();
     this.datosSalaService.numJugadores = this.numJugadores;
-    this.socketService.actualizarUsuariosConectados()
-    .then((usuariosConectados) => {
+    console.log("ME HE ADELANTADO");
+    this.idPartida = this.socketService.idPartida;
+    console.log("ID PARTIDA: ", this.idPartida);
+    /*if (this.router) {
+      // Navegar a la página /Esperar_sala y pasar el ID de la partida en el objeto de navegación
+      this.router.navigate(['/Esperar_sala'], { state: { idPartida: this.idPartida } });
+    }
+    console.log("LEER USUARIOS");
+    */
+    //this.socketService.actualizarUsuariosConectados()
+    /*.then((usuariosConectados) => {
       console.log('Usuarios conectados:', usuariosConectados);
       this.list_players = usuariosConectados;
     })
     .catch((error) => {
       console.error('Error al obtener usuarios conectados:', error);
-    });
+    });*/
   }
 
   crearPartidaDatos() {
@@ -81,15 +92,28 @@ export class CrearSalaComponent {
     console.log("CONFIGURACIÓN CREAR PARTIDA: ", datos);
 
     //this.userService.crearSala(datos);
-    this.socketService.crearSala(datos)
+    /*this.socketService.crearSala(datos)
         .then((crearSala: number) => {
           console.log("CREAR SALA: ", crearSala);
           this.idPartida = crearSala;
-          
+          this.socketService.actualizarUsuariosConectados();
         })
         .catch(() => {
           console.log("ERROR AL CREAR SALA");
         });
+        
+    
+
+    async  leerJugadores(){
+       this.socketService.actualizarUsuariosConectados()
+    .then((usuariosConectados) => {
+      console.log('Usuarios conectados:', usuariosConectados);
+      this.list_players = usuariosConectados;
+    })
+    .catch((error) => {
+      console.error('Error al obtener usuarios conectados:', error);
+    });
+    console.log("USUARIOS LEIDOS");*/
   }
 
   incrementarDinero() {

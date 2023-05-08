@@ -11,6 +11,7 @@ import { LoginComponent } from './user/login/login.component';
 
 export class WebSocketService {
   localSocketID: string;
+  idPartida: number;
   private username: string;
   private email: string;
   private _socketID: string;
@@ -292,5 +293,43 @@ export class WebSocketService {
       });
     });
   }
+
+  /**public crearPartida(){
+    this.socket.emit('crearPartida', {
+      socketId: 
+  }, (ack) => {
+      console.log('Server acknowledged:', ack);
+      if(ack.cod == 0){
+          navigation.navigate('CrearSala', {idPartida: ack.msg});
+      }
+      else if(ack.cod != 2){
+          alert(ack.msg);
+      }
+      else{
+          alert("Se ha producido un error en el servidor, por favor, pulse otra vez el boton");
+      }
+  });
+  }  */
+
+  public crearPartida(): Promise<number> {
+    console.log("CREAR PARTIDA-SALA v2");
+  
+    return new Promise((resolve) => {
+      this.socket.emit('crearPartida', {socketId: this.socketID}, (ack: any) => {
+        console.log('Server acknowledged:', ack);
+      if(ack.cod == 0){
+        console.log("ENTRA");
+          resolve(ack.msg);
+      }
+      else if(ack.cod != 2){
+          resolve(ack.cod);
+      }
+      else{
+          alert("Se ha producido un error en el servidor, por favor, pulse otra vez el boton");
+      }
+      });
+    });
+  }
+  
   
 }

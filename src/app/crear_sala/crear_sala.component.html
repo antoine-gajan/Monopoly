@@ -71,7 +71,7 @@
 </div>
 
 -->
-<h3>ID PARIDA: {{idPartida}}</h3>
+<h3>ID PARTIDA: {{idPartida}}</h3>
 <div class="lista_jugadores">
   <p>Jugadores conectados:</p>
   <div *ngFor="let player of list_players" class="player-name">
@@ -79,7 +79,7 @@
   </div>
 </div>
 
-        <button (click)="crearPartidaDatos()" class="boton-jugar" ngIf*="!partidaCreadaBoton">Crear</button>
-        <button class="boton-jugar" ngIf*="partidaCreadaBoton">Empezar a partida</button>
+        <div *ngIf="!partidaCreadaBoton"><button (click)="crearPartidaDatos()" class="boton-jugar" >Crear</button></div>
+        <div *ngIf="partidaCreadaBoton"><button class="boton-jugar" >Empezar a partida</button></div>
       </div>
 </section>
