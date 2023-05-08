@@ -223,12 +223,7 @@ export class WebSocketService {
         console.log('crearPartida response.cod:', response.cod);
   
         if (response.cod === 0) {
-          let idPartida = '';
-          if (response.msg !== null && response.msg !== undefined) {
-            idPartida = response.msg;
-          }
-          const ruta = '/esperar_sala/' + idPartida;
-          resolve(response.cod);
+          resolve(response.msg);
         } else {
           console.log('Error al crear la sala');
           resolve(-1);
