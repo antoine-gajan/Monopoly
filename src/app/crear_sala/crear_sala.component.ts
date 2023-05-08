@@ -112,17 +112,26 @@ export class CrearSalaComponent {
     });
     console.log("USUARIOS LEIDOS");*/
   }
+  actualizarDatos(){
+    console.log("ACTUALIZAR DATOS");
+    const datos = { nJugadores: this.numJugadores, dineroInicial: this.dineroJugador, socketId: this.socketService.socketID };
+    this.socketService.actualizarDatosCrearPartida(datos);
+    console.log(this.numJugadores, this.dineroJugador);
+  }
 
   incrementarDinero() {
     if (this.dineroJugador + 500 <= 3000) {
       this.dineroJugador += 500;
     }
-    
+    this.actualizarDatos();
   }
 
   decrementarDinero() {
     if (this.dineroJugador - 500 >= 1000) {
       this.dineroJugador -= 500;
     }
+    this.actualizarDatos();
   }
+
+
 }

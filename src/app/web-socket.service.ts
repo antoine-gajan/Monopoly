@@ -333,7 +333,9 @@ export class WebSocketService {
   
   public actualizarDatosCrearPartida(datos: any){
     this.socket.emit('actualizarPartida', datos, (ack:any) => {
-      
+      if(ack.cod==0){
+        console.log("ACTUALIZACIÓN CORRECTA");
+      }
     })
 
   }

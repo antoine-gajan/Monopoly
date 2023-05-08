@@ -14,7 +14,7 @@
         <div class="espaciar">
           <form>
             <b><p for="numero" class="etiqueta">Número de jugadores</p></b>
-            <select [(ngModel)]="numJugadores" class="jugadores" id="numJugadores" name="numJugadores">
+            <select [(ngModel)]="numJugadores" class="jugadores" id="numJugadores" name="numJugadores" (change)="actualizarDatos()">
               <option value="2" [selected]="numJugadores == 2">2</option>
               <option value="3" [selected]="numJugadores == 3">3</option>
               <option value="4" [selected]="numJugadores == 4">4</option>
