@@ -32,6 +32,7 @@ volverArriba() {
     if (this.username == null) {
       this.router.navigate(['/error']);
     }
+    
   }
 
   crearPartida() {
@@ -42,10 +43,7 @@ volverArriba() {
             console.log("CREAR SALA: ", crearSala);
             this.socketService.idPartida = crearSala;
             this.router.navigate(['/crear_sala']);
-            //const navigationExtras: NavigationExtras = {state: {idPartida: crearSala}};
-            //this.router.navigate(['/crear_sala'], navigationExtras);
           }
-          
         })
         .catch(() => {
           console.log("ERROR AL CREAR SALA");

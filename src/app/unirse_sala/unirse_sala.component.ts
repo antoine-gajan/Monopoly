@@ -21,6 +21,8 @@ export class UnirseSalaComponent {
   seguirMostrando: boolean = false;
   finMensaje: boolean = false;
   errorPartidaLlena: boolean = false;
+  list_players: string[] = [];
+
 
   constructor(
     private http: HttpClient, 
@@ -29,6 +31,15 @@ export class UnirseSalaComponent {
     private socketService: WebSocketService
   ) {
     this.username = socketService.getUsername();
+    this.socketService.actualizarUsuariosConectados()
+    .then((usuariosConectados) => {
+      console.log('Usuarios conectados:', usuariosConectados);
+      this.list_players = usuariosConectados;
+    })
+    .catch((error) => {
+      console.error('Error al obtener usuarios conectados:', error);
+    });
+    console.log("--", this.list_players);
   }
 
   // Función que permitirá o no a un usuario unirse a una sala en función de si hay hueco o no
@@ -36,7 +47,7 @@ export class UnirseSalaComponent {
     const datos = { idPartida: this.idPartida, socketId: this.socketService.socketID};
     this.socketService.unirseSalaEsperar(datos)
     .then((unirseSala: string) => {
-      console.log("CREAR SALA: ", unirseSala);
+      console.log("unirse SALA: ", unirseSala);
       this.finMensaje = true;
       this.errorPartidaLlena = true;
     })

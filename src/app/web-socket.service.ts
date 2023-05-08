@@ -322,7 +322,7 @@ export class WebSocketService {
           resolve(ack.msg);
       }
       else if(ack.cod != 2){
-          resolve(ack.cod);
+          resolve(ack.msg);
       }
       else{
           alert("Se ha producido un error en el servidor, por favor, pulse otra vez el boton");

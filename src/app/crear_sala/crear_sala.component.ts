@@ -59,20 +59,17 @@ export class CrearSalaComponent {
     console.log("ME HE ADELANTADO");
     this.idPartida = this.socketService.idPartida;
     console.log("ID PARTIDA: ", this.idPartida);
-    /*if (this.router) {
-      // Navegar a la página /Esperar_sala y pasar el ID de la partida en el objeto de navegación
-      this.router.navigate(['/Esperar_sala'], { state: { idPartida: this.idPartida } });
-    }
     console.log("LEER USUARIOS");
-    */
-    //this.socketService.actualizarUsuariosConectados()
-    /*.then((usuariosConectados) => {
+
+    this.socketService.actualizarUsuariosConectados()
+    .then((usuariosConectados) => {
       console.log('Usuarios conectados:', usuariosConectados);
       this.list_players = usuariosConectados;
     })
     .catch((error) => {
       console.error('Error al obtener usuarios conectados:', error);
-    });*/
+    });
+    console.log("--", this.list_players);
   }
 
   crearPartidaDatos() {
