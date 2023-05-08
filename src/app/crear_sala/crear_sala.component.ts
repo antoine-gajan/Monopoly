@@ -117,6 +117,7 @@ export class CrearSalaComponent {
     if (this.dineroJugador + 500 <= 3000) {
       this.dineroJugador += 500;
     }
+    
   }
 
   decrementarDinero() {
