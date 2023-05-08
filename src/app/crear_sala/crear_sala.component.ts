@@ -28,6 +28,8 @@ export class CrearSalaComponent {
   activarSubasta: boolean = false;
   aumentarCreditos: boolean = false;
   reiniciarJuegoBancarrota: boolean = false;  
+  list_players: string[] = [];
+  partidaCreadaBoton: boolean = false;
 
   constructor(
     private gameService: GameService,
@@ -52,6 +54,14 @@ export class CrearSalaComponent {
   ngOnInit() {
     let username = this.socketService.getUsername();
     this.datosSalaService.numJugadores = this.numJugadores;
+    this.socketService.actualizarUsuariosConectados()
+    .then((usuariosConectados) => {
+      console.log('Usuarios conectados:', usuariosConectados);
+      this.list_players = usuariosConectados;
+    })
+    .catch((error) => {
+      console.error('Error al obtener usuarios conectados:', error);
+    });
   }
 
   crearPartidaDatos() {

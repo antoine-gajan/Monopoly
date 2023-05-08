@@ -42,14 +42,14 @@
   Checkbox Trickery with CSS:
   http://codersblock.com/blog/checkbox-trickery-with-css/ 
 -->
-
+<!--
 <div class="container">
   <b><p class="etiqueta">Personalización de normas</p></b>
           
   <div class="items">
     <p class="undone" aria-hidden="true">unDone</p>
     <p class="done" aria-hidden="true">Done</p>
-    
+
     <input id="item1" type="checkbox"  data-var="cobrarCarcel">
     <label for="item1">Cobrar alquiler desde la cárcel</label>
 
@@ -70,7 +70,16 @@
   </div>
 </div>
 
+-->
 
-        <button (click)="crearPartidaDatos()" class="boton-jugar">Crear</button>
-    </div>
+<div class="lista_jugadores">
+  <p>Jugadores conectados:</p>
+  <div *ngFor="let player of list_players" class="player-name">
+    {{player}}
+  </div>
+</div>
+
+        <button (click)="crearPartidaDatos()" class="boton-jugar" ngIf*="!partidaCreadaBoton">Crear</button>
+        <button class="boton-jugar" ngIf*="partidaCreadaBoton">Empezar a partida</button>
+      </div>
 </section>

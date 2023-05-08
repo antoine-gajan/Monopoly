@@ -136,6 +136,25 @@
   flex-wrap: nowrap;
 }
 
+.lista_jugadores {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 50px auto;
+  padding: 20px;
+  border: 2px solid #0055ff;
+  border-radius: 20px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  background-color: #F3F4F6;
+}
+
+.player-name{
+  text-align: center;
+  font-weight: bold;
+  font-size: 15px;
+  padding: 5px;
+}
 
 
 
