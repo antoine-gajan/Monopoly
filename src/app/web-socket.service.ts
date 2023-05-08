@@ -214,7 +214,31 @@ export class WebSocketService {
     });
   }
 
-  public crearSala(user: any){
+  public crearSala(user: any): Promise<number> {
+    console.log("CREAR PARTIDA-SALA", user);
+  
+    return new Promise((resolve, reject) => {
+      this.socket.emit('crearPartida', user, (response: any) => {
+        console.log('crearPartida response:', response);
+        console.log('crearPartida response.cod:', response.cod);
+  
+        if (response.cod === 0) {
+          let idPartida = '';
+          if (response.msg !== null && response.msg !== undefined) {
+            idPartida = response.msg;
+          }
+          const ruta = '/esperar_sala/' + idPartida;
+          resolve(response.cod);
+        } else {
+          console.log('Error al crear la sala');
+          resolve(-1);
+        }
+      });
+    });
+  }
+  
+
+  /**public crearSala(user: any){
     console.log("CREAR PARTIDA-SALA", user);
     return new Promise<boolean>((resolve, reject) => {
       this.socket.emit('crearPartida', user, (response: any) => {
@@ -228,14 +252,14 @@ export class WebSocketService {
             idPartida = response.msg;
           }
           const ruta = '/esperar_sala/' + idPartida;
-          this.router.navigateByUrl(ruta);
+          //this.router.navigateByUrl(ruta);
         } else{
           console.log('Error al crear la sala');
           reject(false);
         }
       });
     });
-  }
+  } */
 
   public unirseSalaEsperar(user: any): Promise<string> {
     console.log("UNIRSE SALA ESPERAR", user);

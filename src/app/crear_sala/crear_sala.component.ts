@@ -82,8 +82,10 @@ export class CrearSalaComponent {
 
     //this.userService.crearSala(datos);
     this.socketService.crearSala(datos)
-        .then((crearSala: boolean) => {
+        .then((crearSala: number) => {
           console.log("CREAR SALA: ", crearSala);
+          this.idPartida = crearSala;
+          
         })
         .catch(() => {
           console.log("ERROR AL CREAR SALA");
