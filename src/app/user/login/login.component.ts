@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit{
   form: FormGroup;
   passwordShow: boolean = false;
   mostrarError: boolean = false;
+  wrongPassword: boolean = false;
   
   //private socket: SocketIoClient.Socket;
   constructor(
@@ -72,6 +73,7 @@ export class LoginComponent implements OnInit{
         });
     }
     else {
+      this.mostrarError = true;
       console.log("LOGIN: Valores mal introducidos");
     }
   }
@@ -79,7 +81,9 @@ export class LoginComponent implements OnInit{
   passwordMostrarOcultar(){
     this.passwordShow = !this.passwordShow;
   }
-  
+  error(){
+    this.wrongPassword = true;
+  }
   // función que permite volver arriba en la página
   volverArriba() {
     window.scrollTo({ top: 0, behavior: 'smooth' });

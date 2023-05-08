@@ -28,10 +28,18 @@ volverArriba() {
 
   ngOnInit() {
     // Get username from browser
-    this.username = localStorage.getItem('username');
-    if (this.username == null) {
-      this.router.navigate(['/error']);
-    }
+    //this.username = localStorage.getItem('username');
+    this.socketService.consultarUsuario()
+    .then ((usuario: any) => {
+      console.log("usuario: ", usuario);
+      this.username = usuario.msg.nombreUser;
+      if (this.username == null) {
+        this.router.navigate(['/error']);
+      }
+    })
+    .catch(() => {
+      console.log("ERROR AL OBTENER NOMBRE USUARIO");
+    });
     
   }
 

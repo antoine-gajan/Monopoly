@@ -32,7 +32,16 @@ export class UnirseSalaComponent {
     private socketService: WebSocketService,
     private router: Router
   ) {
-    this.username = socketService.getUsername();
+    //this.username = socketService.getUsername();
+    this.socketService.consultarUsuario()
+    .then ((usuario: any) => {
+      console.log("usuario: ", usuario);
+      this.username = usuario.msg.nombreUser;
+    })
+    .catch(() => {
+      console.log("ERROR AL OBTENER NOMBRE USUARIO");
+    });
+
     /*this.socketService.actualizarUsuariosConectados()
     .then((usuariosConectados) => {
       console.log('Usuarios conectados:', usuariosConectados);

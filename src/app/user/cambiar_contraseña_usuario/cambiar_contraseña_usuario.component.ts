@@ -29,7 +29,15 @@ export class CambiarContraseñaComponent implements OnInit {
       password: ['', [Validators.minLength(8),Validators.required]],
       confirm_password: ['', [Validators.required]]
     });
-    this.username = socketService.getUsername();
+    //this.username = socketService.getUsername();
+    this.socketService.consultarUsuario()
+    .then ((usuario: any) => {
+      console.log("usuario: ", usuario);
+      this.username = usuario.msg.nombreUser;
+    })
+    .catch(() => {
+      console.log("ERROR AL OBTENER NOMBRE USUARIO");
+    });
   }
   get password() {
     return this.form.get('password');

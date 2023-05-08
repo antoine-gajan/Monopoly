@@ -24,8 +24,20 @@ export class CambiarCorreoComponent {
     this.form = this.fb.group({
       new_email: ['', [Validators.email, Validators.required]]
     });
-    this.username = socketService.getUsername();
-    this.socketService.leerEmail({socketId: this.socketService.socketID})
+
+    /*this.socketService.consultarUsuario()
+    .then ((usuario: any) => {
+      console.log("usuario: ", usuario);
+      this.username = usuario.msg.nombreUser;
+      this.old_email = usuario.msg.correo;
+      console.log("username", usuario);
+    })
+    .catch(() => {
+      console.log("ERROR AL OBTENER NOMBRE USUARIO");
+    });*/
+    
+    //this.username = socketService.getUsername();
+    /*this.socketService.leerEmail({socketId: this.socketService.socketID})
       .then((correo: string) => {
         console.log('Correo leído:', correo);
         this.socketService.setEmail(correo);
@@ -36,14 +48,18 @@ export class CambiarCorreoComponent {
         console.log('Error leyendo correo:', error);
         // Realizar acciones en caso de error
       });
-      
+      */
   }
 
-  get new_email() {
-    return this.form.get('new_email');
-  }
-  ngOnInit(): void {
-    
+  ngOnInit() {
+    this.socketService.consultarUsuario()
+    .then ((usuario: any) => {
+      console.log("usuario: ", usuario);
+      this.old_email = usuario.msg.correo;
+    })
+    .catch(() => {
+      console.log("ERROR AL OBTENER NOMBRE USUARIO");
+    });
   } 
   /*leer_email(){
     return (this.userService.leer_email(this.username)).toString();
@@ -54,12 +70,16 @@ export class CambiarCorreoComponent {
       //console.log(this.old_email);
       //const user = {username: this.username, email: this.form.value.new_email};
       //console.log(user);
-      this.socketService.setEmail(this.form.value.new_email);
+      
+      //this.socketService.setEmail(this.form.value.new_email);
+      
+      
       console.log("ACTUALIZAR CORREO: ", this.form.value.new_email, this.socketService.socketID);
       const user = { email: this.form.value.new_email, socketId: this.socketService.socketID};
       this.socketService.guardar_nuevo_correo(user)
       .then((cambiarCorreoResponse: boolean) => {
         this.router.navigate(['/ajustes_usuario']);
+        
         console.log("Correo guardado");
         
       })
