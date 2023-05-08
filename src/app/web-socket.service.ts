@@ -97,7 +97,6 @@ export class WebSocketService {
     });
   }
 
-
   getUsername(): string {
     // Get username from browser
     let username_browser = localStorage.getItem('username');
@@ -127,7 +126,6 @@ export class WebSocketService {
       });
     });
   }
-  
 
   //Función que recibe la información necesaria para logear un usuario
   public login(user: any): Promise<boolean> {
@@ -282,7 +280,6 @@ export class WebSocketService {
       });
     });
   }
-  
 
   /**public crearSala(user: any){
     console.log("CREAR PARTIDA-SALA", user);
@@ -375,10 +372,10 @@ export class WebSocketService {
         console.log('Server acknowledged:', ack);
       if(ack.cod == 0){
         console.log("ENTRA");
-          resolve(ack.msg);
+          resolve(ack.msg.id);
       }
       else if(ack.cod != 2){
-          resolve(ack.msg);
+          resolve(ack.msg.id);
       }
       else{
           alert("Se ha producido un error en el servidor, por favor, pulse otra vez el boton");
@@ -393,6 +390,27 @@ export class WebSocketService {
         console.log("ACTUALIZACIÓN CORRECTA");
       }
     })
+  }
 
+  public escucharEntrarAJugar(): Promise<string>{
+    return new Promise ((resolve) => {
+      this.socket.on('comenzarPartida', (ack: any) => {
+        console.log('Valor escuchar para entrar a jugar:', ack);
+        resolve(ack);
+      });
+   });
+  }
+
+  public consultarUsuario(): Promise<any>{
+    return new Promise ((resolve) => {
+      this.socket.emit('infoUsuario', {socketId: this.socketID}, (ack: any) => {
+        if(ack.cod==0){
+          console.log('Valor escuchar para entrar a jugar:', ack);
+          resolve(ack);
+        } else {
+          console.log("Error al consultar usuario");
+        }
+      });
+   });
   }
 }

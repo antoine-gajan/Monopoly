@@ -37,6 +37,7 @@ volverArriba() {
 
   crearPartida() {
     console.log("CREAR PARTIDA BOTON PANTALLA");
+    
     this.socketService.crearPartida()
         .then((crearSala: number) => {
           if(crearSala != -1){

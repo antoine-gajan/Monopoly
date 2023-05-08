@@ -10,6 +10,7 @@ import {InfoCardComponent} from "../../card/info-card/info-card.component";
 import {JailCardComponent} from "../../card/jail-card/jail-card.component";
 import {Coordenadas, PlayerListResponse, PropertiesBoughtResponse} from "../response-type";
 import {DevolutionPropertiesFormComponent} from "../devolution-properties-form/devolution-properties-form.component";
+import { WebSocketService } from 'app/web-socket.service';
 
 @Component({
   selector: 'app-board',
@@ -17,6 +18,8 @@ import {DevolutionPropertiesFormComponent} from "../devolution-properties-form/d
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent implements OnInit, OnDestroy {
+
+  username: string;
   // Game variables
   game_id : number;
   dices: number[] = [];
@@ -32,6 +35,11 @@ export class BoardComponent implements OnInit, OnDestroy {
   timer: any;
   is_timer_active: boolean = false;
   remaining_time: number = 0;
+
+  // Variables for the game functionning
+  message: string;
+  interval_play: any;
+  dices_interval: any;
 
   // Relative to other players
   other_players_list: [string, number, Coordenadas][] = [];
@@ -53,38 +61,55 @@ export class BoardComponent implements OnInit, OnDestroy {
     "../../../assets/images/dice/6.png"
   ]; 
 
-  // Variables for the game functionning
-  message: string;
-  interval_play: any;
-  dices_interval: any;
-
-  constructor(private gameService: GameService, private userService: UserService, private route: ActivatedRoute,
-              private router: Router, private componentFactoryResolver: ComponentFactoryResolver,
-              private viewContainerRef: ViewContainerRef, private elRef: ElementRef) { }
+  constructor(
+    private gameService: GameService,
+    //private userService: UserService, 
+    private route: ActivatedRoute,
+    private router: Router, 
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private viewContainerRef: ViewContainerRef, 
+    private elRef: ElementRef,
+    private socketService: WebSocketService
+  ) { }
 
   /* === FUNCTIONS TO INITIALIZE AND DESTROY THE GAME === */
   ngOnInit() {
+    console.log("---------------------------");
     console.log("Board component initialized");
-    // Get id of the game
-    const game_id: string | null = this.route.snapshot.paramMap.get('id');
+    this.socketService.escucharEntrarAJugar()
+      .then((mensajeAJugar: string) => {
+        console.log("Mensaje a jugar: ", mensajeAJugar);
+      })
+      .catch(() => {
+        console.log("Error al obtener el mensaje a jugar");
+      });
+
+    /* ---------------Se obtiene el id de la partida--------------- */
+    const game_id: string | null = this.route.snapshot.paramMap.get('id'); 
     if (game_id != null) {
       this.game_id = +game_id;
     } else {
-      // Redirect to error page
-      this.router.navigate(['/error']);
+      this.router.navigate(['/error']);  // Se redirige a la página de error
     }
-    // Get name of the player
-    let username = this.userService.getUsername();
-    // If undefined, redirect to error page
-    if (username == null) {
-      this.router.navigate(['/error']);
-    }
-    else {
-      this.player[0] = username;
-    }
+
+    /* ---------------Se obtiene el nombre del usuario de la partida--------------- */
+    let username = this.socketService.consultarUsername()
+    .then((Username: string) => {
+      console.log("Username: ", Username);
+      if(Username == null){
+        this.router.navigate(['/error']);
+      } else {
+        this.player[0] = Username;
+      }
+    })
+    .catch(() => {
+      console.log("Error al obtener el mensaje a jugar");
+    });
+    
     // Load game
-    this.load_game();
+    this.load_game(); // <--------------------------------------------------------------------------REVISAR
   }
+// <--------------------------------------------------------------------------REVISAR A PARTIR DE AQUÍ
 
   ngOnDestroy() {
     // Destroy the intervals for safety
@@ -96,6 +121,17 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
+  obtenerNombreUsuario(){
+    this.socketService.consultarUsername()
+    .then((nombreUsuario: string) => {
+      console.log("nombreUser: ", nombreUsuario);
+      this.username = nombreUsuario;
+      this.socketService.setUsername(nombreUsuario);
+    })
+    .catch(() => {
+      console.log("ERROR AL OBTENER USERNAME");
+    });
+  }
 
   load_game(){
     console.log("Loading game...");

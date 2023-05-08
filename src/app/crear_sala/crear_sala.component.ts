@@ -31,6 +31,7 @@ export class CrearSalaComponent {
   reiniciarJuegoBancarrota: boolean = false;  
   list_players: string[] = [];
   partidaCreadaBoton: boolean = false;
+  jugar: boolean = false;
 
   constructor(
     router: Router,
@@ -54,6 +55,7 @@ export class CrearSalaComponent {
   }
 
   ngOnInit() {
+    
     let username = this.socketService.getUsername();
     this.datosSalaService.numJugadores = this.numJugadores;
     console.log("ME HE ADELANTADO");
@@ -74,7 +76,36 @@ export class CrearSalaComponent {
 
   empezarJugar() {
     console.log("nos vamos al board");
+    //this.actualizarDatos();
+    this.jugar = true;
     this.actualizarDatos();
+    console.log("JUGAR: ", this.jugar);
+    /*const datos = {
+      dineroInicial: this.dineroJugador,
+      nJugadores: this.numJugadores,
+      normas: {
+        cobrarCarcel: this.cobrarCarcel,
+        cobrarBeca: this.cobrarBeca,
+        activarSubasta: this.activarSubasta,
+        aumentarCreditos: this.aumentarCreditos,
+        reiniciarJuegoBancarrota: this.reiniciarJuegoBancarrota
+      },
+      jugar: true,
+      socketId: this.socketService.socketID     
+    };*/
+    //console.log("CONFIGURACIÓN CREAR PARTIDA: ", datos);
+    /*if(this.router!=null){
+      const ruta = '/game/' + this.idPartida;
+      this.router.navigateByUrl(ruta);
+
+    }*/
+
+
+    //this.userService.crearSala(datos);
+
+  }
+  actualizarDatos(){
+    console.log("ACTUALIZAR DATOS");
     const datos = {
       dineroInicial: this.dineroJugador,
       nJugadores: this.numJugadores,
@@ -85,19 +116,9 @@ export class CrearSalaComponent {
         aumentarCreditos: this.aumentarCreditos,
         reiniciarJuegoBancarrota: this.reiniciarJuegoBancarrota
       },
+      jugar: this.jugar,
       socketId: this.socketService.socketID     
     };
-    console.log("CONFIGURACIÓN CREAR PARTIDA: ", datos);
-    if(this.router!=null){
-      const ruta = '/game/' + this.idPartida;
-      this.router.navigateByUrl(ruta);
-    }
-    //this.userService.crearSala(datos);
-
-  }
-  actualizarDatos(){
-    console.log("ACTUALIZAR DATOS");
-    const datos = { nJugadores: this.numJugadores, dineroInicial: this.dineroJugador, socketId: this.socketService.socketID };
     this.socketService.actualizarDatosCrearPartida(datos);
     console.log(this.numJugadores, this.dineroJugador);
   }

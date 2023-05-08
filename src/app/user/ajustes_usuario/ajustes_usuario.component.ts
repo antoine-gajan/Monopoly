@@ -25,31 +25,22 @@ export class AjustesUsuarioComponent {
 
   ngOnInit() {
     
-    
-    this.socketService.consultarUsername()
-    .then((nombreUsuario: string) => {
-      console.log("nombreUser: ", nombreUsuario);
-      this.username = nombreUsuario;
-      this.socketService.setUsername(nombreUsuario);
+    this.socketService.consultarUsuario()
+    .then ((usuario: any) => {
+      console.log("usuario: ", usuario);
+      this.username = usuario.msg.nombreUser;
+      this.email = usuario.msg.correo;
+      const blobData = usuario.msg.imagen;
+      console.log("blobData: ", blobData);
+      const dataUrl =`data:image/jpg;base64,${blobData}`;
+      console.log("dataUrl: ", dataUrl);
+      this.picture = dataUrl;
     })
     .catch(() => {
-      console.log("ERROR AL OBTENER USERNAME");
+      console.log("ERROR AL OBTENER USUARIO");
     });
     console.log("-1", this.username);
-    this.obtenerEmail();
     console.log("-2", this.email);
-    this.obtenerPicutre();
-    this.socketService.consultarImagen()
-    .then((imagenUsuario: string) => {
-      console.log("imagenUsuario: ", imagenUsuario);
-      this.picture = imagenUsuario;
-      this.socketService.setPicture(imagenUsuario);
-    })
-    .catch(() => {
-      console.log("ERROR AL OBTENER IMAGEN");
-    });
-    console.log("-3", this.picture);
-    console.log("Entra página ajustes usuario: ", this.username, this.email);
   }
   
   obtenerPicutre(){
