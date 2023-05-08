@@ -33,14 +33,14 @@ export class UnirseSalaComponent {
     private router: Router
   ) {
     //this.username = socketService.getUsername();
-    this.socketService.consultarUsuario()
+    /*this.socketService.consultarUsuario()
     .then ((usuario: any) => {
       console.log("usuario: ", usuario);
       this.username = usuario.msg.nombreUser;
     })
     .catch(() => {
       console.log("ERROR AL OBTENER NOMBRE USUARIO");
-    });
+    });*/
 
     /*this.socketService.actualizarUsuariosConectados()
     .then((usuariosConectados) => {

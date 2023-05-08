@@ -20,15 +20,19 @@ import {io} from "socket.io-client";
 export class GameService {
   socket: any;
 
-  constructor(private http: HttpClient,
-              private router: Router)  {
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  )  {
     this.socket = io(environment.socketURL,{ transports: ["websocket"] });
   }
 
+  //CAMBIAR A SOCKET socket.emit('lanzarDados', {socketId: this.socketservice.socketID})
   roll_dices(username: string, idPartida: number){
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     let body = JSON.stringify({"idPartida": idPartida, "username": username});
 
+    //emit.('lanzarDados', {socketId: this.socketservice.socketID})
     return this.http.post(environment.lanzarDados, body, httpOptions).pipe(
       tap(
         (response) => {
@@ -37,6 +41,7 @@ export class GameService {
     ));
   }
 
+  //CAMBIAR A SOCKET -> con inicar el socket on a escuchar o pasar la lista de jugadores de la pantlala anterior
   get_list_players(idPartida : number): Observable<PlayerListResponse>{
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     let body = JSON.stringify({"idPartida": idPartida});
@@ -49,6 +54,7 @@ export class GameService {
     ));
   }
 
+  //Creo que es la de socket.emit('infoAsignatura', {coordenadas: {h: obtener->h, v: obtener->v}})
   get_card(username: string, idPartida : number, h : number, v : number){
     // Function which return the card information (owner, price to pay) and update position
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
@@ -63,6 +69,7 @@ export class GameService {
     ));
   }
 
+  //
   buy_card(username: string, idPartida : number, h : number, v : number){
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     let body = JSON.stringify({  "username": username,
@@ -167,9 +174,7 @@ export class GameService {
   }
 
   get_all_properties_of_player(idPartida: number, username: string){
-    const body =  JSON.stringify({  "idPartida": idPartida,
-                                            "username": username
-                                        });
+    const body =  JSON.stringify({  "idPartida": idPartida,"username": username});
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 
     return this.http.put<PropertiesBoughtResponse>(environment.listaAsignaturas, body, httpOptions).pipe(
@@ -179,6 +184,7 @@ export class GameService {
       );
   }
 
+  //socket.on('turnoActual', (mensaje))
   get_current_player(idPartida: number){
     const body =  JSON.stringify({"idPartida": idPartida});
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
@@ -190,6 +196,7 @@ export class GameService {
       );
   }
 
+  //socket.on('siguienteTurno', {socketId: this.socketService.socketID}
   next_turn(idPartida: number){
     const body =  JSON.stringify({"idPartida": idPartida});
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
@@ -202,9 +209,7 @@ export class GameService {
   }
 
   has_card_to_go_out_of_jail(idPartida: number, username: string){
-    const body =  JSON.stringify({  "idPartida": idPartida,
-                                            "username": username
-                                        });
+    const body =  JSON.stringify({  "idPartida": idPartida,"username": username});
 
     return this.http.post(environment.cartaJulio, body, { observe: 'response' }).pipe(
       tap(
@@ -214,9 +219,7 @@ export class GameService {
   }
 
   use_card_go_out_of_jail(idPartida: number, username: string){
-    const body =  JSON.stringify({  "idPartida": idPartida,
-                                            "username": username
-                                        });
+    const body =  JSON.stringify({  "idPartida": idPartida,"username": username});
 
     return this.http.post(environment.usarCartaJulio, body, { observe: 'response' }).pipe(
       tap(
@@ -226,20 +229,16 @@ export class GameService {
   }
 
   sell_card(idPartida: number, username: string, h: number, v: number){
-    const body =  JSON.stringify({  "idPartida": idPartida,
-                                            "username": username,
-                                            "coordenadas": {
-                                              "h": h,
-                                              "v": v
-                                            }
-                                        });
+    const body =  JSON.stringify({ "idPartida": idPartida,"username": username,"coordenadas": {"h": h,"v": v}});
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+
     return this.http.post(environment.vender, body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response)})
       );
   }
+
 
   action_of_card(idPartida: number, username: string, tarjeta:string, h: number, v: number){
     const body =  JSON.stringify({  "idPartida": idPartida,

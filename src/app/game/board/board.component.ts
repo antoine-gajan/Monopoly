@@ -93,7 +93,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
 
     /* ---------------Se obtiene el nombre del usuario de la partida--------------- */
-    let username = this.socketService.consultarUsername()
+    this.socketService.consultarUsername()
     .then((Username: string) => {
       console.log("Username: ", Username);
       if(Username == null){
@@ -107,7 +107,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     });
     
     // Load game
-    this.load_game(); // <--------------------------------------------------------------------------REVISAR
+    //this.load_game(); // <--------------------------------------------------------------------------REVISAR
   }
 // <--------------------------------------------------------------------------REVISAR A PARTIR DE AQUÍ
 
@@ -142,6 +142,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Indicate that the game is loading
     this.message = "Cargando la partida..."
     // Get list of players
+    
     this.gameService.get_list_players(this.game_id).subscribe({
       next: (data: PlayerListResponse) => {
         this.actualize_game_info(data);
