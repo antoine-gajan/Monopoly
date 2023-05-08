@@ -217,11 +217,11 @@ export class WebSocketService {
   public crearSala(user: any): Promise<number> {
     console.log("CREAR PARTIDA-SALA", user);
   
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.socket.emit('crearPartida', user, (response: any) => {
         console.log('crearPartida response:', response);
         console.log('crearPartida response.cod:', response.cod);
-  
+        console.log('crearPartida response.msg:', response.msg);
         if (response.cod === 0) {
           resolve(response.msg);
         } else {
