@@ -40,7 +40,6 @@ volverArriba() {
     .catch(() => {
       console.log("ERROR AL OBTENER NOMBRE USUARIO");
     });
-    
   }
 
   crearPartida() {

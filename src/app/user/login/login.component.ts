@@ -39,6 +39,7 @@ export class LoginComponent implements OnInit{
     });
   }
   ngOnInit() {
+    location.reload();
     this.mostrarError = false;
     // If user is already logged in, redirect to home
     //console.log("He llegado al inicio de sesion");
