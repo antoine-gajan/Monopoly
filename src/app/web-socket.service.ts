@@ -14,6 +14,7 @@ export class WebSocketService {
   idPartida: number;
   private username: string;
   private email: string;
+  private picture: string;
   private _socketID: string;
   private socket = io(environment.socketURL, { transports: ["websocket"] });
 
@@ -37,7 +38,6 @@ export class WebSocketService {
     return this._socketID;
   }
 
-
   setUsername(username: string): void {
     localStorage.setItem('username', username);
     this.username = username;
@@ -47,6 +47,56 @@ export class WebSocketService {
     localStorage.setItem('email', email);
     this.email = email;
   }
+
+  setPicture(picture: string): void {
+    localStorage.setItem('picture', picture);
+    this.picture = picture;
+}
+  public consultarImagen(): Promise<string>{
+    return new Promise<string>((resolve, reject) => {
+      this.socket.emit('imagenPerfil', ({socketId: this.socketID}), (ack: any) => {
+        if (ack.cod === 0) {
+          console.log('Imagen de perfil:', ack.msg.imagen);
+          const blobData = ack.msg.imagen;
+          const dataUrl =`data:image/jpg;base64,${blobData}`;
+          resolve(dataUrl);
+        } else {
+          console.log('Error al obtener la información del usuario');
+          reject("-1");
+        }
+      });
+    });
+  }
+
+  public consultarUsername(): Promise<string>{
+    return new Promise<string>((resolve, reject) => {
+      this.socket.emit('infoUsuario', ({socketId: this.socketID}), (ack: any) => {
+        console.log('ack: ', ack);
+        if (ack.cod === 0) {
+          console.log('Nombre de usuario', ack.msg.nombreUser);
+          resolve(ack.msg.nombreUser);
+        } else {
+          console.log('Error al obtener la información del usuario');
+          reject("-1");
+        }
+      });
+    });
+  }
+
+  public consultarEmail(): Promise<string>{
+    return new Promise<string>((resolve, reject) => {
+      this.socket.emit('infoUsuario', ({socketId: this.socketID}), (ack: any) => {
+        if (ack.cod === 0) {
+          console.log('Correo del usuario', ack.msg.correo);
+          resolve(ack.msg.correo);
+        } else {
+          console.log('Error al obtener la información del usuario');
+          reject("-1");
+        }
+      });
+    });
+  }
+
 
   getUsername(): string {
     // Get username from browser
@@ -291,6 +341,12 @@ export class WebSocketService {
           reject('La información recibida no es un objeto');
         }
       });
+    });
+  }
+
+  hacerOnSocket(){
+    this.socket.on('esperaJugadores', (ack: any) => {
+      console.log('Server acknowledged:', ack);
     });
   }
 

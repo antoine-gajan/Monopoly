@@ -26,7 +26,7 @@
           </form>
         </div>
         
-
+        
         <div class="ajustar-dinero">
           <b><label class="etiqueta">Dinero inicial</label></b>
           <div class="dinero">
@@ -42,40 +42,40 @@
           <b><label class="etiqueta">Personalización de normas</label></b>
           
           <div class="checkbox-wrapper-20">
-            <div class="switch">
-              <input id="1-20" class="input" type="checkbox" />
+            <div class="switch" >
+              <input id="1-20" class="input" type="checkbox" (click)="cobrarCarcelChange()"/>
               <label for="1-20" class="slider"></label>
               <p style="display: inline-flex;">Cobrar alquiler desde la cárcel</p>
             </div>
           </div>
 
-          <div class="checkbox-wrapper-20">
+          <div class="checkbox-wrapper-20" >
             <div class="switch">
-              <input id="2-20" class="input" type="checkbox" />
+              <input id="2-20" class="input" type="checkbox"  (click)="cobrarBecaChange()"/>
               <label for="2-20" class="slider"></label>
               <p style="display: inline-flex;">Posibilidad de cobrar dinero al caer en la casilla de beca</p>
             </div>
           </div>
 
-          <div class="checkbox-wrapper-20">
-            <div class="switch">
-              <input id="3-20" class="input" type="checkbox" />
+          <div class="checkbox-wrapper-20" >
+            <div class="switch" >
+              <input id="3-20" class="input" type="checkbox" (click)="activarSubastaChange()"/>
               <label for="3-20" class="slider"></label>
               <p style="display: inline-flex;">Posibilidad de subastar una asigantura si no la puede comprar un jugador en su turno</p>
             </div>
           </div>
 
-          <div class="checkbox-wrapper-20">
-            <div class="switch">
-              <input id="4-20" class="input" type="checkbox" />
+          <div class="checkbox-wrapper-20" >
+            <div class="switch" >
+              <input id="4-20" class="input" type="checkbox" (click)="aumentarCreditosChange()"/>
               <label for="4-20" class="slider"></label>
               <p style="display: inline-flex;">Posibilidad de aumentar el precio de los créditos de una asignatura</p>
             </div>
           </div>
 
           <div class="checkbox-wrapper-20">
-            <div class="switch">
-              <input id="5-20" class="input" type="checkbox" />
+            <div class="switch" >
+              <input id="5-20" class="input" type="checkbox" (click)="reiniciarJuegoBancarrotaChange()"/>
               <label for="5-20" class="slider"></label>
               <p style="display: inline-flex;">Reiniciar el juego a un jugador si está en bancarrota</p>
             </div>
@@ -84,47 +84,7 @@
 
         </div>
         
-
-
-        <!--
-  Checkbox Trickery with CSS:
-  http://codersblock.com/blog/checkbox-trickery-with-css/ 
--->
-<!--
-<div class="container">
-  <b><p class="etiqueta">Personalización de normas</p></b>
-          
-  <div class="items">
-    <p class="undone" aria-hidden="true">unDone</p>
-    <p class="done" aria-hidden="true">Done</p>
-
-    <label for="item4">Posibilidad de aumentar el precio de los créditos de una asignatura</label>
-
-    <input id="item5" type="checkbox" data-var="reiniciarJuegoBancarrota">
-    <label for="item5">Reiniciar el juego a un jugador si está en bancarrota</label>
-
-    
-    
-  </div>
-</div>
-
--->
-
-
-<div class="checkbox-wrapper-20">
-  <div class="switch">
-    <input id="one-20" class="input" type="checkbox" />
-    <label for="one-20" class="slider"></label>
-    <p>Cobrar alquiler desde la cárcel</p>
-  </div>
-</div>
-
-
-
-
-
-
-<h3>ID PARTIDA: {{idPartida}}</h3>
+    <div class="espaciar_inverso"><h3>ID PARTIDA: {{idPartida}}</h3></div>
 <div class="lista_jugadores">
   <p>Jugadores conectados:</p>
   <div *ngFor="let player of list_players" class="player-name">

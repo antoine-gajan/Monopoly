@@ -93,28 +93,7 @@ export class CrearSalaComponent {
       this.router.navigateByUrl(ruta);
     }
     //this.userService.crearSala(datos);
-    /*this.socketService.crearSala(datos)
-        .then((crearSala: number) => {
-          console.log("CREAR SALA: ", crearSala);
-          this.idPartida = crearSala;
-          this.socketService.actualizarUsuariosConectados();
-        })
-        .catch(() => {
-          console.log("ERROR AL CREAR SALA");
-        });
-        
-    
 
-    async  leerJugadores(){
-       this.socketService.actualizarUsuariosConectados()
-    .then((usuariosConectados) => {
-      console.log('Usuarios conectados:', usuariosConectados);
-      this.list_players = usuariosConectados;
-    })
-    .catch((error) => {
-      console.error('Error al obtener usuarios conectados:', error);
-    });
-    console.log("USUARIOS LEIDOS");*/
   }
   actualizarDatos(){
     console.log("ACTUALIZAR DATOS");
@@ -137,5 +116,29 @@ export class CrearSalaComponent {
     this.actualizarDatos();
   }
 
+  cobrarCarcelChange(){
+    this.cobrarCarcel = !this.cobrarCarcel;
+    console.log("Cobrar carcel: ", this.cobrarCarcel);
+  }
+
+  cobrarBecaChange(){
+    this.cobrarBeca = !this.cobrarBeca;
+    console.log("Cobrar beca: ", this.cobrarBeca);
+  }
+
+  activarSubastaChange(){
+    this.activarSubasta = !this.activarSubasta;
+    console.log("Activar subasta: ", this.activarSubasta);
+  }
+
+  aumentarCreditosChange(){
+    this.aumentarCreditos = !this.aumentarCreditos;
+    console.log("Aumentar creditos: ", this.aumentarCreditos);
+  }
+
+  reiniciarJuegoBancarrotaChange(){
+    this.reiniciarJuegoBancarrota = !this.reiniciarJuegoBancarrota;
+    console.log("Reiniciar juego bancarrota: ", this.reiniciarJuegoBancarrota);
+  }
 
 }

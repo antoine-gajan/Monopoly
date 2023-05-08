@@ -14,30 +14,80 @@ import { WebSocketService } from 'app/web-socket.service';
 export class AjustesUsuarioComponent {
   username: string;
   email: string;
+  picture: string;
 
   constructor(
     private route: ActivatedRoute,
     private socketService: WebSocketService
   ) {
-    this.username = socketService.getUsername();
-    this.email = socketService.getEmail();
-    console.log("Entra página ajustes usuario: ", this.username, this.email);
+    
   }
 
   ngOnInit() {
-    this.username = this.socketService.getUsername();
-    this.email = this.socketService.getEmail();
+    
+    
+    this.socketService.consultarUsername()
+    .then((nombreUsuario: string) => {
+      console.log("nombreUser: ", nombreUsuario);
+      this.username = nombreUsuario;
+      this.socketService.setUsername(nombreUsuario);
+    })
+    .catch(() => {
+      console.log("ERROR AL OBTENER USERNAME");
+    });
+    console.log("-1", this.username);
+    this.obtenerEmail();
+    console.log("-2", this.email);
+    this.obtenerPicutre();
+    this.socketService.consultarImagen()
+    .then((imagenUsuario: string) => {
+      console.log("imagenUsuario: ", imagenUsuario);
+      this.picture = imagenUsuario;
+      this.socketService.setPicture(imagenUsuario);
+    })
+    .catch(() => {
+      console.log("ERROR AL OBTENER IMAGEN");
+    });
+    console.log("-3", this.picture);
     console.log("Entra página ajustes usuario: ", this.username, this.email);
   }
   
-  leer_email(){
-    console.log("entra_leer_email");
-    //this.email = (this.userService.leer_email(this.username)).toString();
-    const user = {username: this.username};
-    console.log(this.username, this.email);
-    //this.router.navigate(['/cambiar_correo', { email: (this.userService.leer_email(user)).toString()}]);
-    console.log("sale: leer_email", this.email);
+  obtenerPicutre(){
+    this.socketService.consultarImagen()
+    .then((imagenUsuario: string) => {
+      console.log("imagenUsuario: ", imagenUsuario);
+      this.picture = imagenUsuario;
+      this.socketService.setPicture(imagenUsuario);
+    })
+    .catch(() => {
+      console.log("ERROR AL OBTENER IMAGEN");
+    });
+    this.socketService.setPicture(this.picture);
   }
 
+  obtenerNombreUsuario(){
+    this.socketService.consultarUsername()
+    .then((nombreUsuario: string) => {
+      console.log("nombreUser: ", nombreUsuario);
+      this.username = nombreUsuario;
+      this.socketService.setUsername(nombreUsuario);
+    })
+    .catch(() => {
+      console.log("ERROR AL OBTENER USERNAME");
+    });
+  }
+
+  obtenerEmail(){
+    this.socketService.consultarEmail()
+    .then((emailUser: string) => {
+      console.log("nombreUser: ", emailUser);
+      this.username = emailUser;
+      this.socketService.setEmail(emailUser);
+    })
+    .catch(() => {
+      console.log("ERROR AL OBTENER EMAIL");
+    });
+  }
+  
   
 }
