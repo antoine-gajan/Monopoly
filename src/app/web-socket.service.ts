@@ -260,7 +260,7 @@ export class WebSocketService {
     });
   }
   
-  actualizarUsuariosConectados(info: any): Promise<string[]>{
+  actualizarUsuariosConectados(): Promise<string[]>{
     return new Promise((resolve, reject) => {
       this.socket.on('esperaJugadores', (info) => {
         if (typeof info === 'object' && info !== null) {

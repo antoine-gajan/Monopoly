@@ -43,7 +43,7 @@ export class EsperarSalaComponent implements OnInit{
     }
 
 
-    this.socketService.actualizarUsuariosConectados(this.game_id)
+    /*this.socketService.actualizarUsuariosConectados(this.game_id)
     .then((usuariosConectados) => {
       console.log('Usuarios conectados:', usuariosConectados);
       this.list_players = usuariosConectados;
@@ -51,6 +51,13 @@ export class EsperarSalaComponent implements OnInit{
     })
     .catch((error) => {
       console.error('Error al obtener usuarios conectados:', error);
+    });*/
+
+    this.socketService.actualizarUsuariosConectados()
+    .then((usuariosConectados) => {
+      console.log('Usuarios conectados:', usuariosConectados);
+      this.list_players = usuariosConectados;
+      this.mostrarListaJugadores = true;
     });
    
   }
@@ -61,7 +68,7 @@ export class EsperarSalaComponent implements OnInit{
   }
 
   actualize_game_info() {
-    this.socketService.actualizarUsuariosConectados(this.game_id)
+    /*this.socketService.actualizarUsuariosConectados(this.game_id)
     .then((usuariosConectados) => {
       console.log('Usuarios conectados:', usuariosConectados);
       this.list_players = usuariosConectados;
@@ -69,7 +76,7 @@ export class EsperarSalaComponent implements OnInit{
     })
     .catch((error) => {
       console.error('Error al obtener usuarios conectados:', error);
-    });
+    });*/
     
 }
 
@@ -97,7 +104,8 @@ export class EsperarSalaComponent implements OnInit{
     setTimeout(() => {
       this.showSpinner = false;
     }, 2500);
-    this.actualize_game_info();
+    //this.actualize_game_info();
+
     this.mostrarListaJugadores = true;
   }
 }

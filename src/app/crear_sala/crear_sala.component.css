@@ -151,6 +151,23 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .container {
   max-width: 450px;
   margin: 0 auto;
@@ -212,11 +229,12 @@ input[type="checkbox"]:checked + label::before {
 }
 
 .done-items label {
-  text-decoration: line-through;
+  color: #ccc;
 }
 
 .done-items input[type="checkbox"]:checked + label {
-  color: #ccc;
+  order: 0;
+  color: #435757;
 }
 
 .undone-items label {
@@ -234,4 +252,3 @@ input[type="checkbox"]:checked + label::before {
   border-top: 1px dashed #435757;
   padding-top: 20px;
 }
-

@@ -43,26 +43,29 @@
   http://codersblock.com/blog/checkbox-trickery-with-css/ 
 -->
 
-
 <div class="container">
   <b><p class="etiqueta">Personalización de normas</p></b>
           
   <div class="items">
+    <p class="undone" aria-hidden="true">unDone</p>
     <p class="done" aria-hidden="true">Done</p>
-    <p class="undone" aria-hidden="true">Not Done</p>
-
-    <input id="item1" type="checkbox" checked>
+    
+    <input id="item1" type="checkbox"  data-var="cobrarCarcel">
     <label for="item1">Cobrar alquiler desde la cárcel</label>
 
-    <input id="item2" type="checkbox">
+    <input id="item2" type="checkbox" data-var="cobrarBeca">
     <label for="item2">Posibilidad de cobrar dinero al caer en la casilla de beca</label>
 
-    <input id="item3" type="checkbox">
-    <label for="item3">Posibilidad de aumentar el precio de los créditos de una asignatura</label>
+    <input id="item3" type="checkbox" data-var="activarSubasta">
+    <label for="item3">Posibilidad de subastar una asigantura si no la puede comprar un jugador en su turno</label>
 
-    <input id="item4" type="checkbox">
-    <label for="item4">Reiniciar el juego a un jugador si está en bancarrota</label>
+    <input id="item4" type="checkbox" data-var="aumentarCreditos">
+    <label for="item4">Posibilidad de aumentar el precio de los créditos de una asignatura</label>
 
+    <input id="item5" type="checkbox" data-var="reiniciarJuegoBancarrota">
+    <label for="item5">Reiniciar el juego a un jugador si está en bancarrota</label>
+
+    
     
   </div>
 </div>

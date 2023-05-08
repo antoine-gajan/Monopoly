@@ -15,7 +15,7 @@ import { Location } from '@angular/common';
 })
 export class CrearSalaComponent {
   numJugadores: number = 2; 
-  dineroJugador: number = 1500;
+  dineroJugador: number = 1000;
   username: string;
   normas: boolean[] = [];
   idPartida: number;
@@ -43,6 +43,10 @@ export class CrearSalaComponent {
   ){
     this.username = socketService.getUsername();
     this.datosSalaService.numJugadores = this.numJugadores;
+    const checkbox = document.querySelector('input[data-var=cobrarCarcel]') as HTMLInputElement;
+    checkbox?.addEventListener('change', (event: Event) => {
+    this.cobrarCarcel = (event.target as HTMLInputElement).checked;
+  });
   }
 
   ngOnInit() {
@@ -77,14 +81,14 @@ export class CrearSalaComponent {
   }
 
   incrementarDinero() {
-    if (this.dineroJugador + 100 <= 3500) {
-      this.dineroJugador += 100;
+    if (this.dineroJugador + 500 <= 3000) {
+      this.dineroJugador += 500;
     }
   }
 
   decrementarDinero() {
-    if (this.dineroJugador - 100 >= 1500) {
-      this.dineroJugador -= 100;
+    if (this.dineroJugador - 500 >= 1000) {
+      this.dineroJugador -= 500;
     }
   }
 }
