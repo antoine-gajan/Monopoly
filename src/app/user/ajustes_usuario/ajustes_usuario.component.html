@@ -38,8 +38,8 @@
           
           <div class="row">
             <div class="col-md-4">
-              <p><b>Nombre de usuario: </b>{{username}}</p>
-              <p><b>Correo electrónico: </b>{{email}}</p>
+              <p><b>Nombre de usuario: </b>{{username ? username : 'Cargando...'}}</p>
+              <p><b>Correo electrónico: </b>{{email ? email : 'Cargando...'}}</p>
               <p>------------</p>
               <B><p>ESTADÍSTICAS</p></B>
               <p><b>Partidas ganadas: </b> XXXXX</p>

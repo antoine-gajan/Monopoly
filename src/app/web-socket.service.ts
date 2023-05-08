@@ -38,20 +38,6 @@ export class WebSocketService {
     return this._socketID;
   }
 
-  setUsername(username: string): void {
-    localStorage.setItem('username', username);
-    this.username = username;
-  }
-
-  setEmail(email: string): void {
-    localStorage.setItem('email', email);
-    this.email = email;
-  }
-
-  setPicture(picture: string): void {
-    localStorage.setItem('picture', picture);
-    this.picture = picture;
-}
   public consultarImagen(): Promise<string>{
     return new Promise<string>((resolve, reject) => {
       this.socket.emit('imagenPerfil', ({socketId: this.socketID}), (ack: any) => {
@@ -92,36 +78,6 @@ export class WebSocketService {
         } else {
           console.log('Error al obtener la información del usuario');
           reject("-1");
-        }
-      });
-    });
-  }
-
-  getUsername(): string {
-    // Get username from browser
-    let username_browser = localStorage.getItem('username');
-    let username_client = this.username;
-    return username_browser ? username_browser : username_client;
-  }
-
-  getEmail(): string {
-    let email_browser = localStorage.getItem('email');
-    let email_client = this.email;
-    return email_browser ? email_browser : email_client;
-  }
-
-  leerEmail(user: any): Promise<string> {
-    console.log("LEER EMAIL");
-    return new Promise<string>((resolve, reject) => {
-      this.socket.emit('infoUsuario', user, (response: any) => {
-        console.log('infoUsuario response:', response);
-        console.log('infoUsuario response.cod:', response.cod);
-        if (response.cod === 0) {
-          console.log('Correo:', response.msg.correo);
-          resolve(response.msg.correo);
-        } else {
-          console.log('Error al obtener la información del usuario');
-          reject(false);
         }
       });
     });

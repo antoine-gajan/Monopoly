@@ -29,12 +29,14 @@ export class CambiarUsernameComponent {
     this.form = this.fb.group({
       new_username: ['', [Validators.required]]
     });
-    this.old_username = socketService.getUsername();
+    //this.old_username = socketService.getUsername();
   }
   get new_username() {
     return this.form.get('new_username');
   }
   ngOnInit() {
+
+
     const flag = localStorage.getItem('ha_entrado');
     if (flag === null) {
       this.ha_entrado = false;
@@ -48,7 +50,17 @@ export class CambiarUsernameComponent {
       this.idSocket = this.socketService.socketID;
       localStorage.setItem('ha_entrado', JSON.stringify(this.ha_entrado));
     }
-    this.old_username = this.socketService.getUsername();
+    //this.old_username = this.socketService.getUsername();
+
+    this.socketService.consultarUsername()
+    .then((nombreUsuario: string) => {
+      console.log("nombreUser: ", nombreUsuario);
+      this.old_username = nombreUsuario;
+      //this.socketService.setUsername(nombreUsuario);
+    })
+    .catch(() => {
+      console.log("ERROR AL OBTENER USERNAME");
+    });
     this.mostrarError = false;
     console.log('recarga cambiar username: ', this.socketService.socketID);
   }
@@ -74,7 +86,7 @@ export class CambiarUsernameComponent {
           this.mostrarError = !cambio_username;
           console.log("CAMBIAR USERNAME", cambio_username);
           this.old_username = this.form.value.new_username;
-          this.socketService.setUsername(this.old_username);
+          //this.socketService.setUsername(this.old_username);
           this.router.navigate(['/ajustes_usuario']);
         })
         .catch(() => {

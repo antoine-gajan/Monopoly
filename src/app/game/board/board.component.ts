@@ -126,7 +126,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     .then((nombreUsuario: string) => {
       console.log("nombreUser: ", nombreUsuario);
       this.username = nombreUsuario;
-      this.socketService.setUsername(nombreUsuario);
+      //this.socketService.setUsername(nombreUsuario);
     })
     .catch(() => {
       console.log("ERROR AL OBTENER USERNAME");

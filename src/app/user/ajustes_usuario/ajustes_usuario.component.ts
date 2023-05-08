@@ -15,6 +15,9 @@ export class AjustesUsuarioComponent {
   username: string;
   email: string;
   picture: string;
+  partidasGanadas: string;
+  juegosJugados: string;
+  ratio: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -30,6 +33,8 @@ export class AjustesUsuarioComponent {
       console.log("usuario: ", usuario);
       this.username = usuario.msg.nombreUser;
       this.email = usuario.msg.correo;
+      this.partidasGanadas = usuario.msg.victorias;
+      this.juegosJugados = usuario.msg.partidasJugadas;
       const blobData = usuario.msg.imagen;
       console.log("blobData: ", blobData);
       const dataUrl =`data:image/jpg;base64,${blobData}`;
@@ -48,12 +53,12 @@ export class AjustesUsuarioComponent {
     .then((imagenUsuario: string) => {
       console.log("imagenUsuario: ", imagenUsuario);
       this.picture = imagenUsuario;
-      this.socketService.setPicture(imagenUsuario);
+      //this.socketService.setPicture(imagenUsuario);
     })
     .catch(() => {
       console.log("ERROR AL OBTENER IMAGEN");
     });
-    this.socketService.setPicture(this.picture);
+    //this.socketService.setPicture(this.picture);
   }
 
   obtenerNombreUsuario(){
@@ -61,7 +66,7 @@ export class AjustesUsuarioComponent {
     .then((nombreUsuario: string) => {
       console.log("nombreUser: ", nombreUsuario);
       this.username = nombreUsuario;
-      this.socketService.setUsername(nombreUsuario);
+      //this.socketService.setUsername(nombreUsuario);
     })
     .catch(() => {
       console.log("ERROR AL OBTENER USERNAME");
@@ -73,7 +78,7 @@ export class AjustesUsuarioComponent {
     .then((emailUser: string) => {
       console.log("nombreUser: ", emailUser);
       this.username = emailUser;
-      this.socketService.setEmail(emailUser);
+      //this.socketService.setEmail(emailUser);
     })
     .catch(() => {
       console.log("ERROR AL OBTENER EMAIL");

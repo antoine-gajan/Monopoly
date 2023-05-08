@@ -46,7 +46,7 @@ export class RegistrationComponent implements OnInit{
   }
 
   ngOnInit() {
-    location.reload();
+    //location.reload();
     this.mostrarError = false;
     // If user is already logged in, redirect to home
     

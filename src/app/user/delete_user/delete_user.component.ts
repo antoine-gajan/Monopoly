@@ -16,12 +16,12 @@ export class DeleteUserComponent {
   constructor( 
     public socketService: WebSocketService
   ){
-    this.username = socketService.getUsername();
+    //this.username = socketService.getUsername();
   }
   
   onDeleteUser(){
     console.log(this.username);
-    const user = {username: this.username,  socketId: this.socketService.socketID};
+    const user = {socketId: this.socketService.socketID};
     //this.userService.onDeleteUser(user);
     this.socketService.onDeleteUser(user);
 

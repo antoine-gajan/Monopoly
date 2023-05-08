@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit{
     });
   }
   ngOnInit() {
-    location.reload();
+    //location.reload();
     this.mostrarError = false;
     // If user is already logged in, redirect to home
     //console.log("He llegado al inicio de sesion");
@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit{
     this.mostrarError = false;
     console.log("LOGIN", this.form.valid);
     if (this.form.valid) {
-      this.socketService.setUsername(this.form.value.username);
+      //this.socketService.setUsername(this.form.value.username);
 
       const nuevo_password = CryptoJS.SHA512(this.form.value.password).toString();
       const user = {username: this.form.value.username, password: nuevo_password, socketId: this.socketService.socketID};
