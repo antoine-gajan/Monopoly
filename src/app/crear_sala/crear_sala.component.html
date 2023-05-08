@@ -13,7 +13,7 @@
         </div>
         <div class="espaciar">
           <form>
-            <label for="numero" class="etiqueta">Número de jugadores</label>
+            <b><p for="numero" class="etiqueta">Número de jugadores</p></b>
             <select [(ngModel)]="numJugadores" class="jugadores" id="numJugadores" name="numJugadores">
               <option value="2" [selected]="numJugadores == 2">2</option>
               <option value="3" [selected]="numJugadores == 3">3</option>
@@ -27,7 +27,7 @@
         </div>
 
         <div class="ajustar-dinero">
-          <label class="etiqueta">Dinero inicial</label>
+          <b><p class="etiqueta">Dinero inicial</p></b>
           <div class="dinero">
             <div class="input-campo">
               <i class="bi bi-plus-square-fill" (click)="incrementarDinero()"></i>
@@ -36,6 +36,38 @@
             </div>
           </div>
         </div>
+
+
+        <!--
+  Checkbox Trickery with CSS:
+  http://codersblock.com/blog/checkbox-trickery-with-css/ 
+-->
+
+
+<div class="container">
+  <b><p class="etiqueta">Personalización de normas</p></b>
+          
+  <div class="items">
+    <p class="done" aria-hidden="true">Done</p>
+    <p class="undone" aria-hidden="true">Not Done</p>
+
+    <input id="item1" type="checkbox" checked>
+    <label for="item1">Cobrar alquiler desde la cárcel</label>
+
+    <input id="item2" type="checkbox">
+    <label for="item2">Posibilidad de cobrar dinero al caer en la casilla de beca</label>
+
+    <input id="item3" type="checkbox">
+    <label for="item3">Posibilidad de aumentar el precio de los créditos de una asignatura</label>
+
+    <input id="item4" type="checkbox">
+    <label for="item4">Reiniciar el juego a un jugador si está en bancarrota</label>
+
+    
+  </div>
+</div>
+
+
 
         <button (click)="crearPartidaDatos()" class="boton-jugar">Crear</button>
     </div>
