@@ -269,7 +269,7 @@ export class WebSocketService {
         
         console.log('unirJugador response:', response);
         console.log('unirJugador response.cod:', response.cod);
-        if (response.cod === 0) {
+        if (response.cod == 0) {
           let idPartida = '';
           idPartida = user.idPartida;
           const ruta = '/esperar_sala/' + idPartida;

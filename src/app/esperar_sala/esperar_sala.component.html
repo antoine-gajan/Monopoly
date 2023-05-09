@@ -37,8 +37,9 @@
     <button id="join" *ngIf="boton_empezar_partida === true" class="boton-jugar" (click)="join_game()">Unirse a la partida</button>-->
     
    
-    <button id="start" *ngIf="username === player_creator_of_game && mostrarBotonEmpezar" class="boton-jugar" (click)="start_game()">Empezar la partida</button>
-    <button id="join" *ngIf="username !== player_creator_of_game && !mostrarBotonEmpezar" class="boton-jugar" (click)="join_game()">Unirse a la partida</button>
+    <!--<button id="start" *ngIf="username === player_creator_of_game && mostrarBotonEmpezar" class="boton-jugar" (click)="start_game()">Empezar la partida</button>
+    -->
+    <button id="join" *ngIf="mostrarBotonUnirse" class="boton-jugar" (click)="join_game()">Unirse a la partida</button>
 </div>
 <br><br><br><br><br><br><br><br><br>
 </section>

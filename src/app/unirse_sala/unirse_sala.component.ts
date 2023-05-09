@@ -36,7 +36,8 @@ export class UnirseSalaComponent {
   }
 
   ngOnInit() {
-    this.socketService.hacerOnSocket();
+    
+    //this.socketService.hacerOnSocket();
   }
 
 
@@ -52,7 +53,7 @@ export class UnirseSalaComponent {
     .catch(() => {
       console.log("ERROR AL CREAR SALA");
     });
-    //this.socketService.hacerOnSocket();
+    this.socketService.hacerOnSocket();
     const ruta = '/esperar_sala/' + this.idPartida;
     this.router.navigateByUrl(ruta);
   }

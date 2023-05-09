@@ -35,9 +35,18 @@ export class EsperarSalaComponent implements OnInit{
   ngOnInit() {
     console.log("ACTUALIZA INFO");
     let idPartida = this.route.snapshot.paramMap.get('id'); // Se obtiene id de la partida
+    this.socketService.escucharEntrarAJugar()
+    .then((data: any) => {
+      console.log("ENTRA A JUGAR: ", data);
+      this.mostrarBotonUnirse = true;
+    })
+    .catch(() => {
+      console.log("ERROR AL ENTRAR A JUGAR");
+    });
+    
     //this.username = this.socketService.getUsername();         // Se obtiene el nombre del usuario actual
     
-    this.socketService.consultarUsuario()
+    /*this.socketService.consultarUsuario()
     .then ((usuario: any) => {
       console.log("usuario: ", usuario);
       this.username = usuario.msg.nombreUser;
@@ -45,7 +54,7 @@ export class EsperarSalaComponent implements OnInit{
     .catch(() => {
       console.log("ERROR AL OBTENER NOMBRE USUARIO");
     });
-
+*/
     if (idPartida != null && this.username != null) {       // Actualiza la información del juego
       this.game_id = +idPartida;
     } else {

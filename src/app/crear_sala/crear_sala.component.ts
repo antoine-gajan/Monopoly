@@ -50,17 +50,8 @@ export class CrearSalaComponent {
 
   ngOnInit() {
     
-    //let username = this.socketService.getUsername();
-    /*this.socketService.consultarUsuario()
-    .then ((usuario: any) => {
-      console.log("usuario: ", usuario);
-      this.username = usuario.msg.nombreUser;
-    })
-    .catch(() => {
-      console.log("ERROR AL OBTENER NOMBRE USUARIO");
-    });*/
     this.socketService.hacerOnSocket();
-    //this.datosSalaService.numJugadores = this.numJugadores;
+    
     console.log("ME HE ADELANTADO");
     this.idPartida = this.socketService.idPartida;
     console.log("ID PARTIDA: ", this.idPartida);
@@ -83,7 +74,9 @@ export class CrearSalaComponent {
     this.jugar = true;
     this.actualizarDatos();
     console.log("JUGAR: ", this.jugar);
-    /*const datos = {
+
+
+    const datos = {
       dineroInicial: this.dineroJugador,
       nJugadores: this.numJugadores,
       normas: {
@@ -95,7 +88,13 @@ export class CrearSalaComponent {
       },
       jugar: true,
       socketId: this.socketService.socketID     
-    };*/
+    };
+
+    /*if(this.router!=null){
+      const ruta = '/game/' + this.idPartida;
+      this.router.navigateByUrl(ruta);
+
+    }*/
     //console.log("CONFIGURACIÓN CREAR PARTIDA: ", datos);
     /*if(this.router!=null){
       const ruta = '/game/' + this.idPartida;
@@ -103,7 +102,7 @@ export class CrearSalaComponent {
 
     }*/
 
-
+    //this.socketService.crearPartida();
     //this.userService.crearSala(datos);
 
   }
@@ -124,6 +123,10 @@ export class CrearSalaComponent {
     };
     this.socketService.actualizarDatosCrearPartida(datos);
     console.log(this.numJugadores, this.dineroJugador);
+    /*if(datos.jugar == true && this.router!=null){
+      const ruta = '/game/' + this.idPartida;
+      this.router.navigateByUrl(ruta);
+    }*/
   }
 
   incrementarDinero() {
