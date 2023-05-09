@@ -10,6 +10,7 @@ import { LoginComponent } from './user/login/login.component';
 })
 
 export class WebSocketService {
+  list_players: string[] = [];
   localSocketID: string;
   idPartida: number;
   username: string;
@@ -265,7 +266,7 @@ export class WebSocketService {
       this.socket.on('esperaJugadores', (info) => {
         if (typeof info === 'object' && info !== null) {
           const keys = Object.keys(info);
-          const usuariosConectados = keys.map((key) => `Jugador ${key}: ${info[key]}`);
+          const usuariosConectados = keys.map((key) => `${info[key]}`);
           resolve(usuariosConectados);
         } else {
           reject('La información recibida no es un objeto');
@@ -341,6 +342,7 @@ export class WebSocketService {
       this.socket.emit('lanzarDados', {socketId: this.socketID}, (ack: any) => {
         console.log('Server acknowledged:', ack);
         if(ack.code == 0){
+          console.log("LANZAR DADOS", ack.msg);
           resolve(ack.msg);
         }
       });
@@ -359,4 +361,97 @@ export class WebSocketService {
       })
     });
   }
+
+  public bancarrota(): Promise<string>{
+    return new Promise ((resolve) => {
+      this.socket.emit('bancarrota', { socketId: this.socketID }, 
+      (ack: any) => {
+        console.log('Server acknowledged:', ack);
+        if(ack.cod == 0){
+          console.log("BANCARROTA", ack.msg);
+          resolve(ack.msg);
+        } else {
+          console.log("Error al declarar bancarrota");
+        }
+      });
+    });
+  }
+
+  public siguienteTurno(): Promise <string>{
+    return new Promise ((resolve) => {
+      this.socket.emit('siguienteTurno', {socketId: this.socketID},
+       (ack: any) => {
+        console.log('Server acknowledged:', ack);
+        if(ack.cod == 0){
+          console.log("SIGUEINTE TURNO", ack.msg);
+          resolve(ack.msg);
+        } else {
+          console.log("Error al hacer siguinete turno");
+        }
+      });
+    });
+  }
+
+  public infoAsignatura(datos: any): Promise <string>{ //datos tiene -> {socketId: this.socketID, coordenadas: {  "h": 3,  "v": 0 }}
+    return new Promise ((resolve) => {
+      this.socket.emit('infoAsignatura', datos,
+       (ack: any) => {
+        console.log('Server acknowledged:', ack);
+        if(ack.cod == 0){
+          console.log("INFO ASIGNATURA", ack.msg);
+          resolve(ack.msg);
+        } else {
+          console.log("Error al hacer obtener info de la asignatura");
+        }
+      });
+    });
+  }
+
+  public casilla(data: any): Promise <string>{
+    return new Promise ((resolve) => {
+      this.socket.emit('casilla', data,
+       (ack: any) => {
+        console.log('Server acknowledged:', ack);
+        if(ack.cod == 0){
+          console.log("info casilla", ack.msg);
+          resolve(ack.msg);
+        } else {
+          console.log("Error al mostrar info de la casilla");
+        }
+      });
+    });
+  }
+
+  public comprarCasilla(data: any): Promise <string>{
+    return new Promise ((resolve) => {
+      this.socket.emit('comprarCasilla', data,
+       (ack: any) => {
+        console.log('Server acknowledged:', ack);
+        if(ack.cod == 0){
+          console.log("COMPRAR CASILLA", ack.msg);
+          resolve(ack.msg);
+        } else {
+          console.log("Error al comprar una casilla");
+        }
+      });
+    });
+  }
+
+  public listaAsignaturasC(data: any): Promise <string>{
+    return new Promise ((resolve) => {
+      this.socket.emit('listaAsignaturasC', data,
+       (ack: any) => {
+        console.log('Server acknowledged:', ack);
+        if(ack.cod == 0){
+          console.log("LISTA ASIGNATURAS C", ack.msg);
+          resolve(ack.msg);
+        } else {
+          console.log("Error en listaAsignaturasC");
+        }
+      });
+    });
+  }
+
+ 
+
 }

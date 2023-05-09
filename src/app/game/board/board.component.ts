@@ -26,7 +26,9 @@ export class BoardComponent implements OnInit, OnDestroy {
   current_player: string;
 
   // Relative to client player
+  list_players: string[] = [];
   player: [string, number, Coordenadas] = ["", 0, {h: 10, v: 10}];
+  playerArray: [PlayerListResponse] = [{} as PlayerListResponse];
   nb_doubles: number = 0;
   is_playing: boolean = false;
   is_in_jail: boolean = false;
@@ -50,11 +52,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   chance_cards: number[] = [7, 22, 36];
   community_cards: number[] = [2, 17, 33];
   taxes_cards: number[] = [4, 38];
-
-
-
-
-  
 
   // Relative to dices
   diceImages = [
@@ -89,17 +86,11 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.router.navigate(['/error']);  // Se redirige a la página de error
     }
     
-  
-    /* ---------------Se obtiene el nombre de usuarios de la partida--------------- */
-    //const usuariosConectados = this.socketService.actualizarUsuariosConectados();
-    //const listaUsuarios: PlayerListResponse[] = usuariosConectados.map((usuario) => [usuario, 0, {h: 10, v: 10}]);
-    // Load game
-
-
+    this.load_game(); // <--------------------------------------------------------------------------REVISAR
     console.log("TODO INICIADO: Game id: ", this.game_id);
-    //this.load_game(); // <--------------------------------------------------------------------------REVISAR
   }
 
+  
 
 
 /**ngOnInit() {
@@ -172,13 +163,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     });
   }
 
-
-  lanzarDados(){
-    this.socketService.lanzarDados();
-  }
-
-
-
   load_game(){
     console.log("Loading game...");
     // Block buttons to avoid risks
@@ -188,7 +172,35 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Indicate that the game is loading
     this.message = "Cargando la partida..."
     // Get list of players
+    this.list_players = this.socketService.list_players;
+
     
+    /*for(let i = 0; i < this.list_players.length; i++){
+      this.playerArray[i].listaDineros[i] = 0;
+      this.playerArray[i].listaPosiciones[i] = {h: 10, v: 10};
+      this.playerArray[i].listaJugadores[i] = this.list_players[i];
+    }*/
+
+    /*let listaJugadores = this.socketService.list_players;
+    const playerResponses: PlayerListResponse[] = [];
+    for (let i = 0; i < listaJugadores.length; i++) {
+      const playerResponse: PlayerListResponse = new PlayerListResponse();
+      playerResponse.listaJugadores = [listaJugadores[i]];
+      playerResponse.listaDineros = [0];
+      playerResponse.listaPosiciones = [{h: 10, v: 10}];
+      playerResponses.push(playerResponse);
+    }
+
+    console.log("JUGADORES TABLERO CARGADOS: ", playerResponses);
+    //for (let i = 0; i < playerResponses.length; i++) {
+    //JUGADOR 1
+      this.player[0] = playerResponses[0].listaJugadores[0];
+      this.player[1] = playerResponses[0].listaDineros[0];
+      this.player[2] = playerResponses[0].listaPosiciones[0];
+    //*/
+
+
+/*
     this.gameService.get_list_players(this.game_id).subscribe({
       next: (data: PlayerListResponse) => {
         this.actualize_game_info(data);
@@ -208,11 +220,10 @@ export class BoardComponent implements OnInit, OnDestroy {
         // Start the game
         this.play();
       }
-    });
+    });*/
   }
 
   /* === FUNCTIONS TO GET THE PROPERTIES OF THE PLAYERS === */
-
   get_properties(): void {
     // Get every properties of the player if he is not bankrupt
     if (!this.is_bankrupt) {
@@ -251,7 +262,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
     /* === FUNCTIONS TO PLAY === */
-
   async play(): Promise<void> {
     // Ensure to execute the interval only once
     this.current_player = "";
@@ -328,7 +338,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     });
   }
 
-  
   play_turn_player() {
     console.log("=== PLAY TURN ===");
     // Cancel the timer
@@ -338,7 +347,36 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Function to play the turn of a player
     // Roll dices
     this.move_dices_action();
-    this.gameService.roll_dices(this.player[0], this.game_id).subscribe( {
+    this.socketService.lanzarDados()
+    .then((msg: any) => {
+      console.log("DADOS LANZADOS: ", msg);
+      clearInterval(this.dices_interval);
+      this.dices[0] = msg.dado1;
+      this.dices[0] = msg.dado2;
+    })
+    .catch(() => {
+      console.log("ERROR AL LANZAR DADOS");
+    });
+    
+    complete: async () => {
+      // Close button to avoid end turn
+      document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
+      // Update message
+      if (this.dices[0] === this.dices[1]){
+        this.message = this.player[0] + ", has sacado dobles " + this.dices[0];
+        this.nb_doubles += 1;
+      }
+      else {
+        this.message = this.player[0] + ", has sacado " + this.dices[0] + " y " + this.dices[1];
+      }
+      // Update player position
+      await this.update_local_player_position(this.dices);
+      // Action of the card
+      this.card_action();
+    }
+
+
+   /* this.gameService.roll_dices(this.player[0], this.game_id).subscribe( {
       next: (data: any) => {
         // Clear dices interval to stop animation
         clearInterval(this.dices_interval);
@@ -373,7 +411,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       // Action of the card
       this.card_action();
     }
-    });
+    });*/
   }
 
   async card_action() {
@@ -534,6 +572,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.is_playing = false;
     this.nb_doubles = 0;
     // Indicate to backend that the player has finished his turn
+    
     this.gameService.next_turn(this.game_id).subscribe({
       next: (data) => {
         this.current_player = data.jugador;
@@ -552,7 +591,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   /* === FUNCTIONS TO UPDATE INFORMATION === */
-
   actualize_game_info(data : PlayerListResponse): void {
     let listaJugadores = data.listaJugadores;
     let listaDineros = data.listaDineros;
@@ -583,7 +621,37 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
-  update_player_info(): void {
+  /**actualize_game_info(data : PlayerListResponse): void {
+    let listaJugadores = data.listaJugadores;
+    let listaDineros = data.listaDineros;
+    let listaPosiciones = data.listaPosiciones;
+    // Result table with other players
+    let result : [string, number, Coordenadas][] = [];
+    for (let i = 0; i < listaJugadores.length; i++) {
+      if (listaJugadores[i] !== this.player[0]) {
+        // Get information of other players
+        let jugador = listaJugadores[i];
+        let dinero = listaDineros[i];
+        let posicion = listaPosiciones[i];
+        // Add to other_players_list if no error
+        if (jugador != null && dinero != null && posicion != null){
+          result.push([jugador, dinero, posicion]);
+        }
+      }
+      // Info of client player
+      else {
+        this.player[1] = listaDineros[i];
+        this.player[2] = listaPosiciones[i];
+      }
+      this.other_players_list = result;
+    }
+    // If user not in list, it's because he is bankrupt
+    if (!listaJugadores.includes(this.player[0])) {
+      this.is_bankrupt = true;
+    }
+  } */
+
+  update_player_info(): void { // ---------------------------------------------------> TODO FALTA CAMBIAR A SOCKETS
     // Get information of player
     this.gameService.get_list_players(this.game_id).subscribe({
       next: (data: PlayerListResponse) => {
@@ -616,7 +684,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   /* === FUNCTIONS TO MANAGE THE POSITION OF THE PLAYER === */
-
   convert_position_to_id(coord : Coordenadas): number{
     // Function to convert position (v, h) to number between 0 and 39
     let v = coord.v;
@@ -757,7 +824,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   /* === FUNCTIONS TO DISPLAY POP UP COMPONENTS === */
-
   createCardComponent(v: number, h: number, message: string, play_again: boolean = false, type: string, money_to_pay: number=0, trigger_end_turn: boolean = true): void {
     // Assure to delete the old buy card component
     this.delete_pop_up_component();
@@ -1005,7 +1071,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
-  cancelTimer() {
+  cancelTimer() { 
     console.log("=== CANCEL TIMER ===");
     // Set timer as inactive
     this.is_timer_active = false;
@@ -1013,9 +1079,21 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   /* === FUNCTIONS TO LEAVE THE GAME === */
-  leave_game(){
+  leave_game(){ // -------------------- actualizada con sockets
     // Declare bankruptcy to backend
-    this.gameService.declare_bankruptcy(this.player[0], this.game_id).subscribe({
+    this.socketService.bancarrota()
+    .then((msg: any) => {
+      console.log("ENTRA A DECLARAR BANCARROTA: ", msg);
+      console.log("=== LEAVE GAME ===");
+      // Update player money to 0
+      this.player[1] = 0;
+      this.router.navigate(['/']);
+    })
+    .catch(() => {
+      console.log("ERROR AL DECLARAR BANCARROTA");
+      this.leave_game();
+    });
+    /*this.gameService.declare_bankruptcy(this.player[0], this.game_id).subscribe({
       next: (data: any) => {
         console.log("=== LEAVE GAME ===");
         // Update player money to 0
@@ -1028,8 +1106,8 @@ export class BoardComponent implements OnInit, OnDestroy {
       },
       complete: () => {
         // Redirect to home page of player
-        this.router.navigate(['/pantalla']);
+        this.router.navigate(['/']);
       }
-    });
+    });*/
   }
 }

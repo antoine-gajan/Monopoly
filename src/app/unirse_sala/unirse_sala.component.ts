@@ -22,7 +22,7 @@ export class UnirseSalaComponent {
   seguirMostrando: boolean = false;
   finMensaje: boolean = false;
   errorPartidaLlena: boolean = false;
-  list_players: string[] = [];
+
 
 
   constructor(

@@ -110,7 +110,7 @@ export class GameService {
     ));
   }
 
-  declare_bankruptcy(username: string, idPartida : number){
+  /*declare_bankruptcy(username: string, idPartida : number){
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
     let body = JSON.stringify({  "username": username,
                                                     "idPartida": idPartida})
@@ -121,7 +121,7 @@ export class GameService {
           console.log(response);
         }
     ));
-  }
+  }*/
 
   actualize(idPartida : number, nJugadores : number, dineroInicial : number){
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
