@@ -344,6 +344,10 @@ export class WebSocketService {
     this.socket.emit('actualizarPartida', datos, (ack:any) => {
       if(ack.cod==0){
         console.log("ACTUALIZACIÓN CORRECTA");
+        if(datos.jugar == true){
+          const ruta = '/game/' + this.idPartida;
+          this.router.navigate([ruta]);
+        }
       }
     })
   }
