@@ -43,7 +43,8 @@ export class GameService {
     ));
   }
   roll_dicesSocket() {  // ME DEVUELVE ACK.MSG CON MSG {coordenadas: {h: valor, v: valor}, dado1: valor, dado2: valor}
-    
+      
+
    /* this.socketService.login(user)
         .then((loginResponse: boolean) => {
           this.mostrarError = !loginResponse;
@@ -195,6 +196,8 @@ export class GameService {
           console.log(response)})
       );
   }
+
+  
 
   //socket.on('turnoActual', (mensaje))
   get_current_player(idPartida: number){

@@ -110,6 +110,7 @@ volverArriba() {
   crearSala() {
     this.crearSalaClicked = true;
     if(this.form_unirse_invitado.valid){
+      this.socketService.username = this.form_unirse_invitado.value.username;
       
       this.socketService.nombreInvitado(this.form_unirse_invitado.value.username);
       
@@ -132,6 +133,7 @@ volverArriba() {
   unirseSala(){
     this.unirseSalaClicked = true;
     if(this.form_unirse_invitado.valid){
+      this.socketService.username = this.form_unirse_invitado.value.username;
       
       this.socketService.nombreInvitado(this.form_unirse_invitado.value.username);
       this.router.navigate(['/unirse_sala']);

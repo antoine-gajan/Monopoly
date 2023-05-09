@@ -69,6 +69,14 @@ export class WebSocketService {
       });
     });
   }
+  
+  public consultarUsernameString(){
+    this.consultarUsername()
+    .then((username: any) => {
+      this.username = username.nombreUser;
+      console.log('Username: ', this.username);
+    });
+  }
 
   public consultarEmail(): Promise<string>{
     return new Promise<string>((resolve, reject) => {
@@ -325,6 +333,7 @@ export class WebSocketService {
   public consultarUsuario(): Promise<any>{
     return new Promise ((resolve) => {
       this.socket.emit('infoUsuario', {socketId: this.socketID}, (ack: any) => {
+        console.log('Server acknowledged:', ack);
         if(ack.cod==0){
           console.log('Valor escuchar para entrar a jugar:', ack);
           resolve(ack);
@@ -336,6 +345,7 @@ export class WebSocketService {
   }
 
   /*-------------------------------------------FUNCIONES DEL GAME/TABLERO-------------------------------------------*/
+  
   public lanzarDados(): Promise <string>{
     console.log("LANZAR DADOS SOCKET");
     return new Promise ((resolve) => {
@@ -391,6 +401,8 @@ export class WebSocketService {
       });
     });
   }
+
+  
 
   public infoAsignatura(datos: any): Promise <string>{ //datos tiene -> {socketId: this.socketID, coordenadas: {  "h": 3,  "v": 0 }}
     return new Promise ((resolve) => {

@@ -78,19 +78,39 @@ export class BoardComponent implements OnInit, OnDestroy {
   ngOnInit() {
     console.log("---------------------------");
     console.log("Board component initialized");
-    /* ---------------Se obtiene el id de la partida--------------- */
-    const game_id: string | null = this.route.snapshot.paramMap.get('id'); 
-    if (game_id != null) {
-      this.game_id = +game_id;
-    } else {
-      this.router.navigate(['/error']);  // Se redirige a la página de error
-    }
-    
-    this.load_game(); // <--------------------------------------------------------------------------REVISAR
-    console.log("TODO INICIADO: Game id: ", this.game_id);
-  }
 
-  
+    console.log("TODO INICIADO: Game id: ", this.game_id);
+    this.list_players = this.socketService.list_players;
+    console.log("TODO INICIADO: List players: ", this.list_players);
+    if(this.list_players.length != 0){
+      this.player[0] = this.list_players[0];// TODO <---------------------actualizar essto y cambiarlo cuando nos devuelban bien los jugadore sy datos de la aprtida
+      this.player[1] = 1500; 
+      for(let i = 1; i<this.list_players.length; i++){
+        this.other_players_list.push([this.list_players[i], 1500, {h: 10, v: 10}]);
+      }
+    }
+    //TODO <-------------------------------------------------------FALTA COMRPOBAR QUE CARGUEN LOS USUARIOS
+    /* TODO: revisar implementación de git */
+
+    this.message = "Cargando la partida..."
+    document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
+    document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
+    //TODO <- ontener el nombre del usuario actual
+    // TODO ----------------> revisar si hay que hacer esto o se va a buggear
+    // this.socketService.consultarUsernameString(); <------------------------------------ FALTA OBTENER EL NOMMBRE DEL USUARIO ACTUAL
+    console.log("TODO INICIADO: Username: ", this.player[0]);
+    this.socketService.siguienteTurno()
+    .then((nextPlayer: string) => {
+      console.log("Next player: ", nextPlayer);
+      console.log("Username: ",this.socketService.username);
+      if(nextPlayer == this.username){
+        this.is_playing = true;
+        console.log("ESTÁ JUGANDO");
+      } else {
+        console.log("NO ESTÁ JUGANDO");
+      }
+    });
+  }
 
 
 /**ngOnInit() {
@@ -137,8 +157,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     //this.load_game(); // <--------------------------------------------------------------------------REVISAR
   } */
 
-
-
 // <--------------------------------------------------------------------------REVISAR A PARTIR DE AQUÍ
 
   ngOnDestroy() {
@@ -163,84 +181,24 @@ export class BoardComponent implements OnInit, OnDestroy {
     });
   }
 
-  load_game(){
-    console.log("Loading game...");
-    // Block buttons to avoid risks
-    document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
-    document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
-
-    // Indicate that the game is loading
-    this.message = "Cargando la partida..."
-    // Get list of players
-    this.list_players = this.socketService.list_players;
-
-    
-    /*for(let i = 0; i < this.list_players.length; i++){
-      this.playerArray[i].listaDineros[i] = 0;
-      this.playerArray[i].listaPosiciones[i] = {h: 10, v: 10};
-      this.playerArray[i].listaJugadores[i] = this.list_players[i];
-    }*/
-
-    /*let listaJugadores = this.socketService.list_players;
-    const playerResponses: PlayerListResponse[] = [];
-    for (let i = 0; i < listaJugadores.length; i++) {
-      const playerResponse: PlayerListResponse = new PlayerListResponse();
-      playerResponse.listaJugadores = [listaJugadores[i]];
-      playerResponse.listaDineros = [0];
-      playerResponse.listaPosiciones = [{h: 10, v: 10}];
-      playerResponses.push(playerResponse);
-    }
-
-    console.log("JUGADORES TABLERO CARGADOS: ", playerResponses);
-    //for (let i = 0; i < playerResponses.length; i++) {
-    //JUGADOR 1
-      this.player[0] = playerResponses[0].listaJugadores[0];
-      this.player[1] = playerResponses[0].listaDineros[0];
-      this.player[2] = playerResponses[0].listaPosiciones[0];
-    //*/
-
-
-/*
-    this.gameService.get_list_players(this.game_id).subscribe({
-      next: (data: PlayerListResponse) => {
-        this.actualize_game_info(data);
-      },
-      error: (error) => {
-        //console.error(error);
-        this.load_game();
-      },
-      complete: () => {
-        // Get every properties of each player
-        this.get_properties();
-        this.get_properties_of_other_players();
-        // Show position of the players
-        this.show_position_every_players();
-        // Indicate that the game is loaded
-        this.message = "Partida cargada";
-        // Start the game
-        this.play();
-      }
-    });*/
-  }
-
   /* === FUNCTIONS TO GET THE PROPERTIES OF THE PLAYERS === */
-  get_properties(): void {
+  get_properties(): void { // -------------------- actualizada con sockets
     // Get every properties of the player if he is not bankrupt
     if (!this.is_bankrupt) {
-      this.gameService.get_all_properties_of_player(this.game_id, this.player[0]).subscribe({
-        next: (data: PropertiesBoughtResponse) => {
-          console.log("Get properties of client player realized successfully");
-          let properties: [string, Coordenadas][] = [];
-          for (let i = 0; i < data.casillas.length; i++) {
-            properties.push([data.casillas[i].nombre, data.casillas[i].coordenadas]);
-          }
-          this.player_properties = properties;
-        },
-        error: (error) => {
-          //console.error(error);
-          // Try again
-          this.get_properties();
+      this.socketService.listaAsignaturasC({socketId: this.socketService.socketID})
+      .then((listadoAsignaturasCompradas: any) => {
+        console.log("LISTA DE ASIGNATURAS COMPRADAS", listadoAsignaturasCompradas);
+        let properties: [string, Coordenadas][] = [];
+        for (let i = 0; i < listadoAsignaturasCompradas.length; i++) {
+          properties.push([listadoAsignaturasCompradas[i].nombre, listadoAsignaturasCompradas[i].coordenadas]);
         }
+        this.player_properties = properties;
+      })
+      .catch((error) => {
+        //console.log("ERROR AL OBTENER LA LISTA DE ASIGNATURAS COMPRADAS");
+        console.log(error);
+        // Try again
+        this.get_properties();
       });
     }
   }
@@ -420,6 +378,9 @@ export class BoardComponent implements OnInit, OnDestroy {
     let owner_of_card: string | null = null;
     let money_to_pay: number | null = null;
     let increase_credit_possible: boolean = false;
+    
+    // TODO <---------------------------------------------------------------------------------infoAsignatura
+
     this.gameService.get_card(this.player[0], this.game_id, this.player[2].h, this.player[2].v).subscribe({
       next: (data: any) => {
         console.log("Position : " + this.player[2].h + " " + this.player[2].v);
