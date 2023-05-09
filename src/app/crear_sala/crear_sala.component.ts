@@ -46,38 +46,20 @@ export class CrearSalaComponent {
     private location: Location
   ){
     this.router = router;
-    //this.username = socketService.getUsername();
-
-    this.socketService.consultarUsuario()
-    .then ((usuario: any) => {
-      console.log("usuario: ", usuario);
-      this.username = usuario.msg.nombreUser;
-    })
-    .catch(() => {
-      console.log("ERROR AL OBTENER NOMBRE USUARIO");
-    });
-
-
-
-
-    //this.datosSalaService.numJugadores = this.numJugadores;
-    //const checkbox = document.querySelector('input[data-var=cobrarCarcel]') as HTMLInputElement;
-    //checkbox?.addEventListener('change', (event: Event) => {
-    //this.cobrarCarcel = (event.target as HTMLInputElement).checked;
-    //});
   }
 
   ngOnInit() {
     
     //let username = this.socketService.getUsername();
-    this.socketService.consultarUsuario()
+    /*this.socketService.consultarUsuario()
     .then ((usuario: any) => {
       console.log("usuario: ", usuario);
       this.username = usuario.msg.nombreUser;
     })
     .catch(() => {
       console.log("ERROR AL OBTENER NOMBRE USUARIO");
-    });
+    });*/
+    this.socketService.hacerOnSocket();
     //this.datosSalaService.numJugadores = this.numJugadores;
     console.log("ME HE ADELANTADO");
     this.idPartida = this.socketService.idPartida;

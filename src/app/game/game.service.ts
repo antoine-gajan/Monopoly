@@ -14,6 +14,7 @@ import {
 } from "./response-type";
 import {Socket} from "ngx-socket-io";
 import {io} from "socket.io-client";
+import { WebSocketService } from 'app/web-socket.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -22,7 +23,8 @@ export class GameService {
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private socketService: WebSocketService
   )  {
     this.socket = io(environment.socketURL,{ transports: ["websocket"] });
   }
@@ -40,6 +42,7 @@ export class GameService {
         }
     ));
   }
+
 
   //CAMBIAR A SOCKET -> con inicar el socket on a escuchar o pasar la lista de jugadores de la pantlala anterior
   get_list_players(idPartida : number): Observable<PlayerListResponse>{

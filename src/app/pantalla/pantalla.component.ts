@@ -56,6 +56,5 @@ volverArriba() {
         .catch(() => {
           console.log("ERROR AL CREAR SALA");
         });
-        
   }
 }

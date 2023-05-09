@@ -107,6 +107,9 @@ export class BoardComponent implements OnInit, OnDestroy {
     });
     
     // Load game
+
+
+    console.log("TODO INICIADO: Game id: ", this.game_id);
     //this.load_game(); // <--------------------------------------------------------------------------REVISAR
   }
 // <--------------------------------------------------------------------------REVISAR A PARTIR DE AQUÍ
@@ -551,6 +554,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     });
   }
 
+  // geera numeros aleatorios en los dados antes de obtener el valor de la consulta de tirar dados
   move_dices_action(): void{
     // Delete previous interval for safety
     if (this.dices_interval != null) {

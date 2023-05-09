@@ -369,4 +369,13 @@ export class WebSocketService {
       });
    });
   }
+
+  /*-------------------------------------------FUNCIONES DEL GAME/TABLERO-------------------------------------------*/
+  public lanzarDados(){
+    console.log("LANZAR DADOS SOCKET");
+    this.socket.emit('lanzarDados', {socketId: this.socketID}, (ack: any) => {
+      console.log('Server acknowledged:', ack);
+    });
+    console.log("------------------");
+  }
 }

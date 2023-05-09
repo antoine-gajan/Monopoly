@@ -32,26 +32,13 @@ export class UnirseSalaComponent {
     private socketService: WebSocketService,
     private router: Router
   ) {
-    //this.username = socketService.getUsername();
-    /*this.socketService.consultarUsuario()
-    .then ((usuario: any) => {
-      console.log("usuario: ", usuario);
-      this.username = usuario.msg.nombreUser;
-    })
-    .catch(() => {
-      console.log("ERROR AL OBTENER NOMBRE USUARIO");
-    });*/
 
-    /*this.socketService.actualizarUsuariosConectados()
-    .then((usuariosConectados) => {
-      console.log('Usuarios conectados:', usuariosConectados);
-      this.list_players = usuariosConectados;
-    })
-    .catch((error) => {
-      console.error('Error al obtener usuarios conectados:', error);
-    });
-    console.log("--", this.list_players);*/
   }
+
+  ngOnInit() {
+    this.socketService.hacerOnSocket();
+  }
+
 
   // Función que permitirá o no a un usuario unirse a una sala en función de si hay hueco o no
   async unirseSalaDatosEsperar() {
@@ -61,14 +48,11 @@ export class UnirseSalaComponent {
       console.log("unirse SALA: ", unirseSala);
       this.finMensaje = true;
       this.errorPartidaLlena = true;
-
-    
     })
     .catch(() => {
       console.log("ERROR AL CREAR SALA");
     });
-
-    this.socketService.hacerOnSocket();
+    //this.socketService.hacerOnSocket();
     const ruta = '/esperar_sala/' + this.idPartida;
     this.router.navigateByUrl(ruta);
   }
