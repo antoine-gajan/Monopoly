@@ -24,10 +24,9 @@
   <div class="input-partida">
     <form [formGroup]="form_unirse_invitado" class="services">
       <input type="text" class="id_partida" placeholder="Nombre de jugador" formControlName="username" id="username" name="username" required/>
-      <div *ngIf="form_unirse_invitado?.get('username')?.invalid && (form_unirse_invitado?.get('username')?.dirty || form_unirse_invitado?.get('username')?.touched)">
+      <div *ngIf="form_unirse_invitado?.get('username')?.invalid && ((form_unirse_invitado?.get('username')?.dirty) || (form_unirse_invitado?.get('username')?.value === '' && (crearSalaClicked || unirseSalaClicked)))">
         <div *ngIf="form_unirse_invitado?.get('username')?.errors?.['required']" style="color: red;">Este campo es obligatorio</div>
       </div>
-      <button>guardar</button>
     </form>
     </div>
   <!--------------------opciones-------------------->

@@ -237,29 +237,6 @@ export class WebSocketService {
     });
   }
 
-  /**public crearSala(user: any){
-    console.log("CREAR PARTIDA-SALA", user);
-    return new Promise<boolean>((resolve, reject) => {
-      this.socket.emit('crearPartida', user, (response: any) => {
-        console.log('crearPartida response:', response);
-        console.log('crearPartida response.cod:', response.cod);
-        if (response.cod === 0) { // Si el código de confirmación es 200, redirigir a la pantalla de usuario
-          //this.router.navigate(['/crear_sala']);
-          resolve(true);
-          let idPartida = '';
-          if (response.msg !== null && response.msg !== undefined) {
-            idPartida = response.msg;
-          }
-          const ruta = '/esperar_sala/' + idPartida;
-          //this.router.navigateByUrl(ruta);
-        } else{
-          console.log('Error al crear la sala');
-          reject(false);
-        }
-      });
-    });
-  } */
-
   public unirseSalaEsperar(user: any): Promise<string> {
     console.log("UNIRSE SALA ESPERAR", user);
     
@@ -288,7 +265,7 @@ export class WebSocketService {
       this.socket.on('esperaJugadores', (info) => {
         if (typeof info === 'object' && info !== null) {
           const keys = Object.keys(info);
-          const usuariosConectados = keys.map((key) => `${key}: ${info[key]}`);
+          const usuariosConectados = keys.map((key) => `Jugador ${key}: ${info[key]}`);
           resolve(usuariosConectados);
         } else {
           reject('La información recibida no es un objeto');
@@ -302,23 +279,6 @@ export class WebSocketService {
       console.log('Server acknowledged:', ack);
     });
   }
-
-  /**public crearPartida(){
-    this.socket.emit('crearPartida', {
-      socketId: 
-  }, (ack) => {
-      console.log('Server acknowledged:', ack);
-      if(ack.cod == 0){
-          navigation.navigate('CrearSala', {idPartida: ack.msg});
-      }
-      else if(ack.cod != 2){
-          alert(ack.msg);
-      }
-      else{
-          alert("Se ha producido un error en el servidor, por favor, pulse otra vez el boton");
-      }
-  });
-  }  */
 
   public crearPartida(): Promise<number> {
     console.log("CREAR PARTIDA-SALA v2");
@@ -375,12 +335,17 @@ export class WebSocketService {
   }
 
   /*-------------------------------------------FUNCIONES DEL GAME/TABLERO-------------------------------------------*/
-  public lanzarDados(){
+  public lanzarDados(): Promise <string>{
     console.log("LANZAR DADOS SOCKET");
-    this.socket.emit('lanzarDados', {socketId: this.socketID}, (ack: any) => {
-      console.log('Server acknowledged:', ack);
+    return new Promise ((resolve) => {
+      this.socket.emit('lanzarDados', {socketId: this.socketID}, (ack: any) => {
+        console.log('Server acknowledged:', ack);
+        if(ack.code == 0){
+          resolve(ack.msg);
+        }
+      });
     });
-    console.log("------------------");
+    //console.log("------------------");
   }
 
   public nombreInvitado(nombreUser: string): Promise<string>{

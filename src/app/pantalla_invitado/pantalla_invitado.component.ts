@@ -17,6 +17,8 @@ export class PantallaInvitadoComponent {
   username: string ;
   id_partida_nueva: number;
   formSubmitted = false;
+  crearSalaClicked = false;
+  unirseSalaClicked = false;
 
   /*constructor(
     //private userService: UserService,
@@ -106,7 +108,7 @@ volverArriba() {
 }
 
   crearSala() {
-    this.formSubmitted = true;
+    this.crearSalaClicked = true;
     if(this.form_unirse_invitado.valid){
       
       this.socketService.nombreInvitado(this.form_unirse_invitado.value.username);
@@ -128,9 +130,11 @@ volverArriba() {
   }
 
   unirseSala(){
-    
-    this.socketService.nombreInvitado(this.form_unirse_invitado.value.username);
-    this.router.navigate(['/unirse_sala']);
-
+    this.unirseSalaClicked = true;
+    if(this.form_unirse_invitado.valid){
+      
+      this.socketService.nombreInvitado(this.form_unirse_invitado.value.username);
+      this.router.navigate(['/unirse_sala']);
+    }
   }
 }

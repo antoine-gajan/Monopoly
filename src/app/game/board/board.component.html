@@ -1,13 +1,17 @@
 <header id="header" class="fixed-top">
 	<div style="display: flex; justify-content: space-between;">
-	  <img class="voler_boton" src="../../../assets/images/voler_boton.png" class="volver_boton" style="cursor: pointer;" onclick="window.history.back();" />
+	  <img class="voler_boton" src="../../../assets/images/voler_boton.png" class="volver_boton" style="cursor: pointer;"/>
 	  <h4><a style="color: #080808" routerLink="/">MONOPOLY VERSIÓN INFORMÁTICA</a></h4>
 	  <img class="home_boton" src="../../../assets/images/home_boton.png" routerLink="/" class="volver_boton">
 	</div>
 </header>
 
+<p>pruebas de funciones</p>
+<button (click)="lanzarDados()">lanzar dados</button>
+
 <div class="main-info">{{message}}</div>
 <div class="timer {{ remaining_time < 10 ? 'blinking' : '' }}" *ngIf="is_timer_active">Tiempo restante para jugar : {{remaining_time}} segundos</div>
+
 
 <div class="main-container">
   <div class="table">

@@ -51,6 +51,11 @@ export class BoardComponent implements OnInit, OnDestroy {
   community_cards: number[] = [2, 17, 33];
   taxes_cards: number[] = [4, 38];
 
+
+
+
+  
+
   // Relative to dices
   diceImages = [
     "../../../assets/images/dice/1.png",
@@ -76,14 +81,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   ngOnInit() {
     console.log("---------------------------");
     console.log("Board component initialized");
-    this.socketService.escucharEntrarAJugar()
-      .then((mensajeAJugar: string) => {
-        console.log("Mensaje a jugar: ", mensajeAJugar);
-      })
-      .catch(() => {
-        console.log("Error al obtener el mensaje a jugar");
-      });
-
     /* ---------------Se obtiene el id de la partida--------------- */
     const game_id: string | null = this.route.snapshot.paramMap.get('id'); 
     if (game_id != null) {
@@ -91,8 +88,44 @@ export class BoardComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigate(['/error']);  // Se redirige a la página de error
     }
+    
+  
+    /* ---------------Se obtiene el nombre de usuarios de la partida--------------- */
+    //const usuariosConectados = this.socketService.actualizarUsuariosConectados();
+    //const listaUsuarios: PlayerListResponse[] = usuariosConectados.map((usuario) => [usuario, 0, {h: 10, v: 10}]);
+    // Load game
 
-    /* ---------------Se obtiene el nombre del usuario de la partida--------------- */
+
+    console.log("TODO INICIADO: Game id: ", this.game_id);
+    //this.load_game(); // <--------------------------------------------------------------------------REVISAR
+  }
+
+
+
+/**ngOnInit() {
+    console.log("---------------------------");
+    console.log("Board component initialized");
+    /*this.socketService.escucharEntrarAJugar()
+      .then((mensajeAJugar: string) => {
+        console.log("Mensaje a jugar: ", mensajeAJugar);
+      })
+      .catch(() => {
+        console.log("Error al obtener el mensaje a jugar");
+      });
+*/
+    /*console.log("Se va a hacer el on socket");
+    this.socketService.hacerOnSocket(); // Obtener listado de jugadores 
+    console.log("Se hizo el on socket");
+*/
+    /* ---------------Se obtiene el id de la partida--------------- *
+    const game_id: string | null = this.route.snapshot.paramMap.get('id'); 
+    if (game_id != null) {
+      this.game_id = +game_id;
+    } else {
+      this.router.navigate(['/error']);  // Se redirige a la página de error
+    }
+
+    /* ---------------Se obtiene el nombre del usuario de la partida--------------- /
     this.socketService.consultarUsername()
     .then((Username: string) => {
       console.log("Username: ", Username);
@@ -111,7 +144,10 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     console.log("TODO INICIADO: Game id: ", this.game_id);
     //this.load_game(); // <--------------------------------------------------------------------------REVISAR
-  }
+  } */
+
+
+
 // <--------------------------------------------------------------------------REVISAR A PARTIR DE AQUÍ
 
   ngOnDestroy() {
@@ -135,6 +171,13 @@ export class BoardComponent implements OnInit, OnDestroy {
       console.log("ERROR AL OBTENER USERNAME");
     });
   }
+
+
+  lanzarDados(){
+    this.socketService.lanzarDados();
+  }
+
+
 
   load_game(){
     console.log("Loading game...");
@@ -285,6 +328,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     });
   }
 
+  
   play_turn_player() {
     console.log("=== PLAY TURN ===");
     // Cancel the timer

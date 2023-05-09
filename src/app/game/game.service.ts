@@ -26,7 +26,7 @@ export class GameService {
     private router: Router,
     private socketService: WebSocketService
   )  {
-    this.socket = io(environment.socketURL,{ transports: ["websocket"] });
+    //this.socket = io(environment.socketURL,{ transports: ["websocket"] });
   }
 
   //CAMBIAR A SOCKET socket.emit('lanzarDados', {socketId: this.socketservice.socketID})
@@ -42,8 +42,17 @@ export class GameService {
         }
     ));
   }
-
-
+  roll_dicesSocket() {  // ME DEVUELVE ACK.MSG CON MSG {coordenadas: {h: valor, v: valor}, dado1: valor, dado2: valor}
+    
+   /* this.socketService.login(user)
+        .then((loginResponse: boolean) => {
+          this.mostrarError = !loginResponse;
+        })
+        .catch(() => {
+          this.mostrarError = true;
+        });
+    */
+  }
   //CAMBIAR A SOCKET -> con inicar el socket on a escuchar o pasar la lista de jugadores de la pantlala anterior
   get_list_players(idPartida : number): Observable<PlayerListResponse>{
     const httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
