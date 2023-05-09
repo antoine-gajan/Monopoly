@@ -12,7 +12,7 @@ import { LoginComponent } from './user/login/login.component';
 export class WebSocketService {
   localSocketID: string;
   idPartida: number;
-  private username: string;
+  username: string;
   private email: string;
   private picture: string;
   private _socketID: string;
@@ -381,5 +381,17 @@ export class WebSocketService {
       console.log('Server acknowledged:', ack);
     });
     console.log("------------------");
+  }
+
+  public nombreInvitado(nombreUser: string): Promise<string>{
+    return new Promise ((resolve) => {
+      this.socket.emit('nombreInvitado', {username: nombreUser, socketId: this.socketID}, (ack: any) => {
+        console.log("Resultado de crear invitado: ", ack);
+        if(ack.cod == 0){
+          console.log("Se ha creado correctamente");
+          resolve(ack.cod);
+        }
+      })
+    });
   }
 }

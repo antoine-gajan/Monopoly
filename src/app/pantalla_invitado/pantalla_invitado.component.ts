@@ -79,15 +79,11 @@ export class PantallaInvitadoComponent {
     return null;
   }*/
 
-  crearSala(): void {
-    this.formSubmitted = true;
-    if (this.form_unirse_invitado.valid) {
-    }
-  }
   constructor(
     //private userService: UserService,
     private fb: FormBuilder,
-    private socketService: WebSocketService
+    private socketService: WebSocketService,
+    private router: Router
     
   ) {
     this.form_unirse_invitado = this.fb.group({
@@ -109,24 +105,32 @@ volverArriba() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-  ngOnInit() {
-    
-    
+  crearSala() {
+    this.formSubmitted = true;
+    if(this.form_unirse_invitado.valid){
+      
+      this.socketService.nombreInvitado(this.form_unirse_invitado.value.username);
+      
+      console.log("CREAR PARTIDA BOTON PANTALLA");
+      
+      this.socketService.crearPartida()
+          .then((crearSala: number) => {
+            if(crearSala != -1){
+              console.log("CREAR SALA: ", crearSala);
+              this.socketService.idPartida = crearSala;
+              this.router.navigate(['/crear_sala']);
+            }
+          })
+          .catch(() => {
+            console.log("ERROR AL CREAR SALA");
+          });
+    }
   }
 
-  crearPartida() {
-    console.log("CREAR PARTIDA BOTON PANTALLA");
+  unirseSala(){
     
-    this.socketService.crearPartida()
-        .then((crearSala: number) => {
-          if(crearSala != -1){
-            console.log("CREAR SALA: ", crearSala);
-            this.socketService.idPartida = crearSala;
-            //this.router.navigate(['/crear_sala']);
-          }
-        })
-        .catch(() => {
-          console.log("ERROR AL CREAR SALA");
-        });
+    this.socketService.nombreInvitado(this.form_unirse_invitado.value.username);
+    this.router.navigate(['/unirse_sala']);
+
   }
 }
