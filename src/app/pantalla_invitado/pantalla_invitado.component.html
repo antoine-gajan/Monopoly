@@ -6,12 +6,16 @@
     <img class="inicio_boton" src="../../../assets/images/home_boton.png" routerLink="/">
   </div>
 </header>
+
+<!-- BOTÓN VOLVER A LA PARTE SUPERIOR DE LA PÁGINA -->
+<button class="btn-flotante" (click)="volverArriba()">
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
+  </svg>
+</button>
+
 <!--------------------BODY WEB-------------------->
 <body>
-  <!--------------------logo juevo-------------------->
-  <div class="imagen_logo_juego">
-    <img src="../../assets/images/logo_juego.jpg">
-  </div>
   <!--------------------mensaje bienvenida-------------------->
   <div class="mensaje_bienvenida" role="main">
     <h2>¡BIENVENID@!</h2>
@@ -20,7 +24,10 @@
   <div class="input-partida">
     <form [formGroup]="form_unirse_invitado" class="services">
       <input type="text" class="id_partida" placeholder="Nombre de jugador" formControlName="username" id="username" name="username" required/>
-      <div *ngIf="form_unirse_invitado?.get('username')?.invalid && (form_unirse_invitado?.get('username')?.dirty || form_unirse_invitado?.get('username')?.touched)"></div>
+      <div *ngIf="form_unirse_invitado?.get('username')?.invalid && (form_unirse_invitado?.get('username')?.dirty || form_unirse_invitado?.get('username')?.touched)">
+        <div *ngIf="form_unirse_invitado?.get('username')?.errors?.['required']" style="color: red;">Este campo es obligatorio</div>
+      </div>
+      <button>guardar</button>
     </form>
     </div>
   <!--------------------opciones-------------------->
@@ -38,7 +45,7 @@
           <path d="M2 1a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2ZM1 3a1 1 0 0 1 1-1h2v2H1V3Zm4 10V2h9a1 1 0 0 1 1 1v9c0 .285-.12.543-.31.725C14.15 11.494 12.822 10 10 10c-3.037 0-4.345 1.73-4.798 3H5Zm-4-2h3v2H2a1 1 0 0 1-1-1v-1Zm3-1H1V8h3v2Zm0-3H1V5h3v2Z"/>
         </svg>
         </a>
-        <a class="card" rel="noopener" routerLink="/unirse_sala_invitado">
+        <a class="card" rel="noopener" >
           <svg class="material-icons" viewBox="0 0 24 24"></svg>
           <span><h4><b>Unirse a una sala</b></h4></span>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -59,14 +66,7 @@
   
      
     </div>
-
+    
   </div>
+  <br><br><br><br><br><br><br><br>
 </body>
-<!-- BOTÓN VOLVER A LA PARTE SUPERIOR DE LA PÁGINA -->
-<button class="btn-flotante" (click)="volverArriba()">
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
-    <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
-  </svg>
-</button>
-
-<br><br><br><br><br><br><br>
