@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {GameService} from "../../game/game.service";
 import {Coordenadas, RandomCard} from "../../game/response-type";
+import { WebSocketService } from 'app/web-socket.service';
 
 @Component({
   selector: 'app-chance-card',
@@ -15,21 +16,29 @@ export class ChanceCardComponent implements OnInit{
 
   chance: RandomCard;
 
-  constructor(private gameService: GameService) { }
+  constructor(
+    private gameService: GameService,
+    private socketService: WebSocketService
+  ) { }
 
   ngOnInit() {
-    this.gameService.get_random_suerte_card(this.idPartida, this.username).subscribe({
-      next:
-        (cards) => {
-          this.chance = cards[0];
-          console.log(this.chance);
-        },
-      error:
-        (error) => {
-          //console.log(error);
-          // Try again
-          this.ngOnInit();
-        }
+
+    this.socketService.suerte()
+    .then((msg: any) => {
+      console.log("***SUERTE***: ", msg);
+      this.chance.cobrarPagarNada = msg.cobrarPagarNada;
+      this.chance.descripcion = msg.descripcion;
+      this.chance.dinero = msg.dinero;
+      this.chance.nombre = msg.descripcion;
+      this.chance.tipo = msg.tipo;
+      this.chance._id = msg._id;
+      console.log("msg: ", msg);
+      console.log("this.chance: ", this.chance);
+    })
+    .catch(() => {
+      //console.log(error);
+      // Try again
+      this.ngOnInit();
     });
   }
 

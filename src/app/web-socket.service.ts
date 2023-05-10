@@ -351,7 +351,7 @@ export class WebSocketService {
     return new Promise ((resolve) => {
       this.socket.emit('lanzarDados', {socketId: this.socketID}, (ack: any) => {
         console.log('Server acknowledged:', ack);
-        if(ack.code == 0){
+        if(ack.cod == 0){
           console.log("LANZAR DADOS", ack.msg);
           resolve(ack.msg);
         }
@@ -438,12 +438,7 @@ export class WebSocketService {
       this.socket.emit('casilla', data,
        (ack: any) => {
         console.log('Server acknowledged:', ack);
-        if(ack.cod == 0){
-          console.log("info casilla", ack.msg);
-          resolve(ack.msg);
-        } else {
-          console.log("Error al mostrar info de la casilla");
-        }
+        resolve(ack.cod);
       });
     });
   }
@@ -479,5 +474,18 @@ export class WebSocketService {
   }
 
  
-
+  public suerte(): Promise <string>{
+    return new Promise ((resolve) => {
+      this.socket.emit('sierte', {socketId: this.socketID},
+       (ack: any) => {
+        console.log('Server acknowledged:', ack);
+        if(ack.cod == 0){
+          console.log("CARTA SUERTE", ack.msg);
+          resolve(ack.msg);
+        } else {
+          console.log("error en carta suerte");
+        }
+       })
+    });
+  }
 }

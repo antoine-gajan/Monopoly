@@ -178,6 +178,64 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
+  async lanzarDados(){
+    // Si no es tu turno, sale un aviso al intentar lanzar los dados
+    if(this.current_player != this.socketService.username){
+      alert("¡No es tu turno de lanzar los dados! Le toca a "+this.current_player);
+      return;
+    }
+    this.startTimer("Lanzar_dados");
+    console.log("Se va a lanzar los dados");
+    this.socketService.lanzarDados()
+    .then((msg: any) => {
+      console.log("DADOS LANZADOS: ", msg);
+      clearInterval(this.dices_interval);
+      this.dices[0] = msg.dado1;
+      this.dices[1] = msg.dado2;
+    })
+    .catch(() => {
+      console.log("ERROR AL LANZAR DADOS");
+    });
+
+    complete: async () => {
+      // Close button to avoid end turn
+      document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
+      // Update message
+      if (this.dices[0] === this.dices[1]){
+        this.message = this.player[0] + ", has sacado dobles " + this.dices[0];
+        this.nb_doubles += 1;
+      }
+      else {
+        this.message = this.player[0] + ", has sacado " + this.dices[0] + " y " + this.dices[1];
+      }
+      console.log("=== UPDATE PLAYER POSITION ===");
+      // Update player position
+      await this.update_local_player_position(this.dices);
+      // Action of the card
+      this.card_action();
+
+
+    }
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   obtenerNombreUsuario(){
     this.socketService.consultarUsername()
     .then((nombreUsuario: string) => {
@@ -347,14 +405,10 @@ export class BoardComponent implements OnInit, OnDestroy {
       clearInterval(this.dices_interval);
       this.dices[0] = msg.dado1;
       this.dices[1] = msg.dado2;
+      // Update player position
+      return this.update_local_player_position(this.dices);
     })
-    .catch(() => {
-      console.log("ERROR AL LANZAR DADOS");
-    });
-
-    this.update_local_player_position(this.dices);
-    
-    complete: async () => {
+    .then(() => {
       // Close button to avoid end turn
       document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
       // Update message
@@ -366,53 +420,14 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.message = this.player[0] + ", has sacado " + this.dices[0] + " y " + this.dices[1];
       }
       console.log("=== UPDATE PLAYER POSITION ===");
-      // Update player position
-      await this.update_local_player_position(this.dices);
       // Action of the card
       this.card_action();
-
-
-    }
-    
-
-
-   /* this.gameService.roll_dices(this.player[0], this.game_id).subscribe( {
-      next: (data: any) => {
-        // Clear dices interval to stop animation
-        clearInterval(this.dices_interval);
-        // Store true value of dices
-        this.dices[0] = data.dado1;
-        this.dices[1] = data.dado2;
-    },
-    error: async (error) => {
-      // Print error
-      if (error.status == 404) {
-        console.log("Partida no encontrada");
-      }
-      else if (error.status == 500){
-        console.log("Error interno del servidor");
-      }
-      // Try again
-      this.play_turn_player();
-    },
-    complete: async () => {
-      // Close button to avoid end turn
-      document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
-      // Update message
-      if (this.dices[0] === this.dices[1]){
-        this.message = this.player[0] + ", has sacado dobles " + this.dices[0];
-        this.nb_doubles += 1;
-      }
-      else {
-        this.message = this.player[0] + ", has sacado " + this.dices[0] + " y " + this.dices[1];
-      }
-      // Update player position
-      await this.update_local_player_position(this.dices);
-      // Action of the card
-      this.card_action();
-    }
-    });*/
+    })
+    .catch(() => {
+      console.log("ERROR AL LANZAR DADOS");
+    });
   }
+  
 
   async card_action() {
     console.log("=== CARD ACTION ===");
@@ -422,7 +437,16 @@ export class BoardComponent implements OnInit, OnDestroy {
     let increase_credit_possible: boolean = false;
     
     // TODO <---------------------------------------------------------------------------------infoAsignatura
+    this.socketService.casilla({coordenadas: {h: this.player[2].h, v: this.player[2].v}, socketId: this.socketService.socketID})
+    .then((cod: any) => {
+      console.log("¿puedo comprar casilla?", cod);
+      if(cod == 8){
+        console.log("puedes comprar");
+        this.createCardComponent(this.player[2].v, this.player[2].h, "Quieres comprar ?", this.dices[0] == this.dices[1], "buy");
+      }
+    });
 
+    /*
     this.gameService.get_card(this.player[0], this.game_id, this.player[2].h, this.player[2].v).subscribe({
       next: (data: any) => {
         console.log("Position : " + this.player[2].h + " " + this.player[2].v);
@@ -514,7 +538,7 @@ export class BoardComponent implements OnInit, OnDestroy {
           }
         }
       }
-    });
+    });*/
   }
 
   end_turn(): void {

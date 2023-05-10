@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {GameService} from "../../game/game.service";
 import {Propriety} from "../../game/response-type";
+import { WebSocketService } from 'app/web-socket.service';
 
 @Component({
   selector: 'app-propriety-card',
@@ -12,7 +13,7 @@ export class ProprietyCardComponent implements OnInit{
   @Input() v: number = 0;
   propriety: Propriety;
 
-  constructor(public gameService: GameService) {}
+  constructor(public socketService: WebSocketService) {}
 
   ngOnInit() {
     this.get_propriety();
@@ -20,15 +21,26 @@ export class ProprietyCardComponent implements OnInit{
 
   get_propriety() {
     // Get the property from the game service
-    this.gameService.get_info_propriety(this.v, this.h).subscribe({
-      next: (data) => {
-        this.propriety = data;
-      },
-      error: (error) => {
-        console.log(error);
-        // Try again
-        setTimeout(() => this.get_propriety(), 2000);
-      }
+    this.socketService.infoAsignatura({coordenadas: {h: this.h, v: this.v}})
+    .then((msg: any) => {
+      console.log("***INFO ASIGNATURA***: ", msg);
+      this.propriety = msg;
+      /*this.propriety._id = msg._id;
+      this.propriety.nombre = msg.descripcion;
+      this.propriety.matricula = msg.matricula;
+      this.propriety.precio1C = msg.precio1C;
+      this.propriety.precio2C = msg.precio2C;
+      this.propriety.precio3C = msg.precio3C;
+      this.propriety.precio4C = msg.precio4C;
+      this.propriety.devolucionMatricula = msg.devolucionMatricula;
+      this.propriety.coordenadas = msg.coordenadas;
+      this.propriety.cuatrimestre = msg.cuatrimestre;
+      this.propriety.precioCompraCreditos = msg.precioCompraCreditos;*/
+    })
+    .catch(() => {
+      console.log("ERROR AL OBTENER INFO ASIGNATURA");
+      // Try again
+      setTimeout(() => this.get_propriety(), 2000);
     });
   }
 

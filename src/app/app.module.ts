@@ -77,7 +77,7 @@ import 'zone.js';
     BrowserModule,
     HttpClientModule,
     GameModule,
-    //CardModule,
+    CardModule,
     AppRoutingModule,
     ReactiveFormsModule,
     RouterModule,
