@@ -25,17 +25,6 @@ export class ProprietyCardComponent implements OnInit{
     .then((msg: any) => {
       console.log("***INFO ASIGNATURA***: ", msg);
       this.propriety = msg;
-      /*this.propriety._id = msg._id;
-      this.propriety.nombre = msg.descripcion;
-      this.propriety.matricula = msg.matricula;
-      this.propriety.precio1C = msg.precio1C;
-      this.propriety.precio2C = msg.precio2C;
-      this.propriety.precio3C = msg.precio3C;
-      this.propriety.precio4C = msg.precio4C;
-      this.propriety.devolucionMatricula = msg.devolucionMatricula;
-      this.propriety.coordenadas = msg.coordenadas;
-      this.propriety.cuatrimestre = msg.cuatrimestre;
-      this.propriety.precioCompraCreditos = msg.precioCompraCreditos;*/
     })
     .catch(() => {
       console.log("ERROR AL OBTENER INFO ASIGNATURA");

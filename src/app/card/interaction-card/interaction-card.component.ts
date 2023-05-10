@@ -1,5 +1,6 @@
 import {Component, Input, EventEmitter, Output } from '@angular/core';
 import {GameService} from "../../game/game.service";
+import { WebSocketService } from 'app/web-socket.service';
 
 @Component({
   selector: 'app-interaction-card',
@@ -24,7 +25,9 @@ export class InteractionCardComponent {
   @Output() close_card = new EventEmitter();
   @Output() update_player_info = new EventEmitter();
 
-  constructor(private gameService : GameService) {
+  constructor(
+    private socketService: WebSocketService
+  ) {
 
   }
 
@@ -45,45 +48,27 @@ export class InteractionCardComponent {
   }
 
   buy_card() {
-    this.gameService.buy_card(this.username, this.game_id, this.h, this.v).subscribe({
-      next: (data) => {
+    console.log("ENTRO A COMPRAR UNA CARTA");
+
+    this.socketService.comprarCasilla({socketId: this.socketService.socketID, coordenadas: {h: this.h, v: this.v}})
+    .then((ack: any) => {
+      console.log("***ACK COMPRA***: ", ack);
+      if(ack.cod == 1){
+        console.log("Credenciales incorrectas");
+      } else if(ack.cod == 2){
+        console.log("Error en la funcion");
+      } else if(ack.cod == 6){
         console.log("You have bought the card");
-        console.log(data);
-        // Update properties of player
         this.update_player_info.emit();
-        // Callback function to come back to board
         this.callback();
-    },
-    error: (error) => {
-      console.log(error);
-      if (error.status == 400) {
+      } else if(ack.cod == 7){
+        console.log("La casilla no estuya");
+      } else if(ack.cod == 9){
         alert("No tienes suficiente dinero para comprar esta casilla");
         this.callback();
       }
-      else {
-        // Try again to buy
-        this.buy_card();
-      }
-    }
     });
-  }
-
-  increase_credit_property(): void {
-    this.gameService.increase_credit_property(this.username, this.game_id, this.h, this.v).subscribe({
-      next: (data) => {
-        console.log("You have increased the card");
-        console.log(data);
-        this.callback();
-    },
-    error: (error) => {
-      console.log(error);
-      if (error.status == 400) {
-        alert("No puedes aumentar el numero de credito de esta casilla");
-        this.callback();
-      }
-      this.increase_credit_property();
-    }
-    });
+  
   }
 
   pay_card() {
@@ -93,24 +78,35 @@ export class InteractionCardComponent {
   }
 
   sell_card() : void {
-    // Sell card with database
-    this.gameService.sell_card(this.game_id, this.username, this.h, this.v).subscribe({
-      next: (data) => {
+    this.socketService.vender({socketId: this.socketService.socketID, coordenadas: {h: this.h, v: this.v}})
+    .then((ack: any) => {
+      console.log("***ACK VENDER***: ", ack);
+      console.log(ack.cod);
+      if(ack.cod == 0){
+        console.log("OK");
         console.log("Has vendido la casilla");
-        console.log(data);
+        console.log(ack);
         // Update properties of player
         this.update_player_info.emit();
         // Callback function
         this.callback();
-      },
-      error: (error) => {
-        console.log(error);
-        if (error.status == 400) {
-          alert("No puedes vender esta casilla");
-          this.callback();
-        }
+      } else if(ack.cod == 1 ||ack.cod == 2){
+        console.log("ERROR");
         // Try again
         this.sell_card();
+      }
+    });
+
+  }
+
+  increase_credit_property(){
+    this.socketService.aumentarCreditos({ socketId: this.socketService.socketID, coordenadas: {h: this.h, v: this.v}})
+    .then((ack: any) => {
+      if(ack.cod == 0){
+        console.log("***PUEES AUMENTAR CREDITOS***");
+      } else if(ack.cod == 1 || ack.cod == 2){
+        console.log("***NO PUEDES AUMENTAR CREDITOS***");
+        console.log(ack);
       }
     });
   }

@@ -64,7 +64,7 @@ export interface Party {
 }
 
 export interface Propriety {
-  casillaInfo: {
+
     _id: string;
     nombre: string;
     precioCompra: number;
@@ -82,5 +82,5 @@ export interface Propriety {
     };
     cuatrisemestre: number;
     precioCompraCreditos: number;
-  }
+
 }

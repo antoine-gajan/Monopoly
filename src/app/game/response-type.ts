@@ -44,7 +44,17 @@ export interface RandomCard{
     _id: string;
 }
 
+export interface CartaSuerte{
+  _id: string;
+  nombre: string;
+  descripcion: string;
+  cobrarPagarNada: string;
+  dinero: number;
+  tipo: string;
+}
+
 export interface Party {
+
   casillaInfo: {
     _id: string;
     nombre: string;

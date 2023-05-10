@@ -416,8 +416,6 @@ export class WebSocketService {
     });
   }
 
-  
-
   public infoAsignatura(datos: any): Promise <string>{ //datos tiene -> {socketId: this.socketID, coordenadas: {  "h": 3,  "v": 0 }}
     return new Promise ((resolve) => {
       this.socket.emit('infoAsignatura', datos,
@@ -448,12 +446,7 @@ export class WebSocketService {
       this.socket.emit('comprarCasilla', data,
        (ack: any) => {
         console.log('Server acknowledged:', ack);
-        if(ack.cod == 0){
-          console.log("COMPRAR CASILLA", ack.msg);
-          resolve(ack.msg);
-        } else {
-          console.log("Error al comprar una casilla");
-        }
+        resolve(ack);
       });
     });
   }
@@ -473,6 +466,25 @@ export class WebSocketService {
     });
   }
 
+  public vender(data: any): Promise<string>{
+    return new Promise ((resolve) => {
+      this.socket.emit('vender', data,
+       (ack: any) => {
+        console.log('Server acknowledged:', ack);
+        resolve (ack);
+      });
+    });
+  }
+
+  public aumentarCreditos(data: any): Promise <string>{
+    return new Promise ((resolve) => {
+      this.socket.emit('aumentarCreditos', data,
+       (ack: any) => {
+        console.log('Server acknowledged:', ack);
+        resolve(ack);
+      });
+    });
+  }
  
   public suerte(): Promise <string>{
     return new Promise ((resolve) => {
@@ -488,4 +500,5 @@ export class WebSocketService {
        })
     });
   }
+
 }

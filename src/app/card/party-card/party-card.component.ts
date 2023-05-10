@@ -1,6 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {GameService} from "../../game/game.service";
 import {Party} from "../../game/response-type";
+import { Propriety } from '../../../../app/game/response-type';
+import { WebSocketService } from 'app/web-socket.service';
 
 @Component({
   selector: 'app-party-card',
@@ -10,17 +12,25 @@ import {Party} from "../../game/response-type";
 export class PartyCardComponent implements OnInit{
   @Input() h: number;
   @Input() v: number;
-  party: Party;
-  constructor(public gameService: GameService) {}
+  party: Propriety;
+  constructor(
+    private socketService: WebSocketService
+  ) {}
 
   ngOnInit() {
     this.get_party();
   }
 
   get_party() {
-    this.gameService.get_info_party(this.v, this.h).subscribe((party) => {
-      console.log(party);
-      this.party = party;
+    this.socketService.infoAsignatura({coordenadas: {h: this.h, v: this.v}})
+    .then((msg: any) => {
+      console.log("***INFO PARTY***: ", msg);
+      this.party = msg;
+    })
+    .catch(() => {
+      console.log("ERROR AL OBTENER INFO PARTY");
+      // Try again
+      setTimeout(() => this.get_party(), 2000);
     });
   }
 }

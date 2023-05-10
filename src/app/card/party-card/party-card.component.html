@@ -1,7 +1,7 @@
 <div class="propriety-card">
   <img class="image-company" src="../../../assets/images/card/fiesta.png" alt="FIESTA IMAGEN" />
   <div *ngIf="party" class="fiesta-title">
-    {{party.casillaInfo.nombre}}
+    {{party.nombre}}
   </div>
   <div *ngIf="!party" class="load-center">
     <app-loader></app-loader>
@@ -9,22 +9,22 @@
   <div class="container-info" *ngIf="party">
       <div class="box-info">
         <div class="text-start rent-info">Alquiler</div>
-        <div class="text-end price-info">{{party.casillaInfo.matricula}}€</div>
+        <div class="text-end price-info">{{party.matricula}}€</div>
       </div>
       <div class="box-info">
         <div class="text-start rent-info space">Si tienes 2 fiestas</div>
-        <div class="text-end price-info">{{party.casillaInfo.precio2M}}€</div>
+        <div class="text-end price-info">{{party.precio2C}}€</div>
       </div>
       <div class="box-info">
         <div class="text-start rent-info space">Si tienes 3 fiestas</div>
-        <div class="text-end price-info">{{party.casillaInfo.precio3M}}€</div>
+        <div class="text-end price-info">{{party.precio3C}}€</div>
       </div>
       <div class="box-info">
         <div class="text-start rent-info space">Si tienes 4 fiestas</div>
-        <div class="text-end price-info">{{party.casillaInfo.precio4M}}€</div>
+        <div class="text-end price-info">{{party.precio4C}}€</div>
       </div>
       <div class="box-info hipoteca">
-        <div class="text-start rent-info hipoteca">Hipoteca : {{party.casillaInfo.devolucionMatricula}}€</div>
+        <div class="text-start rent-info hipoteca">Hipoteca : {{party.devolucionMatricula}}€</div>
       </div>
   </div>
 </div>

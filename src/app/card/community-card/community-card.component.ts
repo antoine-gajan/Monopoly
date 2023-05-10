@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {GameService} from "../../game/game.service";
 import {Coordenadas, RandomCard} from "../../game/response-type";
+import { WebSocketService } from 'app/web-socket.service';
 
 @Component({
   selector: 'app-community-card',
@@ -14,9 +15,14 @@ export class CommunityCardComponent implements OnInit{
   @Output() end_turn = new EventEmitter();
   community: RandomCard;
 
-  constructor(private gameService: GameService) { }
+  constructor(
+    private gameService: GameService,
+    private socketService: WebSocketService
+  ) {}
 
   ngOnInit() {
+
+
     this.gameService.get_random_boletin_card(this.idPartida, this.username).subscribe({
     next:
       (cards) => {

@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {GameService} from "../../game/game.service";
-import {Coordenadas, RandomCard} from "../../game/response-type";
+import {CartaSuerte, Coordenadas, RandomCard} from "../../game/response-type";
 import { WebSocketService } from 'app/web-socket.service';
 
 @Component({
@@ -14,10 +14,10 @@ export class ChanceCardComponent implements OnInit{
   @Input() coordenadas : Coordenadas;
   @Output() end_turn = new EventEmitter();
 
-  chance: RandomCard;
+  chance: CartaSuerte;
 
   constructor(
-    private gameService: GameService,
+    //private gameService: GameService,
     private socketService: WebSocketService
   ) { }
 
@@ -43,23 +43,20 @@ export class ChanceCardComponent implements OnInit{
   }
 
   trigger_action(){
-    this.gameService.action_of_card(this.idPartida, this.username, this.chance.nombre, this.coordenadas.h, this.coordenadas.v).subscribe({
-      next:
-        (data) => {
-          console.log(data);
-        },
-      error:
-        (error) => {
-          console.log(error);
-          // Try again
-          this.trigger_action();
-        }
+    this.socketService.suerte()
+    .then((msg: any) => {
+      this.chance = msg;
+    })
+    .catch(() => {
+      // Try again
+      this.trigger_action();
     });
+
     // Callback function to come back to board
     this.callback_end_turn();
   }
 
-   callback_end_turn() {
+  callback_end_turn() {
     this.end_turn.emit();
   }
 
