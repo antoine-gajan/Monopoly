@@ -112,6 +112,7 @@ export class InteractionCardComponent {
   }
 
   callback(){
+    console.log("ENTRO A CALLBACK", this.trigger_end_turn);
     if (this.trigger_end_turn) {
       this.end_turn.emit();
     }
@@ -119,4 +120,5 @@ export class InteractionCardComponent {
       this.close_card.emit();
     }
   }
+  
 }

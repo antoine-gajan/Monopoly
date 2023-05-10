@@ -122,6 +122,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
 
+
 // <--------------------------------------------------------------------------REVISAR A PARTIR DE AQUÍ
 
   ngOnDestroy() {
@@ -134,6 +135,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  
   async lanzarDados(){
     // Si no es tu turno, sale un aviso al intentar lanzar los dados
     if(this.current_player != this.socketService.username){
@@ -382,7 +385,17 @@ export class BoardComponent implements OnInit, OnDestroy {
     let money_to_pay: number | null = null;
     let increase_credit_possible: boolean = false;
     
+    console.log("=== GET CARD INFO ===", this.player[2].h, this.player[2].v);
     // TODO <---------------------------------------------------------------------------------infoAsignatura
+    if((this.player[2].h == 3 && this.player[2].v == 10)
+      || (this.player[2].h == 3 && this.player[2].v == 10)
+    ){ // Casilla de suerte
+      this.socketService.suerte()
+      .then((msg: any) => {
+        console.log("SUERTE: ", msg); //TODO <- obtener casilla de suerte
+        this.createChanceCardComponent();
+      });
+    }
     this.socketService.casilla({coordenadas: {h: this.player[2].h, v: this.player[2].v}, socketId: this.socketService.socketID})
     .then((cod: any) => {
       console.log("¿puedo comprar casilla?", cod);
@@ -405,7 +418,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Get new position of player by updating game information
     this.socketService.siguienteTurno()
     .then((msg: any) => {
-      this.actualize_game_info(msg);
+      //this.actualize_game_info(msg);
       console.log("new position player : " + this.player[2]);
       console.log("SIGUIENTE TURNO");
     });
