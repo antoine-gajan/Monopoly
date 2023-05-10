@@ -372,6 +372,20 @@ export class WebSocketService {
     });
   }
 
+  public socketOnTurno(): Promise<string>{
+    return new Promise ((resolve) => {
+      this.socket.on('turnoActual', (ack: any) => {
+        console.log('Server acknowledged:', ack);
+        if(ack.cod == 0){
+          console.log("TURNO", ack.msg);
+          resolve(ack.msg);
+        } else {
+          console.log("Error al obtener el turno");
+        }
+      });
+    });
+  }
+
   public bancarrota(): Promise<string>{
     return new Promise ((resolve) => {
       this.socket.emit('bancarrota', { socketId: this.socketID }, 

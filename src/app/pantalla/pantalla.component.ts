@@ -33,6 +33,7 @@ volverArriba() {
     .then ((usuario: any) => {
       console.log("usuario: ", usuario);
       this.username = usuario.msg.nombreUser;
+      this.socketService.username = usuario.msg.nombreUser; 
       if (this.username == null) {
         this.router.navigate(['/error']);
       }

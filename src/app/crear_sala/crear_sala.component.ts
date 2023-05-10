@@ -62,6 +62,7 @@ export class CrearSalaComponent {
       console.log('Usuarios conectados:', usuariosConectados);
       this.socketService.list_players = usuariosConectados;
       this.list_players = usuariosConectados;
+      ///this.socketService.username = usuariosConectados[0];
     })
     .catch((error) => {
       console.error('Error al obtener usuarios conectados:', error);
