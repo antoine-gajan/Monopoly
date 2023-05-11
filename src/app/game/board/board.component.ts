@@ -71,6 +71,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   /* === FUNCTIONS TO INITIALIZE AND DESTROY THE GAME === */
   ngOnInit() {
+    /*
     console.log("Board component initialized");
     // Get id of the game
     const game_id: string | null = this.route.snapshot.paramMap.get('id');
@@ -90,7 +91,54 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.player[0] = username;
     }
     // Load game
-    this.load_game();
+    this.load_game();*/
+    // Se activa el socket on para saber cuando es nuestro turno
+    this.socketService.socketOnTurno();
+    console.log("---------------------------");
+    console.log("Board component initialized");
+    console.log("TODO INICIADO: Game id: ", this.game_id);
+    // Se obtiene la lista de jugadores
+    this.list_players = this.socketService.list_players;
+    console.log("TODO INICIADO: List players: ", this.list_players);
+    if(this.list_players.length != 0){
+      this.player[0] = this.list_players[0];// TODO <---------------------actualizar essto y cambiarlo cuando nos devuelban bien los jugadore sy datos de la aprtida
+      this.player[1] = 1500; 
+      for(let i = 1; i<this.list_players.length; i++){
+        this.other_players_list.push([this.list_players[i], 1500, {h: 10, v: 10}]);
+      }
+    }
+    //TODO <-------------------------------------------------------FALTA COMRPOBAR QUE CARGUEN LOS USUARIOS
+    /* TODO: revisar implementación de git */
+
+    this.message = "Cargando la partida..."
+    
+    document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
+    //TODO <- ontener el nombre del usuario actual
+    // TODO ----------------> revisar si hay que hacer esto o se va a buggear
+    // this.socketService.consultarUsernameString(); <------------------------------------ FALTA OBTENER EL NOMMBRE DEL USUARIO ACTUAL
+    console.log("TODO INICIADO: Username: ", this.player[0]);
+    // Se muestra la posición inicial de todos los jugadores en el tablero
+    this.show_position_every_players();
+    
+    this.socketService.siguienteTurno()
+    .then((nextPlayer: any) => {
+      console.log("Next player: ", nextPlayer.jugador);
+      console.log("Username: ",this.socketService.username);
+      this.current_player = nextPlayer.jugador;
+      if(nextPlayer.jugador == this.socketService.username){
+        this.is_playing = true;
+        this.message = this.current_player + ", es tu turno";
+        this.startTimer("next_turn");
+        console.log("ESTÁ JUGANDO");
+        //this.play_turno();
+      } else {
+       this.message = this.current_player + " está jugando su turno";
+        console.log("NO ESTÁ JUGANDO");
+        document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
+        //this.ver_jugar();
+
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -380,20 +428,13 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.nb_doubles = 0;
     // Indicate to backend that the player has finished his turn
     this.socketService.siguienteTurno()
-      .subscribe({
-        next: (data: any) => {
-          console.log("Next turn : ", data);
-          this.current_player = data.jugador;
-        },
-        error: (error) => {
-          console.error(error);
-        },
-        complete: () => {
-          this.message = "Es el turno de " + this.current_player;
-          // Go back to play to wait next time to play
-          this.play();
-        }
-      })
+    .then((nextPlayer: any) => {
+      console.log("Next turn : ", nextPlayer);
+      this.current_player = nextPlayer.jugador;
+      this.message = "Es el turno de " + this.current_player;
+      this.play();
+    
+    });
   }
 
   /* === FUNCTIONS TO UPDATE INFORMATION === */
