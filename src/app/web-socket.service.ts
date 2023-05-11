@@ -12,6 +12,7 @@ import { Partida, PropertiesBoughtResponse, Propriety, RandomCard } from './game
 })
 
 export class WebSocketService {
+  soyInvitado: boolean;
   list_players: string[] = [];
   localSocketID: string;
   idPartida: number;

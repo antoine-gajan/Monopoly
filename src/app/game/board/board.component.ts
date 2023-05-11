@@ -116,7 +116,6 @@ export class BoardComponent implements OnInit, OnDestroy {
         console.log("NO ESTÁ JUGANDO");
         document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
         //this.ver_jugar();
-
       }
     });
   }
@@ -362,7 +361,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.message = "Pulsa el botón para terminar tu turno";
     document.getElementById("button-end-turn")!.removeAttribute("disabled");
     // Start timer to trigger next turn
-    this.startTimer("next_turn", 0);
+    this.startTimer("next_turn", 30);
   }
 
   go_next_turn() : void {
@@ -823,16 +822,13 @@ export class BoardComponent implements OnInit, OnDestroy {
             this.go_next_turn();
             
           } else if (action == "leave_game") {
-            // Leave the game
-            alert("Se te acaba el tiempo, vas a estar desconectado del juego.")
             // Clear interval
             clearInterval(this.timer);
             // Leave the game
             this.leave_game();
           } else if ( action == "expulsar_jugador"){
             console.log("=== EXPULSAR JUGADOR ===");
-            this.leave_game("expulsar_jugador")
-
+            this.startTimer("leave_game", 15);
           }
         }
       }, 1000);
@@ -868,7 +864,11 @@ export class BoardComponent implements OnInit, OnDestroy {
       },
       complete: () => {
         // Redirect to home page of player
-        this.router.navigate(['/pantalla']);
+        if(this.socketService.soyInvitado){
+          this.router.navigate(['/pantalla_invitado']);
+        } else {
+          this.router.navigate(['/pantalla']);
+        }
       }
     });
   }

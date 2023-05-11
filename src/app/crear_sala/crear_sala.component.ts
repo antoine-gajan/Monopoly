@@ -92,21 +92,6 @@ export class CrearSalaComponent {
       socketId: this.socketService.socketID     
     };
 
-    /*if(this.router!=null){
-      const ruta = '/game/' + this.idPartida;
-      this.router.navigateByUrl(ruta);
-
-    }*/
-    //console.log("CONFIGURACIÓN CREAR PARTIDA: ", datos);
-    /*if(this.router!=null){
-      const ruta = '/game/' + this.idPartida;
-      this.router.navigateByUrl(ruta);
-
-    }*/
-
-    //this.socketService.crearPartida();
-    //this.userService.crearSala(datos);
-
   }
   actualizarDatos(){
     console.log("ACTUALIZAR DATOS");

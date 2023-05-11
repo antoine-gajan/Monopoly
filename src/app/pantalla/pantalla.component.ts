@@ -27,6 +27,7 @@ volverArriba() {
 }
 
   ngOnInit() {
+    this.socketService.soyInvitado = false;
     // Get username from browser
     //this.username = localStorage.getItem('username');
     this.socketService.consultarUsuario()

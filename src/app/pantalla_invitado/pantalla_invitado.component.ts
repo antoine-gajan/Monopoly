@@ -93,6 +93,10 @@ export class PantallaInvitadoComponent {
     });
   }
 
+  ngOnInit() {
+    this.socketService.soyInvitado = true;
+  }
+
   customValidation(control: any) {
     const value = control.value;
     if (value.trim() === '') {
