@@ -173,7 +173,6 @@ export class BoardComponent implements OnInit, OnDestroy {
       // Action of the card
       this.card_action();
 
-
     }
 
   }
@@ -247,9 +246,6 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.is_playing = true;
       this.is_in_jail = false;
       this.message = this.socketService.username + ", es tu turno";
-      this.current_player = this.socketService.username;
-
-      
       document.getElementById("tirar-dados")!.removeAttribute("disabled");
       // Start timer
       this.startTimer("leave_game");  
