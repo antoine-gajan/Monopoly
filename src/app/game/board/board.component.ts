@@ -45,6 +45,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   community_cards: number[] = [2, 17, 33];
   taxes_cards: number[] = [4, 38];
 
+
   // Relative to dices
   diceImages = [
     "../../../assets/images/dice/1.png",
@@ -60,7 +61,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   interval_play: any;
   dices_interval: any;
 
-
+  timer_timeout: any;
   list_players: string[] = [];
 
   constructor(
@@ -139,7 +140,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   reStartTimerExpulsarJugador(){
-    this.startTimer("expulsar_jugador", 90);
+    this.startTimer("expulsar_jugador", 10);
   }
 
   load_game(){
@@ -374,15 +375,29 @@ export class BoardComponent implements OnInit, OnDestroy {
     let old_position_player = this.player[2];
     console.log("old position player (h,v): " + old_position_player.h + " " + old_position_player.v);
     /// TODO: Get new position of player by updating game information
-    
-    this.message = "Pulsa el botón para terminar tu turno";
-    document.getElementById("button-end-turn")!.removeAttribute("disabled");
-    // Start timer to trigger next turn
-    this.reStartTimerExpulsarJugador();
+    if (this.dices[0] == this.dices[1] && this.nb_doubles < 3) {
+      this.message = "Vuelve a tirar los dados";
+      document.getElementById("tirar-dados")!.removeAttribute("disabled");
+      document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
+    }
+    else if (this.dices[0] == this.dices[1] && this.nb_doubles == 3) {
+      this.message = "Vas a la cárcel";
+      this.is_in_jail = true;
+      this.nb_doubles = 0;
+      this.player[2] = {h: 0, v: 10};
+      this.message = "Pulsa el botón para terminar tu turno";
+      document.getElementById("button-end-turn")!.removeAttribute("disabled");
+    }
+    else {
+      this.message = "Pulsa el botón para terminar tu turno";
+      document.getElementById("button-end-turn")!.removeAttribute("disabled");
+    }
   }
 
   go_next_turn() : void {
     console.log("===GO NEXT TURN===");
+    // Start timer to trigger next turn
+    this.reStartTimerExpulsarJugador();
     // Indicate to backend that the player has finished his turn
     this.message = "Has terminado tu turno";
     // Disable button to end turn
@@ -872,19 +887,31 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   mostrarAlert() {
-    const seguirJugando = confirm("¿Quieres seguir jugando?");
+    let seguirJugando;
+    setTimeout(() => {
+      seguirJugando = confirm("¿Quieres seguir jugando?");
+    }, 0);
+    
     
     if (!seguirJugando) {
       this.leave_game();
     } else {
+      // Aquí podrías ejecutar el código correspondiente a la opción "Sí"
       this.reStartTimerExpulsarJugador();
+
     }
     
-    this.timer = setTimeout(() => {
+    this.timer_timeout = setTimeout(() => {
       // Esta línea solo se ejecutará si el temporizador alcanza los 15 segundos y no se ha hecho clic en ningún botón.
       this.leave_game();
     }, 15000);
   }
+  
+  
+  
+  
+  
+  
 
 
   
