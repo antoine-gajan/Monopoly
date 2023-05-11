@@ -1,4 +1,4 @@
-import {Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
+import {Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
 import {GameService} from "../game.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../user/user.service";
@@ -12,12 +12,16 @@ import {Coordenadas, PlayerListResponse, PropertiesBoughtResponse} from "../resp
 import {DevolutionPropertiesFormComponent} from "../devolution-properties-form/devolution-properties-form.component";
 import { WebSocketService } from 'app/web-socket.service';
 
+
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent implements OnInit, OnDestroy {
+
+
+
   // Game variables
   game_id : number;
   dices: number[] = [];
@@ -889,9 +893,9 @@ export class BoardComponent implements OnInit, OnDestroy {
     if (!this.is_timer_active) {
       // Set timer as active
       this.is_timer_active = true;
-      this.remaining_time = 90;
+      this.remaining_time = 15;
       // Time limit in seconds
-      const time_limit = 90;
+      const time_limit = 15; 
       // calculate the turn end time in milliseconds
       const end_time = Date.now() + time_limit * 1000;
       this.timer = setInterval(() => {
@@ -903,7 +907,8 @@ export class BoardComponent implements OnInit, OnDestroy {
           if (action == "next_turn") {
             // Go to next turn
             this.cancelTimer();
-            this.go_next_turn();
+            this.startTimer("expulsar_jugador");
+            //this.go_next_turn();
           } else if (action == "leave_game") {
             // Leave the game
             alert("Se te acaba el tiempo, vas a estar desconectado del juego.")
@@ -911,6 +916,9 @@ export class BoardComponent implements OnInit, OnDestroy {
             clearInterval(this.timer);
             // Leave the game
             this.leave_game();
+          } else if(action == "expulsar_jugador"){
+            //Expezar contador expulsar jugador
+            console.log("=== START TIMER  EXPULSAR JUGADOR ===");
           }
         }
       }, 1000);
@@ -926,6 +934,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     console.log("=== CANCEL TIMER ===");
     // Set timer as inactive
     this.is_timer_active = false;
+    console.log("=== CANCEL TIMER -> clearInterval ===")
     clearInterval(this.timer);
   }
 

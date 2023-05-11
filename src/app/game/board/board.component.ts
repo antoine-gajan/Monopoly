@@ -71,27 +71,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   /* === FUNCTIONS TO INITIALIZE AND DESTROY THE GAME === */
   ngOnInit() {
-    /*
-    console.log("Board component initialized");
-    // Get id of the game
-    const game_id: string | null = this.route.snapshot.paramMap.get('id');
-    if (game_id != null) {
-      this.game_id = +game_id;
-    } else {
-      // Redirect to error page
-      this.router.navigate(['/error']);
-    }
-    // Get name of the player
-    let username = this.socketService.username;
-    // If undefined, redirect to error page
-    if (username == null) {
-      this.router.navigate(['/error']);
-    }
-    else {
-      this.player[0] = username;
-    }
-    // Load game
-    this.load_game();*/
+    
     // Se activa el socket on para saber cuando es nuestro turno
     this.socketService.socketOnTurno();
     console.log("---------------------------");
@@ -128,7 +108,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       if(nextPlayer.jugador == this.socketService.username){
         this.is_playing = true;
         this.message = this.current_player + ", es tu turno";
-        this.startTimer("next_turn");
+        this.startTimer("expulsar_jugador", 5);
         console.log("ESTÁ JUGANDO");
         //this.play_turno();
       } else {
@@ -249,7 +229,7 @@ export class BoardComponent implements OnInit, OnDestroy {
             this.message = this.player[0] + ", es tu turno";
             document.getElementById("tirar-dados")!.removeAttribute("disabled");
             // Start timer
-            this.startTimer("leave_game");
+            this.startTimer("leave_game", 15);
           }
         }
       });
@@ -378,44 +358,11 @@ export class BoardComponent implements OnInit, OnDestroy {
     let old_position_player = this.player[2];
     console.log("old position player (h,v): " + old_position_player.h + " " + old_position_player.v);
     /// TODO: Get new position of player by updating game information
-    /*this.socketService.infoPartida().subscribe({
-      next: (data: Partida) => {
-        this.actualize_game_info(data);
-        console.log("new position player : " + this.player[2]);
-        this.show_position_every_players();
-      },
-      complete: () => {
-        // If the position of player has changed, launch card action of the new position
-        if (this.convert_position_to_id(this.player[2]) != this.convert_position_to_id(old_position_player)) {
-          if (this.convert_position_to_id(this.player[2]) == 10) {
-            // Player has be sent to jail
-            this.is_in_jail = true;
-            this.message = "Has caído en julio";
-          }
-          else {
-            this.is_in_jail = false;
-          }
-          // Trigger action of the card linked to the new position
-          this.card_action();
-        }
-        // If the player can play again, activate the button to play again
-        else if (this.dices[0] === this.dices[1] && !this.is_in_jail) {
-          this.message = this.player[0] + ", puedes volver a tirar los dados";
-          document.getElementById("tirar-dados")!.removeAttribute("disabled");
-        }
-        else {
-          // End of turn : open button to go next turn
-          this.message = "Pulsa el botón para terminar tu turno"
-          document.getElementById("button-end-turn")!.removeAttribute("disabled");
-          // Start timer to trigger next turn
-          this.startTimer("next_turn");
-          }
-        }
-    });*/
+    
     this.message = "Pulsa el botón para terminar tu turno";
     document.getElementById("button-end-turn")!.removeAttribute("disabled");
     // Start timer to trigger next turn
-    this.startTimer("next_turn");
+    this.startTimer("next_turn", 0);
   }
 
   go_next_turn() : void {
@@ -853,15 +800,15 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   /* === FUNCTIONS DEL TIMER === */
-  startTimer(action: string) {
+  startTimer(action: string, time_limit_1: number) {
     console.log("=== START TIMER ===");
     // If no active timer, create one
     if (!this.is_timer_active) {
       // Set timer as active
       this.is_timer_active = true;
-      this.remaining_time = 90;
+      this.remaining_time = time_limit_1;
       // Time limit in seconds
-      const time_limit = 90;
+      const time_limit = time_limit_1;
       // calculate the turn end time in milliseconds
       const end_time = Date.now() + time_limit * 1000;
       this.timer = setInterval(() => {
@@ -874,6 +821,7 @@ export class BoardComponent implements OnInit, OnDestroy {
             // Go to next turn
             this.cancelTimer();
             this.go_next_turn();
+            
           } else if (action == "leave_game") {
             // Leave the game
             alert("Se te acaba el tiempo, vas a estar desconectado del juego.")
@@ -881,6 +829,10 @@ export class BoardComponent implements OnInit, OnDestroy {
             clearInterval(this.timer);
             // Leave the game
             this.leave_game();
+          } else if ( action == "expulsar_jugador"){
+            console.log("=== EXPULSAR JUGADOR ===");
+            
+
           }
         }
       }, 1000);
@@ -888,7 +840,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     else {
       // Delete old timer and create a new one
       this.cancelTimer();
-      this.startTimer(action);
+      this.startTimer(action, time_limit_1);
     }
   }
 
