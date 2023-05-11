@@ -14,12 +14,15 @@ export class InfoCardComponent {
 
   @Output() end_turn = new EventEmitter();
   @Output() delete_card = new EventEmitter();
+  @Output() reStartTimerExpulsarJugador = new EventEmitter()
 
   constructor(private gameService: GameService) {
 
   }
 
   validate() {
+    // Restart the timer
+    this.reStartTimerExpulsarJugador.emit();
     // If the card enables to continue playing, emit end_turn event
     if (this.trigger_end_turn) {
       this.end_turn.emit();

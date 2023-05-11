@@ -61,8 +61,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   interval_play: any;
   dices_interval: any;
 
-  timer_timeout: any;
   list_players: string[] = [];
+  timer_timeout: any;
 
   constructor(
 
@@ -72,9 +72,11 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   /* === FUNCTIONS TO INITIALIZE AND DESTROY THE GAME === */
   ngOnInit() {
+
     
     this.username = this.socketService.username;
     // Se activa el socket on para saber cuando es nuestro turno
+
     this.socketService.socketOnTurno()
     .subscribe({
       next: (data) => {
@@ -91,7 +93,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     console.log("TODO INICIADO: List players: ", this.list_players);
     if(this.list_players.length != 0){
       this.player[0] = this.list_players[0];// TODO <---------------------actualizar essto y cambiarlo cuando nos devuelban bien los jugadore sy datos de la aprtida
-      this.player[1] = 1500; 
+      this.player[1] = 1500;
       for(let i = 1; i<this.list_players.length; i++){
         this.other_players_list.push([this.list_players[i], 1500, {h: 10, v: 10}]);
       }
@@ -108,6 +110,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     console.log("TODO INICIADO: Username: ", this.player[0]);
     // Se muestra la posición inicial de todos los jugadores en el tablero
     this.show_position_every_players();
+
     
     console.log("jugador0", this.player[0]);
     if(this.player[0] == this.socketService.username){
@@ -123,25 +126,8 @@ export class BoardComponent implements OnInit, OnDestroy {
         //document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
         //this.ver_jugar();
     }
-    /*this.socketService.siguienteTurno()
-    .then((nextPlayer: any) => {
-      console.log("Next player: ", nextPlayer.jugador);
-      console.log("Username: ",this.socketService.username);
-      this.current_player = nextPlayer.jugador;
-      if(nextPlayer.jugador == this.socketService.username){
-        this.is_playing = true;
-        this.message = this.current_player + ", es tu turno";
-        this.reStartTimerExpulsarJugador();
-        console.log("ESTÁ JUGANDO");
-        document.getElementById("tirar-dados")!.removeAttribute("disabled");
-        //this.play_turno();
-      } else {
-       this.message = this.current_player + " está jugando su turno";
-        console.log("NO ESTÁ JUGANDO");
-        //document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
-        //this.ver_jugar();
-      }
-    });*/
+ 
+   
   }
 
   ngOnDestroy() {
@@ -242,26 +228,16 @@ export class BoardComponent implements OnInit, OnDestroy {
     /* === FUNCTIONS TO PLAY === */
 
   async play(): Promise<void> {
-    // Get the current player
-    this.socketService.socketOnTurno()
-      .subscribe({
-        next: (data: any) => {
-          this.current_player = data.jugador;
-          this.message = this.current_player + " está jugando su turno";
-          if (this.current_player == this.username){
-            this.is_playing = true;
-            this.message = this.player[0] + ", es tu turno";
-            document.getElementById("tirar-dados")!.removeAttribute("disabled");
-            // Start timer
-            this.reStartTimerExpulsarJugador();
-          } else {
-            this.socketService.socketOnTurno();
-          }
-        },
-        error: (error) => {
-          console.error(error);
-        }
-      });
+    // Check who is playing and if it's my turn, play
+    if (this.current_player == this.username){
+      // If it's my turn
+      this.is_playing = true;
+      this.message = this.player[0] + ", es tu turno";
+      // Enable play button
+      document.getElementById("tirar-dados")!.removeAttribute("disabled");
+      // Start timer
+      this.reStartTimerExpulsarJugador();
+    }
   }
 
   play_turn_player() {
@@ -279,10 +255,8 @@ export class BoardComponent implements OnInit, OnDestroy {
         // Clear dices interval to stop animation
         clearInterval(this.dices_interval);
         // Store true value of dices
-        //this.dices[0] = msg.dado1;
-        //this.dices[1] = msg.dado2;
-        this.dices[0]=4;
-        this.dices[1]=4;
+        this.dices[0] = msg.dado1;
+        this.dices[1] = msg.dado2;
         this.reStartTimerExpulsarJugador();
     },
     error: async () => {
@@ -719,7 +693,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     componentRef.instance.delete_card.subscribe(() => {this.delete_pop_up_component()});
-    //componentRef.instance.reStartTimerExpulsarJugador.subscribe(() => {this.reStartTimerExpulsarJugador()});
+    componentRef.instance.reStartTimerExpulsarJugador.subscribe(() => {this.reStartTimerExpulsarJugador()});
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";
     // Center the component at the middle of the page
@@ -763,9 +737,9 @@ export class BoardComponent implements OnInit, OnDestroy {
     else{
       // If in jail, next step will just close the pop up card
       componentRef.instance.next_step.subscribe(() => {this.delete_pop_up_component()});
-      
+
     }
-    
+
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";
     // Center the component at the middle of the page
@@ -826,35 +800,36 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   get_color_property(coord: Coordenadas){
+    // Return [color_background, color_text]
     let id_position = this.convert_position_to_id(coord);
     if (this.get_type_casilla(coord) == 'propriety'){
       if (id_position < 5){
-        return "#b02f7c";
+        return ["#b02f7c", "#ffffff"];
       }
       else if (id_position < 10){
-        return "#5e3577";
+        return ["#5e3577", "#CCCCCC"];
       }
       else if (id_position < 15){
-        return "#5a6dba";
+        return ["#5a6dba", "#ffffff"];
       }
       else if (id_position < 20){
-        return "#d2eaf5";
+        return ["#d2eaf5", "#000000"];
       }
       else if (id_position < 25){
-        return "#41994e";
+        return ["#41994e", "#f0f0f0"];
       }
       else if (id_position < 30){
-        return "#ffed20";
+        return ["#ffed20", "#000000"];
       }
       else if (id_position < 35){
-        return "#fa811d";
+        return ["#fa811d", "#ffffff"];
       }
       else {
-        return "#f50c2b";
+        return ["#f50c2b", "#ffffff"];
       }
     }
     else {
-      return "#fafaf8";
+      return ["#fafaf8", "#000000"];
     }
   }
 
@@ -880,7 +855,7 @@ export class BoardComponent implements OnInit, OnDestroy {
             // Go to next turn
             this.cancelTimer();
             this.go_next_turn();
-            
+
           } else if (action == "leave_game") {
             // Clear interval
             clearInterval(this.timer);
@@ -902,40 +877,18 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   mostrarAlert() {
-    let seguirJugando;
-    setTimeout(() => {
-      seguirJugando = confirm("¿Quieres seguir jugando?");
-    }, 0);
-    
-    
-    if (!seguirJugando) {
-      this.leave_game();
-    } else {
-      // Aquí podrías ejecutar el código correspondiente a la opción "Sí"
-      this.reStartTimerExpulsarJugador();
+  let seguirJugando;
+  this.startTimer("leave_game", 15);
 
-    }
-    
-    this.timer_timeout = setTimeout(() => {
-      // Esta línea solo se ejecutará si el temporizador alcanza los 15 segundos y no se ha hecho clic en ningún botón.
-      this.leave_game();
-    }, 15000);
+  seguirJugando = confirm("¿Quieres seguir jugando?");
+  if (!seguirJugando) {
+    this.cancelTimer();
+    this.leave_game();
+  } else {
+    this.reStartTimerExpulsarJugador();
   }
-  
-  
-  
-  
-  
-  
+}
 
-
-  
-  
-  
-  
-  
-  
-  
 
   cancelTimer() {
     console.log("=== CANCEL TIMER ===");
@@ -957,7 +910,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       next: (data: any) => {
         console.log("=== LEAVE GAME ===");
         // Update player money to 0
-        //TODO: ervisar como se quita al usuario, si es cosa del back o del front
+        //TODO: revisar como se quita al usuario, si es cosa del back o del front
       },
       error: (error) => {
         console.error(error);
@@ -972,6 +925,6 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.router.navigate(['/pantalla']);
         }
       }
-    });
+    }); 
   }
 }
