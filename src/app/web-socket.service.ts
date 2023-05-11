@@ -384,10 +384,6 @@ export class WebSocketService {
         if(ack.cod == 0){
           console.log("TURNO", ack.msg);
           observer.next(ack.msg);
-          // If it's the turn of the user, complete the observer
-          if (ack.msg == this.username){
-            observer.complete();
-          }
         } else {
           console.log("Error al obtener el turno");
           observer.error(new Error("Error al obtener el turno"));

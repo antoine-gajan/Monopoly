@@ -73,7 +73,14 @@ export class BoardComponent implements OnInit, OnDestroy {
   ngOnInit() {
     
     // Se activa el socket on para saber cuando es nuestro turno
-    this.socketService.socketOnTurno();
+    this.socketService.socketOnTurno()
+    .subscribe({
+      next: (data) => {
+        console.log("TODO INICIADO: Turno: ", data);
+        this.current_player = data;
+      }
+     });
+
     console.log("---------------------------");
     console.log("Board component initialized");
     console.log("TODO INICIADO: Game id: ", this.game_id);
@@ -108,7 +115,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       if(nextPlayer.jugador == this.socketService.username){
         this.is_playing = true;
         this.message = this.current_player + ", es tu turno";
-        this.startTimer("expulsar_jugador", 5);
+        this.startTimer("expulsar_jugador", 90);
         console.log("ESTÁ JUGANDO");
         //this.play_turno();
       } else {
@@ -218,18 +225,18 @@ export class BoardComponent implements OnInit, OnDestroy {
         next: (data: any) => {
           this.current_player = data.jugador;
           this.message = this.current_player + " está jugando su turno";
-        },
-        error: (error) => {
-          console.error(error);
-        },
-        complete: () => {
           if (this.current_player == this.username){
             this.is_playing = true;
             this.message = this.player[0] + ", es tu turno";
             document.getElementById("tirar-dados")!.removeAttribute("disabled");
             // Start timer
             this.startTimer("leave_game", 15);
+          } else {
+            this.socketService.socketOnTurno();
           }
+        },
+        error: (error) => {
+          console.error(error);
         }
       });
   }
@@ -379,7 +386,6 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.current_player = nextPlayer.jugador;
       this.message = "Es el turno de " + this.current_player;
       this.play();
-    
     });
   }
 
@@ -850,6 +856,11 @@ export class BoardComponent implements OnInit, OnDestroy {
   /* === FUNCTIONS TO LEAVE THE GAME === */
   leave_game(){
     // Declare bankruptcy to backend
+    this.socketService.siguienteTurno()
+    .then((data: any) => {
+      console.log("=== LEAVE GAME SIGUIENTE JUGADOR ===");
+    });
+
     this.socketService.bancarrota()
     .subscribe({
       next: (data: any) => {
