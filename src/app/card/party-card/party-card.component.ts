@@ -12,6 +12,7 @@ import { WebSocketService } from 'app/web-socket.service';
 export class PartyCardComponent implements OnInit{
   @Input() h: number;
   @Input() v: number;
+  
   party: Propriety;
   constructor(
     private socketService: WebSocketService

@@ -27,6 +27,7 @@ export class InteractionCardComponent {
   @Output() end_turn = new EventEmitter();
   @Output() close_card = new EventEmitter();
   @Output() update_player_info = new EventEmitter();
+  @Output() reStartTimerExpulsarJugador = new EventEmitter();
 
   constructor(
     private socketService: WebSocketService
@@ -52,6 +53,7 @@ export class InteractionCardComponent {
 
   buy_card() {
     this.botonPulsado = true;
+    this.reStartTimerExpulsarJugador.emit();
     console.log("ENTRA A COMPRAR CASILLA");
     this.socketService.comprarCasilla({ socketId: this.socketService.socketID, coordenadas: {h: this.h, v: this.v}})
     .subscribe({
@@ -73,10 +75,11 @@ export class InteractionCardComponent {
         this.callback();
       }
     });
-    this.botonPulsado = false;
+    //this.botonPulsado = false;
   }
 
   increase_credit_property(): void {
+    this.reStartTimerExpulsarJugador.emit();
     this.botonPulsado = true;
     this.socketService.aumentarCreditos({ socketId: this.socketService.socketID, coordenadas: {h: this.h, v: this.v}})
     .subscribe({
@@ -96,18 +99,20 @@ export class InteractionCardComponent {
         this.callback();
       }
     });
-    this.botonPulsado = false;
+    //this.botonPulsado = false;
   }
 
   pay_card() {
+    this.reStartTimerExpulsarJugador.emit();
     this.botonPulsado = true;
     // Call end turn of BoardComponent
     console.log("You have paid");
-    this.botonPulsado = false;
+    //this.botonPulsado = false;
     this.callback();
   }
 
   sell_card() : void {
+    this.reStartTimerExpulsarJugador.emit();
     this.botonPulsado = true;
     this.socketService.vender({socketId: this.socketService.socketID, coordenadas: {h: this.h, v: this.v}})
     .subscribe({
@@ -133,11 +138,12 @@ export class InteractionCardComponent {
         this.callback();
       }
     });
-    this.botonPulsado = false;
+    //this.botonPulsado = false;
   }
 
   callback(){
-    this.botonPulsado = false;
+    //this.reStartTimerExpulsarJugador.emit();
+    //this.botonPulsado = false;
     console.log("callback");
     this.update_player_info.emit();
     if (this.trigger_end_turn) {

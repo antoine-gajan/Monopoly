@@ -115,7 +115,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       if(nextPlayer.jugador == this.socketService.username){
         this.is_playing = true;
         this.message = this.current_player + ", es tu turno";
-        this.startTimer("expulsar_jugador", 90);
+        this.reStartTimerExpulsarJugador();
         console.log("ESTÁ JUGANDO");
         document.getElementById("tirar-dados")!.removeAttribute("disabled");
         //this.play_turno();
@@ -138,6 +138,9 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
+  reStartTimerExpulsarJugador(){
+    this.startTimer("expulsar_jugador", 90);
+  }
 
   load_game(){
     console.log("Loading game...");
@@ -234,7 +237,7 @@ export class BoardComponent implements OnInit, OnDestroy {
             this.message = this.player[0] + ", es tu turno";
             document.getElementById("tirar-dados")!.removeAttribute("disabled");
             // Start timer
-            this.startTimer("leave_game", 15);
+            this.reStartTimerExpulsarJugador();
           } else {
             this.socketService.socketOnTurno();
           }
@@ -262,8 +265,9 @@ export class BoardComponent implements OnInit, OnDestroy {
         // Store true value of dices
         //this.dices[0] = msg.dado1;
         //this.dices[1] = msg.dado2;
-        this.dices[0]=1;
-        this.dices[1]=2;
+        this.dices[0]=4;
+        this.dices[1]=4;
+        this.reStartTimerExpulsarJugador();
     },
     error: async () => {
       // Try again
@@ -374,7 +378,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.message = "Pulsa el botón para terminar tu turno";
     document.getElementById("button-end-turn")!.removeAttribute("disabled");
     // Start timer to trigger next turn
-    this.startTimer("next_turn", 15);
+    this.reStartTimerExpulsarJugador();
   }
 
   go_next_turn() : void {
@@ -608,6 +612,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   createCardComponent(v: number, h: number, message: string, play_again: boolean = false, type: string, money_to_pay: number=0, trigger_end_turn: boolean = true): void {
     // Assure to delete the old buy card component
     this.delete_pop_up_component();
+    this.reStartTimerExpulsarJugador();
     const factory = this.componentFactoryResolver.resolveComponentFactory(InteractionCardComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
     // Inputs
@@ -625,6 +630,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     componentRef.instance.close_card.subscribe(() => {this.delete_pop_up_component()});
     componentRef.instance.update_player_info.subscribe(() => {this.update_player_info()});
+    componentRef.instance.reStartTimerExpulsarJugador.subscribe(() => {this.reStartTimerExpulsarJugador()});
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";
     // Center the component at the middle of the page
@@ -634,6 +640,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   createChanceCardComponent(): void {
     // Assure to delete the old buy card component
     this.delete_pop_up_component();
+    this.reStartTimerExpulsarJugador();
     const factory = this.componentFactoryResolver.resolveComponentFactory(ChanceCardComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
     // Inputs
@@ -642,6 +649,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     componentRef.instance.coordenadas = this.player[2];
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
+    //componentRef.instance.reStartTimerExpulsarJugador.subscribe(() => {this.reStartTimerExpulsarJugador()});
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";
     // Center the component at the middle of the page
@@ -651,6 +659,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   createCommunityCardComponent(): void {
     // Assure to delete the old pop up card component
     this.delete_pop_up_component();
+    this.reStartTimerExpulsarJugador();
     const factory = this.componentFactoryResolver.resolveComponentFactory(CommunityCardComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
     // Inputs
@@ -659,6 +668,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     componentRef.instance.coordenadas = this.player[2];
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
+    //componentRef.instance.reStartTimerExpulsarJugador.subscribe(() => {this.reStartTimerExpulsarJugador()});
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";
     // Center the component at the middle of the page
@@ -668,6 +678,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   createInfoCardComponent(title : string, description: string, button_text : string, trigger_end_turn: boolean = true): void {
     // Assure to delete the old pop up card component
     this.delete_pop_up_component();
+    this.reStartTimerExpulsarJugador();
     const factory = this.componentFactoryResolver.resolveComponentFactory(InfoCardComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
     // Inputs
@@ -678,6 +689,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     componentRef.instance.delete_card.subscribe(() => {this.delete_pop_up_component()});
+    //componentRef.instance.reStartTimerExpulsarJugador.subscribe(() => {this.reStartTimerExpulsarJugador()});
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";
     // Center the component at the middle of the page
@@ -687,6 +699,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   createJailCardComponent(): void {
     // Assure to delete the old pup up card component
     this.delete_pop_up_component();
+    this.reStartTimerExpulsarJugador();
     const factory = this.componentFactoryResolver.resolveComponentFactory(JailCardComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
     // Inputs
@@ -695,6 +708,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     componentRef.instance.game_id = this.game_id;
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
+    componentRef.instance.reStartTimerExpulsarJugador.subscribe(() => {this.reStartTimerExpulsarJugador()});
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";
     // Center the component at the middle of the page
@@ -719,7 +733,9 @@ export class BoardComponent implements OnInit, OnDestroy {
     else{
       // If in jail, next step will just close the pop up card
       componentRef.instance.next_step.subscribe(() => {this.delete_pop_up_component()});
+      
     }
+    
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";
     // Center the component at the middle of the page
@@ -842,7 +858,8 @@ export class BoardComponent implements OnInit, OnDestroy {
             this.leave_game();
           } else if ( action == "expulsar_jugador"){
             console.log("=== EXPULSAR JUGADOR ===");
-            this.startTimer("leave_game", 15);
+            this.mostrarAlert();
+            //this.startTimer("leave_game", 15);
           }
         }
       }, 1000);
@@ -853,6 +870,30 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.startTimer(action, time_limit_1);
     }
   }
+
+  mostrarAlert() {
+    const seguirJugando = confirm("¿Quieres seguir jugando?");
+    
+    if (!seguirJugando) {
+      this.leave_game();
+    } else {
+      this.reStartTimerExpulsarJugador();
+    }
+    
+    this.timer = setTimeout(() => {
+      // Esta línea solo se ejecutará si el temporizador alcanza los 15 segundos y no se ha hecho clic en ningún botón.
+      this.leave_game();
+    }, 15000);
+  }
+
+
+  
+  
+  
+  
+  
+  
+  
 
   cancelTimer() {
     console.log("=== CANCEL TIMER ===");

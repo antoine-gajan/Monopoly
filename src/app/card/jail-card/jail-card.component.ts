@@ -13,6 +13,7 @@ export class JailCardComponent {
   @Input() game_id : number;
   @Input() player_money : number = 0;
   @Output() end_turn = new EventEmitter();
+  @Output() reStartTimerExpulsarJugador = new EventEmitter();
   // Card to go out
   has_card : boolean = false;
   // Dices
@@ -38,6 +39,7 @@ export class JailCardComponent {
   }
 
   has_card_to_go_out(){
+    this.reStartTimerExpulsarJugador.emit();
     //TODO falta de implementar
     /*
     this.gameService.has_card_to_go_out_of_jail(this.game_id, this.player_name).subscribe(
@@ -59,6 +61,7 @@ export class JailCardComponent {
   }
 
   use_card_to_go_out(){
+    this.reStartTimerExpulsarJugador.emit();
     // TODO <- falta implementar
     /*this.gameService.use_card_go_out_of_jail(this.game_id, this.player_name).subscribe(
       (response) => {
@@ -73,16 +76,19 @@ export class JailCardComponent {
   }
 
   validate(){
+    this.reStartTimerExpulsarJugador.emit();
     this.end_turn.emit();
   }
 
   pagar() {
+    this.reStartTimerExpulsarJugador.emit();
     /// TODO: Pay 67€
     // End turn
     this.validate();
   }
 
   roll_dices(): void {
+    this.reStartTimerExpulsarJugador.emit();  
     // Roll dices
     this.move_dices_action();
     this.socketService.lanzarDados()
