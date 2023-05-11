@@ -16,19 +16,19 @@ export class Coordenadas{
   v: number;
 }
 export class PropertyBoughtResponse {
-  
+
   _id: string;
   coordenadas: {
     h: number;
     v: number;
     _id: string;
   };
-  partida: number; 
-  jugador: string;     
+  partida: number;
+  jugador: string;
   precio: number;
   cuatrimestre: number;
-  nombre: string;    
-  __v: number;    
+  nombre: string;
+  __v: number;
 }
 
   export interface RandomCard{
@@ -103,3 +103,12 @@ export interface Partida{
           jugador: string
           _id: string };
   }
+
+export interface Product{
+  _id: string;
+  comprado: boolean;
+  usado: boolean;
+  nombre: string;
+  imagen: string;
+  precio: number;
+}

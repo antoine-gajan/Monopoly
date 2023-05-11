@@ -1,11 +1,11 @@
 <div class="card">
   <div class="imgBox">
-    <img *ngIf="image_path" class="img" ngSrc="image_path">
+    <img *ngIf="product.imagen" class="img" [src]="getImageUrl()" alt="Image">
   </div>
 
   <div class="contentBox">
-    <h3>{{name}}</h3>
-    <h2 class="price">{{price}} credits</h2>
-    <button (click)="buy_product()" class="buy">Comprar</button>
+    <h3>{{product.nombre}}</h3>
+    <h2 class="price">{{product.precio}} credits</h2>
+    <button *ngIf="!product.comprado" (click)="buy_product()" class="buy">Comprar</button>
   </div>
 </div>
