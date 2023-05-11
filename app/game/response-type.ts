@@ -36,12 +36,12 @@ export class PropertiesBoughtResponse {
 }
 
 export interface RandomCard{
-    cobrarPagarNada: string;
-    descripcion: string;
-    dinero: number;
-    nombre: string;
-    tipo: string;
-    _id: string;
+  _id: string;
+  nombre: string;
+  descripcion: string;
+  cobrarPagarNada: string;
+  dinero: number;
+  tipo: string;
 }
 
 export interface Party {
@@ -80,7 +80,7 @@ export interface Propriety {
       v: number;
       _id: string;
     };
-    cuatrisemestre: number;
+    cuatrimestre: number;
     precioCompraCreditos: number;
 
 }

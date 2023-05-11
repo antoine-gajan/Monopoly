@@ -48,27 +48,57 @@ export class InteractionCardComponent {
   }
 
   buy_card() {
-    console.log("ENTRO A COMPRAR UNA CARTA");
+    this.socketService.comprarCasilla({ socketId: this.socketService.socketID, coordenadas: {h: this.h, v: this.v}})
+    .subscribe({
+      next: (ack: any) => {
+        if(ack.cod == 1){
+          console.log("no se ha encontrado");
+          alert("No se ha encontrado la casilla");
 
-    this.socketService.comprarCasilla({socketId: this.socketService.socketID, coordenadas: {h: this.h, v: this.v}})
-    .then((ack: any) => {
-      console.log("***ACK COMPRA***: ", ack);
-      if(ack.cod == 1){
-        console.log("Credenciales incorrectas");
-      } else if(ack.cod == 2){
-        console.log("Error en la funcion");
-      } else if(ack.cod == 6){
-        console.log("You have bought the card");
-        this.update_player_info.emit();
-        this.callback();
-      } else if(ack.cod == 7){
-        console.log("La casilla no estuya");
-      } else if(ack.cod == 9){
-        alert("No tienes suficiente dinero para comprar esta casilla");
+        } else if(ack.cod == 2){
+          console.log("error en la funcion");
+          alert("Error en la función");
+
+        } else if(ack.cod == 6){          
+          console.log("La casilla es tuya y puedes aumentar");
+          alert("La casilla es tuya y puedes aumentar");
+        } else if(ack.cod == 7){
+          console.log("La casilla es tuya y no puedes aumentar");
+          alert("La casilla es tuya y no puedes aumentar");
+
+        } else if(ack.cod == 9){
+          console.log("No tienes dinero suficiente para comprarla");
+          alert("No tienes dinero suficiente para comprarla");
+
+        } else {
+          console.log("Error al hacer obtener info de la asignatura");
+          alert("Error al hacer obtener info de la asignatura");
+
+        }
+        // Callback function to come back to board
         this.callback();
       }
     });
-  
+  }
+
+  increase_credit_property(): void {
+    this.socketService.aumentarCreditos({ socketId: this.socketService.socketID, coordenadas: {h: this.h, v: this.v}})
+    .subscribe({
+      next: (ack: any) => {
+
+        if(ack.cod == 0){
+          console.log("You have increased the card");
+          console.log(ack);
+        } else if(ack.cod == 1){
+          console.log("no se ha encontrado");
+          alert("No se ha encontrado la casilla");
+        } else if(ack.cod == 2){
+          console.log("error en la funcion");
+          alert("Error en la función");
+        }
+        this.callback();
+    }
+    });
   }
 
   pay_card() {
@@ -79,40 +109,28 @@ export class InteractionCardComponent {
 
   sell_card() : void {
     this.socketService.vender({socketId: this.socketService.socketID, coordenadas: {h: this.h, v: this.v}})
-    .then((ack: any) => {
-      console.log("***ACK VENDER***: ", ack);
-      console.log(ack.cod);
-      if(ack.cod == 0){
-        console.log("OK");
+    .subscribe({
+      next: (ack: any) => {
         console.log("Has vendido la casilla");
         console.log(ack);
-        // Update properties of player
-        this.update_player_info.emit();
-        // Callback function
+
+        if(ack.cod == 0){
+          console.log("You have increased the card");
+          // Update properties of player
+          this.update_player_info.emit();
+        } else if(ack.cod == 1){
+          console.log("no se ha encontrado");
+          alert("No se ha encontrado la casilla");
+        } else if(ack.cod == 2){
+          console.log("error en la funcion");
+          alert("Error en la función");
+        }
         this.callback();
-      } else if(ack.cod == 1 ||ack.cod == 2){
-        console.log("ERROR");
-        // Try again
-        this.sell_card();
-      }
-    });
-
-  }
-
-  increase_credit_property(){
-    this.socketService.aumentarCreditos({ socketId: this.socketService.socketID, coordenadas: {h: this.h, v: this.v}})
-    .then((ack: any) => {
-      if(ack.cod == 0){
-        console.log("***PUEES AUMENTAR CREDITOS***");
-      } else if(ack.cod == 1 || ack.cod == 2){
-        console.log("***NO PUEDES AUMENTAR CREDITOS***");
-        console.log(ack);
       }
     });
   }
 
   callback(){
-    console.log("ENTRO A CALLBACK", this.trigger_end_turn);
     if (this.trigger_end_turn) {
       this.end_turn.emit();
     }
@@ -120,5 +138,4 @@ export class InteractionCardComponent {
       this.close_card.emit();
     }
   }
-  
 }

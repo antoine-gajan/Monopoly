@@ -10,6 +10,7 @@ import {InfoCardComponent} from "../../card/info-card/info-card.component";
 import {JailCardComponent} from "../../card/jail-card/jail-card.component";
 import {Coordenadas, PlayerListResponse, PropertiesBoughtResponse} from "../response-type";
 import {DevolutionPropertiesFormComponent} from "../devolution-properties-form/devolution-properties-form.component";
+import { WebSocketService } from 'app/web-socket.service';
 
 @Component({
   selector: 'app-board',
@@ -60,7 +61,8 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   constructor(private gameService: GameService, private userService: UserService, private route: ActivatedRoute,
               private router: Router, private componentFactoryResolver: ComponentFactoryResolver,
-              private viewContainerRef: ViewContainerRef, private elRef: ElementRef) { }
+              private viewContainerRef: ViewContainerRef, private elRef: ElementRef,
+              private socketService: WebSocketService) { }
 
   /* === FUNCTIONS TO INITIALIZE AND DESTROY THE GAME === */
   ngOnInit() {
@@ -930,11 +932,12 @@ export class BoardComponent implements OnInit, OnDestroy {
   /* === FUNCTIONS TO LEAVE THE GAME === */
   leave_game(){
     // Declare bankruptcy to backend
-    this.gameService.declare_bankruptcy(this.player[0], this.game_id).subscribe({
-      next: (data: any) => {
+    this.socketService.bancarrota()
+    .subscribe({
+      next: () => {
         console.log("=== LEAVE GAME ===");
         // Update player money to 0
-        this.player[1] = 0;
+         //TODO <- revisar como mostrar y quitar al usuario
       },
       error: (error) => {
         console.error(error);

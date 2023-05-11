@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {GameService} from "../../game/game.service";
 import {Coordenadas, RandomCard} from "../../game/response-type";
+import { WebSocketService } from 'app/web-socket.service';
 
 @Component({
   selector: 'app-chance-card',
@@ -15,42 +16,21 @@ export class ChanceCardComponent implements OnInit{
 
   chance: RandomCard;
 
-  constructor(private gameService: GameService) { }
+  constructor(private socketService: WebSocketService) { }
 
   ngOnInit() {
-    this.gameService.get_random_suerte_card(this.idPartida, this.username).subscribe({
-      next:
-        (cards) => {
-          this.chance = cards[0];
-          console.log(this.chance);
-        },
-      error:
-        (error) => {
-          //console.log(error);
-          // Try again
-          this.ngOnInit();
-        }
+    this.socketService.suerte()
+    .subscribe({
+    next:
+      (msg) => {
+        this.chance = msg;
+        console.log(this.chance);
+      }
     });
   }
 
   trigger_action(){
-    this.gameService.action_of_card(this.idPartida, this.username, this.chance.nombre, this.coordenadas.h, this.coordenadas.v).subscribe({
-      next:
-        (data) => {
-          console.log(data);
-        },
-      error:
-        (error) => {
-          console.log(error);
-          // Try again
-          this.trigger_action();
-        }
-    });
     // Callback function to come back to board
-    this.callback_end_turn();
-  }
-
-   callback_end_turn() {
     this.end_turn.emit();
   }
 

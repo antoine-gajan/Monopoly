@@ -22,15 +22,17 @@ export class ProprietyCardComponent implements OnInit{
   get_propriety() {
     // Get the property from the game service
     this.socketService.infoAsignatura({coordenadas: {h: this.h, v: this.v}})
-    .then((msg: any) => {
-      console.log("***INFO ASIGNATURA***: ", msg);
-      this.propriety = msg;
-    })
-    .catch(() => {
-      console.log("ERROR AL OBTENER INFO ASIGNATURA");
-      // Try again
-      setTimeout(() => this.get_propriety(), 2000);
+    .subscribe({
+      next: (data) => {
+        this.propriety = data;
+      },
+      error: (error) => {
+        console.log(error);
+        // Try again
+        setTimeout(() => this.get_propriety(), 2000);
+      }
     });
+  
   }
 
   get_color() {

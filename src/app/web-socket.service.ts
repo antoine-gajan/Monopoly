@@ -3,6 +3,8 @@ import { io } from "socket.io-client";
 import { environment } from 'enviroment/enviroment';
 import { Router } from '@angular/router';
 import { LoginComponent } from './user/login/login.component';
+import { Observable } from 'rxjs';
+import { Partida, PropertiesBoughtResponse, Propriety, RandomCard } from './game/response-type';
 
 
 @Injectable({
@@ -345,19 +347,21 @@ export class WebSocketService {
   }
 
   /*-------------------------------------------FUNCIONES DEL GAME/TABLERO-------------------------------------------*/
-  
-  public lanzarDados(): Promise <string>{
-    console.log("LANZAR DADOS SOCKET");
-    return new Promise ((resolve) => {
-      this.socket.emit('lanzarDados', {socketId: this.socketID}, (ack: any) => {
+  lanzarDados(){
+    return new Observable((observer) => {
+    this.socket.emit('lanzarDados', {socketId: this.socketID},
+      (ack: any) => {
         console.log('Server acknowledged:', ack);
         if(ack.cod == 0){
           console.log("LANZAR DADOS", ack.msg);
-          resolve(ack.msg);
+          observer.next(ack.msg);
+          observer.complete();
+        } else {
+          console.log("Error al hacer lanzar dados");
+          observer.error(new Error("Error al lanzar dados"));
         }
-      });
     });
-    //console.log("------------------");
+  });
   }
 
   public nombreInvitado(nombreUser: string): Promise<string>{
@@ -386,46 +390,52 @@ export class WebSocketService {
     });
   }
 
-  public bancarrota(): Promise<string>{
-    return new Promise ((resolve) => {
+  public bancarrota(): Observable<string>{
+    return new Observable ((observer) => {
       this.socket.emit('bancarrota', { socketId: this.socketID }, 
       (ack: any) => {
         console.log('Server acknowledged:', ack);
         if(ack.cod == 0){
           console.log("BANCARROTA", ack.msg);
-          resolve(ack.msg);
+          observer.next();
+          observer.complete();
         } else {
           console.log("Error al declarar bancarrota");
+          observer.error(new Error("Error al declarar bancarrota"));
         }
       });
     });
   }
 
-  public siguienteTurno(): Promise <string>{
-    return new Promise ((resolve) => {
+  public siguienteTurno(): Observable <string>{
+    return new Observable ((observer) => {
       this.socket.emit('siguienteTurno', {socketId: this.socketID},
        (ack: any) => {
         console.log('Server acknowledged:', ack);
         if(ack.cod == 0){
           console.log("SIGUEINTE TURNO", ack.msg);
-          resolve(ack.msg);
+          observer.next(ack.msg);
+          observer.complete();
         } else {
           console.log("Error al hacer siguinete turno");
+          observer.error();
         }
       });
     });
   }
 
-  public infoAsignatura(datos: any): Promise <string>{ //datos tiene -> {socketId: this.socketID, coordenadas: {  "h": 3,  "v": 0 }}
-    return new Promise ((resolve) => {
+  public infoAsignatura(datos: any): Observable <Propriety>{ //datos tiene -> {socketId: this.socketID, coordenadas: {  "h": 3,  "v": 0 }}
+    return new Observable ((observer) => {
       this.socket.emit('infoAsignatura', datos,
        (ack: any) => {
         console.log('Server acknowledged:', ack);
         if(ack.cod == 0){
           console.log("INFO ASIGNATURA", ack.msg);
-          resolve(ack.msg);
+          observer.next(ack.msg);
+          observer.complete();
         } else {
           console.log("Error al hacer obtener info de la asignatura");
+          observer.error(new Error("Error al obtener la información de la asignatura"));
         }
       });
     });
@@ -441,63 +451,102 @@ export class WebSocketService {
     });
   }
 
-  public comprarCasilla(data: any): Promise <string>{
-    return new Promise ((resolve) => {
+  public comprarCasilla(data: any): Observable <string>{
+    return new Observable ((observer) => {
       this.socket.emit('comprarCasilla', data,
        (ack: any) => {
         console.log('Server acknowledged:', ack);
-        resolve(ack);
+        observer.next(ack);
       });
     });
   }
 
-  public listaAsignaturasC(data: any): Promise <string>{
-    return new Promise ((resolve) => {
-      this.socket.emit('listaAsignaturasC', data,
+  public listaAsignaturasC(): Observable <PropertiesBoughtResponse>{
+    return new Observable ((observer) => {
+      this.socket.emit('listaAsignaturasC', {socketId: this.socketID},
        (ack: any) => {
         console.log('Server acknowledged:', ack);
         if(ack.cod == 0){
           console.log("LISTA ASIGNATURAS C", ack.msg);
-          resolve(ack.msg);
+          observer.next(ack.msg);
+          observer.complete();
         } else {
           console.log("Error en listaAsignaturasC");
+          observer.error(new Error("Error al obtener la lista de asignaturas compradas"));
         }
       });
     });
   }
 
-  public vender(data: any): Promise<string>{
-    return new Promise ((resolve) => {
+  public vender(data: any):  Observable <string>{
+    return new Observable ((observer) => {
       this.socket.emit('vender', data,
        (ack: any) => {
         console.log('Server acknowledged:', ack);
-        resolve (ack);
+        observer.next(ack);
+        observer.complete();
       });
     });
   }
 
-  public aumentarCreditos(data: any): Promise <string>{
-    return new Promise ((resolve) => {
+  public aumentarCreditos(data: any): Observable <string>{
+    return new Observable ((observer) => {
       this.socket.emit('aumentarCreditos', data,
        (ack: any) => {
         console.log('Server acknowledged:', ack);
-        resolve(ack);
+        observer.next(ack);
+        observer.complete();
       });
     });
   }
  
-  public suerte(): Promise <string>{
-    return new Promise ((resolve) => {
-      this.socket.emit('sierte', {socketId: this.socketID},
+  public suerte(): Observable<RandomCard>{
+    return new Observable ((observer) => {
+      this.socket.emit('suerte', {socketId: this.socketID},
        (ack: any) => {
         console.log('Server acknowledged:', ack);
         if(ack.cod == 0){
-          console.log("CARTA SUERTE", ack.msg);
-          resolve(ack.msg);
+          console.log("SUERTE", ack.msg);
+          observer.next(ack.msg);
+          observer.complete();
         } else {
-          console.log("error en carta suerte");
+          console.log("error en suerte");
         }
        })
+    });
+  }
+
+
+  public boletin(): Observable<RandomCard>{
+    return new Observable ((observer) => {
+      this.socket.emit('boletin', {socketId: this.socketID},
+       (ack: any) => {
+        console.log('Server acknowledged:', ack);
+        if(ack.cod == 0){
+          console.log("BOLETIN", ack.msg);
+          observer.next(ack.msg);
+          observer.complete();
+        } else {
+          console.log("error en boletin");
+        }
+       })
+    });
+  }
+
+  public infoPartida(): Observable<Partida>{
+    return new Observable ((observer) => {
+      this.socket.emit('infoPartida', {socketId: this.socketID},
+      (ack: any) => {
+        console.log('Server acknowledged:', ack);
+        if(ack.cod == 0){
+          console.log("INFO PARTIDA", ack.msg);
+          observer.next(ack.msg);
+          observer.complete();
+        } else {
+          console.log("error en infoPartida");
+          observer.error();
+        }
+      })
     });
   }
 

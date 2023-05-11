@@ -93,3 +93,17 @@ export interface Propriety {
     cuatrimestre: number;
     precioCompraCreditos: number;
 }
+
+
+export interface Partida{
+  _id: string;
+  id: number;
+  nombreJugadores: string[];
+  posicionJugadores: Coordenadas[];
+  dineroJugadores: number[];
+  numeroJugadores: number;
+  dados: {dado1: number
+          dado2: number
+          jugador: string
+          _id: string };
+  }

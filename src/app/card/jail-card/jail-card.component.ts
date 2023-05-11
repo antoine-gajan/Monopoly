@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {GameService} from "../../game/game.service";
+import { WebSocketService } from 'app/web-socket.service';
 
 @Component({
   selector: 'app-jail-card',
@@ -27,7 +28,9 @@ export class JailCardComponent {
     "../../../assets/images/dice/6.png"
   ];
 
-  constructor(private gameService : GameService) { }
+  constructor(
+    private socketService: WebSocketService
+  ) { }
 
   ngOnInit(): void {
     // Observe if player has card to go out of jail
@@ -35,6 +38,8 @@ export class JailCardComponent {
   }
 
   has_card_to_go_out(){
+    //TODO falta de implementar
+    /*
     this.gameService.has_card_to_go_out_of_jail(this.game_id, this.player_name).subscribe(
       (response) => {
         console.log(response.status);
@@ -50,11 +55,12 @@ export class JailCardComponent {
           this.has_card_to_go_out();
         }
       }
-    );
+    );*/
   }
 
   use_card_to_go_out(){
-    this.gameService.use_card_go_out_of_jail(this.game_id, this.player_name).subscribe(
+    // TODO <- falta implementar
+    /*this.gameService.use_card_go_out_of_jail(this.game_id, this.player_name).subscribe(
       (response) => {
         if (response.status == 200){
           this.has_card = false;
@@ -63,7 +69,7 @@ export class JailCardComponent {
         // End turn
         this.validate();
       }
-    );
+    );*/
   }
 
   validate(){
@@ -79,25 +85,16 @@ export class JailCardComponent {
   roll_dices(): void {
     // Roll dices
     this.move_dices_action();
-    this.gameService.roll_dices(this.player_name, this.game_id).subscribe( {
-      next: (data: any) => {
+    this.socketService.lanzarDados()
+    .subscribe({
+      next: (msg: any) => {
         // Clear dices interval to stop animation
         clearInterval(this.dices_interval);
         // Store true value of dices
-        this.dices[0] = data.dado1;
-        this.dices[1] = data.dado2;
+        this.dices[0] = msg.dado1;
+        this.dices[1] = msg.dado2;
     },
-    error: async (error) => {
-      // Print error
-      if (error.status == 404) {
-        console.log("Partida no encontrada");
-      }
-      else if (error.status == 500){
-        console.log("Error interno del servidor");
-      }
-      else {
-        console.log(error);
-      }
+    error: async () =>{
       // Try again
       this.roll_dices();
     },

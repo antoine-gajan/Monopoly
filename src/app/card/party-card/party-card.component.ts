@@ -23,14 +23,15 @@ export class PartyCardComponent implements OnInit{
 
   get_party() {
     this.socketService.infoAsignatura({coordenadas: {h: this.h, v: this.v}})
-    .then((msg: any) => {
-      console.log("***INFO PARTY***: ", msg);
-      this.party = msg;
-    })
-    .catch(() => {
-      console.log("ERROR AL OBTENER INFO PARTY");
-      // Try again
-      setTimeout(() => this.get_party(), 2000);
+    .subscribe({
+      next: (data) => {
+        this.party = data;
+      },
+      error: (error) => {
+        console.log(error);
+        // Try again
+        setTimeout(() => this.get_party(), 2000);
+      }
     });
   }
 }

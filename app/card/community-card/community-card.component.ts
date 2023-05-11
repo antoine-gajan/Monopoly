@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {GameService} from "../../game/game.service";
 import {Coordenadas, RandomCard} from "../../game/response-type";
+import { WebSocketService } from 'app/web-socket.service';
 
 @Component({
   selector: 'app-community-card',
@@ -14,42 +15,21 @@ export class CommunityCardComponent implements OnInit{
   @Output() end_turn = new EventEmitter();
   community: RandomCard;
 
-  constructor(private gameService: GameService) { }
+  constructor(private socketService: WebSocketService) { }
 
   ngOnInit() {
-    this.gameService.get_random_boletin_card(this.idPartida, this.username).subscribe({
+    this.socketService.boletin()
+    .subscribe({
     next:
-      (cards) => {
-        this.community = cards[0];
+      (msg) => {
+        this.community = msg;
         console.log(this.community);
-      },
-    error:
-      (error) => {
-        //console.log(error);
-        // Try again in 3 seconds
-        this.ngOnInit();
       }
     });
   }
 
-  trigger_action(){
-    this.gameService.action_of_card(this.idPartida, this.username, this.community.nombre, this.coordenadas.h, this.coordenadas.v).subscribe({
-      next:
-        (data) => {
-          console.log(data);
-        },
-      error:
-        (error) => {
-          console.log(error);
-          // Try again
-          this.trigger_action();
-        }
-    });
+  trigger_action(){ //END TURN
     // Callback function to come back to board
-    this.callback_end_turn();
-  }
-
-  callback_end_turn() {
     this.end_turn.emit();
   }
 

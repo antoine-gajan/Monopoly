@@ -27,7 +27,6 @@ import {InteractionCardComponent} from "./card/interaction-card/interaction-card
 import { CrearSalaComponent } from './crear_sala/crear_sala.component';
 import { UnirseSalaComponent } from './unirse_sala/unirse_sala.component';
 import { PantallaInvitadoComponent } from './pantalla_invitado/pantalla_invitado.component';
-import { UnirseSalaInvitadoComponent } from './unirse_sala_invitado/unirse_sala_invitado.component';
 import { EsperarSalaComponent } from './esperar_sala/esperar_sala.component';
 import {ProductComponent} from "./shop/product/product.component";
 import {TiendaComponent} from "./shop/tienda/tienda.component";
@@ -65,7 +64,6 @@ import 'zone.js';
         CrearSalaComponent,
         UnirseSalaComponent,
         PantallaInvitadoComponent,
-        UnirseSalaInvitadoComponent,
         EsperarSalaComponent,
         ProductComponent,
         TiendaComponent,
