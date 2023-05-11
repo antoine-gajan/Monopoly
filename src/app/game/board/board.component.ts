@@ -73,6 +73,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   /* === FUNCTIONS TO INITIALIZE AND DESTROY THE GAME === */
   ngOnInit() {
     
+    this.username = this.socketService.username;
     // Se activa el socket on para saber cuando es nuestro turno
     this.socketService.socketOnTurno()
     .subscribe({
@@ -108,7 +109,21 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Se muestra la posición inicial de todos los jugadores en el tablero
     this.show_position_every_players();
     
-    this.socketService.siguienteTurno()
+    console.log("jugador0", this.player[0]);
+    if(this.player[0] == this.socketService.username){
+      this.is_playing = true;
+        this.message = this.current_player + ", es tu turno";
+        this.reStartTimerExpulsarJugador();
+        console.log("ESTÁ JUGANDO");
+        document.getElementById("tirar-dados")!.removeAttribute("disabled");
+        //this.play_turno();
+    } else {
+      this.message = this.current_player + " está jugando su turno";
+        console.log("NO ESTÁ JUGANDO");
+        //document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
+        //this.ver_jugar();
+    }
+    /*this.socketService.siguienteTurno()
     .then((nextPlayer: any) => {
       console.log("Next player: ", nextPlayer.jugador);
       console.log("Username: ",this.socketService.username);
@@ -126,7 +141,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         //document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
         //this.ver_jugar();
       }
-    });
+    });*/
   }
 
   ngOnDestroy() {
@@ -140,7 +155,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   reStartTimerExpulsarJugador(){
-    this.startTimer("expulsar_jugador", 10);
+    this.startTimer("expulsar_jugador", 90);
   }
 
   load_game(){
