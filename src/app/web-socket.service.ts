@@ -407,18 +407,18 @@ export class WebSocketService {
     });
   }
 
-  public siguienteTurno(): Observable <string>{
-    return new Observable ((observer) => {
+  public siguienteTurno(): Promise <string>{
+    return new Promise ((resolve) => {
       this.socket.emit('siguienteTurno', {socketId: this.socketID},
        (ack: any) => {
         console.log('Server acknowledged:', ack);
         if(ack.cod == 0){
           console.log("SIGUEINTE TURNO", ack.msg);
-          observer.next(ack.msg);
-          observer.complete();
+          resolve(ack.msg);
+          
         } else {
           console.log("Error al hacer siguinete turno");
-          observer.error();
+
         }
       });
     });

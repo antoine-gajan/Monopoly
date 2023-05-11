@@ -22,6 +22,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   game_id : number;
   dices: number[] = [];
   current_player: string;
+  username: string;
 
   // Relative to client player
   player: [string, number, Coordenadas] = ["", 0, {h: 10, v: 10}];
@@ -59,6 +60,9 @@ export class BoardComponent implements OnInit, OnDestroy {
   interval_play: any;
   dices_interval: any;
 
+
+  list_players: string[] = [];
+
   constructor(
     
     private gameService: GameService, private userService: UserService, private route: ActivatedRoute,
@@ -67,8 +71,55 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   /* === FUNCTIONS TO INITIALIZE AND DESTROY THE GAME === */
   ngOnInit() {
-    console.log("Board component initialized");
-    // Get id of the game
+   
+     // Se activa el socket on para saber cuando es nuestro turno
+     this.socketService.socketOnTurno();
+     console.log("---------------------------");
+     console.log("Board component initialized");
+     console.log("TODO INICIADO: Game id: ", this.game_id);
+     // Se obtiene la lista de jugadores
+     this.list_players = this.socketService.list_players;
+     console.log("TODO INICIADO: List players: ", this.list_players);
+     if(this.list_players.length != 0){
+       this.player[0] = this.list_players[0];// TODO <---------------------actualizar essto y cambiarlo cuando nos devuelban bien los jugadore sy datos de la aprtida
+       this.player[1] = 1500; 
+       for(let i = 1; i<this.list_players.length; i++){
+         this.other_players_list.push([this.list_players[i], 1500, {h: 10, v: 10}]);
+       }
+     }
+     //TODO <-------------------------------------------------------FALTA COMRPOBAR QUE CARGUEN LOS USUARIOS
+     /* TODO: revisar implementación de git */
+ 
+     this.message = "Cargando la partida..."
+     
+     document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
+     //TODO <- ontener el nombre del usuario actual
+     // TODO ----------------> revisar si hay que hacer esto o se va a buggear
+     // this.socketService.consultarUsernameString(); <------------------------------------ FALTA OBTENER EL NOMMBRE DEL USUARIO ACTUAL
+     console.log("TODO INICIADO: Username: ", this.player[0]);
+     // Se muestra la posición inicial de todos los jugadores en el tablero
+     this.show_position_every_players();
+     
+     this.socketService.siguienteTurno()
+     .then((nextPlayer: any) => {
+       console.log("Next player: ", nextPlayer.jugador);
+       console.log("Username: ",this.socketService.username);
+       this.current_player = nextPlayer.jugador;
+       if(nextPlayer.jugador == this.socketService.username){
+         this.is_playing = true;
+         this.message = this.current_player + ", es tu turno";
+         console.log("ESTÁ JUGANDO");
+         //this.play_turno();
+       } else {
+        this.message = this.current_player + " está jugando su turno";
+         console.log("NO ESTÁ JUGANDO");
+         document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
+         //this.ver_jugar();
+ 
+       }
+     });
+    /*
+    this.socketService.socketOnTurno();
     const game_id: string | null = this.route.snapshot.paramMap.get('id');
     if (game_id != null) {
       this.game_id = +game_id;
@@ -76,17 +127,43 @@ export class BoardComponent implements OnInit, OnDestroy {
       // Redirect to error page
       this.router.navigate(['/error']);
     }
-    // Get name of the player
-    let username = this.socketService.username;
-    // If undefined, redirect to error page
-    if (username == null) {
-      this.router.navigate(['/error']);
+    console.log("TODO INICIADO: Game id: ", this.game_id);
+    this.list_players = this.socketService.list_players;
+    if(this.list_players.length != 0){
+      this.player[0] = this.list_players[0];// TODO <---------------------actualizar essto y cambiarlo cuando nos devuelban bien los jugadore sy datos de la aprtida
+      this.player[1] = 1500; 
+      for(let i = 1; i<this.list_players.length; i++){
+        this.other_players_list.push([this.list_players[i], 1500, {h: 10, v: 10}]);
+      }
     }
-    else {
-      this.player[0] = username;
-    }
-    // Load game
-    this.load_game();
+
+    this.message = "Cargando la partida..."
+    this.show_position_every_players();
+
+    this.socketService.siguienteTurno()
+    .then((msg: any) => {
+       console.log("Siguiente turno: ", msg.jugador);
+        console.log("Next player: ", msg.jugador);
+        console.log("Username: ",this.socketService.username);
+        document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
+        if(msg.jugador == this.socketService.username){
+          this.is_playing = true;
+          console.log("ESTÁ JUGANDO");
+          this.play_turn_player(); 
+        } else {
+          document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
+          console.log("NO ESTÁ JUGANDO");
+
+        }
+
+      
+    });
+
+   
+
+ 
+*/
+    
   }
 
   ngOnDestroy() {
@@ -401,21 +478,21 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.is_playing = false;
     this.nb_doubles = 0;
     // Indicate to backend that the player has finished his turn
-    this.socketService.siguienteTurno().subscribe({
-      next: (msg) => {
-        this.current_player = msg;
-        console.log("Next turn : " + this.current_player);
-      },
-      error: (error) => {
-        //console.error(error);
-        this.go_next_turn();
-      },
-      complete: () => {
+    this.socketService.siguienteTurno()
+    .then((data:any) => {
+      console.log("Next turn : ", data);
+      this.current_player = data.jugador;
+    },
+    (error) => {
+      console.error(error);
+      this.go_next_turn();
+    });
+    /*complete: () => {
         this.message = "Es el turno de " + this.current_player;
         // Go back to play to wait next time to play
         this.play();
       }
-    });
+    }*/
   }
 
   /* === FUNCTIONS TO UPDATE INFORMATION === */
