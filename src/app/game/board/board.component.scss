@@ -53,26 +53,38 @@ h1, h2, h3, h4, h5, h6 {
 }
 /***********************TABLERO***********************/
 .table {
+	height: 500px;
+	width: 994px;
 	padding-left: 40px;
 	padding-right: 40px;
-  float:left;
+ 	float:left;
  	width: 45%;
 }
 /***********************BOARD***********************/
 .board {
-  transform: scale(0.45);
-  transform-origin: left top;
+	transform: scale(0.45);
 	display: grid;
 	grid-template-columns: 125px repeat(9, 80px) 125px;
 	grid-template-rows: 125px repeat(9, 80px) 125px;
+  	transform-origin: left top;
 	grid-gap: 2px;
 	margin: 20px auto;
 	width: 994px;
 	height: 994px;
-	background: $black;
 	border: 2px solid $black;
+	background: $black;
+  
 }
 
+
+.player-panel {
+	border-radius: 4px;
+    padding: 5px;
+    margin-bottom: 10px;
+    width: 300px;
+	border: 1px solid #000;
+    box-sizing: content-box;
+}
 /***********************CENTER***********************/
 .center {
 	grid-column: 2 / 11;
@@ -777,14 +789,6 @@ h1, h2, h3, h4, h5, h6 {
 	box-sizing: border-box;
 }
 
-.player-panel {
-    border-radius: 4px;
-    padding: 5px;
-    margin-bottom: 10px;
-    width: 300px;
-	border: 1px solid #000;
-    box-sizing: content-box;
-}
 
 .player-panel-token {
     margin-right: 4px;
