@@ -5,7 +5,7 @@ import {map, Observable, tap} from "rxjs";
 import { environment } from 'enviroment/enviroment';
 import {
   PlayerResponse,
-  PropertiesBoughtResponse,
+  PropertyBoughtResponse,
   Party,
   Propriety,
   RandomCard,
@@ -162,7 +162,7 @@ export class GameService {
                                         });
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 
-    return this.http.put<PropertiesBoughtResponse>(environment.listaAsignaturas, body, httpOptions).pipe(
+    return this.http.put<PropertyBoughtResponse>(environment.listaAsignaturas, body, httpOptions).pipe(
       tap(
         (response) => {
           console.log(response)})

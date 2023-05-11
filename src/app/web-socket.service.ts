@@ -4,7 +4,7 @@ import { environment } from 'enviroment/enviroment';
 import { Router } from '@angular/router';
 import { LoginComponent } from './user/login/login.component';
 import { Observable } from 'rxjs';
-import { Partida, PropertiesBoughtResponse, Propriety, RandomCard } from './game/response-type';
+import { Partida, PropertyBoughtResponse, Propriety, RandomCard } from './game/response-type';
 
 
 @Injectable({
@@ -384,6 +384,7 @@ export class WebSocketService {
         if(ack.cod == 0){
           console.log("TURNO", ack.msg);
           observer.next(ack.msg);
+
         } else {
           console.log("Error al obtener el turno");
           observer.error(new Error("Error al obtener el turno"));
@@ -476,7 +477,7 @@ export class WebSocketService {
     });
   }
 
-  public listaAsignaturasC(): Observable <PropertiesBoughtResponse>{
+  public listaAsignaturasC(): Observable <PropertyBoughtResponse[]>{
     return new Observable ((observer) => {
       this.socket.emit('listaAsignaturasC', {socketId: this.socketID},
        (ack: any) => {

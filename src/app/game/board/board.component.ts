@@ -5,10 +5,10 @@ import {UserService} from "../../user/user.service";
 import {InteractionCardComponent} from "../../card/interaction-card/interaction-card.component";
 import {ChanceCardComponent} from "../../card/chance-card/chance-card.component";
 import {CommunityCardComponent} from "../../card/community-card/community-card.component";
-import {EMPTY, forkJoin, interval, switchMap, takeWhile} from "rxjs";
+import {EMPTY, Observable, forkJoin, interval, switchMap, takeWhile} from "rxjs";
 import {InfoCardComponent} from "../../card/info-card/info-card.component";
 import {JailCardComponent} from "../../card/jail-card/jail-card.component";
-import {Coordenadas, Partida, PlayerListResponse, PropertiesBoughtResponse} from "../response-type";
+import {Coordenadas, Partida, PlayerListResponse, PropertyBoughtResponse} from "../response-type";
 import {DevolutionPropertiesFormComponent} from "../devolution-properties-form/devolution-properties-form.component";
 import { WebSocketService } from 'app/web-socket.service';
 
@@ -98,7 +98,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     /* TODO: revisar implementación de git */
 
     this.message = "Cargando la partida..."
-    
+    document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
     document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
     //TODO <- ontener el nombre del usuario actual
     // TODO ----------------> revisar si hay que hacer esto o se va a buggear
@@ -117,11 +117,12 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.message = this.current_player + ", es tu turno";
         this.startTimer("expulsar_jugador", 90);
         console.log("ESTÁ JUGANDO");
+        document.getElementById("tirar-dados")!.removeAttribute("disabled");
         //this.play_turno();
       } else {
        this.message = this.current_player + " está jugando su turno";
         console.log("NO ESTÁ JUGANDO");
-        document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
+        //document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
         //this.ver_jugar();
       }
     });
@@ -182,18 +183,21 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   /* === FUNCTIONS TO GET THE PROPERTIES OF THE PLAYERS === */
 
-  get_properties(): void {
+  get_properties(){
+    console.log("Get properties of client player");
     // Get every properties of the player if he is not bankrupt
     if (!this.is_bankrupt) {
+      console.log("Get properties of client player-2");
       this.socketService.listaAsignaturasC()
       .subscribe({
-        next: (data: PropertiesBoughtResponse) => {
+        next: (data: PropertyBoughtResponse[]) => {
           console.log("Get properties of client player realized successfully");
           let properties: [string, Coordenadas][] = [];
-          for (let i = 0; i < data.casillas.length; i++) {
-            properties.push([data.casillas[i].nombre, data.casillas[i].coordenadas]);
+          for (let i = 0; i < data.length; i++) {
+            properties.push([data[i].nombre, data[i].coordenadas]);
           }
           this.player_properties = properties;
+          // Return Empty to continue
         }
       });
     }
@@ -205,10 +209,10 @@ export class BoardComponent implements OnInit, OnDestroy {
     for (let player of this.other_players_list) {
       this.socketService.listaAsignaturasC()
       .subscribe({
-        next: (data: PropertiesBoughtResponse) => {
+        next: (data: PropertyBoughtResponse[]) => {
           let properties: [string, Coordenadas][] = [];
-          for (let i = 0; i < data.casillas.length; i++) {
-            properties.push([data.casillas[i].nombre, data.casillas[i].coordenadas]);
+          for (let i = 0; i < data.length; i++) {
+            properties.push([data[i].nombre, data[i].coordenadas]);
           }
           this.other_player_properties[player[0]] = properties;
         }
@@ -256,8 +260,10 @@ export class BoardComponent implements OnInit, OnDestroy {
         // Clear dices interval to stop animation
         clearInterval(this.dices_interval);
         // Store true value of dices
-        this.dices[0] = msg.dado1;
-        this.dices[1] = msg.dado2;
+        //this.dices[0] = msg.dado1;
+        //this.dices[1] = msg.dado2;
+        this.dices[0]=1;
+        this.dices[1]=2;
     },
     error: async () => {
       // Try again
@@ -368,7 +374,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.message = "Pulsa el botón para terminar tu turno";
     document.getElementById("button-end-turn")!.removeAttribute("disabled");
     // Start timer to trigger next turn
-    this.startTimer("next_turn", 30);
+    this.startTimer("next_turn", 15);
   }
 
   go_next_turn() : void {
@@ -423,7 +429,9 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   update_player_info(): void {
     // Get information of player
-
+    console.log("===UPDATE PLAYER INFO===");
+    this.get_properties();
+    /*
     this.socketService.infoPartida()
     .subscribe({
       next: (data: Partida) => {
@@ -435,7 +443,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         // Try again
         this.update_player_info();
       }
-    });
+    });*/
   }
 
   move_dices_action(): void{

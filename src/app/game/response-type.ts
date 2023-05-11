@@ -15,27 +15,23 @@ export class Coordenadas{
   h: number;
   v: number;
 }
-export class PropertiesBoughtResponse {
-  casillas:
-    [
-      {
-        coordenadas: {
-          h: number;
-          v: number;
-          _id: string;
-        }
-      cuatrimestre: number;
-      jugador: string;
-      partida: number;
-      precio: number;
-      nombre: string;
-      __v: number;
-      _id: string;
-      }
-    ]
+export class PropertyBoughtResponse {
+  
+  _id: string;
+  coordenadas: {
+    h: number;
+    v: number;
+    _id: string;
+  };
+  partida: number; 
+  jugador: string;     
+  precio: number;
+  cuatrimestre: number;
+  nombre: string;    
+  __v: number;    
 }
 
-export interface RandomCard{
+  export interface RandomCard{
     cobrarPagarNada: string;
     descripcion: string;
     dinero: number;

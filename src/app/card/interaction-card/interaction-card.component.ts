@@ -8,6 +8,9 @@ import { WebSocketService } from 'app/web-socket.service';
   styleUrls: ['./interaction-card.component.css']
 })
 export class InteractionCardComponent {
+
+  botonPulsado: boolean = false;
+
   @Input() h : number;
   @Input() v : number;
   @Input() game_id : number = 0;
@@ -48,6 +51,7 @@ export class InteractionCardComponent {
   }
 
   buy_card() {
+    this.botonPulsado = true;
     console.log("ENTRA A COMPRAR CASILLA");
     this.socketService.comprarCasilla({ socketId: this.socketService.socketID, coordenadas: {h: this.h, v: this.v}})
     .subscribe({
@@ -59,6 +63,7 @@ export class InteractionCardComponent {
           console.log("error en la funcion");
         } else if(ack.cod == 6 || ack.cod == 7){
           console.log("Has comprado la casilla");
+          
         } else if(ack.cod == 9){
           console.log("No tienes dinero suficiente para comprarla");
         }
@@ -68,9 +73,11 @@ export class InteractionCardComponent {
         this.callback();
       }
     });
+    this.botonPulsado = false;
   }
 
   increase_credit_property(): void {
+    this.botonPulsado = true;
     this.socketService.aumentarCreditos({ socketId: this.socketService.socketID, coordenadas: {h: this.h, v: this.v}})
     .subscribe({
       next: (ack: any) => {
@@ -89,15 +96,19 @@ export class InteractionCardComponent {
         this.callback();
       }
     });
+    this.botonPulsado = false;
   }
 
   pay_card() {
+    this.botonPulsado = true;
     // Call end turn of BoardComponent
     console.log("You have paid");
+    this.botonPulsado = false;
     this.callback();
   }
 
   sell_card() : void {
+    this.botonPulsado = true;
     this.socketService.vender({socketId: this.socketService.socketID, coordenadas: {h: this.h, v: this.v}})
     .subscribe({
       next: (ack: any) => {
@@ -118,12 +129,17 @@ export class InteractionCardComponent {
         }
       },
       complete: () => {
+        console.log("Has vendido la casilla");
         this.callback();
       }
     });
+    this.botonPulsado = false;
   }
 
   callback(){
+    this.botonPulsado = false;
+    console.log("callback");
+    this.update_player_info.emit();
     if (this.trigger_end_turn) {
       this.end_turn.emit();
     }
