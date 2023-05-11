@@ -65,7 +65,7 @@ export class InteractionCardComponent {
           console.log("error en la funcion");
         } else if(ack.cod == 6 || ack.cod == 7){
           console.log("Has comprado la casilla");
-          
+
         } else if(ack.cod == 9){
           console.log("No tienes dinero suficiente para comprarla");
         }
@@ -75,7 +75,6 @@ export class InteractionCardComponent {
         this.callback();
       }
     });
-    //this.botonPulsado = false;
   }
 
   increase_credit_property(): void {
@@ -99,7 +98,6 @@ export class InteractionCardComponent {
         this.callback();
       }
     });
-    //this.botonPulsado = false;
   }
 
   pay_card() {
@@ -107,7 +105,6 @@ export class InteractionCardComponent {
     this.botonPulsado = true;
     // Call end turn of BoardComponent
     console.log("You have paid");
-    //this.botonPulsado = false;
     this.callback();
   }
 
@@ -126,11 +123,9 @@ export class InteractionCardComponent {
         }
         else if(ack.cod == 1){
           console.log("no se ha encontrado");
-          alert("No se ha encontrado la casilla");
         }
         else if(ack.cod == 2){
           console.log("error en la funcion");
-          alert("Error en la función");
         }
       },
       complete: () => {
@@ -138,12 +133,9 @@ export class InteractionCardComponent {
         this.callback();
       }
     });
-    //this.botonPulsado = false;
   }
 
   callback(){
-    //this.reStartTimerExpulsarJugador.emit();
-    //this.botonPulsado = false;
     console.log("callback");
     this.update_player_info.emit();
     if (this.trigger_end_turn) {
