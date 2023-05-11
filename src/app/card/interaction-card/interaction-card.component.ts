@@ -52,6 +52,7 @@ export class InteractionCardComponent {
     this.socketService.comprarCasilla({ socketId: this.socketService.socketID, coordenadas: {h: this.h, v: this.v}})
     .subscribe({
       next: (ack: any) => {
+        console.log("ack: " + ack);
         if(ack.cod == 1){
           console.log("no se ha encontrado");
           alert("No se ha encontrado la casilla");
