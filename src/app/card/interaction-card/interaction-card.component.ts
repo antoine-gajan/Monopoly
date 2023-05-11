@@ -54,28 +54,15 @@ export class InteractionCardComponent {
       next: (ack: any) => {
         if(ack.cod == 1){
           console.log("no se ha encontrado");
-          alert("No se ha encontrado la casilla");
-
         } else if(ack.cod == 2){
           console.log("error en la funcion");
-          alert("Error en la función");
-
-        } else if(ack.cod == 6){          
-          console.log("La casilla es tuya y puedes aumentar");
-          alert("La casilla es tuya y puedes aumentar");
-        } else if(ack.cod == 7){
-          console.log("La casilla es tuya y no puedes aumentar");
-          alert("La casilla es tuya y no puedes aumentar");
-
+        } else if(ack.cod == 6 || ack.cod == 7){
+          console.log("Has comprado la casilla");
         } else if(ack.cod == 9){
           console.log("No tienes dinero suficiente para comprarla");
-          alert("No tienes dinero suficiente para comprarla");
-
-        } else {
-          console.log("Error al hacer obtener info de la asignatura");
-          alert("Error al hacer obtener info de la asignatura");
-
         }
+      },
+      complete: () => {
         // Callback function to come back to board
         this.callback();
       }
@@ -86,7 +73,6 @@ export class InteractionCardComponent {
     this.socketService.aumentarCreditos({ socketId: this.socketService.socketID, coordenadas: {h: this.h, v: this.v}})
     .subscribe({
       next: (ack: any) => {
-
         if(ack.cod == 0){
           console.log("You have increased the card");
           console.log(ack);
@@ -97,14 +83,16 @@ export class InteractionCardComponent {
           console.log("error en la funcion");
           alert("Error en la función");
         }
+      },
+      complete: () => {
         this.callback();
-    }
+      }
     });
   }
 
   pay_card() {
     // Call end turn of BoardComponent
-    console.log("You have paid " + this.amount_to_pay + "€");
+    console.log("You have paid");
     this.callback();
   }
 
@@ -114,18 +102,21 @@ export class InteractionCardComponent {
       next: (ack: any) => {
         console.log("Has vendido la casilla");
         console.log(ack);
-
         if(ack.cod == 0){
-          console.log("You have increased the card");
+          console.log("You have sold the card");
           // Update properties of player
           this.update_player_info.emit();
-        } else if(ack.cod == 1){
+        }
+        else if(ack.cod == 1){
           console.log("no se ha encontrado");
           alert("No se ha encontrado la casilla");
-        } else if(ack.cod == 2){
+        }
+        else if(ack.cod == 2){
           console.log("error en la funcion");
           alert("Error en la función");
         }
+      },
+      complete: () => {
         this.callback();
       }
     });
