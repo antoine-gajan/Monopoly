@@ -64,63 +64,15 @@ export class BoardComponent implements OnInit, OnDestroy {
   list_players: string[] = [];
 
   constructor(
-    
+
     private gameService: GameService, private userService: UserService, private route: ActivatedRoute,
               private router: Router, private componentFactoryResolver: ComponentFactoryResolver,
               private viewContainerRef: ViewContainerRef, private elRef: ElementRef,    private socketService: WebSocketService) { }
 
   /* === FUNCTIONS TO INITIALIZE AND DESTROY THE GAME === */
   ngOnInit() {
-   
-     // Se activa el socket on para saber cuando es nuestro turno
-     this.socketService.socketOnTurno();
-     console.log("---------------------------");
-     console.log("Board component initialized");
-     console.log("TODO INICIADO: Game id: ", this.game_id);
-     // Se obtiene la lista de jugadores
-     this.list_players = this.socketService.list_players;
-     console.log("TODO INICIADO: List players: ", this.list_players);
-     if(this.list_players.length != 0){
-       this.player[0] = this.list_players[0];// TODO <---------------------actualizar essto y cambiarlo cuando nos devuelban bien los jugadore sy datos de la aprtida
-       this.player[1] = 1500; 
-       for(let i = 1; i<this.list_players.length; i++){
-         this.other_players_list.push([this.list_players[i], 1500, {h: 10, v: 10}]);
-       }
-     }
-     //TODO <-------------------------------------------------------FALTA COMRPOBAR QUE CARGUEN LOS USUARIOS
-     /* TODO: revisar implementación de git */
- 
-     this.message = "Cargando la partida..."
-     
-     document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
-     //TODO <- ontener el nombre del usuario actual
-     // TODO ----------------> revisar si hay que hacer esto o se va a buggear
-     // this.socketService.consultarUsernameString(); <------------------------------------ FALTA OBTENER EL NOMMBRE DEL USUARIO ACTUAL
-     console.log("TODO INICIADO: Username: ", this.player[0]);
-     // Se muestra la posición inicial de todos los jugadores en el tablero
-     this.show_position_every_players();
-     
-     this.socketService.siguienteTurno()
-     .then((nextPlayer: any) => {
-       console.log("Next player: ", nextPlayer.jugador);
-       console.log("Username: ",this.socketService.username);
-       this.current_player = nextPlayer.jugador;
-       if(nextPlayer.jugador == this.socketService.username){
-         this.is_playing = true;
-         this.message = this.current_player + ", es tu turno";
-         this.startTimer("next_turn");
-         console.log("ESTÁ JUGANDO");
-         //this.play_turno();
-       } else {
-        this.message = this.current_player + " está jugando su turno";
-         console.log("NO ESTÁ JUGANDO");
-         document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
-         //this.ver_jugar();
- 
-       }
-     });
-    /*
-    this.socketService.socketOnTurno();
+    console.log("Board component initialized");
+    // Get id of the game
     const game_id: string | null = this.route.snapshot.paramMap.get('id');
     if (game_id != null) {
       this.game_id = +game_id;
@@ -128,43 +80,17 @@ export class BoardComponent implements OnInit, OnDestroy {
       // Redirect to error page
       this.router.navigate(['/error']);
     }
-    console.log("TODO INICIADO: Game id: ", this.game_id);
-    this.list_players = this.socketService.list_players;
-    if(this.list_players.length != 0){
-      this.player[0] = this.list_players[0];// TODO <---------------------actualizar essto y cambiarlo cuando nos devuelban bien los jugadore sy datos de la aprtida
-      this.player[1] = 1500; 
-      for(let i = 1; i<this.list_players.length; i++){
-        this.other_players_list.push([this.list_players[i], 1500, {h: 10, v: 10}]);
-      }
+    // Get name of the player
+    let username = this.socketService.username;
+    // If undefined, redirect to error page
+    if (username == null) {
+      this.router.navigate(['/error']);
     }
-
-    this.message = "Cargando la partida..."
-    this.show_position_every_players();
-
-    this.socketService.siguienteTurno()
-    .then((msg: any) => {
-       console.log("Siguiente turno: ", msg.jugador);
-        console.log("Next player: ", msg.jugador);
-        console.log("Username: ",this.socketService.username);
-        document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
-        if(msg.jugador == this.socketService.username){
-          this.is_playing = true;
-          console.log("ESTÁ JUGANDO");
-          this.play_turn_player(); 
-        } else {
-          document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
-          console.log("NO ESTÁ JUGANDO");
-
-        }
-
-      
-    });
-
-   
-
- 
-*/
-    
+    else {
+      this.player[0] = username;
+    }
+    // Load game
+    this.load_game();
   }
 
   ngOnDestroy() {
@@ -187,7 +113,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Indicate that the game is loading
     this.message = "Cargando la partida..."
     // Get list of players
-    this.socketService.infoPartida()
+    /*this.socketService.infoPartida()
     .subscribe({
       next: (data: Partida) => {
         this.actualize_game_info(data);
@@ -197,8 +123,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.load_game();
       },
       complete: () => {
-        // Get every properties of each player
-        this.get_properties();
+        //this.get_properties();
         this.get_properties_of_other_players();
         // Show position of the players
         this.show_position_every_players();
@@ -207,7 +132,18 @@ export class BoardComponent implements OnInit, OnDestroy {
         // Start the game
         this.play();
       }
-    });
+    });*/
+    // Se obtiene la lista de jugadores
+     this.list_players = this.socketService.list_players;
+     console.log("TODO INICIADO: List players: ", this.list_players);
+     if(this.list_players.length != 0){
+       this.player[0] = this.list_players[0];// TODO <---------------------actualizar essto y cambiarlo cuando nos devuelban bien los jugadore sy datos de la aprtida
+       this.player[1] = 1500;
+       for(let i = 1; i<this.list_players.length; i++){
+         this.other_players_list.push([this.list_players[i], 1500, {h: 10, v: 10}]);
+       }
+     }
+     this.play();
   }
 
   /* === FUNCTIONS TO GET THE PROPERTIES OF THE PLAYERS === */
@@ -224,11 +160,6 @@ export class BoardComponent implements OnInit, OnDestroy {
             properties.push([data.casillas[i].nombre, data.casillas[i].coordenadas]);
           }
           this.player_properties = properties;
-        },
-        error: (error) => {
-          //console.error(error);
-          // Try again
-          this.get_properties();
         }
       });
     }
@@ -254,29 +185,26 @@ export class BoardComponent implements OnInit, OnDestroy {
     /* === FUNCTIONS TO PLAY === */
 
   async play(): Promise<void> {
-    // Ensure to execute the interval only once
+    // Get the current player
     this.socketService.socketOnTurno()
-    .then((msg: any) => {
-      console.log("Siguiente turno: ", msg);
-      // Get the current player
-      this.current_player = msg.jugador;
-
-      
-    });
-
-    if(this.current_player == this.socketService.username){
-      // When he can play, activate button and remove is_in_jail for safety
-      this.is_playing = true;
-      // TODO <- comprobar si puedo salir o no de la carcel si me encuentro en la casilla de la carcel
-      this.message = this.player[0] + ", es tu turno";
-      document.getElementById("tirar-dados")!.removeAttribute("disabled");
-      // Start timer
-      this.startTimer("leave_game");
-    } else {
-      this.message = this.current_player + " está jugando su turno";
-        // Update game information
-        //return this.gameService.get_list_players(this.game_id);
-    }
+      .subscribe({
+        next: (data: any) => {
+          this.current_player = data.jugador;
+          this.message = this.current_player + " está jugando su turno";
+        },
+        error: (error) => {
+          console.error(error);
+        },
+        complete: () => {
+          if (this.current_player == this.username){
+            this.is_playing = true;
+            this.message = this.player[0] + ", es tu turno";
+            document.getElementById("tirar-dados")!.removeAttribute("disabled");
+            // Start timer
+            this.startTimer("leave_game");
+          }
+        }
+      });
   }
 
   play_turn_player() {
@@ -323,34 +251,13 @@ export class BoardComponent implements OnInit, OnDestroy {
   async card_action() {
     console.log("=== CARD ACTION ===");
     // Get card information
-    let owner_of_card: string | null = null;
-    let money_to_pay: number | null = null;
-    let increase_credit_possible: boolean = false;
-    this.socketService.infoAsignatura({coordenadas: {h: this.player[2].h, v: this.player[2].v}})
+    this.socketService.casilla({coordenadas: {h: this.player[2].h, v: this.player[2].v}, socketId: this.socketService.socketID})
     .subscribe({
-      next: (data: any) => {
+      next: async (msg: number) => {
         console.log("Position : " + this.player[2].h + " " + this.player[2].v);
-        owner_of_card = data.jugador;
-        money_to_pay = data.dinero;
-        // If player owns the card, check if increase is possible
-        if (owner_of_card == this.player[0]) {
-          if (data.aumento) increase_credit_possible = true;
-        }
-        // If player doesn't own the card, check if he is bankrupt when he has to pay
-        else if (owner_of_card != null && owner_of_card != this.player[0]) {
-          if (data.bancarrota) this.is_bankrupt = true;
-        }
-        // Console log to debug
-        console.log("Owner of card: " + owner_of_card);
-        console.log("Money to pay: " + money_to_pay);
-        console.log("Increase credit possible: " + increase_credit_possible);
-      },
-      error: (error) => {
-        //console.error(error);
-        // Try again
-        this.card_action();
-      },
-      complete: async () => {
+        // Get the number of ack code
+        let number = msg;
+
         // Get position with id
         let position_id = this.convert_position_to_id(this.player[2]);
         console.log("Position id: " + position_id);
@@ -389,32 +296,26 @@ export class BoardComponent implements OnInit, OnDestroy {
         }
         // If it's a normal card, check if it's owned and what to do
         else {
-          // If no owner, can buy
-          if (owner_of_card == null) {
+          // If has to pay another player
+          if (number == 2){
+            this.createCardComponent(this.player[2].v, this.player[2].h, "Tienes que pagar", this.dices[0] == this.dices[1], "pay");
+          }
+          // If owner is the player and can increase the number of credit
+          else if (number == 6) {
+            this.createCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.dices[0] == this.dices[1], "increase");
+          }
+          // If can't increase the number of credit, propose to sell the card
+          else if (number == 7) {
+            this.createCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.dices[0] == this.dices[1], "sell");
+          }
+          // If no owner and can buy
+          else if (number == 8) {
             // Display buy card
             this.createCardComponent(this.player[2].v, this.player[2].h, "Quieres comprar ?", this.dices[0] == this.dices[1], "buy");
           }
-          // If owner is the player
-          else if (owner_of_card == this.player[0]) {
-            // If can increase the number of credit
-            if (increase_credit_possible) {
-              this.createCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.dices[0] == this.dices[1], "increase");
-            }
-            // If can't increase the number of credit, propose to sell the card
-            else {
-              this.createCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.dices[0] == this.dices[1], "sell");
-            }
-          }
-          // If owner is another player
-          else if (owner_of_card != this.player[0] && money_to_pay != null) {
-            // Pay if you are not bankrupt
-            if (!this.is_bankrupt) {
-              this.createCardComponent(this.player[2].v, this.player[2].h, "La tarjeta pertenece a " + owner_of_card, this.dices[0] == this.dices[1], "pay", money_to_pay);
-            }
-            // Else, you are bankrupt
-            else {
-              this.createInfoCardComponent("BANCARROTA", "Has perdido...<br>No tienes suficiente dinero para pagar " + money_to_pay + "€ a " + owner_of_card + " !", "Vale", false);
-            }
+          // If no owner and can't buy, just show card
+          else if (number == 9) {
+            this.createCardComponent(this.player[2].v, this.player[2].h, "No puedes comprar", this.dices[0] == this.dices[1], "view");
           }
         }
       }
@@ -428,17 +329,12 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Get old position of player
     let old_position_player = this.player[2];
     console.log("old position player (h,v): " + old_position_player.h + " " + old_position_player.v);
-    // Get new position of player by updating game information
-    this.socketService.infoPartida().subscribe({
+    /// TODO: Get new position of player by updating game information
+    /*this.socketService.infoPartida().subscribe({
       next: (data: Partida) => {
         this.actualize_game_info(data);
         console.log("new position player : " + this.player[2]);
         this.show_position_every_players();
-      },
-      error: (error) => {
-        //console.error(error);
-        // Try again
-        this.end_turn();
       },
       complete: () => {
         // If the position of player has changed, launch card action of the new position
@@ -467,7 +363,11 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.startTimer("next_turn");
           }
         }
-    });
+    });*/
+    this.message = "Pulsa el botón para terminar tu turno";
+    document.getElementById("button-end-turn")!.removeAttribute("disabled");
+    // Start timer to trigger next turn
+    this.startTimer("next_turn");
   }
 
   go_next_turn() : void {
@@ -480,20 +380,20 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.nb_doubles = 0;
     // Indicate to backend that the player has finished his turn
     this.socketService.siguienteTurno()
-    .then((data:any) => {
-      console.log("Next turn : ", data);
-      this.current_player = data.jugador;
-    },
-    (error) => {
-      console.error(error);
-      this.go_next_turn();
-    });
-    /*complete: () => {
-        this.message = "Es el turno de " + this.current_player;
-        // Go back to play to wait next time to play
-        this.play();
-      }
-    }*/
+      .subscribe({
+        next: (data: any) => {
+          console.log("Next turn : ", data);
+          this.current_player = data.jugador;
+        },
+        error: (error) => {
+          console.error(error);
+        },
+        complete: () => {
+          this.message = "Es el turno de " + this.current_player;
+          // Go back to play to wait next time to play
+          this.play();
+        }
+      })
   }
 
   /* === FUNCTIONS TO UPDATE INFORMATION === */
@@ -530,7 +430,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   update_player_info(): void {
     // Get information of player
-    
+
     this.socketService.infoPartida()
     .subscribe({
       next: (data: Partida) => {

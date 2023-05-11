@@ -71,7 +71,7 @@ export class WebSocketService {
       });
     });
   }
-  
+
   public consultarUsernameString(){
     this.consultarUsername()
     .then((username: any) => {
@@ -110,7 +110,7 @@ export class WebSocketService {
           reject(false);
         }
       });
-      
+
     });
 
   }
@@ -133,9 +133,9 @@ export class WebSocketService {
         console.log('Error en el registro');
       }
     });
-    
+
   });
-    
+
   }
 
   //Función que recibe la información necesaria para cambiar el nombre de un usuario
@@ -157,7 +157,7 @@ export class WebSocketService {
     });
   });
   }
-  
+
   //Función que recibe la infomación necesaria para eliminar a un usuario
   onDeleteUser(user: any){
     console.log('onDeleteUser: ', user);
@@ -171,7 +171,7 @@ export class WebSocketService {
       }
     });
   }
-  
+
   crearSalaInvitado(user: any): Promise<boolean>{
     //const user = {username: nombreUserInivtado, socketId: this.localSocketID};
     console.log('crearSalaInvitado: ', user);
@@ -187,7 +187,7 @@ export class WebSocketService {
           reject(false);
         }
       });
-      
+
     });
   }
 
@@ -206,7 +206,7 @@ export class WebSocketService {
           reject(false);
         }
       });
-      
+
     });
 
   }
@@ -220,7 +220,7 @@ export class WebSocketService {
         console.log('guardar cambio email  response.cod:', response.cod);
         console.log('guardar cambio email  response.msg:', response.msg);
         if (response.cod === 0) { // Si el código de confirmación es 200, redirigir a la pantalla de usuario
-          
+
           resolve(true);
         } else{
           console.log('Error al hacer un update del correo');
@@ -232,7 +232,7 @@ export class WebSocketService {
 
   public crearSala(user: any): Promise<number> {
     console.log("CREAR PARTIDA-SALA", user);
-  
+
     return new Promise((resolve) => {
       this.socket.emit('crearPartida', user, (response: any) => {
         console.log('crearPartida response:', response);
@@ -250,11 +250,11 @@ export class WebSocketService {
 
   public unirseSalaEsperar(user: any): Promise<string> {
     console.log("UNIRSE SALA ESPERAR", user);
-    
-    
+
+
     return new Promise<string>((resolve, reject) => {
       this.socket.emit('unirJugador', user, (response: any) => {
-        
+
         console.log('unirJugador response:', response);
         console.log('unirJugador response.cod:', response.cod);
         if (response.cod == 0) {
@@ -270,7 +270,7 @@ export class WebSocketService {
       });
     });
   }
-  
+
   actualizarUsuariosConectados(): Promise<string[]>{
     return new Promise((resolve, reject) => {
       this.socket.on('esperaJugadores', (info) => {
@@ -293,7 +293,7 @@ export class WebSocketService {
 
   public crearPartida(): Promise<number> {
     console.log("CREAR PARTIDA-SALA v2");
-  
+
     return new Promise((resolve) => {
       this.socket.emit('crearPartida', {socketId: this.socketID}, (ack: any) => {
         console.log('Server acknowledged:', ack);
@@ -310,7 +310,7 @@ export class WebSocketService {
       });
     });
   }
-  
+
   public actualizarDatosCrearPartida(datos: any){
     this.socket.emit('actualizarPartida', datos, (ack:any) => {
       if(ack.cod==0){
@@ -376,15 +376,20 @@ export class WebSocketService {
     });
   }
 
-  public socketOnTurno(): Promise<string>{
-    return new Promise ((resolve) => {
+  public socketOnTurno(): Observable<any>{
+    return new Observable((observer) => {
       this.socket.on('turnoActual', (ack: any) => {
         console.log('Server acknowledged:', ack);
         if(ack.cod == 0){
           console.log("TURNO", ack.msg);
-          resolve(ack.msg);
+          observer.next(ack.msg);
+          // If it's the turn of the user, complete the observer
+          if (ack.msg == this.username){
+            observer.complete();
+          }
         } else {
           console.log("Error al obtener el turno");
+          observer.error(new Error("Error al obtener el turno"));
         }
       });
     });
@@ -392,7 +397,7 @@ export class WebSocketService {
 
   public bancarrota(): Observable<string>{
     return new Observable ((observer) => {
-      this.socket.emit('bancarrota', { socketId: this.socketID }, 
+      this.socket.emit('bancarrota', { socketId: this.socketID },
       (ack: any) => {
         console.log('Server acknowledged:', ack);
         if(ack.cod == 0){
@@ -407,18 +412,18 @@ export class WebSocketService {
     });
   }
 
-  public siguienteTurno(): Promise <string>{
-    return new Promise ((resolve) => {
-      this.socket.emit('siguienteTurno', {socketId: this.socketID},
-       (ack: any) => {
+  public siguienteTurno(): Observable <string>{
+    return new Observable ((observer) => {
+      this.socket.emit('siguienteTurno', { socketId: this.socketID },
+      (ack: any) => {
         console.log('Server acknowledged:', ack);
         if(ack.cod == 0){
-          console.log("SIGUEINTE TURNO", ack.msg);
-          resolve(ack.msg);
-          
+          console.log("SIGUIENTE TURNO", ack.msg);
+          observer.next(ack.msg);
+          observer.complete();
         } else {
-          console.log("Error al hacer siguinete turno");
-
+          console.log("Error al pasar turno");
+          observer.error(new Error("Error al pasar turno"));
         }
       });
     });
@@ -441,22 +446,35 @@ export class WebSocketService {
     });
   }
 
-  public casilla(data: any): Promise <string>{
-    return new Promise ((resolve) => {
+  public casilla(data: any): Observable<number>{
+    return new Observable((observer) => {
       this.socket.emit('casilla', data,
-       (ack: any) => {
+      (ack: any) => {
         console.log('Server acknowledged:', ack);
-        resolve(ack.cod);
+        if(ack.cod == 5 || ack.cod == 6 || ack.cod == 7 || ack.cod == 8){
+          console.log("CASILLA", ack.msg);
+          observer.next(ack.cod);
+          observer.complete();
+        }
+        else {
+          console.log("Error al obtener la casilla");
+          observer.error(new Error("Error al obtener la casilla"));
+        }
       });
     });
   }
 
-  public comprarCasilla(data: any): Observable <string>{
+  public comprarCasilla(data: any): Observable <any>{
     return new Observable ((observer) => {
       this.socket.emit('comprarCasilla', data,
        (ack: any) => {
-        console.log('Server acknowledged:', ack);
-        observer.next(ack);
+        if (ack.cod == 1 || ack.cod == 2){
+          observer.error(new Error("Error al comprar la casilla"));
+        }
+        else if (ack.cod == 6 || ack.cod == 7 || ack.cod == 9){
+          observer.next(ack);
+          observer.complete();
+        }
       });
     });
   }
@@ -499,7 +517,7 @@ export class WebSocketService {
       });
     });
   }
- 
+
   public suerte(): Observable<RandomCard>{
     return new Observable ((observer) => {
       this.socket.emit('suerte', {socketId: this.socketID},
@@ -542,7 +560,8 @@ export class WebSocketService {
           console.log("INFO PARTIDA", ack.msg);
           observer.next(ack.msg);
           observer.complete();
-        } else {
+        }
+        else {
           console.log("error en infoPartida");
           observer.error();
         }
