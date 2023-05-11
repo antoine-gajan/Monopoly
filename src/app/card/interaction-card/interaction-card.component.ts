@@ -48,6 +48,7 @@ export class InteractionCardComponent {
   }
 
   buy_card() {
+    console.log("ENTRA A COMPRAR CASILLA");
     this.socketService.comprarCasilla({ socketId: this.socketService.socketID, coordenadas: {h: this.h, v: this.v}})
     .subscribe({
       next: (ack: any) => {

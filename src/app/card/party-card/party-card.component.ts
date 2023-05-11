@@ -22,6 +22,7 @@ export class PartyCardComponent implements OnInit{
   }
 
   get_party() {
+    console.log("ENTRA A GET PARTY");
     this.socketService.infoAsignatura({coordenadas: {h: this.h, v: this.v}})
     .subscribe({
       next: (data) => {

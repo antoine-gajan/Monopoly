@@ -108,6 +108,7 @@ export class BoardComponent implements OnInit, OnDestroy {
        if(nextPlayer.jugador == this.socketService.username){
          this.is_playing = true;
          this.message = this.current_player + ", es tu turno";
+         this.startTimer("next_turn");
          console.log("ESTÁ JUGANDO");
          //this.play_turno();
        } else {
