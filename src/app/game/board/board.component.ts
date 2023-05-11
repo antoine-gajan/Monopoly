@@ -831,7 +831,7 @@ export class BoardComponent implements OnInit, OnDestroy {
             this.leave_game();
           } else if ( action == "expulsar_jugador"){
             console.log("=== EXPULSAR JUGADOR ===");
-            
+            this.leave_game("expulsar_jugador")
 
           }
         }
