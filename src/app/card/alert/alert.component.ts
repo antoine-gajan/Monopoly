@@ -37,8 +37,9 @@ export class AlertComponent implements OnInit{
         // Calculate remaining time in seconds
         this.remaining_time = Math.floor((end_time - Date.now()) / 1000);
         // Check if the timer has finished
-        if (this.remaining_time == 0) {
-          console.log("15 SECONDS WAITED");
+        if (this.remaining_time <= 0) {
+          clearInterval(this.timer);
+          console.log("Timer out, you will be expulsed from the game");
           this.abandonar_partida();
           }
       }, 1000);

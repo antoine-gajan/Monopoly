@@ -807,7 +807,7 @@ export class BoardComponent implements OnInit, OnDestroy {
             this.leave_game();
           } else if ( action == "expulsar_jugador"){
             console.log("=== EXPULSAR JUGADOR ===");
-            //TODO <-- Expulsar jugador
+            // Expulse player
             this.cancelTimer();
             this.createAlertComponent();
 
@@ -834,27 +834,25 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   /* === FUNCTIONS TO LEAVE THE GAME === */
   leave_game(){
-    // Declare bankruptcy to backend
+    // Change the player who has to play
     this.socketService.siguienteTurno()
     .then((data: any) => {
       console.log("=== LEAVE GAME SIGUIENTE JUGADOR ===");
     });
-
+    // Declare bankruptcy to backend
     this.socketService.bancarrota()
     .subscribe({
-      next: (data: any) => {
-        console.log("=== LEAVE GAME ===");
-        // Update player money to 0
-        //TODO: revisar como se quita al usuario, si es cosa del back o del front
-      },
-      complete: () => {
-        // Redirect to home page of player
-        if(this.socketService.soyInvitado){
-          this.router.navigate(['/pantalla_invitado']);
-        } else {
-          this.router.navigate(['/pantalla']);
-        }
+      next: () => {
+        console.log("=== LEAVE GAME EXPULSAR ===");
       }
     });
+
+    // Redirect to home page of player
+    if(this.socketService.soyInvitado){
+      this.router.navigate(['/pantalla_invitado']);
+    }
+    else {
+      this.router.navigate(['/pantalla']);
+    }
   }
 }

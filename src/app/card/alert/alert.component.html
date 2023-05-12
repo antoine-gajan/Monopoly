@@ -1,12 +1,9 @@
 <div class="chance-card">
   <h3 class="title-card">
-    ¡AVISO!
+    ¿Quiere seguir jugando?
   </h3>
   <div class="info-container">
-    <div class="info">
-      ¿Quiere seguir jugando?
-      <div *ngIf="is_timer_active">Tiempo restante para jugar : {{remaining_time}} segundos</div>
-    </div>
+    <div class="info" *ngIf="is_timer_active">Tiempo restante para jugar : {{remaining_time}} segundos</div>
     <img src='../../../assets/images/perso_right.png'>
   </div>
   <div class="list-button" *ngIf="!is_loading">

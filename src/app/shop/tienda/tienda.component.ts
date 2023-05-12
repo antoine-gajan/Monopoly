@@ -13,6 +13,7 @@ import {Product} from "../../game/response-type";
 export class TiendaComponent {
 
   products: Product[] = [];
+  is_loading: boolean = true;
   constructor(
     private route: ActivatedRoute,
     private location: Location,
@@ -25,6 +26,7 @@ export class TiendaComponent {
       (products) => {
         console.log(products);
         this.products = products;
+        this.is_loading = false;
       });
   }
 

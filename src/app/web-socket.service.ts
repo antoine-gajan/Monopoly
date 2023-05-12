@@ -577,6 +577,24 @@ export class WebSocketService {
     });
   }
 
+  public comprarTienda(data: any): Observable<any>{
+    return new Observable((observer) => {
+      this.socket.emit('comprarTienda', data,
+      (ack: any) => {
+        console.log('Server acknowledged comprarTienda:', ack);
+        if(ack.cod == 0){
+          console.log("COMPRA TIENDA", ack.msg);
+          observer.next(ack.msg);
+          observer.complete();
+        }
+        else {
+          console.log("error en comprarTienda");
+          observer.error();
+        }
+      });
+    });
+  }
+
   public estaJulio(): Observable<any>{
     return new Observable<any>((observer) => {
       this.socket.emit('estaJulio', {socketId: this.socketID},

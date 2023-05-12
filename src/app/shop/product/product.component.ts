@@ -1,5 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Product} from "../../game/response-type";
+import {WebSocketService} from "../../web-socket.service";
 
 @Component({
   selector: 'app-product',
@@ -8,30 +9,30 @@ import {Product} from "../../game/response-type";
 })
 export class ProductComponent implements OnInit{
   @Input() product : Product;
-  comprado : boolean = false;
-  usado : boolean = false;
-  comprado_prueba : boolean = false;
-  usado_prueba : boolean = false;
+  @Output() refresh_shop = new EventEmitter();
 
-  constructor() {
+  constructor(private socketService: WebSocketService) {
   }
 
   ngOnInit(): void {
-
   }
 
   getImageUrl() {
     return 'data:image/png;base64,' + this.product.imagen;
-} 
+}
 
   buy_product(){
-    //TODO: si el back deja comprarlo -> this.puedoComprar
-    //this.comprado_prueba = true;
-    
+    // Buy product
+    this.socketService.comprarTienda({socketId: this.socketService.socketID, producto: this.product.nombre}).subscribe(
+      (msg) => {
+        console.log(msg);
+        console.log("Se ha comprado el producto: " + this.product.nombre);
+        this.refresh_shop.emit();
+      });
   }
 
   usar_product() {
-    /// TODO : Buy product from shop with link to backend
-    //this.usado_prueba = true;
+    /// TODO : Use product from shop with link to backend
+    this.refresh_shop.emit();
   }
 }

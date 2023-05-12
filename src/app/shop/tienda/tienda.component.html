@@ -11,10 +11,13 @@
 
 <div>
   <div class="title-list-products">Fichas y avatares: </div>
-  <div class="list-products">
+  <div class="list-products" *ngIf="!is_loading">
     <div class="product" *ngFor="let product of products">
-      <app-product [product]="product" comprado="product.comprado" usado="product.usado" class="product"></app-product>
+      <app-product [product]="product" (refresh_shop)="ngOnInit()" class="product"></app-product>
     </div>
+  </div>
+  <div class="list-products" *ngIf="is_loading">
+    <app-loader></app-loader>
   </div>
 </div>
 
