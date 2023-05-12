@@ -15,9 +15,9 @@ export class AjustesUsuarioComponent {
   username: string;
   email: string;
   picture: string;
-  partidasGanadas: string;
-  juegosJugados: string;
-  ratio: string;
+  partidasGanadas: number = 0;
+  juegosJugados: number = 0;
+  ratio: number = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -35,6 +35,9 @@ export class AjustesUsuarioComponent {
       this.email = usuario.msg.correo;
       this.partidasGanadas = usuario.msg.victorias;
       this.juegosJugados = usuario.msg.partidasJugadas;
+      if(usuario.msg.partidasJugadas != 0){
+        this.ratio = (usuario.msg.victorias / usuario.msg.partidasJugadas);
+      }
       const blobData = usuario.msg.imagen;
       console.log("blobData: ", blobData);
       const dataUrl =`data:image/jpg;base64,${blobData}`;
@@ -83,7 +86,6 @@ export class AjustesUsuarioComponent {
     .catch(() => {
       console.log("ERROR AL OBTENER EMAIL");
     });
-  }
-  
+  }  
   
 }

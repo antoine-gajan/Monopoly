@@ -11,6 +11,7 @@ import {GameModule} from "../game/game.module";
 import { InfoCardComponent } from './info-card/info-card.component';
 import { JailCardComponent } from './jail-card/jail-card.component';
 import { SubastaCardComponent } from './subasta-card/subasta-card.component';
+import { AlertComponent } from './alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { SubastaCardComponent } from './subasta-card/subasta-card.component';
     InteractionCardComponent,
     InfoCardComponent,
     JailCardComponent,
-    SubastaCardComponent],
+    SubastaCardComponent,
+    AlertComponent],
     imports: [
       CommonModule,
       GameModule,
