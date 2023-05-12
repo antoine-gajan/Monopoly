@@ -76,11 +76,10 @@ export class BoardComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // Get the game id from the url
     this.game_id = parseInt(<string>this.route.snapshot.paramMap.get('id'));
-
-    
+    // Tomamos el nombre del usuario    
     this.username = this.socketService.username;
+    
     // Se activa el socket on para saber cuando es nuestro turno
-
     this.socketService.socketOnTurno()
     .subscribe({
       next: (data) => {
@@ -92,6 +91,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     console.log("---------------------------");
     console.log("Board component initialized");
     console.log("TODO INICIADO: Game id: ", this.game_id);
+
+   
     // Se obtiene la lista de jugadores
     this.list_players = this.socketService.list_players;
     console.log("TODO INICIADO: List players: ", this.list_players);
@@ -299,7 +300,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     .subscribe({
       next: async (msg: number) => {
         //console.log
-        /*console.log("Position : " + this.player[2].h + " " + this.player[2].v);
+        console.log("Position : " + this.player[2].h + " " + this.player[2].v);
         // Get the number of ack code
         let number = msg;
 
@@ -362,7 +363,7 @@ export class BoardComponent implements OnInit, OnDestroy {
           else if (number == 9) {
             this.createCardComponent(this.player[2].v, this.player[2].h, "No puedes comprar", this.dices[0] == this.dices[1], "view");
           }
-        }*/
+        }
       }
     });
   }
