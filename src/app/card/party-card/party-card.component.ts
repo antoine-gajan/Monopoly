@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {GameService} from "../../game/game.service";
 import {Party} from "../../game/response-type";
-import { Propriety } from '../../../../app/game/response-type';
+import { Propriety } from '../../game/response-type';
 import { WebSocketService } from 'app/web-socket.service';
 
 @Component({
@@ -12,7 +12,7 @@ import { WebSocketService } from 'app/web-socket.service';
 export class PartyCardComponent implements OnInit{
   @Input() h: number;
   @Input() v: number;
-  
+
   party: Propriety;
   constructor(
     private socketService: WebSocketService
@@ -31,8 +31,6 @@ export class PartyCardComponent implements OnInit{
       },
       error: (error) => {
         console.log(error);
-        // Try again
-        setTimeout(() => this.get_party(), 2000);
       }
     });
   }
