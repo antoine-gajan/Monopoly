@@ -14,8 +14,10 @@ export class JailCardComponent {
   @Input() player_money : number = 0;
   @Output() end_turn = new EventEmitter();
   @Output() reStartTimerExpulsarJugador = new EventEmitter();
-  // Card to go out
+  // Variables linked with button
   has_card : boolean = false;
+  can_pay : boolean = false;
+
   // Dices
   dices_interval: any;
   dices: number[] = [];
@@ -34,30 +36,13 @@ export class JailCardComponent {
   ) { }
 
   ngOnInit(): void {
-    // Observe if player has card to go out of jail
-    this.has_card_to_go_out();
-  }
-
-  has_card_to_go_out(){
-    this.reStartTimerExpulsarJugador.emit();
-    //TODO falta de implementar
-    /*
-    this.gameService.has_card_to_go_out_of_jail(this.game_id, this.player_name).subscribe(
-      (response) => {
-        console.log(response.status);
-        if (response.status == 200){
-          this.has_card = true;
-        }
-        else if (response.status == 205){
-          this.has_card = false;
-        }
-        else {
-          console.log("Error al comprobar si tiene carta Julio");
-          // Try again
-          this.has_card_to_go_out();
-        }
+    this.socketService.estaJulio().subscribe(
+      (msg) => {
+        console.log(msg);
+        this.has_card = (msg.carta != null);
+        this.can_pay = msg.puedePagar;
       }
-    );*/
+    )
   }
 
   use_card_to_go_out(){
@@ -88,7 +73,7 @@ export class JailCardComponent {
   }
 
   roll_dices(): void {
-    this.reStartTimerExpulsarJugador.emit();  
+    this.reStartTimerExpulsarJugador.emit();
     // Roll dices
     this.move_dices_action();
     this.socketService.lanzarDados()

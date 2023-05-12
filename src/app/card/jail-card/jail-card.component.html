@@ -15,8 +15,8 @@
           </div>
   </div>
   <div class="list-button">
-    <button class="button-action pagar" *ngIf="player_money >= 67" (click)="pagar()">Pagar 67€</button>
-    <button class="button-action carta" *ngIf="has_card" (click)="use_card_to_go_out()">Utilizar carta </button>
+    <button class="button-action pagar" *ngIf="can_pay" (click)="pagar()">Pagar</button>
+    <button class="button-action carta" *ngIf="has_card" (click)="use_card_to_go_out()">Utilizar carta</button>
     <button class="button-action nada" (click)="roll_dices()">Lanzar los dados</button>
   </div>
 </div>

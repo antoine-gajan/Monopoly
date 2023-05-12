@@ -384,7 +384,6 @@ export class WebSocketService {
         if(ack.cod == 0){
           console.log("TURNO", ack.msg);
           observer.next(ack.msg);
-
         } else {
           console.log("Error al obtener el turno");
           observer.error(new Error("Error al obtener el turno"));
@@ -551,20 +550,17 @@ export class WebSocketService {
 
   public infoPartida(): Observable<Partida>{
     return new Observable ((observer) => {
-      this.socket.emit('infoPartida', {socketId: this.socketID},
-      (ack: any) => {
+      this.socket.on('infoPartida', (ack: any) => {
         console.log('Server acknowledged:', ack);
         if(ack.cod == 0){
           console.log("INFO PARTIDA", ack.msg);
           observer.next(ack.msg);
-          observer.complete();
         }
         else {
           console.log("error en infoPartida");
-          observer.error();
         }
-      })
-    });
+       });
+      });
   }
 
   public tienda(): Observable<Product[]>{
@@ -582,6 +578,24 @@ export class WebSocketService {
           observer.error();
         }
       })
+    });
+  }
+
+  public estaJulio(): Observable<any>{
+    return new Observable<any>((observer) => {
+      this.socket.emit('estaJulio', {socketId: this.socketID},
+      (ack: any) => {
+        console.log('Server acknowledged:', ack);
+        if(ack.cod == 0){
+          console.log("ESTA JULIO", ack.msg);
+          observer.next(ack.msg);
+          observer.complete();
+        }
+        else {
+          console.log("error en estaJulio");
+          observer.error();
+        }
+      });
     });
   }
 }

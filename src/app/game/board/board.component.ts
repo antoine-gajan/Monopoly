@@ -5,11 +5,9 @@ import {UserService} from "../../user/user.service";
 import {InteractionCardComponent} from "../../card/interaction-card/interaction-card.component";
 import {ChanceCardComponent} from "../../card/chance-card/chance-card.component";
 import {CommunityCardComponent} from "../../card/community-card/community-card.component";
-import {EMPTY, Observable, forkJoin, interval, switchMap, takeWhile} from "rxjs";
 import {InfoCardComponent} from "../../card/info-card/info-card.component";
 import {JailCardComponent} from "../../card/jail-card/jail-card.component";
 import {Coordenadas, Partida, PlayerListResponse, PropertyBoughtResponse} from "../response-type";
-import {DevolutionPropertiesFormComponent} from "../devolution-properties-form/devolution-properties-form.component";
 import { WebSocketService } from 'app/web-socket.service';
 import {SubastaCardComponent} from "../../card/subasta-card/subasta-card.component";
 import { AlertComponent } from 'app/card/alert/alert.component';
@@ -77,10 +75,11 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Get the game id from the url
     this.game_id = parseInt(<string>this.route.snapshot.paramMap.get('id'));
 
-    
     this.username = this.socketService.username;
-    // Se activa el socket on para saber cuando es nuestro turno
 
+    this.message = "Cargando la partida...";
+
+    // Se activa el socket on para saber cuando es nuestro turno
     this.socketService.socketOnTurno()
     .subscribe({
       next: (data) => {
@@ -89,10 +88,37 @@ export class BoardComponent implements OnInit, OnDestroy {
       }
      });
 
+    // Know the first player
+    this.socketService.siguienteTurno()
+    .then((player: any) => {
+      console.log("Player : ", player);
+      this.current_player = player.jugador;
+    });
+
+    // Activate socket to know information of game
+    this.socketService.infoPartida()
+      .subscribe({
+        next: (data) => {
+          console.log("Info partida: ", data);
+          this.actualize_game_info(data);
+          this.show_position_every_players();
+          // Check if game is finished and display winner
+          if (data.nombreJugadores.length == 1){
+            if (data.nombreJugadores[0] == this.player[0]){
+              this.message = "¡Has ganado la partida!";
+              this.createInfoCardComponent("¡Partida terminada!", "¡Has ganado la partida!", "Vale", false);
+            }
+            else {
+              this.createInfoCardComponent("¡Partida terminada!", "¡El ganador es " + data.nombreJugadores[0], "Vale", false);
+            }
+          }
+        }
+      });
+
     console.log("---------------------------");
     console.log("Board component initialized");
     console.log("TODO INICIADO: Game id: ", this.game_id);
-    // Se obtiene la lista de jugadores
+    /*// Se obtiene la lista de jugadores
     this.list_players = this.socketService.list_players;
     console.log("TODO INICIADO: List players: ", this.list_players);
     if(this.list_players.length != 0){
@@ -103,37 +129,15 @@ export class BoardComponent implements OnInit, OnDestroy {
       }
     }
     //TODO <-------------------------------------------------------FALTA COMRPOBAR QUE CARGUEN LOS USUARIOS
-    /* TODO: revisar implementación de git */
-
-    this.message = "Cargando la partida..."
+    */
     document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
     document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
     //TODO <- ontener el nombre del usuario actual
     // TODO ----------------> revisar si hay que hacer esto o se va a buggear
     // this.socketService.consultarUsernameString(); <------------------------------------ FALTA OBTENER EL NOMMBRE DEL USUARIO ACTUAL
     console.log("TODO INICIADO: Username: ", this.player[0]);
-    // Se muestra la posición inicial de todos los jugadores en el tablero
-    this.show_position_every_players();
 
-    
-    console.log("jugador0", this.player[0]);
-    if(this.player[0] == this.socketService.username){
-      this.current_player = this.socketService.username;
-      this.is_playing = true;
-        this.message = this.current_player + ", es tu turno";
-        this.reStartTimerExpulsarJugador();
-        console.log("ESTÁ JUGANDO");
-        document.getElementById("tirar-dados")!.removeAttribute("disabled");
-        //this.play_turno();
-    } else {
-      this.current_player = this.player[0];
-      this.message = this.current_player + " está jugando su turno";
-        console.log("NO ESTÁ JUGANDO");
-        //document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
-        //this.ver_jugar();
-    }
- 
-   
+
   }
 
   ngOnDestroy() {
@@ -146,53 +150,15 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
-  reStartTimerExpulsarJugador(){
-    this.startTimer("expulsar_jugador", 10);
-  }
-
-  reStartTimerExpulsarJugadorAlert(){
-    this.startTimer("expulsar_jugador", 15);
-  }
-
   load_game(){
     console.log("Loading game...");
     // Block buttons to avoid risks
     document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
     document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
 
-    // Indicate that the game is loading
-    this.message = "Cargando la partida..."
-    // Get list of players
-    /*this.socketService.infoPartida()
-    .subscribe({
-      next: (data: Partida) => {
-        this.actualize_game_info(data);
-      },
-      error: (error) => {
-        //console.error(error);
-        this.load_game();
-      },
-      complete: () => {
-        //this.get_properties();
-        this.get_properties_of_other_players();
-        // Show position of the players
-        this.show_position_every_players();
-        // Indicate that the game is loaded
-        this.message = "Partida cargada";
-        // Start the game
-        this.play();
-      }
-    });*/
-    // Se obtiene la lista de jugadores
-     this.list_players = this.socketService.list_players;
-     console.log("TODO INICIADO: List players: ", this.list_players);
-     if(this.list_players.length != 0){
-       this.player[0] = this.list_players[0];// TODO <---------------------actualizar essto y cambiarlo cuando nos devuelban bien los jugadore sy datos de la aprtida
-       this.player[1] = 1500;
-       for(let i = 1; i<this.list_players.length; i++){
-         this.other_players_list.push([this.list_players[i], 1500, {h: 10, v: 10}]);
-       }
-     }
+    // Indicate that the game is loading correctly
+    this.message = "Partida cargada";
+    // Launch game
      this.play();
   }
 
@@ -212,24 +178,6 @@ export class BoardComponent implements OnInit, OnDestroy {
             properties.push([data[i].nombre, data[i].coordenadas]);
           }
           this.player_properties = properties;
-          // Return Empty to continue
-        }
-      });
-    }
-  }
-
-  get_properties_of_other_players(): void {
-    // Get every properties of the other players
-    console.log("Get properties of other players");
-    for (let player of this.other_players_list) {
-      this.socketService.listaAsignaturasC()
-      .subscribe({
-        next: (data: PropertyBoughtResponse[]) => {
-          let properties: [string, Coordenadas][] = [];
-          for (let i = 0; i < data.length; i++) {
-            properties.push([data[i].nombre, data[i].coordenadas]);
-          }
-          this.other_player_properties[player[0]] = properties;
         }
       });
     }
@@ -239,14 +187,32 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   async play(): Promise<void> {
     // Check who is playing and if it's my turn, play
+
+    // If it's my turn
+    this.is_playing = true;
+    this.message = this.player[0] + ", es tu turno";
     if (this.current_player == this.username){
-      // If it's my turn
-      this.is_playing = true;
-      this.message = this.player[0] + ", es tu turno";
-      // Enable play button
-      document.getElementById("tirar-dados")!.removeAttribute("disabled");
-      // Start timer
-      this.reStartTimerExpulsarJugador();
+      // Check if the player is in jail
+      this.socketService.estaJulio().subscribe(
+        {
+          next: (msg) => {
+            console.log("TODO INICIADO: Is in jail: ", msg);
+            this.is_in_jail = msg.carcel;
+          },
+          complete: () => {
+            // Enable play button if not in jail
+            if (!this.is_in_jail) {
+              document.getElementById("tirar-dados")!.removeAttribute("disabled");
+            }
+            else{
+              // Card action of jail
+              this.card_action();
+            }
+            // Start timer
+            this.reStartTimerExpulsarJugador();
+          }
+        }
+      )
     }
   }
 
@@ -628,7 +594,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     const factory = this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
     // Inputs
-    
+
     componentRef.instance.leave_game.subscribe(() => {this.leave_game()});
     componentRef.instance.close_card.subscribe(() => {this.delete_pop_up_component()});
     componentRef.instance.reStartTimerExpulsarJugador.subscribe(() => {this.reStartTimerExpulsarJugador()});
@@ -880,7 +846,7 @@ export class BoardComponent implements OnInit, OnDestroy {
             //TODO <-- Expulsar jugador
             this.cancelTimer();
             this.createAlertComponent();
-            
+
           }
         }
       }, 1000);
@@ -892,8 +858,13 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
- 
+    reStartTimerExpulsarJugador(){
+    this.startTimer("expulsar_jugador", 10);
+  }
 
+  reStartTimerExpulsarJugadorAlert(){
+    this.startTimer("expulsar_jugador", 15);
+  }
 
   cancelTimer() {
     console.log("=== CANCEL TIMER ===");
@@ -925,6 +896,6 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.router.navigate(['/pantalla']);
         }
       }
-    }); 
+    });
   }
 }
