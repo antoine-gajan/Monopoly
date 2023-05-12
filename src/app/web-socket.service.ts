@@ -577,7 +577,7 @@ export class WebSocketService {
     });
   }
 
-  /*public estaJulio(): Observable<any>{
+  public estaJulio(): Observable<any>{
     return new Observable<any>((observer) => {
       this.socket.emit('estaJulio', {socketId: this.socketID},
       (ack: any) => {
@@ -593,5 +593,17 @@ export class WebSocketService {
         }
       });
     });
-  }*/
+  }
+
+  public pagarJulio(): Observable<any>{
+    return new Observable<any>((observer) => {
+      this.socket.emit('pagarJulio', {socketId: this.socketID},
+      (ack: any) => {
+        console.log('Server acknowledged:', ack);
+        console.log("PAGAR JULIO", ack.msg);
+        observer.next(ack.msg);
+        observer.complete();
+      });
+    });
+  }
 }

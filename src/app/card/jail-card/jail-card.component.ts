@@ -8,14 +8,11 @@ import { WebSocketService } from 'app/web-socket.service';
 })
 export class JailCardComponent {
   // Information of player
-  @Input() player_name: string;
-  @Input() game_id : number;
-  @Input() player_money : number = 0;
   @Output() end_turn = new EventEmitter();
   @Output() reStartTimerExpulsarJugador = new EventEmitter();
   // Variables linked with button
-  has_card : boolean = false;
-  can_pay : boolean = false;
+  @Input() has_card : boolean = false;
+  @Input() can_pay : boolean = false;
   is_loading : boolean = false;
 
   // Dices
@@ -35,15 +32,6 @@ export class JailCardComponent {
     private socketService: WebSocketService
   ) { }
 
-  ngOnInit(): void {
-    /*this.socketService.estaJulio().subscribe(
-      (msg) => {
-        console.log(msg);
-        this.has_card = (msg.carta != null);
-        this.can_pay = msg.puedePagar;
-      }
-    )*/
-  }
 
   use_card_to_go_out(){
     this.reStartTimerExpulsarJugador.emit();
@@ -66,10 +54,14 @@ export class JailCardComponent {
   }
 
   pagar() {
-    this.reStartTimerExpulsarJugador.emit();
-    /// TODO: Pay 67€
-    // End turn
-    this.validate();
+    // Pay with backend
+    this.socketService.pagarJulio().subscribe(
+      (msg) => {
+        console.log(msg);
+        // End turn
+        this.validate();
+      }
+    )
   }
 
   roll_dices(): void {
