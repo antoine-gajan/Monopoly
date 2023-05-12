@@ -76,4 +76,10 @@ export class CambiarContraseñaComponent implements OnInit {
     location.reload();
     this.mensajeCambiado = !this.mensajeCambiado;
   }
+
+  // función que permite volver arriba en la página
+  volverArriba() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
 }

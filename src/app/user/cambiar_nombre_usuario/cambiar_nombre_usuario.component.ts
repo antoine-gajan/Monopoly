@@ -97,4 +97,10 @@ export class CambiarUsernameComponent {
         console.log("CAMBIAR USERNAME informacion introducida falsa");
       }
   }
+
+  // función que permite volver arriba en la página
+  volverArriba() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
 }

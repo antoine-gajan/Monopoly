@@ -88,5 +88,11 @@ export class CambiarCorreoComponent {
       });
     }
   }
+
+  // función que permite volver arriba en la página
+  volverArriba() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
 }
 

@@ -581,7 +581,7 @@ export class WebSocketService {
     });
   }
 
-  public estaJulio(): Observable<any>{
+  /*public estaJulio(): Observable<any>{
     return new Observable<any>((observer) => {
       this.socket.emit('estaJulio', {socketId: this.socketID},
       (ack: any) => {
@@ -597,5 +597,5 @@ export class WebSocketService {
         }
       });
     });
-  }
+  }*/
 }

@@ -87,5 +87,11 @@ export class AjustesUsuarioComponent {
       console.log("ERROR AL OBTENER EMAIL");
     });
   }  
+
+  // función que permite volver arriba en la página
+  volverArriba() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   
 }

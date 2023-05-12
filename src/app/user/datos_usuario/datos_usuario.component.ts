@@ -27,4 +27,9 @@ export class DatosUsuarioComponent {
     //this.router.navigate(['/cambiar_correo', { email: (this.userService.leer_email(user)).toString()}]);
     console.log("sale: leer_email", this.email);
   }
+  // función que permite volver arriba en la página
+  volverArriba() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
 }
