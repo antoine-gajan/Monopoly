@@ -14,10 +14,9 @@ export class InfoCardComponent {
 
   @Output() end_turn = new EventEmitter();
   @Output() delete_card = new EventEmitter();
-  @Output() reStartTimerExpulsarJugador = new EventEmitter()
+  @Output() reStartTimerExpulsarJugador = new EventEmitter();
 
-  constructor(private gameService: GameService) {
-
+  constructor() {
   }
 
   validate() {

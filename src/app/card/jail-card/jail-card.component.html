@@ -14,9 +14,12 @@
             <img class="dice" [src]="diceImages[dices[1] - 1]">
           </div>
   </div>
-  <div class="list-button">
+  <div class="list-button" *ngIf="!is_loading">
     <button class="button-action pagar" *ngIf="can_pay" (click)="pagar()">Pagar</button>
     <button class="button-action carta" *ngIf="has_card" (click)="use_card_to_go_out()">Utilizar carta</button>
     <button class="button-action nada" (click)="roll_dices()">Lanzar los dados</button>
+  </div>
+  <div class="list-button" *ngIf="is_loading">
+    <app-loader></app-loader>
   </div>
 </div>

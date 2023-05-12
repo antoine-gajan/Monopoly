@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {GameService} from "../../game/game.service";
 import { WebSocketService } from 'app/web-socket.service';
 
 @Component({
@@ -17,6 +16,7 @@ export class JailCardComponent {
   // Variables linked with button
   has_card : boolean = false;
   can_pay : boolean = false;
+  is_loading : boolean = false;
 
   // Dices
   dices_interval: any;
