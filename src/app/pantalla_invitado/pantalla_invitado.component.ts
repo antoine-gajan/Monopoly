@@ -120,7 +120,12 @@ volverArriba() {
       
       console.log("CREAR PARTIDA BOTON PANTALLA");
       
-      this.socketService.crearPartida()
+      this.socketService.crearPartida({
+        dineroInicial: 1000,
+        nJugadores: 2,
+        normas: {cobrarCarcel: false, cobrarBeca: false, activarSubasta: false, aumentarCreditos: false, reiniciarJuegoBancarrota: false},
+        socketId: this.socketService.socketID
+      })
           .then((crearSala: number) => {
             if(crearSala != -1){
               console.log("CREAR SALA: ", crearSala);

@@ -7,15 +7,11 @@ import { WebSocketService } from 'app/web-socket.service';
   styleUrls: ['./jail-card.component.css']
 })
 export class JailCardComponent {
-  // Information of player
-  @Input() player_name: string;
-  @Input() game_id : number;
-  @Input() player_money : number = 0;
   @Output() end_turn = new EventEmitter();
   @Output() reStartTimerExpulsarJugador = new EventEmitter();
   // Variables linked with button
-  has_card : boolean = false;
-  can_pay : boolean = false;
+  @Input() has_card : boolean = false;
+  @Input() can_pay : boolean = false;
   is_loading : boolean = false;
 
   // Dices

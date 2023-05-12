@@ -32,6 +32,8 @@ export class CrearSalaComponent {
   list_players: string[] = [];
   partidaCreadaBoton: boolean = false;
   jugar: boolean = false;
+  numJugadoresConectados: number;
+  numMinJugadores: number = 2;
 
   constructor(
     router: Router,
@@ -52,6 +54,9 @@ export class CrearSalaComponent {
     
     this.socketService.hacerOnSocket();
     
+    this.numJugadoresConectados = this.socketService.cantidadUsuariosConectados;
+    this.numMinJugadores = Math.min(this.numJugadoresConectados, 2);
+
     console.log("ME HE ADELANTADO");
     this.idPartida = this.socketService.idPartida;
     console.log("ID PARTIDA: ", this.idPartida);
@@ -68,6 +73,10 @@ export class CrearSalaComponent {
       console.error('Error al obtener usuarios conectados:', error);
     });
     console.log("--", this.socketService.list_players);
+  }
+
+  range(start: number, end: number): number[] {
+    return Array.from({length: (end - start)}, (v, k) => k + start);
   }
 
   empezarJugar() {
@@ -96,6 +105,7 @@ export class CrearSalaComponent {
   actualizarDatos(){
     console.log("ACTUALIZAR DATOS");
     this.socketService.dineroPartida = this.dineroJugador;
+    
     const datos = {
       dineroInicial: this.dineroJugador,
       nJugadores: this.numJugadores,

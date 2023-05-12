@@ -22,6 +22,7 @@ export class WebSocketService {
   private picture: string;
   private _socketID: string;
   private socket = io(environment.socketURL, { transports: ["websocket"] });
+  cantidadUsuariosConectados: number;
 
   constructor(private router: Router) {
     this.socket.on('connect', () => {
@@ -232,23 +233,7 @@ export class WebSocketService {
     });
   }
 
-  public crearSala(user: any): Promise<number> {
-    console.log("CREAR PARTIDA-SALA", user);
 
-    return new Promise((resolve) => {
-      this.socket.emit('crearPartida', user, (response: any) => {
-        console.log('crearPartida response:', response);
-        console.log('crearPartida response.cod:', response.cod);
-        console.log('crearPartida response.msg:', response.msg);
-        if (response.cod === 0) {
-          resolve(response.msg);
-        } else {
-          console.log('Error al crear la sala');
-          resolve(-1);
-        }
-      });
-    });
-  }
 
   public unirseSalaEsperar(user: any): Promise<string> {
     console.log("UNIRSE SALA ESPERAR", user);
@@ -289,16 +274,23 @@ export class WebSocketService {
 
   hacerOnSocket(){
     this.socket.on('esperaJugadores', (ack: any) => {
-      console.log('Server acknowledged:', ack);
+      console.log('Server acknowledged esperaJugadores: ->', ack);
+  
+      let vector = ack as string[];
+      this.cantidadUsuariosConectados = vector.length;
+      console.log("Cantidad de usuarios conectados: ", this.cantidadUsuariosConectados);
     });
   }
 
-  public crearPartida(): Promise<number> {
+  
+  
+
+  public crearPartida(datos: any): Promise<number> {
     console.log("CREAR PARTIDA-SALA v2");
 
     return new Promise((resolve) => {
-      this.socket.emit('crearPartida', {socketId: this.socketID}, (ack: any) => {
-        console.log('Server acknowledged:', ack);
+      this.socket.emit('crearPartida', datos, (ack: any) => {
+        console.log('Server acknowledged crearPartida:', ack);
       if(ack.cod == 0){
         console.log("ENTRA");
           resolve(ack.msg.id);
@@ -337,7 +329,7 @@ export class WebSocketService {
   public consultarUsuario(): Promise<any>{
     return new Promise ((resolve) => {
       this.socket.emit('infoUsuario', {socketId: this.socketID}, (ack: any) => {
-        console.log('Server acknowledged:', ack);
+        console.log('Server acknowledged consultarUsuario:', ack);
         if(ack.cod==0){
           console.log('Valor escuchar para entrar a jugar:', ack);
           resolve(ack);
@@ -353,7 +345,7 @@ export class WebSocketService {
     return new Observable((observer) => {
     this.socket.emit('lanzarDados', {socketId: this.socketID},
       (ack: any) => {
-        console.log('Server acknowledged:', ack);
+        console.log('Server acknowledged lanzarDados:', ack);
         if(ack.cod == 0){
           console.log("LANZAR DADOS", ack.msg);
           observer.next(ack.msg);
@@ -392,7 +384,7 @@ export class WebSocketService {
     return new Observable ((observer) => {
       this.socket.emit('bancarrota', { socketId: this.socketID },
       (ack: any) => {
-        console.log('Server acknowledged:', ack);
+        console.log('Server acknowledged bancarrota:', ack);
         if(ack.cod == 0){
           console.log("BANCARROTA", ack.msg);
           observer.next();
@@ -409,7 +401,7 @@ export class WebSocketService {
     return new Promise ((resolve) => {
       this.socket.emit('siguienteTurno', {socketId: this.socketID},
        (ack: any) => {
-        console.log('Server acknowledged:', ack);
+        console.log('Server acknowledged siguienteTurno:', ack);
         if(ack.cod == 0){
           console.log("SIGUEINTE TURNO", ack.msg);
           resolve(ack.msg);
@@ -426,7 +418,7 @@ export class WebSocketService {
     return new Observable ((observer) => {
       this.socket.emit('infoAsignatura', datos,
        (ack: any) => {
-        console.log('Server acknowledged:', ack);
+        console.log('Server acknowledged infoAsignatura:', ack);
         if(ack.cod == 0){
           console.log("INFO ASIGNATURA", ack.msg);
           observer.next(ack.msg);
@@ -443,7 +435,7 @@ export class WebSocketService {
     return new Observable((observer) => {
       this.socket.emit('casilla', data,
       (ack: any) => {
-        console.log('Server acknowledged:', ack);
+        console.log('Server acknowledged casilla:', ack);
         if(ack.cod == 5 || ack.cod == 6 || ack.cod == 7 || ack.cod == 8){
           console.log("CASILLA", ack.msg);
           observer.next(ack.cod);
@@ -461,6 +453,7 @@ export class WebSocketService {
     return new Observable ((observer) => {
       this.socket.emit('comprarCasilla', data,
        (ack: any) => {
+        console.log('Server acknowledged comprarCasilla:', ack);
         if (ack.cod == 1 || ack.cod == 2){
           observer.error(new Error("Error al comprar la casilla"));
         }
@@ -476,7 +469,7 @@ export class WebSocketService {
     return new Observable ((observer) => {
       this.socket.emit('listaAsignaturasC', {socketId: this.socketID},
        (ack: any) => {
-        console.log('Server acknowledged:', ack);
+        console.log('Server acknowledged listaAsignaturas:', ack);
         if(ack.cod == 0){
           console.log("LISTA ASIGNATURAS C", ack.msg);
           observer.next(ack.msg);
@@ -493,7 +486,7 @@ export class WebSocketService {
     return new Observable ((observer) => {
       this.socket.emit('vender', data,
        (ack: any) => {
-        console.log('Server acknowledged:', ack);
+        console.log('Server acknowledged vender:', ack);
         observer.next(ack);
         observer.complete();
       });
@@ -504,7 +497,7 @@ export class WebSocketService {
     return new Observable ((observer) => {
       this.socket.emit('aumentarCreditos', data,
        (ack: any) => {
-        console.log('Server acknowledged:', ack);
+        console.log('Server acknowledged aumentarCreditos:', ack);
         observer.next(ack);
         observer.complete();
       });
@@ -515,7 +508,7 @@ export class WebSocketService {
     return new Observable ((observer) => {
       this.socket.emit('suerte', {socketId: this.socketID},
        (ack: any) => {
-        console.log('Server acknowledged:', ack);
+        console.log('Server acknowledged suerte:', ack);
         if(ack.cod == 0){
           console.log("SUERTE", ack.msg);
           observer.next(ack.msg);
@@ -532,7 +525,7 @@ export class WebSocketService {
     return new Observable ((observer) => {
       this.socket.emit('boletin', {socketId: this.socketID},
        (ack: any) => {
-        console.log('Server acknowledged:', ack);
+        console.log('Server acknowledged boletin:', ack);
         if(ack.cod == 0){
           console.log("BOLETIN", ack.msg);
           observer.next(ack.msg);
@@ -547,7 +540,7 @@ export class WebSocketService {
   public infoPartida(): Observable<Partida>{
     return new Observable ((observer) => {
       this.socket.on('infoPartida', (ack: any) => {
-        console.log('Server acknowledged:', ack);
+        console.log('Server acknowledged infoPartida:', ack);
         if(ack.cod == 0){
           console.log("INFO PARTIDA", ack.msg);
           observer.next(ack.msg);
@@ -563,7 +556,7 @@ export class WebSocketService {
     return new Observable ((observer) => {
       this.socket.emit('tienda', {socketId: this.socketID},
       (ack: any) => {
-        console.log('Server acknowledged:', ack);
+        console.log('Server acknowledged tienda:', ack);
         if(ack.cod == 0){
           console.log("TIENDA", ack.msg);
           observer.next(ack.msg);
@@ -577,21 +570,29 @@ export class WebSocketService {
     });
   }
 
-  /*public estaJulio(): Observable<any>{
-    return new Observable<any>((observer) => {
+  public estaJulio(): Observable<Product[]>{
+    return new Observable ((observer) => {
       this.socket.emit('estaJulio', {socketId: this.socketID},
       (ack: any) => {
-        console.log('Server acknowledged:', ack);
+        console.log('Server acknowledged estaJulio:', ack);
         if(ack.cod == 0){
-          console.log("ESTA JULIO", ack.msg);
           observer.next(ack.msg);
-          observer.complete();
-        }
-        else {
-          console.log("error en estaJulio");
-          observer.error();
-        }
-      });
+          observer.complete();  
+        }      
+      })
     });
-  }*/
+  }
+
+  public pagarJulio(): Observable<Product[]>{
+    return new Observable ((observer) => {
+      this.socket.emit('tienda', {socketId: this.socketID},
+      (ack: any) => {
+        console.log('Server acknowledged estaJulio:', ack);
+        if(ack.cod == 0){
+          observer.next(ack.msg);
+          observer.complete();  
+        }     
+      })
+    });
+  }
 }

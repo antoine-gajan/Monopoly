@@ -38,9 +38,11 @@ export class SubastaCardComponent {
 
   subastar() {
     /// TODO : Indicate to backend that we want to subastar
+    console.log("Subastando");
   }
 
   stop_subastar() {
     /// TODO : Indicate to backend that we want to stop subastar
+    console.log("Parar de subastando");
   }
 }
