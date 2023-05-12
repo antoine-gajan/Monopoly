@@ -6,6 +6,9 @@
   <div class="contentBox">
     <h3>{{product.nombre}}</h3>
     <h2 class="price">{{product.precio}} credits</h2>
-    <button *ngIf="!product.comprado" (click)="buy_product()" class="buy">Comprar</button>
+    <button *ngIf="!comprado" (click)="buy_product()" class="buy">Comprar</button>
+    <button *ngIf="comprado && !usado" (click)="buy_product()" class="lo_tengo">Usar</button>
+    
+    
   </div>
 </div>

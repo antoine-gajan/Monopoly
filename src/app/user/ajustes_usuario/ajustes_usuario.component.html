@@ -42,14 +42,14 @@
               <p><b>Correo electrónico: </b>{{email ? email : 'Cargando...'}}</p>
               <p>------------</p>
               <B><p>ESTADÍSTICAS</p></B>
-              <p><b>Partidas ganadas: </b> XXXXX</p>
-              <p><b>Juegos jugados: </b> XXXXX</p>
-              <p><b>Ratio: </b> XXXXX</p>
+              <p><b>Partidas ganadas: </b>{{partidasGanadas !== undefined ? partidasGanadas : 'Cargando...'}}</p>
+              <p><b>Juegos jugados: </b>{{juegosJugados !== undefined ? juegosJugados : 'Cargando...'}}</p>
+              <p><b>Ratio: </b>{{ratio !== undefined ? ratio : 'Cargando...'}}</p>
             </div>
 
             <div class="col-md-4">
               <div class="text-center">
-                <img class="rounded-circle img-responsive mt-2" width="128" height="128" src={{picture}} />
+                <img class="rounded-circle circle img-responsive mt-2" width="128" height="128" src={{picture}} />
               </div>
             </div>
           </div>

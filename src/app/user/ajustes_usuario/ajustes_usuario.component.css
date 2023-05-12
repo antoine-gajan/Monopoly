@@ -220,3 +220,7 @@ a {
 .list-group-item-action:hover {
   background-color: #ccc;
 }
+
+.circle {
+  border-radius: 50%;
+}

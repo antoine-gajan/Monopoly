@@ -12,6 +12,7 @@ import {Coordenadas, Partida, PlayerListResponse, PropertyBoughtResponse} from "
 import {DevolutionPropertiesFormComponent} from "../devolution-properties-form/devolution-properties-form.component";
 import { WebSocketService } from 'app/web-socket.service';
 import {SubastaCardComponent} from "../../card/subasta-card/subasta-card.component";
+import { AlertComponent } from 'app/card/alert/alert.component';
 
 @Component({
   selector: 'app-board',
@@ -117,6 +118,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     
     console.log("jugador0", this.player[0]);
     if(this.player[0] == this.socketService.username){
+      this.current_player = this.socketService.username;
       this.is_playing = true;
         this.message = this.current_player + ", es tu turno";
         this.reStartTimerExpulsarJugador();
@@ -124,6 +126,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         document.getElementById("tirar-dados")!.removeAttribute("disabled");
         //this.play_turno();
     } else {
+      this.current_player = this.player[0];
       this.message = this.current_player + " está jugando su turno";
         console.log("NO ESTÁ JUGANDO");
         //document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
@@ -144,7 +147,11 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   reStartTimerExpulsarJugador(){
-    this.startTimer("expulsar_jugador", 90);
+    this.startTimer("expulsar_jugador", 10);
+  }
+
+  reStartTimerExpulsarJugadorAlert(){
+    this.startTimer("expulsar_jugador", 15);
   }
 
   load_game(){
@@ -613,6 +620,25 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   /* === FUNCTIONS TO DISPLAY POP UP COMPONENTS === */
 
+  createAlertComponent(): void {
+    // Assure to delete the old buy card component
+    this.delete_pop_up_component();
+    this.cancelTimer();
+
+    const factory = this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
+    const componentRef = this.viewContainerRef.createComponent(factory);
+    // Inputs
+    
+    componentRef.instance.leave_game.subscribe(() => {this.leave_game()});
+    componentRef.instance.close_card.subscribe(() => {this.delete_pop_up_component()});
+    componentRef.instance.reStartTimerExpulsarJugador.subscribe(() => {this.reStartTimerExpulsarJugador()});
+    componentRef.instance.reStartTimerExpulsarJugadorAlert.subscribe(() => {this.reStartTimerExpulsarJugadorAlert()});
+    // Give an id to the component html
+    componentRef.location.nativeElement.id = "pop-up-card";
+    // Center the component at the middle of the page
+    componentRef.location.nativeElement.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);";
+  }
+
   createCardComponent(v: number, h: number, message: string, play_again: boolean = false, type: string, money_to_pay: number=0, trigger_end_turn: boolean = true): void {
     // Assure to delete the old buy card component
     this.delete_pop_up_component();
@@ -851,8 +877,10 @@ export class BoardComponent implements OnInit, OnDestroy {
             this.leave_game();
           } else if ( action == "expulsar_jugador"){
             console.log("=== EXPULSAR JUGADOR ===");
-            this.mostrarAlert();
-            //this.startTimer("leave_game", 15);
+            //TODO <-- Expulsar jugador
+            this.cancelTimer();
+            this.createAlertComponent();
+            
           }
         }
       }, 1000);
@@ -864,18 +892,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
-  mostrarAlert() {
-  let seguirJugando;
-  this.startTimer("leave_game", 15);
-
-  seguirJugando = confirm("¿Quieres seguir jugando?");
-  if (!seguirJugando) {
-    this.cancelTimer();
-    this.leave_game();
-  } else {
-    this.reStartTimerExpulsarJugador();
-  }
-}
+ 
 
 
   cancelTimer() {
@@ -899,11 +916,6 @@ export class BoardComponent implements OnInit, OnDestroy {
         console.log("=== LEAVE GAME ===");
         // Update player money to 0
         //TODO: revisar como se quita al usuario, si es cosa del back o del front
-      },
-      error: (error) => {
-        console.error(error);
-        // Try again
-        this.leave_game();
       },
       complete: () => {
         // Redirect to home page of player

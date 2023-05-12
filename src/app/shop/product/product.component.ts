@@ -8,6 +8,10 @@ import {Product} from "../../game/response-type";
 })
 export class ProductComponent implements OnInit{
   @Input() product : Product;
+  comprado : boolean = false;
+  usado : boolean = false;
+  comprado_prueba : boolean = false;
+  usado_prueba : boolean = false;
 
   constructor() {
   }
@@ -18,9 +22,16 @@ export class ProductComponent implements OnInit{
 
   getImageUrl() {
     return 'data:image/png;base64,' + this.product.imagen;
-}
+} 
 
-  buy_product() {
+  buy_product(){
+    //TODO: si el back deja comprarlo -> this.puedoComprar
+    //this.comprado_prueba = true;
+    
+  }
+
+  usar_product() {
     /// TODO : Buy product from shop with link to backend
+    //this.usado_prueba = true;
   }
 }
