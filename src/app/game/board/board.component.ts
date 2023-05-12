@@ -210,28 +210,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.is_playing = true;
     this.message = this.current_player + ", es tu turno";
     console.log("ESTÁ JUGANDO");
-
-    // Chequeamos si está en la cárcel
-    /*this.socketService.estaJulio()
-    .subscribe({
-      next: (msg: any) => {
-        console.log("ESTÁ EN LA CÁRCEL: ", msg);
-        if(msg.carcel == true){
-          console.log("ESTÁ EN LA CÁRCEL- 2");
-          this.is_in_jail = true;
-          let carta_carcel_tengo = false;
-          if(msg.carta != null){
-            carta_carcel_tengo = true;
-          }
-          this.createJailCardComponent(carta_carcel_tengo, msg.salirJulio);
-        } else {
-          /// TODO: Check if is in jail and either roll dices or direct card action of jail
-          document.getElementById("tirar-dados")!.removeAttribute("disabled");
-  
-        }
-      }
-    });*/
-
     /// TODO: Check if is in jail and either roll dices or direct card action of jail
     document.getElementById("tirar-dados")!.removeAttribute("disabled");
   }
