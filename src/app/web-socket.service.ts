@@ -378,17 +378,12 @@ export class WebSocketService {
     });
   }
 
-  public socketOnTurno(): Observable<any>{
+  public socketOnTurno(): Observable<string>{
     return new Observable((observer) => {
       this.socket.on('turnoActual', (ack: any) => {
         console.log('Server acknowledged turnoActual:', ack);
-        if(ack.cod == 0){
-          console.log("TURNO", ack.msg);
-          observer.next(ack.msg);
-        } else {
-          console.log("Error al obtener el turno");
-          observer.error(new Error("Error al obtener el turno"));
-        }
+        console.log("TURNO", ack.jugador);
+        observer.next(ack.jugador);
       });
     });
   }
