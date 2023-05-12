@@ -27,6 +27,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   // Relative to client player
   player: [string, number, Coordenadas] = ["", 0, {h: 10, v: 10}];
   nb_doubles: number = 0;
+  previous_position: Coordenadas;
   is_playing: boolean = false;
   is_in_jail: boolean = false;
   is_bankrupt: boolean = false;
@@ -206,6 +207,7 @@ export class BoardComponent implements OnInit, OnDestroy {
             }
             else{
               // Card action of jail
+              this.message = "Estás en julio";
               this.card_action();
             }
             // Start timer
@@ -260,6 +262,13 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   async card_action() {
     console.log("=== CARD ACTION ===");
+    this.socketService.estaJulio().subscribe(
+      {
+        next: (msg) => {
+          this.is_in_jail = msg.carcel;
+        }
+      });
+    this.previous_position = this.player[2];
     // Get card information
     this.socketService.casilla({coordenadas: {h: this.player[2].h, v: this.player[2].v}, socketId: this.socketService.socketID})
     .subscribe({
@@ -336,10 +345,11 @@ export class BoardComponent implements OnInit, OnDestroy {
     console.log("===END TURN===");
     // Delete the pop-up-card component
     this.delete_pop_up_component();
-    // Get old position of player
-    let old_position_player = this.player[2];
-    console.log("old position player (h,v): " + old_position_player.h + " " + old_position_player.v);
-    /// TODO: Get new position of player by updating game information
+    // Compare old and new position
+    if (this.previous_position.h != this.player[2].h || this.previous_position.v != this.player[2].v) {
+      // If different, launch the action
+      this.card_action();
+    }
     if (this.dices[0] == this.dices[1] && this.nb_doubles < 3) {
       this.message = "Vuelve a tirar los dados";
       document.getElementById("tirar-dados")!.removeAttribute("disabled");
