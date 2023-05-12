@@ -36,13 +36,13 @@ export class JailCardComponent {
   ) { }
 
   ngOnInit(): void {
-    this.socketService.estaJulio().subscribe(
+    /*this.socketService.estaJulio().subscribe(
       (msg) => {
         console.log(msg);
         this.has_card = (msg.carta != null);
         this.can_pay = msg.puedePagar;
       }
-    )
+    )*/
   }
 
   use_card_to_go_out(){

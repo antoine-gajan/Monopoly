@@ -5,9 +5,11 @@ import {UserService} from "../../user/user.service";
 import {InteractionCardComponent} from "../../card/interaction-card/interaction-card.component";
 import {ChanceCardComponent} from "../../card/chance-card/chance-card.component";
 import {CommunityCardComponent} from "../../card/community-card/community-card.component";
+import {EMPTY, Observable, forkJoin, interval, switchMap, takeWhile} from "rxjs";
 import {InfoCardComponent} from "../../card/info-card/info-card.component";
 import {JailCardComponent} from "../../card/jail-card/jail-card.component";
 import {Coordenadas, Partida, PlayerListResponse, PropertyBoughtResponse} from "../response-type";
+import {DevolutionPropertiesFormComponent} from "../devolution-properties-form/devolution-properties-form.component";
 import { WebSocketService } from 'app/web-socket.service';
 import {SubastaCardComponent} from "../../card/subasta-card/subasta-card.component";
 import { AlertComponent } from 'app/card/alert/alert.component';
@@ -27,7 +29,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   // Relative to client player
   player: [string, number, Coordenadas] = ["", 0, {h: 10, v: 10}];
   nb_doubles: number = 0;
-  previous_position: Coordenadas;
   is_playing: boolean = false;
   is_in_jail: boolean = false;
   is_bankrupt: boolean = false;
@@ -135,7 +136,6 @@ export class BoardComponent implements OnInit, OnDestroy {
    
   }
 
-
   ngOnDestroy() {
     // Destroy the intervals for safety
     if (this.interval_play != undefined){
@@ -146,15 +146,53 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
+  reStartTimerExpulsarJugador(){
+    this.startTimer("expulsar_jugador", 90);
+  }
+
+  reStartTimerExpulsarJugadorAlert(){
+    this.startTimer("expulsar_jugador", 15);
+  }
+
   load_game(){
     console.log("Loading game...");
     // Block buttons to avoid risks
     document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
     document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
 
-    // Indicate that the game is loading correctly
-    this.message = "Partida cargada";
-    // Launch game
+    // Indicate that the game is loading
+    this.message = "Cargando la partida..."
+    // Get list of players
+    /*this.socketService.infoPartida()
+    .subscribe({
+      next: (data: Partida) => {
+        this.actualize_game_info(data);
+      },
+      error: (error) => {
+        //console.error(error);
+        this.load_game();
+      },
+      complete: () => {
+        //this.get_properties();
+        this.get_properties_of_other_players();
+        // Show position of the players
+        this.show_position_every_players();
+        // Indicate that the game is loaded
+        this.message = "Partida cargada";
+        // Start the game
+        this.play();
+      }
+    });*/
+    // Se obtiene la lista de jugadores
+     this.list_players = this.socketService.list_players;
+     console.log("TODO INICIADO: List players: ", this.list_players);
+     if(this.list_players.length != 0){
+       this.player[0] = this.list_players[0];// TODO <---------------------actualizar essto y cambiarlo cuando nos devuelban bien los jugadore sy datos de la aprtida
+       this.player[1] = 1500;
+       for(let i = 1; i<this.list_players.length; i++){
+         this.other_players_list.push([this.list_players[i], 1500, {h: 10, v: 10}]);
+       }
+     }
      this.play();
   }
 
@@ -174,6 +212,24 @@ export class BoardComponent implements OnInit, OnDestroy {
             properties.push([data[i].nombre, data[i].coordenadas]);
           }
           this.player_properties = properties;
+          // Return Empty to continue
+        }
+      });
+    }
+  }
+
+  get_properties_of_other_players(): void {
+    // Get every properties of the other players
+    console.log("Get properties of other players");
+    for (let player of this.other_players_list) {
+      this.socketService.listaAsignaturasC()
+      .subscribe({
+        next: (data: PropertyBoughtResponse[]) => {
+          let properties: [string, Coordenadas][] = [];
+          for (let i = 0; i < data.length; i++) {
+            properties.push([data[i].nombre, data[i].coordenadas]);
+          }
+          this.other_player_properties[player[0]] = properties;
         }
       });
     }
@@ -183,33 +239,14 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   async play(): Promise<void> {
     // Check who is playing and if it's my turn, play
-
-    // If it's my turn
-    this.is_playing = true;
-    this.message = this.player[0] + ", es tu turno";
     if (this.current_player == this.username){
-      // Check if the player is in jail
-      /*this.socketService.estaJulio().subscribe(
-        {
-          next: (msg) => {
-            console.log("TODO INICIADO: Is in jail: ", msg);
-            this.is_in_jail = msg.carcel;
-          },
-          complete: () => {
-            // Enable play button if not in jail
-            if (!this.is_in_jail) {
-              document.getElementById("tirar-dados")!.removeAttribute("disabled");
-            }
-            else{
-              // Card action of jail
-              this.message = "Estás en julio";
-              this.card_action();
-            }
-            // Start timer
-            this.reStartTimerExpulsarJugador();
-          }
-        }
-      )*/
+      // If it's my turn
+      this.is_playing = true;
+      this.message = this.player[0] + ", es tu turno";
+      // Enable play button
+      document.getElementById("tirar-dados")!.removeAttribute("disabled");
+      // Start timer
+      this.reStartTimerExpulsarJugador();
     }
   }
 
@@ -257,28 +294,12 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   async card_action() {
     console.log("=== CARD ACTION ===");
-    this.socketService.infoAsignatura({coordenadas: {h: this.player[2].h, v: this.player[2].v}})
-    .subscribe({
-      next: async (msg: any) => {
-        console.log("Card action: ", msg);
-      }
-    });
-
-    /*this.socketService.estaJulio().subscribe(
-      {
-        next: (msg) => {
-          this.is_in_jail = msg.carcel;
-        }
-      });*/
-
-
-
-    /*this.previous_position = this.player[2];
     // Get card information
     this.socketService.casilla({coordenadas: {h: this.player[2].h, v: this.player[2].v}, socketId: this.socketService.socketID})
     .subscribe({
       next: async (msg: number) => {
-        console.log("Position : " + this.player[2].h + " " + this.player[2].v);
+        //console.log
+        /*console.log("Position : " + this.player[2].h + " " + this.player[2].v);
         // Get the number of ack code
         let number = msg;
 
@@ -341,20 +362,19 @@ export class BoardComponent implements OnInit, OnDestroy {
           else if (number == 9) {
             this.createCardComponent(this.player[2].v, this.player[2].h, "No puedes comprar", this.dices[0] == this.dices[1], "view");
           }
-        }
+        }*/
       }
-    });*/
+    });
   }
 
   end_turn(): void {
     console.log("===END TURN===");
     // Delete the pop-up-card component
     this.delete_pop_up_component();
-    // Compare old and new position
-    if (this.previous_position.h != this.player[2].h || this.previous_position.v != this.player[2].v) {
-      // If different, launch the action
-      this.card_action();
-    }
+    // Get old position of player
+    let old_position_player = this.player[2];
+    console.log("old position player (h,v): " + old_position_player.h + " " + old_position_player.v);
+    /// TODO: Get new position of player by updating game information
     if (this.dices[0] == this.dices[1] && this.nb_doubles < 3) {
       this.message = "Vuelve a tirar los dados";
       document.getElementById("tirar-dados")!.removeAttribute("disabled");
@@ -609,7 +629,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     const factory = this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
     // Inputs
-
+    
     componentRef.instance.leave_game.subscribe(() => {this.leave_game()});
     componentRef.instance.close_card.subscribe(() => {this.delete_pop_up_component()});
     componentRef.instance.reStartTimerExpulsarJugador.subscribe(() => {this.reStartTimerExpulsarJugador()});
@@ -861,7 +881,7 @@ export class BoardComponent implements OnInit, OnDestroy {
             //TODO <-- Expulsar jugador
             this.cancelTimer();
             this.createAlertComponent();
-
+            
           }
         }
       }, 1000);
@@ -873,13 +893,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
-    reStartTimerExpulsarJugador(){
-    this.startTimer("expulsar_jugador", 90);
-  }
+ 
 
-  reStartTimerExpulsarJugadorAlert(){
-    this.startTimer("expulsar_jugador", 15);
-  }
 
   cancelTimer() {
     console.log("=== CANCEL TIMER ===");
@@ -911,6 +926,6 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.router.navigate(['/pantalla']);
         }
       }
-    });
+    }); 
   }
 }
