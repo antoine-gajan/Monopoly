@@ -97,15 +97,6 @@ export class BoardComponent implements OnInit, OnDestroy {
       }
      });
 
-     this.socketService.infoPartida()
-      .subscribe({
-        next: (info) => {
-          console.log("TODO INICIADO: Info: ", info);
-          this.actualize_game_info(info);
-          this.show_position_every_players();
-        }
-      });
-
     if (this.current_player == this.player[0]){
       this.play();
     }
@@ -153,12 +144,12 @@ export class BoardComponent implements OnInit, OnDestroy {
       for(let i = 0; i < this.list_players.length; i++){
         // Information of other players
         if (this.list_players[i] != this.username) {
-          this.other_players_list.push([this.list_players[i], this.socketService.dineroPartida, {h: 10, v: 10}]);
+          this.other_players_list.push([this.list_players[i], 1500, {h: 10, v: 10}]);
         }
         // Information of myself
         else {
           this.player[0] = this.username;
-          this.player[1] = this.socketService.dineroPartida;
+          this.player[1] = 1500;
         }
       }
     }
@@ -219,6 +210,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.is_playing = true;
     this.message = this.current_player + ", es tu turno";
     console.log("ESTÁ JUGANDO");
+<<<<<<< HEAD
     // Chequeamos si está en la cárcel
     /*this.socketService.estaJulio()
     .subscribe({
@@ -239,12 +231,16 @@ export class BoardComponent implements OnInit, OnDestroy {
         }
       }
     });*/
+=======
+    /// TODO: Check if is in jail and either roll dices or direct card action of jail
+>>>>>>> parent of f04f1488 (Cambios antes comprobación pujas y comportamiento)
     document.getElementById("tirar-dados")!.removeAttribute("disabled");
   }
 
   play_turn_player() {
     console.log("=== PLAY TURN ===");
     // Cancel the timer
+    this.cancelTimer();
     // Disable play button to avoid double click
     document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
     // Function to play the turn of a player
@@ -258,8 +254,6 @@ export class BoardComponent implements OnInit, OnDestroy {
         // Store true value of dices
         this.dices[0] = msg.dado1;
         this.dices[1] = msg.dado2;
-        this.player[2] = msg.coordenadas;
-        this.show_position_every_players();
         this.reStartTimerExpulsarJugador();
     },
     error: async () => {
@@ -277,6 +271,8 @@ export class BoardComponent implements OnInit, OnDestroy {
       else {
         this.message = this.player[0] + ", has sacado " + this.dices[0] + " y " + this.dices[1];
       }
+      // Update player position
+      await this.update_local_player_position(this.dices);
       // Action of the card
       this.card_action();
     }
@@ -300,6 +296,10 @@ export class BoardComponent implements OnInit, OnDestroy {
         // Wait 0.5 seconds
         await this.sleep(500);
         // Check where is the player and special actions linked to the position
+        if (this.is_in_jail) {
+          // Display a jail card component
+          this.createJailCardComponent();
+        }
         if (this.nothing_cards.includes(position_id)) {
           this.message = "No pasa nada";
           // End turn
@@ -557,6 +557,46 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
+  async update_local_player_position(dices: number[]) {
+    // Function to update the position of a player
+    console.log("===UPDATE LOCAL PLAYER POSITION===");
+    // Get old position id
+    let old_id = this.convert_position_to_id(this.player[2]);
+    // Update position attribute
+    let change_turn = old_id + dices[0] + dices[1] >= 40;
+    // Get new position id
+    let new_id = (old_id + dices[0] + dices[1]) % 40;
+    // Get position from id
+    let new_position = this.convert_id_to_position(new_id);
+    // Update position
+    this.player[2].v = new_position[0];
+    this.player[2].h = new_position[1];
+    // Check if is in jail
+    this.is_in_jail = (new_id == 30) || this.nb_doubles == 3;
+    // If change turn, receive 267
+    if (change_turn){
+      this.message = "Has pasado por la salida";
+    }
+    // If player has to go to jail-card
+    if (this.is_in_jail) {
+      this.show_position(this.player[0], this.player[2], 0);
+      // Message in function of the manner to go to jail
+      if (this.nb_doubles == 3){
+        this.message = "Has ido en julio por tirar 3 dobles";
+      }
+      else{
+        this.message = "Has ido en julio";
+      }
+      // Wait 0.5 seconds
+      await this.sleep(500);
+      // Go to jail
+      this.player[2].v = 10;
+      this.player[2].h = 0;
+    }
+    // Show position
+    this.show_position(this.player[0], this.player[2], 0);
+  }
+
   show_position(id_player: string, position: Coordenadas, index_color: number): void{
     // Function to display position of id_player in the board
     // Get the id of property with position
@@ -673,15 +713,16 @@ export class BoardComponent implements OnInit, OnDestroy {
     componentRef.location.nativeElement.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);";
   }
 
-  createJailCardComponent(tengo_carta_salir: boolean, puedoPagar: boolean): void {
+  createJailCardComponent(): void {
     // Assure to delete the old pup up card component
     this.delete_pop_up_component();
     this.reStartTimerExpulsarJugador();
     const factory = this.componentFactoryResolver.resolveComponentFactory(JailCardComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
     // Inputs
-    componentRef.instance.has_card = tengo_carta_salir;
-    componentRef.instance.can_pay = puedoPagar;
+    componentRef.instance.player_money = this.player[1];
+    componentRef.instance.player_name = this.player[0];
+    componentRef.instance.game_id = this.game_id;
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     componentRef.instance.reStartTimerExpulsarJugador.subscribe(() => {this.reStartTimerExpulsarJugador()});
