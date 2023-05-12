@@ -11,6 +11,7 @@ import {JailCardComponent} from "../../card/jail-card/jail-card.component";
 import {Coordenadas, Partida, PlayerListResponse, PropertyBoughtResponse} from "../response-type";
 import {DevolutionPropertiesFormComponent} from "../devolution-properties-form/devolution-properties-form.component";
 import { WebSocketService } from 'app/web-socket.service';
+import {SubastaCardComponent} from "../../card/subasta-card/subasta-card.component";
 
 @Component({
   selector: 'app-board',
@@ -72,6 +73,8 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   /* === FUNCTIONS TO INITIALIZE AND DESTROY THE GAME === */
   ngOnInit() {
+    // Get the game id from the url
+    this.game_id = parseInt(<string>this.route.snapshot.paramMap.get('id'));
 
     
     this.username = this.socketService.username;
@@ -579,9 +582,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     // If change turn, receive 267
     if (change_turn){
       this.message = "Has pasado por la salida";
-      this.player[1] += 267;
-      // Wait 0.5 seconds
-      await this.sleep(500);
     }
     // If player has to go to jail-card
     if (this.is_in_jail) {
@@ -719,32 +719,20 @@ export class BoardComponent implements OnInit, OnDestroy {
     componentRef.location.nativeElement.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);";
   }
 
-  createDevolutionFormComponent(): void {
+  createSubastaCardComponent(coord: Coordenadas): void {
     // Assure to delete the old pup up card component
     this.delete_pop_up_component();
-    const factory = this.componentFactoryResolver.resolveComponentFactory(DevolutionPropertiesFormComponent);
+    const factory = this.componentFactoryResolver.resolveComponentFactory(SubastaCardComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
     // Inputs
-    componentRef.instance.idPartida = this.game_id;
-    componentRef.instance.player_username = this.player[0];
-    componentRef.instance.list_properties = this.player_properties;
-    componentRef.instance.is_in_jail = this.is_in_jail;
-    // Outputs
-    if (!this.is_in_jail){
-      // If not in jail, devolve button can call to end turn
-      componentRef.instance.next_step.subscribe(() => {this.end_turn()});
-    }
-    else{
-      // If in jail, next step will just close the pop up card
-      componentRef.instance.next_step.subscribe(() => {this.delete_pop_up_component()});
-
-    }
-
+    componentRef.instance.game_id = this.game_id;
+    componentRef.instance.h = coord.h;
+    componentRef.instance.v = coord.v;
+    componentRef.instance.message = "Subasta";
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";
     // Center the component at the middle of the page
     componentRef.location.nativeElement.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);";
-
   }
 
   get_token_color_from_index(index: number): string{

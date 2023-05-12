@@ -18,12 +18,8 @@
       <app-party-card [h]= "h" [v]="v"></app-party-card>
     </ng-container>
   </div>
-  <div class="list-button">
-    <div *ngIf="!botonPulsado">
-      <button *ngIf="type == 'buy'" class="button-action buy" (click)="buy_card()">Comprar</button>
-    
-
-   
+  <div class="list-button"*ngIf="!botonPulsado">
+    <button *ngIf="type == 'buy'" class="button-action buy" (click)="buy_card()">Comprar</button>
     <button *ngIf="play_again && type === 'buy'" class="button-action play-again" (click)="callback()">Jugar otra vez</button>
     <button *ngIf="!play_again && type === 'buy'" class="button-action stop" (click)="callback()">Cancelar</button>
 
@@ -39,6 +35,5 @@
 
     <button *ngIf="type == 'view'" class="button-action stop" (click)="callback()">Cerrar</button>
   </div>
-  <div *ngIf="botonPulsado"><app-loader></app-loader></div>
-  </div>
+  <div *ngIf="botonPulsado" class="list-button"><app-loader></app-loader></div>
 </div>

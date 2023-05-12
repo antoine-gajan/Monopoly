@@ -1,0 +1,29 @@
+<div class="buy-card">
+  <div class="message">{{message}}
+  </div>
+  <div class="card-information">
+    <ng-container *ngIf="get_type_casilla() === 'propriety'">
+      <app-propriety-card [h]= "h" [v]="v"></app-propriety-card>
+    </ng-container>
+
+    <ng-container *ngIf="get_type_casilla() === 'heat'">
+      <app-heat-card></app-heat-card>
+    </ng-container>
+
+    <ng-container *ngIf="get_type_casilla() === 'electricity'">
+      <app-electricity-card></app-electricity-card>
+    </ng-container>
+
+    <ng-container *ngIf="get_type_casilla() === 'party'">
+      <app-party-card [h]= "h" [v]="v"></app-party-card>
+    </ng-container>
+  </div>
+  <div class="info-subasta">
+    <div class="player-subasta">{{player_subasta}}</div>
+    <div class="price-subasta">{{price_subasta}}</div>
+  </div>
+  <div class="list-button">
+    <button class="button-action" (click)="subastar()">Subastar</button>
+    <button class="button-action" (click)="stop_subastar()">No quiero subastar</button>
+  </div>
+</div>

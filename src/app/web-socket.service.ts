@@ -4,7 +4,7 @@ import { environment } from 'enviroment/enviroment';
 import { Router } from '@angular/router';
 import { LoginComponent } from './user/login/login.component';
 import { Observable } from 'rxjs';
-import { Partida, PropertyBoughtResponse, Propriety, RandomCard } from './game/response-type';
+import {Partida, Product, PropertyBoughtResponse, Propriety, RandomCard} from './game/response-type';
 
 
 @Injectable({
@@ -418,7 +418,7 @@ export class WebSocketService {
         if(ack.cod == 0){
           console.log("SIGUEINTE TURNO", ack.msg);
           resolve(ack.msg);
-          
+
         } else {
           console.log("Error al hacer siguinete turno");
 
@@ -567,4 +567,21 @@ export class WebSocketService {
     });
   }
 
+  public tienda(): Observable<Product[]>{
+    return new Observable ((observer) => {
+      this.socket.emit('tienda', {socketId: this.socketID},
+      (ack: any) => {
+        console.log('Server acknowledged:', ack);
+        if(ack.cod == 0){
+          console.log("TIENDA", ack.msg);
+          observer.next(ack.msg);
+          observer.complete();
+        }
+        else {
+          console.log("error en tienda");
+          observer.error();
+        }
+      })
+    });
+  }
 }

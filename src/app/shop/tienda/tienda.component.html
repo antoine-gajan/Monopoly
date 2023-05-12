@@ -13,18 +13,20 @@
 </div>
 
 <div>
-  <div class="title-list-products">Tokens :</div>
+  <div class="title-list-products">A comprar :</div>
   <div class="list-products">
-    <app-product name="Pink" [price]="10" class="product"></app-product>
-    <app-product name="Blue" [price]="20" class="product"></app-product>
+    <div class="product" *ngFor="let product of products">
+      <app-product [product]="product" *ngIf="!product.comprado" class="product"></app-product>
+    </div>
   </div>
 </div>
 
 <div>
-  <div class="title-list-products">Avatars :</div>
+  <div class="title-list-products">Ya comprados :</div>
   <div class="list-products">
-    <app-product name="Avatar 1" [price]="30" class="product"></app-product>
-    <app-product name="Avatar 2" [price]="50" class="product"></app-product>
+    <div class="product" *ngFor="let product of products">
+      <app-product [product]="product" *ngIf="product.comprado" class="product"></app-product>
+    </div>
   </div>
 </div>
 

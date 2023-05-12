@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ErrorPageComponent } from './error-page.component';
+import { SubastaCardComponent } from './subasta-card.component';
 
-describe('ErrorPageComponent', () => {
-  let component: ErrorPageComponent;
-  let fixture: ComponentFixture<ErrorPageComponent>;
+describe('SubastaCardComponent', () => {
+  let component: SubastaCardComponent;
+  let fixture: ComponentFixture<SubastaCardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ErrorPageComponent ]
+      declarations: [ SubastaCardComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ErrorPageComponent);
+    fixture = TestBed.createComponent(SubastaCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

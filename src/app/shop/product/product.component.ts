@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {Product} from "../../game/response-type";
 
 @Component({
   selector: 'app-product',
@@ -6,9 +7,7 @@ import {Component, Input, OnInit} from '@angular/core';
   styleUrls: ['./product.component.css']
 })
 export class ProductComponent implements OnInit{
-  @Input() name: string = "Product name";
-  @Input() price: number = 0;
-  @Input() image_path: string;
+  @Input() product : Product;
 
   constructor() {
   }
@@ -16,6 +15,11 @@ export class ProductComponent implements OnInit{
   ngOnInit(): void {
 
   }
+
+  getImageUrl() {
+    return 'data:image/png;base64,' + this.product.imagen;
+}
+
   buy_product() {
     /// TODO : Buy product from shop with link to backend
   }
