@@ -210,7 +210,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.is_playing = true;
     this.message = this.current_player + ", es tu turno";
     console.log("ESTÁ JUGANDO");
-<<<<<<< HEAD
+
     // Chequeamos si está en la cárcel
     /*this.socketService.estaJulio()
     .subscribe({
@@ -231,9 +231,8 @@ export class BoardComponent implements OnInit, OnDestroy {
         }
       }
     });*/
-=======
+
     /// TODO: Check if is in jail and either roll dices or direct card action of jail
->>>>>>> parent of f04f1488 (Cambios antes comprobación pujas y comportamiento)
     document.getElementById("tirar-dados")!.removeAttribute("disabled");
   }
 
