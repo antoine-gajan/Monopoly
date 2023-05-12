@@ -1,7 +1,5 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {GameService} from "../../game/game.service";
-import {CartaSuerte, Coordenadas, Propriety, RandomCard} from "../../game/response-type";
-import { WebSocketService } from 'app/web-socket.service';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+
 
 @Component({
   selector: 'app-alert',
@@ -12,12 +10,14 @@ export class AlertComponent implements OnInit{
   is_timer_active: boolean = false;
   remaining_time: number = 0;
   timer: any;
+  is_loading: boolean = false;
+
   @Output() leave_game = new EventEmitter();
   @Output() close_card = new EventEmitter();
   @Output() reStartTimerExpulsarJugador = new EventEmitter();
   @Output() reStartTimerExpulsarJugadorAlert = new EventEmitter();
 
-  
+
   ngOnInit() {
    this.startTimer(10);
   }
@@ -40,18 +40,20 @@ export class AlertComponent implements OnInit{
         if (this.remaining_time == 0) {
           console.log("15 SECONDS WAITED");
           this.abandonar_partida();
-          } 
+          }
       }, 1000);
     }
   }
 
   seguir_jugando(){
+    this.is_loading = true;
     this.is_timer_active = false;
     this.reStartTimerExpulsarJugador.emit();
     this.close_card.emit();
   }
 
   abandonar_partida(){
+    this.is_loading = true;
     this.is_timer_active = false;
     clearInterval(this.timer);
     console.log("lo expulsamos de la partida, alert");
