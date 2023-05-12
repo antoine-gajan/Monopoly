@@ -220,7 +220,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.message = this.current_player + ", es tu turno";
     console.log("ESTÁ JUGANDO");
     // Chequeamos si está en la cárcel
-    this.socketService.estaJulio()
+    /*this.socketService.estaJulio()
     .subscribe({
       next: (msg: any) => {
         console.log("ESTÁ EN LA CÁRCEL: ", msg);
@@ -238,8 +238,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   
         }
       }
-    });
-
+    });*/
+    document.getElementById("tirar-dados")!.removeAttribute("disabled");
   }
 
   play_turn_player() {
