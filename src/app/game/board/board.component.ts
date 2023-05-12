@@ -74,12 +74,14 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   /* === FUNCTIONS TO INITIALIZE AND DESTROY THE GAME === */
   ngOnInit() {
-    // Get the game id from the url
-    this.game_id = parseInt(<string>this.route.snapshot.paramMap.get('id'));
-    // Tomamos el nombre del usuario    
-    this.username = this.socketService.username;
+    console.log("---------------------------");
+    console.log("Board component initialized");
+    this.load_game();
     
+    this.username = this.socketService.username;
+    console.log("TODO INICIADO: Game id: ", this.game_id);
     // Se activa el socket on para saber cuando es nuestro turno
+
     this.socketService.socketOnTurno()
     .subscribe({
       next: (data) => {
@@ -88,38 +90,14 @@ export class BoardComponent implements OnInit, OnDestroy {
       }
      });
 
-    console.log("---------------------------");
-    console.log("Board component initialized");
-    console.log("TODO INICIADO: Game id: ", this.game_id);
-
-   
+    
+    
     // Se obtiene la lista de jugadores
-    this.list_players = this.socketService.list_players;
-    console.log("TODO INICIADO: List players: ", this.list_players);
-    if(this.list_players.length != 0){
-      this.player[0] = this.list_players[0];// TODO <---------------------actualizar essto y cambiarlo cuando nos devuelban bien los jugadore sy datos de la aprtida
-      this.player[1] = 1500;
-      for(let i = 1; i<this.list_players.length; i++){
-        this.other_players_list.push([this.list_players[i], 1500, {h: 10, v: 10}]);
-      }
-    }
-    //TODO <-------------------------------------------------------FALTA COMRPOBAR QUE CARGUEN LOS USUARIOS
-    /* TODO: revisar implementación de git */
-
-    this.message = "Cargando la partida..."
-    document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
-    document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
-    //TODO <- ontener el nombre del usuario actual
-    // TODO ----------------> revisar si hay que hacer esto o se va a buggear
-    // this.socketService.consultarUsernameString(); <------------------------------------ FALTA OBTENER EL NOMMBRE DEL USUARIO ACTUAL
-    console.log("TODO INICIADO: Username: ", this.player[0]);
     // Se muestra la posición inicial de todos los jugadores en el tablero
-    this.show_position_every_players();
+    
 
     
-    console.log("jugador0", this.player[0]);
     if(this.player[0] == this.socketService.username){
-      this.current_player = this.socketService.username;
       this.is_playing = true;
         this.message = this.current_player + ", es tu turno";
         this.reStartTimerExpulsarJugador();
@@ -127,12 +105,12 @@ export class BoardComponent implements OnInit, OnDestroy {
         document.getElementById("tirar-dados")!.removeAttribute("disabled");
         //this.play_turno();
     } else {
-      this.current_player = this.player[0];
       this.message = this.current_player + " está jugando su turno";
         console.log("NO ESTÁ JUGANDO");
         //document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
         //this.ver_jugar();
     }
+    
  
    
   }
@@ -157,33 +135,28 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   load_game(){
     console.log("Loading game...");
-    // Block buttons to avoid risks
+    this.list_players = this.socketService.list_players;
+    console.log("TODO INICIADO: List players: ", this.list_players);
+    if(this.list_players.length != 0){
+      this.player[0] = this.list_players[0];// TODO <---------------------actualizar essto y cambiarlo cuando nos devuelban bien los jugadore sy datos de la aprtida
+      this.player[1] = 1500;
+      for(let i = 1; i<this.list_players.length; i++){
+        this.other_players_list.push([this.list_players[i], this.socketService.dineroPartida, {h: 10, v: 10}]);
+      }
+    }
+    
+    this.message = "Cargando la partida..."
     document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
     document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
+    //TODO <- ontener el nombre del usuario actual
+    // TODO ----------------> revisar si hay que hacer esto o se va a buggear
+    // this.socketService.consultarUsernameString(); <------------------------------------ FALTA OBTENER EL NOMMBRE DEL USUARIO ACTUAL
+    console.log("TODO INICIADO: Username: ", this.player[0]);
+    // Se muestra la posición inicial de todos los jugadores en el tablero
+    this.show_position_every_players();
 
-    // Indicate that the game is loading
-    this.message = "Cargando la partida..."
-    // Get list of players
-    /*this.socketService.infoPartida()
-    .subscribe({
-      next: (data: Partida) => {
-        this.actualize_game_info(data);
-      },
-      error: (error) => {
-        //console.error(error);
-        this.load_game();
-      },
-      complete: () => {
-        //this.get_properties();
-        this.get_properties_of_other_players();
-        // Show position of the players
-        this.show_position_every_players();
-        // Indicate that the game is loaded
-        this.message = "Partida cargada";
-        // Start the game
-        this.play();
-      }
-    });*/
+    
+
     // Se obtiene la lista de jugadores
      this.list_players = this.socketService.list_players;
      console.log("TODO INICIADO: List players: ", this.list_players);
@@ -194,7 +167,12 @@ export class BoardComponent implements OnInit, OnDestroy {
          this.other_players_list.push([this.list_players[i], 1500, {h: 10, v: 10}]);
        }
      }
-     this.play();
+
+     this.show_position_every_players();
+     console.log("jugador0", this.player[0]);
+
+     
+
   }
 
   /* === FUNCTIONS TO GET THE PROPERTIES OF THE PLAYERS === */
@@ -240,15 +218,15 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   async play(): Promise<void> {
     // Check who is playing and if it's my turn, play
-    if (this.current_player == this.username){
-      // If it's my turn
-      this.is_playing = true;
-      this.message = this.player[0] + ", es tu turno";
-      // Enable play button
-      document.getElementById("tirar-dados")!.removeAttribute("disabled");
-      // Start timer
-      this.reStartTimerExpulsarJugador();
-    }
+    console.log("=== PLAY ===");
+    this.reStartTimerExpulsarJugador();
+    this.current_player = this.socketService.username;
+    this.is_playing = true;
+    this.message = this.current_player + ", es tu turno";
+    this.reStartTimerExpulsarJugador();
+    console.log("ESTÁ JUGANDO");
+    document.getElementById("tirar-dados")!.removeAttribute("disabled");
+    
   }
 
   play_turn_player() {

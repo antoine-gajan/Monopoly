@@ -12,6 +12,7 @@ import {Partida, Product, PropertyBoughtResponse, Propriety, RandomCard} from '.
 })
 
 export class WebSocketService {
+  dineroPartida: number;
   soyInvitado: boolean;
   list_players: string[] = [];
   localSocketID: string;
@@ -380,7 +381,7 @@ export class WebSocketService {
   public socketOnTurno(): Observable<any>{
     return new Observable((observer) => {
       this.socket.on('turnoActual', (ack: any) => {
-        console.log('Server acknowledged:', ack);
+        console.log('Server acknowledged turnoActual:', ack);
         if(ack.cod == 0){
           console.log("TURNO", ack.msg);
           observer.next(ack.msg);

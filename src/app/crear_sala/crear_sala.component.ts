@@ -95,6 +95,7 @@ export class CrearSalaComponent {
   }
   actualizarDatos(){
     console.log("ACTUALIZAR DATOS");
+    this.socketService.dineroPartida = this.dineroJugador;
     const datos = {
       dineroInicial: this.dineroJugador,
       nJugadores: this.numJugadores,
