@@ -21,42 +21,19 @@ export class CommunityCardComponent implements OnInit{
   ) {}
 
   ngOnInit() {
-
-    /*
-    this.gameService.get_random_boletin_card(this.idPartida, this.username).subscribe({
-    next:
-      (cards) => {
-        this.community = cards[0];
-        console.log(this.community);
+    // Get the community card from backend
+    this.socketService.boletin()
+    .subscribe({
+      next: (data) => {
+        this.community = data;
       },
-    error:
-      (error) => {
-        //console.log(error);
-        // Try again in 3 seconds
-        this.ngOnInit();
+      error: (error) => {
+        console.log(error);
       }
-    });*/
+    });
   }
 
   trigger_action(){
-    /*this.gameService.action_of_card(this.idPartida, this.username, this.community.nombre, this.coordenadas.h, this.coordenadas.v).subscribe({
-      next:
-        (data) => {
-          console.log(data);
-        },
-      error:
-        (error) => {
-          console.log(error);
-          // Try again
-          this.trigger_action();
-        }
-    });
-    // Callback function to come back to board
-    this.callback_end_turn();*/
+    this.end_turn.emit()
   }
-
-  callback_end_turn() {
-    this.end_turn.emit();
-  }
-
 }

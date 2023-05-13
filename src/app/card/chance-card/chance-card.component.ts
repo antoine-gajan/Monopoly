@@ -22,7 +22,6 @@ export class ChanceCardComponent implements OnInit{
   ) { }
 
   ngOnInit() {
-
     this.socketService.suerte()
     .subscribe({
       next: (data) => {
@@ -30,8 +29,6 @@ export class ChanceCardComponent implements OnInit{
       },
       error: (error) => {
         console.log(error);
-        // Try again
-        
       }
     });
   }
