@@ -230,7 +230,6 @@ export class WebSocketService {
           reject(false);
         }
       });
-
     });
 
   }
