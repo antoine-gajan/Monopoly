@@ -253,7 +253,7 @@ export class WebSocketService {
     });
   }
 
-  public crearSala(user: any): Promise<number> {
+  /*public crearSala(user: any): Promise<number> {
     console.log("CREAR PARTIDA-SALA", user);
 
     return new Promise((resolve) => {
@@ -269,7 +269,7 @@ export class WebSocketService {
         }
       });
     });
-  }
+  }*/
 
   public unirseSalaEsperar(user: any): Promise<string> {
     console.log("UNIRSE SALA ESPERAR", user);
@@ -396,6 +396,8 @@ export class WebSocketService {
 
   public nombreInvitado(nombreUser: string): Promise<string>{
     return new Promise ((resolve) => {
+      console.log("NOMBRE INVITADO", nombreUser);
+      console.log("SOCKET ID", this.socketID);
       this.socket.emit('nombreInvitado', {username: nombreUser, socketId: this.socketID}, (ack: any) => {
         console.log("Resultado de crear invitado: ", ack);
         if(ack.cod == 0){
