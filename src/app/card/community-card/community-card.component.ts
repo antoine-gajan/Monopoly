@@ -22,7 +22,7 @@ export class CommunityCardComponent implements OnInit{
 
   ngOnInit() {
 
-
+    /*
     this.gameService.get_random_boletin_card(this.idPartida, this.username).subscribe({
     next:
       (cards) => {
@@ -35,11 +35,11 @@ export class CommunityCardComponent implements OnInit{
         // Try again in 3 seconds
         this.ngOnInit();
       }
-    });
+    });*/
   }
 
   trigger_action(){
-    this.gameService.action_of_card(this.idPartida, this.username, this.community.nombre, this.coordenadas.h, this.coordenadas.v).subscribe({
+    /*this.gameService.action_of_card(this.idPartida, this.username, this.community.nombre, this.coordenadas.h, this.coordenadas.v).subscribe({
       next:
         (data) => {
           console.log(data);
@@ -52,7 +52,7 @@ export class CommunityCardComponent implements OnInit{
         }
     });
     // Callback function to come back to board
-    this.callback_end_turn();
+    this.callback_end_turn();*/
   }
 
   callback_end_turn() {
