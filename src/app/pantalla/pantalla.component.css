@@ -21,7 +21,7 @@ body {
     background-blend-mode: lighten;
 }
 
-  
+
 .imagen_logo_juego{
     display: flex;
     justify-content: center;
@@ -56,7 +56,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /*------------------------------------
  * CARDS
- *-----------------------------------*/  
+ *-----------------------------------*/
 
 
 .material-icons{
@@ -65,7 +65,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 24px;
 }
 
-.icono-tienda, 
+.icono-tienda,
 .icono-reglas {
   border: #222222;
   width: 24px;
@@ -99,7 +99,7 @@ h1, h2, h3, h4, h5, h6 {
 .card-container .card:not(.highlight-card) {
     cursor: pointer;
 }
-    
+
 .card-container .card:not(.highlight-card):hover {
     transform: translateY(-3px);
     box-shadow: 0 4px 17px rgba(0, 0, 0, 0.35);
@@ -157,8 +157,15 @@ h1, h2, h3, h4, h5, h6 {
     cursor: pointer;
     box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
 }
-  
+
 .btn-flotante i {
     line-height: 50px;
     text-align: center;
+}
+
+.loader{
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

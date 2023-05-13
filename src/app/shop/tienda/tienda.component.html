@@ -12,19 +12,20 @@
 <div class="info-player" *ngIf="infoPlayer">
   <div class="avatar"><img class="profile-picture" [src]="'data:image/png;base64,' + infoPlayer.imagen" /></div>
   <div class="username">{{infoPlayer.nombreUser}}</div>
-  <div class="money">💰{{infoPlayer.monedas}} creditos</div>
+  <div class="money">{{infoPlayer.monedas}} 💸</div>
 </div>
 
-<div>
+<div *ngIf="!is_loading">
   <div class="title-list-products">Fichas y avatares: </div>
   <div class="list-products" *ngIf="!is_loading">
     <div class="product" *ngFor="let product of products">
       <app-product [product]="product" class="product"></app-product>
     </div>
   </div>
-  <div class="list-products" *ngIf="is_loading">
-    <app-loader></app-loader>
-  </div>
+</div>
+
+<div *ngIf="is_loading" class="loader">
+  <app-loader></app-loader>
 </div>
 
 
