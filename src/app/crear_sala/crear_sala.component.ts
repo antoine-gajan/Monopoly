@@ -15,7 +15,7 @@ import { Location } from '@angular/common';
 })
 export class CrearSalaComponent {
   private router: Router | null = null;
-  numJugadores: number = 2; 
+  numJugadores: number = 2;
   dineroJugador: number = 1000;
   username: string;
   normas: boolean[] = [];
@@ -28,7 +28,7 @@ export class CrearSalaComponent {
   cobrarBeca: boolean = false;
   activarSubasta: boolean = false;
   aumentarCreditos: boolean = false;
-  reiniciarJuegoBancarrota: boolean = false;  
+  reiniciarJuegoBancarrota: boolean = false;
   list_players: string[] = [];
   partidaCreadaBoton: boolean = false;
   jugar: boolean = false;
@@ -49,9 +49,9 @@ export class CrearSalaComponent {
   }
 
   ngOnInit() {
-    
+
     this.socketService.hacerOnSocket();
-    
+
     console.log("ME HE ADELANTADO");
     this.idPartida = this.socketService.idPartida;
     console.log("ID PARTIDA: ", this.idPartida);
@@ -89,7 +89,7 @@ export class CrearSalaComponent {
         reiniciarJuegoBancarrota: this.reiniciarJuegoBancarrota
       },
       jugar: true,
-      socketId: this.socketService.socketID     
+      socketId: this.socketService.socketID
     };
 
     /*if(this.router!=null){
@@ -121,7 +121,7 @@ export class CrearSalaComponent {
         reiniciarJuegoBancarrota: this.reiniciarJuegoBancarrota
       },
       jugar: this.jugar,
-      socketId: this.socketService.socketID     
+      socketId: this.socketService.socketID
     };
     this.socketService.actualizarDatosCrearPartida(datos);
     console.log(this.numJugadores, this.dineroJugador);
@@ -132,6 +132,7 @@ export class CrearSalaComponent {
   }
 
   incrementarDinero() {
+    // incrementar dinero
     if (this.dineroJugador + 500 <= 3000) {
       this.dineroJugador += 500;
     }
