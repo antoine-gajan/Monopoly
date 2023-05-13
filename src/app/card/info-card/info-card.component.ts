@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {GameService} from "../../game/game.service";
 
 @Component({
   selector: 'app-info-card',

@@ -10,7 +10,6 @@ import { ContactoComponent } from './contacto/contacto.component';
 import {ErrorPageComponent} from "./error-page/error-page.component";
 import {BoardComponent} from "./game/board/board.component";
 import {ProprietyCardComponent} from "./card/propriety-card/propriety-card.component";
-import {LeaderboardComponent} from "./game/leaderboard/leaderboard.component";
 import {CommunityCardComponent} from "./card/community-card/community-card.component";
 import {ChanceCardComponent} from "./card/chance-card/chance-card.component";
 import { CrearSalaComponent } from './crear_sala/crear_sala.component';
@@ -32,7 +31,6 @@ const routes: Routes = [
   { path: 'propriety_card', component : ProprietyCardComponent },
   { path: 'chance_card', component : ChanceCardComponent },
   { path: 'community_card', component : CommunityCardComponent },
-  { path: 'leaderboard', component : LeaderboardComponent },
   { path: 'signup', component: RegistrationComponent },
   { path: 'game/:id', component: BoardComponent },
   { path: 'pantalla', component: PantallaComponent },

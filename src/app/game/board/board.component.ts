@@ -201,24 +201,6 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.player_properties = properties;
       }
     });
-
-  }
-
-  get_properties_of_other_players(): void {
-    // Get every properties of the other players
-    console.log("Get properties of other players");
-    for (let player of this.other_players_list) {
-      this.socketService.listaAsignaturasC()
-      .subscribe({
-        next: (data: PropertyBoughtResponse[]) => {
-          let properties: [string, Coordenadas][] = [];
-          for (let i = 0; i < data.length; i++) {
-            properties.push([data[i].nombre, data[i].coordenadas]);
-          }
-          this.other_player_properties[player[0]] = properties;
-        }
-      });
-    }
   }
 
     /* === FUNCTIONS TO PLAY === */

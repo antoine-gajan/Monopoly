@@ -1,5 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {GameService} from "../../game/game.service";
 import {Propriety} from "../../game/response-type";
 import { WebSocketService } from 'app/web-socket.service';
 
@@ -32,7 +31,7 @@ export class ProprietyCardComponent implements OnInit{
         setTimeout(() => this.get_propriety(), 2000);
       }
     });
-  
+
   }
 
   get_color() {

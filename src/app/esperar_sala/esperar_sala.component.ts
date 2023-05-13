@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import { UserService } from 'app/user/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GameService } from 'app/game/game.service';
-import { PlayerListResponse } from "../game/response-type";
 import { WebSocketService } from 'app/web-socket.service';
 
 @Component({
@@ -42,7 +40,7 @@ export class EsperarSalaComponent implements OnInit{
       this.mostrarBotonUnirse = true;
     });
     //this.username = this.socketService.getUsername();         // Se obtiene el nombre del usuario actual
-    
+
     /*this.socketService.consultarUsuario()
     .then ((usuario: any) => {
       console.log("usuario: ", usuario);
@@ -58,7 +56,7 @@ export class EsperarSalaComponent implements OnInit{
       this.router.navigate(['/error']);
     }
 
-    
+
     this.socketService.actualizarUsuariosConectados()
     .subscribe((usuariosConectados) => {
       console.log('Usuarios conectados:', usuariosConectados);
@@ -67,11 +65,11 @@ export class EsperarSalaComponent implements OnInit{
       this.mostrarListaJugadores = true;
     });
 
-   
-   
+
+
   }
 
- 
+
   volver_atras(){
     window.history.back();
   }
@@ -86,7 +84,7 @@ export class EsperarSalaComponent implements OnInit{
     .catch((error) => {
       console.error('Error al obtener usuarios conectados:', error);
     });*/
-    
+
 }
 
   // Función para acceder al tablero de juego para el creador de la partida
@@ -104,7 +102,7 @@ export class EsperarSalaComponent implements OnInit{
     this.router.navigateByUrl(ruta);
   }
 
-  /* 
+  /*
    * Genera el movimiento de reload al hacer click sobre el icono
    * y devuelve la lista de jugadores actualizada
    */

@@ -1,5 +1,4 @@
 import {Component, Input, EventEmitter, Output } from '@angular/core';
-import {GameService} from "../../game/game.service";
 import { WebSocketService } from 'app/web-socket.service';
 
 @Component({

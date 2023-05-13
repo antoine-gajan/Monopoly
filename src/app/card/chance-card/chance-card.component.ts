@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {GameService} from "../../game/game.service";
-import {CartaSuerte, Coordenadas, Propriety, RandomCard} from "../../game/response-type";
+import {Coordenadas, RandomCard} from "../../game/response-type";
 import { WebSocketService } from 'app/web-socket.service';
 
 @Component({

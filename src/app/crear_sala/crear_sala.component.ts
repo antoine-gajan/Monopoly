@@ -1,11 +1,8 @@
 import {Component, ComponentFactoryResolver, ElementRef, ViewContainerRef} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/user/user.service';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { GameService } from 'app/game/game.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DatosSalaService } from 'app/user/datos.service';
 import { WebSocketService } from 'app/web-socket.service';
-import { Location } from '@angular/common';
 
 
 @Component({
@@ -15,7 +12,7 @@ import { Location } from '@angular/common';
 })
 export class CrearSalaComponent {
   private router: Router | null = null;
-  numJugadores: number = 2; 
+  numJugadores: number = 2;
   dineroJugador: number = 1000;
   username: string;
   normas: boolean[] = [];
@@ -28,14 +25,13 @@ export class CrearSalaComponent {
   cobrarBeca: boolean = false;
   activarSubasta: boolean = false;
   aumentarCreditos: boolean = false;
-  reiniciarJuegoBancarrota: boolean = false;  
+  reiniciarJuegoBancarrota: boolean = false;
   list_players: string[] = [];
   partidaCreadaBoton: boolean = false;
   jugar: boolean = false;
 
   constructor(
     router: Router,
-    private gameService: GameService,
     private userService: UserService,
     private route: ActivatedRoute,
     private componentFactoryResolver: ComponentFactoryResolver,
@@ -43,13 +39,12 @@ export class CrearSalaComponent {
     private elRef: ElementRef,
     private datosSalaService: DatosSalaService,
     private socketService: WebSocketService,
-    private location: Location
   ){
     this.router = router;
   }
 
   ngOnInit() {
-    
+
     //this.socketService.hacerOnSocket();
     this.list_players[0] = this.socketService.username;
     //console.log("ME HE ADELANTADO");
@@ -85,7 +80,7 @@ export class CrearSalaComponent {
         reiniciarJuegoBancarrota: this.reiniciarJuegoBancarrota
       },
       jugar: true,
-      socketId: this.socketService.socketID     
+      socketId: this.socketService.socketID
     };*/
 
   }
@@ -102,7 +97,7 @@ export class CrearSalaComponent {
         reiniciarJuegoBancarrota: this.reiniciarJuegoBancarrota
       },
       jugar: this.jugar,
-      socketId: this.socketService.socketID     
+      socketId: this.socketService.socketID
     };
     this.socketService.actualizarDatosCrearPartida(datos);
     console.log(this.numJugadores, this.dineroJugador);

@@ -1,6 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {GameService} from "../../game/game.service";
-import {Party} from "../../game/response-type";
 import { Propriety } from '../../game/response-type';
 import { WebSocketService } from 'app/web-socket.service';
 

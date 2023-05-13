@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {GameService} from "../../game/game.service";
 import {Coordenadas, RandomCard} from "../../game/response-type";
 import { WebSocketService } from 'app/web-socket.service';
 
@@ -16,7 +15,6 @@ export class CommunityCardComponent implements OnInit{
   community: RandomCard;
 
   constructor(
-    private gameService: GameService,
     private socketService: WebSocketService
   ) {}
 
