@@ -38,8 +38,5 @@ export class TiendaComponent {
           });
         }
       });
-
-
   }
-
 }

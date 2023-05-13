@@ -121,4 +121,5 @@ export interface InfoPlayerResponse {
   partidasJugadas: number;
   partidasEnJuego: number;
   token: string;
+  imagen: string;
 }

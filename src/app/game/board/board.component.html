@@ -392,12 +392,12 @@
       <div class="player-panel" data-ui="player0">
 
         <svg width="12" height="12" class="player-panel-token">
-          <circle cx="6" cy="6" r="6" fill="red"></circle>
+          <circle cx="6" cy="6" r="6" fill="red" [style]="'stroke: black; stroke-width: 0.3px;'"></circle>
         </svg>
-        <span class="player-name">{{player[0]}}</span>
-        <span class="player-money" data-ui="1500" style="color: rgb(0, 0, 0);">{{player[1]}}€</span>
+        <span class="player-name">🥷{{player[0]}}</span>
+        <span class="player-money" data-ui="1500" style="color: rgb(0, 0, 0);">{{player[1]}}🪙</span>
 
-        <ng-container *ngIf="!is_bankrupt">
+        <ng-container>
           <div class ="player-properties" *ngFor="let property of player_properties">
               <div class="player-property" data-ui="vt"  [style.background]="get_color_property(property[1])[0]" [style.color]="get_color_property(property[1])[1]" (click)="createCardComponent(property[1].v, property[1].h, 'Quieres vender ?', false, 'sell', 0, false)">
                 {{ property[0] }}
@@ -410,10 +410,9 @@
         <div class="player-panel" *ngIf="other_player[0] != player[0]">
 
           <svg width="12" height="12" class="player-panel-token">
-            <circle cx="6" cy="6" r="6" [attr.fill]= "get_token_color_from_index(i + 1)"></circle>
-          </svg>
-          <span class="player-name">{{other_player[0]}}</span>
-          <span class="player-money" data-ui="1400" style="color: rgb(0, 0, 0);">{{other_player[1]}}€</span>
+            <circle cx="6" cy="6" r="6" [attr.fill]= "get_token_color_from_index(i + 1)" [style]="'stroke: black; stroke-width: 0.3px;'"></circle></svg>
+          <span class="player-name">👤{{other_player[0]}}</span>
+          <span class="player-money" data-ui="1400" style="color: rgb(0, 0, 0);">{{other_player[1]}}🪙</span>
 
 
           <div class ="player-properties" *ngFor="let property of other_player_properties[other_player[0]]">

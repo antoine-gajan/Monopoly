@@ -10,15 +10,16 @@
 </header>
 
 <div class="info-player" *ngIf="infoPlayer">
+  <div class="avatar"><img class="profile-picture" [src]="'data:image/png;base64,' + infoPlayer.imagen" /></div>
   <div class="username">{{infoPlayer.nombreUser}}</div>
-  <div class="money">{{infoPlayer.monedas}}</div>
+  <div class="money">💰{{infoPlayer.monedas}} creditos</div>
 </div>
 
 <div>
   <div class="title-list-products">Fichas y avatares: </div>
   <div class="list-products" *ngIf="!is_loading">
     <div class="product" *ngFor="let product of products">
-      <app-product [product]="product" (refresh_shop)="ngOnInit()" class="product"></app-product>
+      <app-product [product]="product" class="product"></app-product>
     </div>
   </div>
   <div class="list-products" *ngIf="is_loading">
