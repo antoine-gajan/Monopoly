@@ -81,7 +81,6 @@ export class RegistrationComponent implements OnInit{
       console.log("CREAR CUENTA", user);
       this.socketService.registro(user)
       .then((resgisterResponse: boolean) => {
-        this.socketService.username = this.form.value.username;
         this.mostrarError = !resgisterResponse;
       })
       .catch(() => {

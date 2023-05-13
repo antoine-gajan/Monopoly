@@ -318,7 +318,7 @@ export class WebSocketService {
 
   public crearPartida(): Promise<number> {
     console.log("CREAR PARTIDA-SALA v2");
-
+    //const socketNuevo =  as unknown as string;
     return new Promise((resolve) => {
       this.socket.emit('crearPartida', {socketId: this.socketID}, (ack: any) => {
         console.log('Server acknowledged:', ack);

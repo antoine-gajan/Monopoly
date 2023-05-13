@@ -32,7 +32,19 @@ volverArriba() {
     this.is_loading = true;
     // Get username from browser
     //this.username = localStorage.getItem('username');
-    this.username = this.socketService.username;
+    this.socketService.consultarUsuario()
+    .then ((usuario: any) => {
+      this.is_loading = false;
+      console.log("usuario: ", usuario);
+      this.username = usuario.msg.nombreUser;
+      this.socketService.username = usuario.msg.nombreUser;
+      if (this.username == null) {
+        this.router.navigate(['/error']);
+      }
+    })
+    .catch(() => {
+      console.log("ERROR AL OBTENER NOMBRE USUARIO");
+    });
   }
 
   crearPartida() {
