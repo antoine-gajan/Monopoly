@@ -120,4 +120,5 @@ export interface InfoPlayerResponse {
   victorias: number;
   partidasJugadas: number;
   partidasEnJuego: number;
+  token: string;
 }

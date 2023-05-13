@@ -15,11 +15,10 @@ export class AlertComponent implements OnInit{
   @Output() leave_game = new EventEmitter();
   @Output() close_card = new EventEmitter();
   @Output() reStartTimerExpulsarJugador = new EventEmitter();
-  @Output() reStartTimerExpulsarJugadorAlert = new EventEmitter();
 
 
   ngOnInit() {
-   this.startTimer(10);
+   this.startTimer(15);
   }
 
   startTimer(time_limit_1: number) {
@@ -37,8 +36,7 @@ export class AlertComponent implements OnInit{
         // Calculate remaining time in seconds
         this.remaining_time = Math.floor((end_time - Date.now()) / 1000);
         // Check if the timer has finished
-        if (this.remaining_time <= 0) {
-          clearInterval(this.timer);
+        if (this.remaining_time == 0) {
           console.log("Timer out, you will be expulsed from the game");
           this.abandonar_partida();
           }
@@ -57,7 +55,6 @@ export class AlertComponent implements OnInit{
     this.is_loading = true;
     this.is_timer_active = false;
     clearInterval(this.timer);
-    console.log("lo expulsamos de la partida, alert");
     this.leave_game.emit();
   }
 }

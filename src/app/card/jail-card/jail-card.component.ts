@@ -10,6 +10,7 @@ export class JailCardComponent {
   // Information of player
   @Output() end_turn = new EventEmitter();
   @Output() reStartTimerExpulsarJugador = new EventEmitter();
+  @Output() play_turn = new EventEmitter();
   // Variables linked with button
   @Input() has_card : boolean = false;
   @Input() can_pay : boolean = false;
@@ -80,8 +81,15 @@ export class JailCardComponent {
     complete: async () => {
       // Callback when complete
       console.log("Roll dices to go out of jail completed");
-      // End turn
-      this.validate();
+      // If dobles, can play again
+      this.reStartTimerExpulsarJugador.emit();
+      if (this.dices[0] == this.dices[1]) {
+        this.play_turn.emit();
+      }
+      // Else, end turn
+      else {
+        this.end_turn.emit();
+      }
     }
   });
   }
