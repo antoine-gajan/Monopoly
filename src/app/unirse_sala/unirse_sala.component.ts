@@ -53,7 +53,7 @@ export class UnirseSalaComponent {
     .catch(() => {
       console.log("ERROR AL CREAR SALA");
     });
-    this.socketService.hacerOnSocket();
+    this.socketService.actualizarUsuariosConectados();
     const ruta = '/esperar_sala/' + this.idPartida;
     this.router.navigateByUrl(ruta);
   }

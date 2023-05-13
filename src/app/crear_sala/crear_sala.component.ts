@@ -61,6 +61,7 @@ export class CrearSalaComponent {
     .subscribe((usuariosConectados) => {
       console.log('Usuarios conectados:', usuariosConectados);
       this.list_players = usuariosConectados;
+      this.socketService.list_players = usuariosConectados;
     })
     console.log("LISTA JUGADORES: ", this.list_players);
   }

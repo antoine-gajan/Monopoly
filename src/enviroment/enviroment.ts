@@ -3,7 +3,7 @@ export const environment = {
   
 
     socketURL: 'http://localhost:80',
-    //socketURL: 'https://toothless.nerks.net',
+    // socketURL: 'https://toothless.nerks.net',
     //--API servidor local -> cuando funcione cambiarlo
     login: 'http://localhost:8080/users/login',
     registration: 'http://localhost:8080/users/register',

@@ -19,7 +19,7 @@ import {
 })
 
 export class WebSocketService {
-  dineroPartida: number;
+  dineroPartida: number[] = [];
   soyInvitado: boolean;
   list_players: string[] = [];
   localSocketID: string;
@@ -282,6 +282,7 @@ export class WebSocketService {
         console.log('unirJugador response:', response);
         console.log('unirJugador response.cod:', response.cod);
         if (response.cod == 0) {
+          console.log("SOCKET ID :"+this.socket.id);
           let idPartida = '';
           idPartida = user.idPartida;
           const ruta = '/esperar_sala/' + idPartida;
@@ -310,11 +311,11 @@ export class WebSocketService {
     });
   }
 
-  hacerOnSocket(){
-    this.socket.on('esperaJugadores', (ack: any) => {
-      console.log('Server acknowledged hacerOnSocket:', ack);
-    });
-  }
+  // hacerOnSocket(){
+  //   this.socket.on('esperaJugadores', (ack: any) => {
+  //     console.log('Server acknowledged hacerOnSocket:', ack);
+  //   });
+  // }
 
   public crearPartida(): Promise<number> {
     console.log("CREAR PARTIDA-SALA v2");
@@ -324,6 +325,7 @@ export class WebSocketService {
         console.log('Server acknowledged:', ack);
       if(ack.cod == 0){
         console.log("ENTRA");
+        console.log("SOCKET ID :"+this.socket.id);
           resolve(ack.msg);
       }
       else if(ack.cod != 2){
@@ -349,11 +351,14 @@ export class WebSocketService {
     })
   }
 
-  public escucharEntrarAJugar(): Promise<string>{
-    return new Promise ((resolve) => {
+  public escucharEntrarAJugar(): Observable<string>{
+    return new Observable ((observable) => {
       this.socket.on('comenzarPartida', (ack: any) => {
         console.log('Valor escuchar para entrar a jugar:', ack);
-        resolve(ack);
+        console.log("Username: "+ack.username);
+        this.dineroPartida = ack.partida.dineroJugadores;
+        observable.next(ack);
+        observable.complete();
       });
    });
   }

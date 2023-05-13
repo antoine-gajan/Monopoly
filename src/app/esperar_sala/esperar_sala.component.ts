@@ -36,14 +36,11 @@ export class EsperarSalaComponent implements OnInit{
     console.log("ACTUALIZA INFO");
     let idPartida = this.route.snapshot.paramMap.get('id'); // Se obtiene id de la partida
     this.socketService.escucharEntrarAJugar()
-    .then((data: any) => {
+    .subscribe((data: any) => {
       console.log("ENTRA A JUGAR: ", data);
+
       this.mostrarBotonUnirse = true;
-    })
-    .catch(() => {
-      console.log("ERROR AL ENTRAR A JUGAR");
     });
-    
     //this.username = this.socketService.getUsername();         // Se obtiene el nombre del usuario actual
     
     /*this.socketService.consultarUsuario()

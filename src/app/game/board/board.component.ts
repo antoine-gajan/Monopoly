@@ -88,7 +88,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         console.log("TODO INICIADO: Turno: ", jugador);
         this.current_player = jugador;
         // If it's my turn, play
-        if (this.current_player == this.player[0]){
+        if (this.current_player == this.username){
           this.play();
         }
         // If it's not my turn, wait
@@ -170,12 +170,12 @@ export class BoardComponent implements OnInit, OnDestroy {
       for(let i = 0; i < this.list_players.length; i++){
         // Information of other players
         if (this.list_players[i] != this.username) {
-          this.other_players_list.push([this.list_players[i], this.socketService.dineroPartida, {h: 10, v: 10}]);
+          this.other_players_list.push([this.list_players[i], this.socketService.dineroPartida[i], {h: 10, v: 10}]);
         }
         // Information of myself
         else {
           this.player[0] = this.username;
-          this.player[1] = this.socketService.dineroPartida;
+          this.player[1] = this.socketService.dineroPartida[i];
         }
       }
     }
