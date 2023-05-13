@@ -87,9 +87,9 @@
     <div class="espaciar_inverso"><h3>ID PARTIDA: {{idPartida}}</h3></div>
 <div class="lista_jugadores">
   <p>Jugadores conectados:</p>
-  <div *ngFor="let player of list_players" class="player-name">
-    {{player}}
-  </div>
+<div><div *ngFor="let player of list_players" class="player-name">
+     {{player}}
+   </div></div>
 </div>
 
         <button (click)="empezarJugar()" class="boton-jugar" >Empezar a partida</button>

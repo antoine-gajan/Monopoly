@@ -48,11 +48,13 @@ volverArriba() {
     console.log("CREAR PARTIDA BOTON PANTALLA");
     
     this.socketService.crearPartida()
-        .then((crearSala: number) => {
+        .then((crearSala: any) => {
           if(crearSala != -1){
             console.log("CREAR SALA: ", crearSala);
-            this.socketService.idPartida = crearSala;
-            this.router.navigate(['/crear_sala']);
+            this.socketService.idPartida = crearSala.id;
+            // console.log("ID PARTIDA: ", this.socketService.idPartida);
+            this.router.navigate(['/crear_sala'], { state: { username: crearSala.username } });
+
           }
         })
         .catch(() => {

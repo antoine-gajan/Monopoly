@@ -15,7 +15,7 @@ import { Location } from '@angular/common';
 })
 export class CrearSalaComponent {
   private router: Router | null = null;
-  numJugadores: number = 2;
+  numJugadores: number = 2; 
   dineroJugador: number = 1000;
   username: string;
   normas: boolean[] = [];
@@ -28,7 +28,7 @@ export class CrearSalaComponent {
   cobrarBeca: boolean = false;
   activarSubasta: boolean = false;
   aumentarCreditos: boolean = false;
-  reiniciarJuegoBancarrota: boolean = false;
+  reiniciarJuegoBancarrota: boolean = false;  
   list_players: string[] = [];
   partidaCreadaBoton: boolean = false;
   jugar: boolean = false;
@@ -49,10 +49,10 @@ export class CrearSalaComponent {
   }
 
   ngOnInit() {
-
-    this.socketService.hacerOnSocket();
-
-    console.log("ME HE ADELANTADO");
+    
+    //this.socketService.hacerOnSocket();
+    this.list_players[0] = this.socketService.username;
+    //console.log("ME HE ADELANTADO");
     this.idPartida = this.socketService.idPartida;
     console.log("ID PARTIDA: ", this.idPartida);
     console.log("LEER USUARIOS");
@@ -60,14 +60,14 @@ export class CrearSalaComponent {
     this.socketService.actualizarUsuariosConectados()
     .then((usuariosConectados) => {
       console.log('Usuarios conectados:', usuariosConectados);
-      this.socketService.list_players = usuariosConectados;
+      //this.socketService.list_players = usuariosConectados;
       this.list_players = usuariosConectados;
       ///this.socketService.username = usuariosConectados[0];
     })
     .catch((error) => {
       console.error('Error al obtener usuarios conectados:', error);
     });
-    console.log("--", this.socketService.list_players);
+    console.log("--", this.list_players);
   }
 
   empezarJugar() {
@@ -77,7 +77,7 @@ export class CrearSalaComponent {
     this.actualizarDatos();
     console.log("JUGAR: ", this.jugar);
 
-
+    /*
     const datos = {
       dineroInicial: this.dineroJugador,
       nJugadores: this.numJugadores,
@@ -89,23 +89,8 @@ export class CrearSalaComponent {
         reiniciarJuegoBancarrota: this.reiniciarJuegoBancarrota
       },
       jugar: true,
-      socketId: this.socketService.socketID
-    };
-
-    /*if(this.router!=null){
-      const ruta = '/game/' + this.idPartida;
-      this.router.navigateByUrl(ruta);
-
-    }*/
-    //console.log("CONFIGURACIÓN CREAR PARTIDA: ", datos);
-    /*if(this.router!=null){
-      const ruta = '/game/' + this.idPartida;
-      this.router.navigateByUrl(ruta);
-
-    }*/
-
-    //this.socketService.crearPartida();
-    //this.userService.crearSala(datos);
+      socketId: this.socketService.socketID     
+    };*/
 
   }
   actualizarDatos(){
@@ -121,7 +106,7 @@ export class CrearSalaComponent {
         reiniciarJuegoBancarrota: this.reiniciarJuegoBancarrota
       },
       jugar: this.jugar,
-      socketId: this.socketService.socketID
+      socketId: this.socketService.socketID     
     };
     this.socketService.actualizarDatosCrearPartida(datos);
     console.log(this.numJugadores, this.dineroJugador);
@@ -132,7 +117,6 @@ export class CrearSalaComponent {
   }
 
   incrementarDinero() {
-    // incrementar dinero
     if (this.dineroJugador + 500 <= 3000) {
       this.dineroJugador += 500;
     }

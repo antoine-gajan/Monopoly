@@ -323,10 +323,10 @@ export class WebSocketService {
         console.log('Server acknowledged:', ack);
       if(ack.cod == 0){
         console.log("ENTRA");
-          resolve(ack.msg.id);
+          resolve(ack.msg);
       }
       else if(ack.cod != 2){
-          resolve(ack.msg.id);
+          resolve(ack.msg);
       }
       else{
           alert("Se ha producido un error en el servidor, por favor, pulse otra vez el boton");
@@ -340,8 +340,9 @@ export class WebSocketService {
       if(ack.cod==0){
         console.log("ACTUALIZACIÓN CORRECTA");
         if(datos.jugar == true){
-          const ruta = '/game/' + this.idPartida;
-          this.router.navigate([ruta]);
+          console.log("ENTRA A JUGAR");
+          /*const ruta = '/game/' + this.idPartida;
+          this.router.navigate([ruta]);*/
         }
       }
     })
