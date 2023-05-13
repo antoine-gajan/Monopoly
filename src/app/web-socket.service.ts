@@ -49,6 +49,10 @@ export class WebSocketService {
     console.log('getSocketID: ', this._socketID);
     return this._socketID;
   }
+  
+  getSocket(){
+    return this.socket;
+  }
 
   public consultarImagen(): Promise<string>{
     return new Promise<string>((resolve, reject) => {
