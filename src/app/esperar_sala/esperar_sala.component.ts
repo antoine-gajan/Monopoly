@@ -63,14 +63,11 @@ export class EsperarSalaComponent implements OnInit{
 
     
     this.socketService.actualizarUsuariosConectados()
-    .then((usuariosConectados) => {
+    .subscribe((usuariosConectados) => {
       console.log('Usuarios conectados:', usuariosConectados);
       this.socketService.list_players = usuariosConectados;
       this.list_players = usuariosConectados;
       this.mostrarListaJugadores = true;
-    })
-    .catch((error) => {
-      console.error('Error al obtener usuarios conectados:', error);
     });
 
    

@@ -295,15 +295,16 @@ export class WebSocketService {
     });
   }
 
-  actualizarUsuariosConectados(): Promise<string[]>{
-    return new Promise((resolve, reject) => {
+  actualizarUsuariosConectados(): Observable<string[]>{
+    return new Observable((observable) => {
       this.socket.on('esperaJugadores', (info) => {
         if (typeof info === 'object' && info !== null) {
           const keys = Object.keys(info);
           const usuariosConectados = keys.map((key) => `${info[key]}`);
-          resolve(usuariosConectados);
+          observable.next(usuariosConectados);
+          observable.complete();
         } else {
-          reject('La información recibida no es un objeto');
+          console.log("La información recibida no es un objeto");
         }
       });
     });
@@ -311,7 +312,7 @@ export class WebSocketService {
 
   hacerOnSocket(){
     this.socket.on('esperaJugadores', (ack: any) => {
-      console.log('Server acknowledged:', ack);
+      console.log('Server acknowledged hacerOnSocket:', ack);
     });
   }
 

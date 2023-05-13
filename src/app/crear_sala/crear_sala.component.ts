@@ -58,16 +58,11 @@ export class CrearSalaComponent {
     console.log("LEER USUARIOS");
 
     this.socketService.actualizarUsuariosConectados()
-    .then((usuariosConectados) => {
+    .subscribe((usuariosConectados) => {
       console.log('Usuarios conectados:', usuariosConectados);
-      //this.socketService.list_players = usuariosConectados;
       this.list_players = usuariosConectados;
-      ///this.socketService.username = usuariosConectados[0];
     })
-    .catch((error) => {
-      console.error('Error al obtener usuarios conectados:', error);
-    });
-    console.log("--", this.list_players);
+    console.log("LISTA JUGADORES: ", this.list_players);
   }
 
   empezarJugar() {
