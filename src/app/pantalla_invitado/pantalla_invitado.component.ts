@@ -1,9 +1,7 @@
 import {Component} from '@angular/core';
-import { UserService } from 'app/user/user.service';
 import { WebSocketService } from 'app/web-socket.service';
-import * as yup from 'yup';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -24,7 +22,7 @@ export class PantallaInvitadoComponent {
     //private userService: UserService,
     private fb: FormBuilder,
     private socketService: WebSocketService
-    
+
   ) {
     this.form_unirse_invitado = this.fb.group({
       username: ['', [Validators.required, this.customValidation]],
@@ -61,10 +59,10 @@ export class PantallaInvitadoComponent {
     if(this.form_unirse_invitado.valid){
       console.log("CREAR SALA INVITADO: ", this.form_unirse_invitado.value.username);
       //this.socketService.setUsername(this.form_unirse_invitado.value.username);
-      
+
       //this.datosUser.usrename = this.form_unirse_invitado.value.username;
       //this.datosUser.idSocket = this.socketService.socketID;
-      
+
     }
   }
 
@@ -86,7 +84,7 @@ export class PantallaInvitadoComponent {
     private fb: FormBuilder,
     private socketService: WebSocketService,
     private router: Router
-    
+
   ) {
     this.form_unirse_invitado = this.fb.group({
       username: ['', [Validators.required, this.customValidation]],
@@ -104,7 +102,7 @@ export class PantallaInvitadoComponent {
     }
     return null;
   }
-  
+
 
 // función que permite volver arriba en la página
 volverArriba() {
@@ -115,11 +113,11 @@ volverArriba() {
     this.crearSalaClicked = true;
     if(this.form_unirse_invitado.valid){
       this.socketService.username = this.form_unirse_invitado.value.username;
-      
+
       this.socketService.nombreInvitado(this.form_unirse_invitado.value.username);
-      
+
       console.log("CREAR PARTIDA BOTON PANTALLA");
-      
+
       this.socketService.crearPartida()
           .then((crearSala: any) => {
             if(crearSala != -1){
@@ -138,7 +136,7 @@ volverArriba() {
     this.unirseSalaClicked = true;
     if(this.form_unirse_invitado.valid){
       this.socketService.username = this.form_unirse_invitado.value.username;
-      
+
       this.socketService.nombreInvitado(this.form_unirse_invitado.value.username);
       this.router.navigate(['/unirse_sala']);
     }
