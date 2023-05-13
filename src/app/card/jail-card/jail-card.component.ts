@@ -77,10 +77,6 @@ export class JailCardComponent {
         this.dices[0] = msg.dado1;
         this.dices[1] = msg.dado2;
     },
-    error: async () =>{
-      // Try again
-      this.roll_dices();
-    },
     complete: async () => {
       // Callback when complete
       console.log("Roll dices to go out of jail completed");

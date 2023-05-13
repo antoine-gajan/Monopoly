@@ -27,7 +27,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   // Relative to client player
   player: [string, number, Coordenadas] = ["", 0, {h: 10, v: 10}];
   is_playing: boolean = false;
-  is_in_jail: boolean = false;
   is_bankrupt: boolean = false;
   player_properties: [string, Coordenadas][] = [];
   timer: any;
@@ -188,20 +187,19 @@ export class BoardComponent implements OnInit, OnDestroy {
   get_properties(){
     console.log("Get properties of client player");
     // Get every properties of the player if he is not bankrupt
-    if (!this.is_bankrupt) {
-      console.log("Get properties of client player-2");
-      this.socketService.listaAsignaturasC()
-      .subscribe({
-        next: (data: PropertyBoughtResponse[]) => {
-          console.log("Get properties of client player realized successfully");
-          let properties: [string, Coordenadas][] = [];
-          for (let i = 0; i < data.length; i++) {
-            properties.push([data[i].nombre, data[i].coordenadas]);
-          }
-          this.player_properties = properties;
+    console.log("Get properties of client player-2");
+    this.socketService.listaAsignaturasC()
+    .subscribe({
+      next: (data: PropertyBoughtResponse[]) => {
+        console.log("Get properties of client player realized successfully");
+        let properties: [string, Coordenadas][] = [];
+        for (let i = 0; i < data.length; i++) {
+          properties.push([data[i].nombre, data[i].coordenadas]);
         }
-      });
-    }
+        this.player_properties = properties;
+      }
+    });
+
   }
 
   get_properties_of_other_players(): void {
@@ -234,8 +232,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     .subscribe({
       next: (msg: any) => {
         console.log("ESTÁ EN LA CÁRCEL: ", msg);
-        this.is_in_jail = msg.carcel;
-        if(this.is_in_jail){
+        if(msg.carcel){
           this.message = "Estás en la cárcel";
           let carta_carcel_tengo = false;
           if(msg.carta != null){
@@ -274,7 +271,6 @@ export class BoardComponent implements OnInit, OnDestroy {
         // Check if we did 3 doubles, if so, go to jail
         if (msg.dobles == 3) {
           // Display message and end turn
-          this.is_in_jail = true;
           this.message = this.current_player + ", has sacado 3 dobles, vas a la cárcel";
           this.go_next_turn();
         }
@@ -378,10 +374,10 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Get properties of player
     this.update_player_info();
     // Compare old position and new position
-    if (this.old_position.h != this.player[2].h || this.old_position.v != this.player[2].v && !this.is_in_jail) {
+    if (this.old_position.h != this.player[2].h || this.old_position.v != this.player[2].v && this.player[2].h != 0 && this.player[2].v != 10) {
       this.card_action();
     }
-    else if (this.dices[0] == this.dices[1] && !this.is_in_jail) {
+    else if (this.dices[0] == this.dices[1]) {
       this.message = "Vuelve a tirar los dados";
       document.getElementById("tirar-dados")!.removeAttribute("disabled");
       document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
@@ -435,10 +431,6 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.player[2] = listaPosiciones[i];
       }
       this.other_players_list = result;
-    }
-    // If user not in list, it's because he is bankrupt
-    if (!listaJugadores.includes(this.player[0])) {
-      this.is_bankrupt = true;
     }
   }
 
@@ -517,9 +509,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   show_position_every_players(): void {
     console.log("=== POSITION OF PLAYERS ACTUALIZED ===");
     // Show position of the player if he is not bankrupt
-    if (!this.is_bankrupt) {
-      this.show_position(this.player[0], this.player[2], 0);
-    }
+    this.show_position(this.player[0], this.player[2], 0);
     // Show position of the other players
     for (let i = 0; i < this.other_players_list.length; i++) {
       this.show_position(this.other_players_list[i][0], this.other_players_list[i][2], i + 1);
