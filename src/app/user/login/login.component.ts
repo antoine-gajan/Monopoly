@@ -67,6 +67,7 @@ export class LoginComponent implements OnInit{
       console.log("LOGIN: ", user);
       this.socketService.login(user)
         .then((loginResponse: boolean) => {
+          this.socketService.username = this.form.value.username;
           this.mostrarError = !loginResponse;
         })
         .catch(() => {
