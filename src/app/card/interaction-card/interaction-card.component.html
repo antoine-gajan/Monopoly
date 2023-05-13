@@ -22,6 +22,8 @@
     <button *ngIf="type == 'buy'" class="button-action buy" (click)="buy_card()">Comprar</button>
     <button *ngIf="play_again && type === 'buy'" class="button-action play-again" (click)="callback()">Jugar otra vez</button>
     <button *ngIf="!play_again && type === 'buy'" class="button-action stop" (click)="callback()">Cancelar</button>
+    <button *ngIf="!play_again && type === 'buy' && !is_puja_activated" class="button-action stop" (click)="callback()">Cancelar</button>
+    <button *ngIf="type === 'buy' && is_puja_activated" class="button-action buy" (click)="empezar_puja()">Pujar</button>
 
     <button *ngIf="(type === 'sell' || type === 'increase') && is_playing" class="button-action sell" (click)="sell_card()">Vender</button>
     <button *ngIf="(type === 'sell' || type === 'increase') && is_playing" class="button-action stop" (click)="callback()">Cancelar</button>

@@ -13,15 +13,12 @@ export class InteractionCardComponent {
 
   @Input() h : number;
   @Input() v : number;
-  @Input() game_id : number = 0;
   @Input() type : string = "buy";
-  @Input() amount_to_pay : number = 0;
-  @Input() username : string;
-  @Input() player_money : number = 0;
   @Input() message: string;
   @Input() play_again: boolean = false;
   @Input() trigger_end_turn: boolean = true;
   @Input() is_playing: boolean = false;
+  @Input() is_puja_activated: boolean = false;
 
   // Define an EventEmitter to emit the "end turn" event of BoardComponent
   @Output() end_turn = new EventEmitter();
@@ -144,5 +141,16 @@ export class InteractionCardComponent {
     else {
       this.close_card.emit();
     }
+  }
+
+  empezar_puja() {
+    // Begin puja
+    this.socketService.empezarPuja({socketId: this.socketService.socketID, coordenadas: {h: this.h, v: this.v}})
+      .subscribe({
+        next: (ack: any) => {
+          console.log("Has empezado la puja");
+          console.log(ack);
+        }
+      });
   }
 }

@@ -18,12 +18,13 @@
       <app-party-card [h]= "h" [v]="v"></app-party-card>
     </ng-container>
   </div>
-  <div class="info-subasta">
-    <div class="player-subasta">{{player_subasta}}</div>
-    <div class="price-subasta">{{price_subasta}}</div>
+  <div class="info-subasta" *ngIf="player_subasta && price_subasta">
+    <div class="player-subasta">Jugador : {{player_subasta}}</div>
+    <div class="price-subasta">Pujado : {{price_subasta}} €</div>
   </div>
   <div class="list-button">
-    <button class="button-action" (click)="subastar()">Subastar</button>
-    <button class="button-action" (click)="stop_subastar()">No quiero subastar</button>
+    <button class="button-action" (click)="subastar(10)">+10€</button>
+    <button class="button-action" (click)="subastar(50)">+50€</button>
+    <button class="button-action" (click)="subastar(100)">+50€</button>
   </div>
 </div>

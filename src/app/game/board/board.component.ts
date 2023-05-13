@@ -5,11 +5,9 @@ import {UserService} from "../../user/user.service";
 import {InteractionCardComponent} from "../../card/interaction-card/interaction-card.component";
 import {ChanceCardComponent} from "../../card/chance-card/chance-card.component";
 import {CommunityCardComponent} from "../../card/community-card/community-card.component";
-import {EMPTY, Observable, forkJoin, interval, switchMap, takeWhile} from "rxjs";
 import {InfoCardComponent} from "../../card/info-card/info-card.component";
 import {JailCardComponent} from "../../card/jail-card/jail-card.component";
-import {Coordenadas, Partida, PlayerListResponse, PropertyBoughtResponse} from "../response-type";
-import {DevolutionPropertiesFormComponent} from "../devolution-properties-form/devolution-properties-form.component";
+import {Coordenadas, Partida, PropertyBoughtResponse} from "../response-type";
 import { WebSocketService } from 'app/web-socket.service';
 import {SubastaCardComponent} from "../../card/subasta-card/subasta-card.component";
 import { AlertComponent } from 'app/card/alert/alert.component';
@@ -28,7 +26,6 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   // Relative to client player
   player: [string, number, Coordenadas] = ["", 0, {h: 10, v: 10}];
-  nb_doubles: number = 0;
   is_playing: boolean = false;
   is_in_jail: boolean = false;
   is_bankrupt: boolean = false;
@@ -36,6 +33,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   timer: any;
   is_timer_active: boolean = false;
   remaining_time: number = 0;
+  old_position: Coordenadas;
 
   // Relative to other players
   other_players_list: [string, number, Coordenadas][] = [];
@@ -64,6 +62,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   dices_interval: any;
 
   list_players: string[] = [];
+  // Variables with normes of the game
+  is_puja_activated: boolean = false;
 
   constructor(
 
@@ -92,6 +92,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         }
         // If it's not my turn, wait
         else{
+          this.is_playing = false;
           this.message = this.current_player + " está jugando su turno";
         }
       }
@@ -106,6 +107,16 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.show_position_every_players();
         }
       });
+
+    /*
+    // Socket to know if there is puja
+    this.socketService.hay_puja().subscribe({
+      next: () => {
+        /// TODO: Link with backend
+        this.message = "Se ha iniciado una puja";
+      }
+    })
+    */
 
     // Determine player for first turn
     if (this.current_player == this.player[0]){
@@ -257,7 +268,16 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.dices[0] = msg.dado1;
         this.dices[1] = msg.dado2;
         this.player[2] = msg.coordenadas;
+        // Actualize position of players
+        this.show_position_every_players();
         this.reStartTimerExpulsarJugador();
+        // Check if we did 3 doubles, if so, go to jail
+        if (msg.dobles == 3) {
+          // Display message and end turn
+          this.is_in_jail = true;
+          this.message = this.current_player + ", has sacado 3 dobles, vas a la cárcel";
+          this.go_next_turn();
+        }
     },
     error: async () => {
       // Try again
@@ -269,7 +289,6 @@ export class BoardComponent implements OnInit, OnDestroy {
       // Update message
       if (this.dices[0] === this.dices[1]){
         this.message = this.player[0] + ", has sacado dobles " + this.dices[0];
-        this.nb_doubles += 1;
       }
       else {
         this.message = this.player[0] + ", has sacado " + this.dices[0] + " y " + this.dices[1];
@@ -288,6 +307,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       next: async (msg: number) => {
         //console.log
         console.log("Position : " + this.player[2].h + " " + this.player[2].v);
+        this.old_position = this.player[2];
         // Get the number of ack code
         let number = msg;
 
@@ -355,22 +375,16 @@ export class BoardComponent implements OnInit, OnDestroy {
     console.log("===END TURN===");
     // Delete the pop-up-card component
     this.delete_pop_up_component();
-    // Get old position of player
-    let old_position_player = this.player[2];
-    console.log("old position player (h,v): " + old_position_player.h + " " + old_position_player.v);
-    /// TODO: Get new position of player by updating game information
-    if (this.dices[0] == this.dices[1] && this.nb_doubles < 3) {
+    // Get properties of player
+    this.update_player_info();
+    // Compare old position and new position
+    if (this.old_position.h != this.player[2].h || this.old_position.v != this.player[2].v && !this.is_in_jail) {
+      this.card_action();
+    }
+    else if (this.dices[0] == this.dices[1] && !this.is_in_jail) {
       this.message = "Vuelve a tirar los dados";
       document.getElementById("tirar-dados")!.removeAttribute("disabled");
       document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
-    }
-    else if (this.dices[0] == this.dices[1] && this.nb_doubles == 3) {
-      this.message = "Vas a la cárcel";
-      this.is_in_jail = true;
-      this.nb_doubles = 0;
-      this.player[2] = {h: 0, v: 10};
-      this.message = "Pulsa el botón para terminar tu turno";
-      document.getElementById("button-end-turn")!.removeAttribute("disabled");
     }
     else {
       this.message = "Pulsa el botón para terminar tu turno";
@@ -387,7 +401,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Disable button to end turn
     document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
     this.is_playing = false;
-    this.nb_doubles = 0;
     // Indicate to backend that the player has finished his turn
     this.socketService.siguienteTurno()
     .then((nextPlayer: any) => {
@@ -579,14 +592,12 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Inputs
     componentRef.instance.h = h;
     componentRef.instance.v = v;
-    componentRef.instance.game_id = this.game_id;
-    componentRef.instance.username = this.player[0];
     componentRef.instance.message = message;
     componentRef.instance.play_again = play_again;
-    componentRef.instance.amount_to_pay = money_to_pay;
     componentRef.instance.type = type;
     componentRef.instance.trigger_end_turn = trigger_end_turn;
     componentRef.instance.is_playing = this.is_playing;
+    componentRef.instance.is_puja_activated = this.is_puja_activated;
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     componentRef.instance.close_card.subscribe(() => {this.delete_pop_up_component()});
@@ -676,19 +687,31 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   createSubastaCardComponent(coord: Coordenadas): void {
-    // Assure to delete the old pup up card component
+    // Ensure to delete old subasta card
     this.delete_pop_up_component();
+    this.delete_subasta_card_component();
     const factory = this.componentFactoryResolver.resolveComponentFactory(SubastaCardComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
     // Inputs
-    componentRef.instance.game_id = this.game_id;
     componentRef.instance.h = coord.h;
     componentRef.instance.v = coord.v;
     componentRef.instance.message = "Subasta";
+    componentRef.instance.is_playing = this.is_playing;
+    // Outputs
+    componentRef.instance.close_subasta_card.subscribe(() => {this.delete_subasta_card_component()});
+    componentRef.instance.trigger_end_turn.subscribe(() => {this.end_turn()});
     // Give an id to the component html
-    componentRef.location.nativeElement.id = "pop-up-card";
+    componentRef.location.nativeElement.id = "subasta-card";
     // Center the component at the middle of the page
     componentRef.location.nativeElement.style.cssText = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);";
+  }
+
+  delete_subasta_card_component() {
+    // Assure to delete the old pup up card component
+    const old_subasta_component_element = document.getElementById('subasta-card');
+    if (old_subasta_component_element != null){
+      old_subasta_component_element.remove();
+    }
   }
 
   get_token_color_from_index(index: number): string{

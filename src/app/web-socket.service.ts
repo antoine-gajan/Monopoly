@@ -624,4 +624,70 @@ export class WebSocketService {
       });
     });
   }
+
+  public pujar(data: any): Observable<any>{
+    return new Observable<any>((observer) => {
+      this.socket.emit('pujar', data,
+      (ack: any) => {
+        if(ack.cod==0){
+          console.log("PUJAR", ack.msg);
+          observer.next(ack.msg);
+          observer.complete();
+        }
+        else if(ack.cod == 2){
+            alert("Se ha producido un error en el servidor. Vuelva a intentarlo");
+        }
+      });
+    });
+  }
+
+  public actualizarPuja(): Observable<any>{
+    return new Observable((observer) => {
+      this.socket.on('actualizarPuja', (ack: any) => {
+        console.log('Server acknowledged:', ack);
+        if(ack.cod == 0){
+          console.log("ACTUALIZAR PUJA", ack.msg);
+          observer.next(ack.msg);
+        }
+        else {
+          console.log("error en actualizarPuja");
+        }
+      });
+    });
+  }
+
+  public terminarPuja(): Observable<any>{
+    return new Observable((observer) => {
+      this.socket.on('terminarPuja', (ack: any) => {
+        console.log('Server acknowledged:', ack);
+        observer.next(ack.msg);
+      });
+    });
+  }
+
+  public empezarPuja(data: any): Observable<any>{
+    return new Observable((observer) => {
+      this.socket.emit('empezarPuja', data,
+      (ack: any) => {
+        console.log('Server acknowledged:', ack);
+        if(ack.cod == 0){
+          console.log("EMPEZAR PUJA", ack);
+          observer.next(ack);
+          observer.complete();
+        }
+        else {
+          console.log("error en empezarPuja");
+        }
+      });
+    });
+  }
+
+  public hay_puja(): Observable<any>{
+    return new Observable((observer) => {
+      this.socket.on('hay_puja', (ack: any) => {
+        console.log('Server acknowledged:', ack);
+        observer.next(ack);
+      });
+    });
+  }
 }

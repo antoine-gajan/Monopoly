@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {WebSocketService} from "../../web-socket.service";
 
 @Component({
@@ -15,10 +15,34 @@ export class SubastaCardComponent {
 
   @Input() h : number;
   @Input() v : number;
-  @Input() game_id : number = 0;
   @Input() message: string;
+  @Input() is_playing: boolean = false;
+  @Output() close_subasta_card = new EventEmitter();
+  @Output() trigger_end_turn = new EventEmitter();
+
   player_subasta: string;
   price_subasta: number;
+
+  ngOnInit(): void {
+    // Listen to sockets
+    this.socketService.actualizarPuja().subscribe(
+      (msg) => {
+        console.log(msg);
+        this.player_subasta = msg.nombre;
+        this.price_subasta = msg.cantidad;
+      });
+
+    this.socketService.terminarPuja().subscribe(
+      (msg) => {
+        console.log("Puja terminada");
+        // Close the card
+        this.close_subasta_card.emit();
+        // End turn if the player is playing
+        if(this.is_playing){
+          this.trigger_end_turn.emit();
+        }
+      });
+  }
 
   get_type_casilla() {
 
@@ -36,11 +60,15 @@ export class SubastaCardComponent {
     }
   }
 
-  subastar() {
-    /// TODO : Indicate to backend that we want to subastar
-  }
-
-  stop_subastar() {
-    /// TODO : Indicate to backend that we want to stop subastar
+  subastar(money: number) {
+    this.socketService.pujar({socketId: this.socketService.socketID, cantidad: money}).subscribe({
+      next: (msg) => {
+        console.log(msg);
+        console.log("Se ha pujado + " + money + "€");
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
   }
 }
