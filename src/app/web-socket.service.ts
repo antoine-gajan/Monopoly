@@ -22,7 +22,7 @@ export class WebSocketService {
   dineroPartida: number[] = [];
   soyInvitado: boolean;
   list_players: string[] = [];
-  localSocketID: string;
+  localSocketID: any;
   idPartida: number;
   username: string;
   private email: string;
