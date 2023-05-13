@@ -112,3 +112,12 @@ export interface Product{
   imagen: string;
   precio: number;
 }
+
+export interface InfoPlayerResponse {
+  nombreUser: string;
+  correo: string;
+  monedas: number;
+  victorias: number;
+  partidasJugadas: number;
+  partidasEnJuego: number;
+}

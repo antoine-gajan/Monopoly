@@ -4,7 +4,14 @@ import { environment } from 'enviroment/enviroment';
 import { Router } from '@angular/router';
 import { LoginComponent } from './user/login/login.component';
 import { Observable } from 'rxjs';
-import {Partida, Product, PropertyBoughtResponse, Propriety, RandomCard} from './game/response-type';
+import {
+  InfoPlayerResponse,
+  Partida,
+  Product,
+  PropertyBoughtResponse,
+  Propriety,
+  RandomCard
+} from './game/response-type';
 
 
 @Injectable({
@@ -69,6 +76,21 @@ export class WebSocketService {
         } else {
           console.log('Error al obtener la información del usuario');
           reject("-1");
+        }
+      });
+    });
+  }
+
+  public infoUsuario(): Observable<InfoPlayerResponse>{
+    return new Observable((observer) => {
+      this.socket.emit('infoUsuario', ({socketId: this.socketID}), (ack: any) => {
+        console.log('ack: ', ack);
+        if (ack.cod === 0) {
+          observer.next(ack.msg);
+          observer.complete();
+        } else {
+          console.log('Error al obtener la información del usuario');
+          observer.error();
         }
       });
     });

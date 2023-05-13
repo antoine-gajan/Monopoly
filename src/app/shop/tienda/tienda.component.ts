@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {Location} from "@angular/common";
 import {WebSocketService} from "../../web-socket.service";
-import {Product} from "../../game/response-type";
+import {InfoPlayerResponse, Product} from "../../game/response-type";
 
 
 @Component({
@@ -13,6 +13,7 @@ import {Product} from "../../game/response-type";
 export class TiendaComponent {
 
   products: Product[] = [];
+  infoPlayer: InfoPlayerResponse;
   is_loading: boolean = true;
   constructor(
     private route: ActivatedRoute,
@@ -23,11 +24,22 @@ export class TiendaComponent {
   ngOnInit(): void {
     // Get all products from shop
     this.socketService.tienda().subscribe(
-      (products) => {
-        console.log(products);
-        this.products = products;
-        this.is_loading = false;
+      {
+        next: (products) => {
+          this.products = products;
+        },
+        complete: () => {
+          this.socketService.infoUsuario().subscribe(
+      {
+          next: (infoPlayer) => {
+            this.infoPlayer = infoPlayer;
+            this.is_loading = false;
+          }
+          });
+        }
       });
+
+
   }
 
 }

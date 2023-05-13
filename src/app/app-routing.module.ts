@@ -16,17 +16,12 @@ import {ChanceCardComponent} from "./card/chance-card/chance-card.component";
 import { CrearSalaComponent } from './crear_sala/crear_sala.component';
 import { UnirseSalaComponent } from './unirse_sala/unirse_sala.component';
 import { TiendaComponent } from './shop/tienda/tienda.component';
-import { ProfileComponent } from './user/profile/profile.component';
 import { AjustesUsuarioComponent } from './user/ajustes_usuario/ajustes_usuario.component';
 import { CambiarUsernameComponent } from './user/cambiar_nombre_usuario/cambiar_nombre_usuario.component';
 import { CambiarCorreoComponent } from './user/cambiar_correo_usuario/cambiar_correo_usuario.component';
 import { CambiarContraseñaComponent } from './user/cambiar_contraseña_usuario/cambiar_contraseña_usuario.component';
 import { DeleteUserComponent } from './user/delete_user/delete_user.component';
-import {ElectricityCardComponent} from "./card/electricity-card/electricity-card.component";
-import {HeatCardComponent} from "./card/heat-card/heat-card.component";
-import {PartyCardComponent} from "./card/party-card/party-card.component";
 import {InteractionCardComponent} from "./card/interaction-card/interaction-card.component";
-import {LoaderComponent} from "./game/loader/loader.component";
 import { PantallaInvitadoComponent } from './pantalla_invitado/pantalla_invitado.component';
 import { EsperarSalaComponent } from './esperar_sala/esperar_sala.component';
 import { DatosUsuarioComponent } from './user/datos_usuario/datos_usuario.component';
@@ -48,7 +43,6 @@ const routes: Routes = [
   { path: 'crear_sala', component: CrearSalaComponent },
   { path: 'unirse_sala', component: UnirseSalaComponent },
   { path: 'tienda', component: TiendaComponent },
-  { path: 'profile', component: ProfileComponent },
   { path: 'error', component: ErrorPageComponent },
   { path: 'buy', component: InteractionCardComponent},
   { path: 'ajustes_usuario', component: AjustesUsuarioComponent },
