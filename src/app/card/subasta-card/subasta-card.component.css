@@ -46,3 +46,13 @@
 .sell{
   background-color: #ff0000;
 }
+
+.info-subasta{
+  padding: 30px;
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

@@ -719,4 +719,22 @@ export class WebSocketService {
       });
     });
   }
+
+  public updateImagenPerfil(data: any): Observable<any>{
+    return new Observable((observer) => {
+      this.socket.emit('updateImagenPerfil', data,
+      (ack: any) => {
+        console.log('Server acknowledged:', ack);
+        if(ack.cod == 0){
+          console.log("UPDATE IMAGEN PERFIL", ack);
+          observer.next(ack);
+          observer.complete();
+        }
+        else {
+          console.log("error en updateImagenPerfil");
+          observer.error();
+        }
+      });
+    });
+  }
 }

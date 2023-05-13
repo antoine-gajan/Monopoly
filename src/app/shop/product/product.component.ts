@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Product} from "../../game/response-type";
 import {WebSocketService} from "../../web-socket.service";
 
@@ -9,9 +9,8 @@ import {WebSocketService} from "../../web-socket.service";
 })
 export class ProductComponent implements OnInit{
   @Input() product : Product;
-  @Output() refresh_shop = new EventEmitter();
 
-  constructor(private socketService: WebSocketService) {
+  constructor(private socketService: WebSocketService, private cdr: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
@@ -27,12 +26,30 @@ export class ProductComponent implements OnInit{
       (msg) => {
         console.log(msg);
         console.log("Se ha comprado el producto: " + this.product.nombre);
-        this.refresh_shop.emit();
+        this.cdr.detectChanges();
       });
   }
 
   usar_product() {
-    /// TODO : Use product from shop with link to backend
-    this.refresh_shop.emit();
+    // Determine type of product
+    const lower_name = this.product.nombre.toLowerCase();
+    if (lower_name.includes("ficha")) {
+      /// TODO: indicate that this product has to be used in the game
+      this.cdr.detectChanges();
+    }
+    else if (lower_name.includes("avatar")) {
+      this.socketService.updateImagenPerfil({socketId: this.socketService.socketID, imagen: this.product.imagen}).subscribe(
+        {
+          next: (msg) => {
+            console.log("Se ha cambiado la imagen de perfil");
+          },
+          error: (err) => {
+            console.log(err);
+          },
+          complete: () => {
+            this.cdr.detectChanges();
+          }
+        });
+    }
   }
 }
