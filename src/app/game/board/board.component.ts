@@ -267,6 +267,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.dices[0] = msg.dado1;
         this.dices[1] = msg.dado2;
         this.player[2] = msg.coordenadas;
+        this.old_position = this.player[2];
         // Actualize position of players
         this.show_position_every_players();
         this.reStartTimerExpulsarJugador();
@@ -305,7 +306,6 @@ export class BoardComponent implements OnInit, OnDestroy {
       next: async (msg: number) => {
         //console.log
         console.log("Position : " + this.player[2].h + " " + this.player[2].v);
-        this.old_position = this.player[2];
         // Get the number of ack code
         let number = msg;
 
