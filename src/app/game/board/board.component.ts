@@ -44,6 +44,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   community_cards: number[] = [2, 17, 33];
   taxes_cards: number[] = [4, 38];
 
+  // Relative to tokens
+  tokens : string[] = ["red", "white", "#85FCF8", "#7CF209", "#051EFB", "#D405FB", "#AC763F", "#B8B8B7", "#FBDC34", "#FDEFA7", "#FE9430"];
 
   // Relative to dices
   diceImages = [
@@ -137,14 +139,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
-  reStartTimerExpulsarJugador(){
-    this.startTimer("expulsar_jugador", 90);
-  }
-
-  reStartTimerExpulsarJugadorAlert(){
-    this.startTimer("expulsar_jugador", 15);
-  }
-
   load_game(){
     // Print message
     this.message = "Cargando la partida...";
@@ -155,6 +149,17 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Get the game id from the url
     this.game_id = parseInt(this.route.snapshot.paramMap.get('id')!);
     this.username = this.socketService.username;
+    // Get token of the player
+    this.socketService.infoUsuario().subscribe({
+      next: (info) => {
+        const num_string = info.token?.match(/\d+/)?.[0] ?? "";
+        const num = num_string ? parseInt(num_string) : 1;
+        // In the tokens list, exchange the token of the element num with the first element
+        const temp = this.tokens[num - 1];
+        this.tokens[num - 1] = this.tokens[0];
+        this.tokens[0] = temp;
+      }
+    });
     // Get the list of players
     this.list_players = this.socketService.list_players;
     // Current player is the first player in the list
@@ -174,12 +179,9 @@ export class BoardComponent implements OnInit, OnDestroy {
         }
       }
     }
-
     console.log("TODO INICIADO: Username: ", this.player[0]);
     // Se muestra la posición inicial de todos los jugadores en el tablero
      this.show_position_every_players();
-     console.log("jugador0", this.current_player);
-
   }
 
   /* === FUNCTIONS TO GET THE PROPERTIES OF THE PLAYERS === */
@@ -221,7 +223,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     /* === FUNCTIONS TO PLAY === */
 
-  async play(): Promise<void> {
+  play(): void {
     console.log("=== PLAY ===");
     this.reStartTimerExpulsarJugador();
     this.is_playing = true;
@@ -295,7 +297,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     });
   }
 
-  async card_action() {
+  card_action() {
     console.log("=== CARD ACTION ===");
     // Get card information
     this.socketService.casilla({coordenadas: {h: this.player[2].h, v: this.player[2].v}, socketId: this.socketService.socketID})
@@ -310,8 +312,6 @@ export class BoardComponent implements OnInit, OnDestroy {
         // Get position with id
         let position_id = this.convert_position_to_id(this.player[2]);
         console.log("Position id: " + position_id);
-        // Wait 0.5 seconds
-        await this.sleep(500);
         // Check where is the player and special actions linked to the position
         if (this.nothing_cards.includes(position_id)) {
           this.message = "No pasa nada";
@@ -319,14 +319,10 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.end_turn();
         }
         else if (this.chance_cards.includes(position_id)) {
-          // Wait 0.5 seconds
-          await this.sleep(500);
           this.message = "Toma una carta de suerte";
           this.createChanceCardComponent();
         }
         else if (this.community_cards.includes(position_id)) {
-          // Wait 0.5 seconds
-          await this.sleep(500);
           this.message = "Toma una carta de comunidad";
           this.createCommunityCardComponent();
         }
@@ -527,7 +523,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       // Add a circle on the property
       let player : HTMLElement = document.createElement("div");
       player.id = "player" + id_player.toString();
-      player.style.cssText = "background-color: " + this.get_token_color_from_index(index_color)+ "; border-radius: 50%; width: 30px; height: 30px;";
+      player.style.cssText = "background-color: " + this.get_token_color_from_index(index_color)+ "; border-radius: 50%; border-color: black; border-style: solid; width: 30px; height: 30px;";
       container_property.appendChild(player);
     }
     else{
@@ -562,11 +558,9 @@ export class BoardComponent implements OnInit, OnDestroy {
     const factory = this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
     // Inputs
-
     componentRef.instance.leave_game.subscribe(() => {this.leave_game()});
     componentRef.instance.close_card.subscribe(() => {this.delete_pop_up_component()});
     componentRef.instance.reStartTimerExpulsarJugador.subscribe(() => {this.reStartTimerExpulsarJugador()});
-    componentRef.instance.reStartTimerExpulsarJugadorAlert.subscribe(() => {this.reStartTimerExpulsarJugadorAlert()});
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";
     // Center the component at the middle of the page
@@ -669,6 +663,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     componentRef.instance.can_pay = has_money;
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.go_next_turn()});
+    componentRef.instance.play_turn.subscribe(() => {this.play()});
     componentRef.instance.reStartTimerExpulsarJugador.subscribe(() => {this.reStartTimerExpulsarJugador()});
     // Give an id to the component html
     componentRef.location.nativeElement.id = "pop-up-card";
@@ -706,26 +701,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   get_token_color_from_index(index: number): string{
     // Function to get the color of the token from the index
-    switch(index){
-      case 0:
-        return "red";
-      case 1:
-        return "blue";
-      case 2:
-        return "green";
-      case 3:
-        return "yellow";
-      case 4:
-        return "purple";
-      case 5:
-        return "orange";
-      case 6:
-        return "pink";
-      case 7:
-        return "brown";
-      default:
-        return "black";
-    }
+    return this.tokens[index];
   }
 
   sleep(ms : number) {
@@ -807,25 +783,11 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.remaining_time = Math.floor((end_time - Date.now()) / 1000);
         // Check if the turn hasn't already ended
         if (this.remaining_time <= 0) {
-          console.log("90 SECONDS WAITED");
-          if (action == "next_turn") {
-            // Go to next turn
-            this.cancelTimer();
-            this.go_next_turn();
-
-          } else if (action == "leave_game") {
-            // Clear interval
-            clearInterval(this.timer);
-            // Leave the game
-            this.leave_game();
-          } else if ( action == "expulsar_jugador"){
-            console.log("=== EXPULSAR JUGADOR ===");
-            // Expulse player
-            this.cancelTimer();
-            this.createAlertComponent();
-
+          console.log("=== EXPULSAR JUGADOR ===");
+          // Expulse player
+          this.cancelTimer();
+          this.createAlertComponent();
           }
-        }
       }, 1000);
     }
     else {
@@ -835,8 +797,9 @@ export class BoardComponent implements OnInit, OnDestroy {
     }
   }
 
-
-
+  reStartTimerExpulsarJugador(){
+    this.startTimer("expulsar_jugador", 90);
+  }
 
   cancelTimer() {
     console.log("=== CANCEL TIMER ===");
