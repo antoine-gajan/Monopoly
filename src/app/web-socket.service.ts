@@ -342,8 +342,8 @@ export class WebSocketService {
         console.log("ACTUALIZACIÓN CORRECTA");
         if(datos.jugar == true){
           console.log("ENTRA A JUGAR");
-          /*const ruta = '/game/' + this.idPartida;
-          this.router.navigate([ruta]);*/
+          const ruta = '/game/' + this.idPartida;
+          this.router.navigate([ruta]);
         }
       }
     })
