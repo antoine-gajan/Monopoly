@@ -22,7 +22,7 @@ export class UnirseSalaComponent {
   seguirMostrando: boolean = false;
   finMensaje: boolean = false;
   errorPartidaLlena: boolean = false;
-
+  idCod: number;
 
 
   constructor(
@@ -45,17 +45,25 @@ export class UnirseSalaComponent {
   async unirseSalaDatosEsperar() {
     const datos = { idPartida: this.idPartida, socketId: this.socketService.socketID};
     this.socketService.unirseSalaEsperar(datos)
-    .then((unirseSala: string) => {
+    .then((unirseSala: number) => {
       console.log("unirse SALA: ", unirseSala);
-      this.finMensaje = true;
-      this.errorPartidaLlena = true;
+        this.errorPartidaLlena = this.socketService.errorPartidaLlena;
+        this.idCod = unirseSala;
     })
     .catch(() => {
-      console.log("ERROR AL CREAR SALA");
+      console.log("ERROR AL UNIRSE A LA SALA");
+      alert("ERROR AL UNIRSE A LA SALA");
     });
+
     this.socketService.actualizarUsuariosConectados();
-    const ruta = '/esperar_sala/' + this.idPartida;
-    this.router.navigateByUrl(ruta);
+    console.log("ACTUALIZA INFO", this.socketService.errorPartidaLlena);
+    if(this.socketService.errorPartidaLlena === false && this.idCod === 0){
+      const ruta = '/esperar_sala/' + this.idPartida;
+      this.router.navigateByUrl(ruta);
+    } else {
+      console.log("ERROR AL UNIRSE A LA SALA cambiar valor booleano");
+      this.errorPartidaLlena = true;
+    }
   }
 
   volverUnirseSala(){

@@ -9,7 +9,7 @@
 <br>
 <!--------------------CREAR SALA-------------------->
 <div class="box">
-  <div *ngIf="!loading && !finMensaje">
+  <div *ngIf="!errorPartidaLlena">
     <!--------------------mensaje para unirse a partida-------------------->
     <div class="titulo">
       <h2>ÚNETE A UNA SALA</h2>
@@ -22,9 +22,6 @@
     <!--------------------botón para jugar partida-------------------->
     <button class="boton-jugar" (click)="unirseSalaDatosEsperar()">Unirse a la sala</button> 
   </div>  
-  <div *ngIf="loading && !finMensaje" class="load-center">
-    <app-loader></app-loader>
-  </div>
   <div *ngIf="errorPartidaLlena" class="text-center">
     <div class="titulo">
       <h2>Ups, no puedes unirte a la partida.</h2>

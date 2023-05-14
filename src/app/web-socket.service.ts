@@ -27,6 +27,7 @@ export class WebSocketService {
   idPartida: number;
   username: string;
   indexJugador: number;
+  errorPartidaLlena: boolean = false;
   private email: string;
   private picture: string;
   private _socketID: string;
@@ -277,22 +278,29 @@ export class WebSocketService {
     });
   }*/
 
-  public unirseSalaEsperar(user: any): Promise<string> {
+  public unirseSalaEsperar(user: any): Promise<number> {
     console.log("UNIRSE SALA ESPERAR", user);
-
-
-    return new Promise<string>((resolve, reject) => {
+  
+    return new Promise<number>((resolve, reject) => {
       this.socket.emit('unirJugador', user, (response: any) => {
-
         console.log('unirJugador response:', response);
         console.log('unirJugador response.cod:', response.cod);
-        
-          console.log("SOCKET ID :"+this.socket.id);
-          resolve(response.cod);
-       
+  
+        const responseCode = response.cod;
+        console.log("SOCKET ID :"+this.socket.id);
+        if (responseCode === 4) {
+          this.errorPartidaLlena = true;
+          console.log("ERROR PARTIDA LLENA", this.errorPartidaLlena);
+        } else if (responseCode === 0) {
+          console.log("UNIDO A LA PARTIDA");
+          this.errorPartidaLlena = false;
+        }
+        resolve(responseCode);
       });
     });
   }
+  
+  
 
   actualizarUsuariosConectados(): Observable<string[]>{
     return new Observable((observable) => {
