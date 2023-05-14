@@ -305,8 +305,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         //this.dices[1] = 2;
         this.list_players[this.socketService.indexJugador].coordenadas = msg.coordenadas;
         //this.list_players[this.socketService.indexJugador].coordenadas = {h: 8, v: 10};
-        //this.player[2] = msg.coordenadas;
-        this.old_position = {h: 8, v: 10};
+        //this.old_position = {h: 8, v: 10};
         this.old_position = msg.coordenadas;
         // Actualize position of players
         this.show_position_every_players();
