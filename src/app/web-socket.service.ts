@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { LoginComponent } from './user/login/login.component';
 import { Observable } from 'rxjs';
 import {
+  Coordenadas,
   InfoPlayerResponse,
   Partida,
   Product,
@@ -25,6 +26,7 @@ export class WebSocketService {
   localSocketID: any;
   idPartida: number;
   username: string;
+  indexJugador: number;
   private email: string;
   private picture: string;
   private _socketID: string;
