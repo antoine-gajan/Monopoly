@@ -52,11 +52,15 @@ export class CrearSalaComponent {
     console.log("ID PARTIDA: ", this.idPartida);
     console.log("LEER USUARIOS");
 
-    this.socketService.actualizarUsuariosConectados()
-    .subscribe((usuariosConectados) => {
-      console.log('Usuarios conectados:', usuariosConectados);
-      this.list_players = usuariosConectados;
+    this.socketService.getSocket().on('esperaJugadores', (mensaje)=>{
+      console.log("Usuarios contectados: ",mensaje);
+      this.list_players = mensaje;
     })
+    // this.socketService.actualizarUsuariosConectados()
+    // .subscribe((usuariosConectados) => {
+    //   console.log('Usuarios conectados:', usuariosConectados);
+    //   this.list_players = usuariosConectados;
+    // })
     console.log("LISTA JUGADORES: ", this.list_players);
   }
 

@@ -22,7 +22,7 @@ export class WebSocketService {
   dineroPartida: number[] = [];
   soyInvitado: boolean;
   list_players: string[] = [];
-  localSocketID: string;
+  localSocketID: any;
   idPartida: number;
   username: string;
   private email: string;
@@ -48,6 +48,10 @@ export class WebSocketService {
     this._socketID = localStorage.getItem('socketID') || '';
     console.log('getSocketID: ', this._socketID);
     return this._socketID;
+  }
+  
+  getSocket(){
+    return this.socket;
   }
 
   public consultarImagen(): Promise<string>{
