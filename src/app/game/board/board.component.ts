@@ -186,6 +186,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       }
     }
     console.log("TODO INICIADO: Username: ", this.player[0]);
+    console.log("TODO INICIADO: MONEY: ", this.socketService.dineroPartida);
     // Se muestra la posición inicial de todos los jugadores en el tablero
      this.show_position_every_players();
   }
