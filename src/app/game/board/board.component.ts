@@ -19,7 +19,7 @@ import { AlertComponent } from 'app/card/alert/alert.component';
 })
 export class BoardComponent implements OnInit, OnDestroy {
   // Game variables
-  game_id : number;
+  game_id : number = this.socketService.idPartida;
   dices: number[] = [];
   current_player: string;
   username: string;
@@ -49,6 +49,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   taxes_cards: number[] = [4, 38];
 
   indexJugador: number;
+
 
   // Relative to tokens
   tokens : string[] = ["red", "white", "#85FCF8", "#7CF209", "#051EFB", "#D405FB", "#AC763F", "#B8B8B7", "#FBDC34", "#FDEFA7", "#FE9430"];
@@ -83,7 +84,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     console.log("---------------------------");
     console.log("Board component initialized");
     this.load_game();
-
+    this.game_id = this.socketService.idPartida;
     console.log("TODO INICIADO: Username: ", this.username);
     console.log("TODO INICIADO: Game id: ", this.game_id);
 
@@ -95,6 +96,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       next: (jugador) => {
         console.log("TODO INICIADO: Turno: ", jugador);
         this.current_player = jugador;
+
         // If it's my turn, play
         if (this.current_player == this.username){
           this.is_playing = true;
@@ -104,6 +106,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         else{
           this.is_playing = false;
           this.message = this.current_player + " está jugando su turno";
+
         }
       }
      });
@@ -146,6 +149,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     else {
       this.cancelTimer();
       this.message = this.current_player + " está jugando su turno";
+      this.game_id = parseInt(this.route.snapshot.paramMap.get('id')!);
+   
     }
   }
 
@@ -167,20 +172,20 @@ export class BoardComponent implements OnInit, OnDestroy {
     document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
     document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
     // Get the game id from the url
-    this.game_id = parseInt(this.route.snapshot.paramMap.get('id')!);
+    
     this.username = this.socketService.username;
     // Get token of the player
     if(!this.socketService.soyInvitado){
-      this.socketService.infoUsuario().subscribe({
-        next: (info) => {
-          const num_string = info.token?.match(/\d+/)?.[0] ?? "";
-          const num = num_string ? parseInt(num_string) : 1;
-          // In the tokens list, exchange the token of the element num with the first element
-          const temp = this.tokens[num - 1];
-          this.tokens[num - 1] = this.tokens[0];
-          this.tokens[0] = temp;
-        }
-      });
+      // this.socketService.infoUsuario().subscribe({
+      //   next: (info) => {
+      //     const num_string = info.token?.match(/\d+/)?.[0] ?? "";
+      //     const num = num_string ? parseInt(num_string) : 1;
+      //     // In the tokens list, exchange the token of the element num with the first element
+      //     const temp = this.tokens[num - 1];
+      //     this.tokens[num - 1] = this.tokens[0];
+      //     this.tokens[0] = temp;
+      //   }
+      // });
     }
     // Get the list of players
     this.lista_nombre_jugadores = this.socketService.list_players;
@@ -234,15 +239,16 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.message = this.current_player + ", es tu turno";
     console.log("ESTÁ JUGANDO");
     // Check if the player is in jail
-    /*this.socketService.estaJulio()
+    this.socketService.estaJulio()
     .subscribe({
       next: (msg: any) => {
         console.log("ESTÁ EN LA CÁRCEL: ", msg);
-        if(msg.carcel){
+        console.log("cacel: estas", msg.carcel[0]);
+        if(msg.carcel[0]){
           this.message = "Estás en la cárcel";
           let carta_carcel_tengo = false;
-          if(msg.carta != null){
-            carta_carcel_tengo = true;
+          if(msg.carcel[1] != null){
+            carta_carcel_tengo = msg.carcel[0];
           }
           this.createJailCardComponent(carta_carcel_tengo, msg.salirJulio);
         }
@@ -250,8 +256,8 @@ export class BoardComponent implements OnInit, OnDestroy {
           document.getElementById("tirar-dados")!.removeAttribute("disabled");
         }
       }
-    });*/
-    document.getElementById("tirar-dados")!.removeAttribute("disabled");
+    });
+   // document.getElementById("tirar-dados")!.removeAttribute("disabled");
   }
 
   play_turn_player() {
@@ -269,12 +275,12 @@ export class BoardComponent implements OnInit, OnDestroy {
         // Clear dices interval to stop animation
         clearInterval(this.dices_interval);
         // Store true value of dices
-        //this.dices[0] = msg.dado1;
-        this.dices[0] = 0;
-        //this.dices[1] = msg.dado2;
-        this.dices[1] = 2;
-        //this.list_players[this.socketService.indexJugador].coordenadas = msg.coordenadas;
-        this.list_players[this.socketService.indexJugador].coordenadas = {h: 8, v: 10};
+        this.dices[0] = msg.dado1;
+        //this.dices[0] = 0;
+        this.dices[1] = msg.dado2;
+        //this.dices[1] = 2;
+        this.list_players[this.socketService.indexJugador].coordenadas = msg.coordenadas;
+        //this.list_players[this.socketService.indexJugador].coordenadas = {h: 8, v: 10};
         //this.player[2] = msg.coordenadas;
         this.old_position = {h: 8, v: 10};
         this.old_position = msg.coordenadas;

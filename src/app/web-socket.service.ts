@@ -630,9 +630,9 @@ export class WebSocketService {
 
   public estaJulio(): Observable<any>{
     return new Observable<any>((observer) => {
-      this.socket.emit('estaJulio', {socketId: this.socketID},
+      this.socket.emit('estaJulio', ({socketId: this.socketID}),
       (ack: any) => {
-        console.log('Server acknowledged:', ack);
+        console.log('Server acknowledged julio:', ack);
         if(ack.cod == 0){
           console.log("ESTA JULIO", ack.msg);
           observer.next(ack.msg);
@@ -640,7 +640,7 @@ export class WebSocketService {
         }
         else {
           console.log("error en estaJulio");
-          observer.error();
+          //observer.error();
         }
       });
     });
