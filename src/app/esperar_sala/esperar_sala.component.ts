@@ -33,7 +33,6 @@ export class EsperarSalaComponent implements OnInit{
   ngOnInit() {
     console.log("ACTUALIZA INFO");
     let idPartida = this.route.snapshot.paramMap.get('id'); // Se obtiene id de la partida
-    
     this.socketService.escucharEntrarAJugar()
     .subscribe((data: any) => {
       console.log("ENTRA A JUGAR: ", data);
@@ -57,12 +56,16 @@ export class EsperarSalaComponent implements OnInit{
       this.router.navigate(['/error']);
     }
 
-    this.socketService.getSocket().on('esperaJugadores', (mensaje)=>{
-      console.log("Usuarios contectados: ",mensaje);
-      this.list_players = mensaje;
-      this.socketService.list_players = mensaje;
+
+    this.socketService.actualizarUsuariosConectados()
+    .subscribe((usuariosConectados) => {
+      console.log('Usuarios conectados:', usuariosConectados);
+      this.socketService.list_players = usuariosConectados;
+      this.list_players = usuariosConectados;
       this.mostrarListaJugadores = true;
-    })
+    });
+
+
 
   }
 

@@ -38,13 +38,6 @@ export class UnirseSalaComponent {
   ngOnInit() {
     
     //this.socketService.hacerOnSocket();
-    this.socketService.getSocket().on('esperaJugadores', (mensaje)=>{
-      console.log("Usuarios contectados: ",mensaje);
-      this.socketService.list_players = mensaje;
-      console.log("a esperar jugadores");
-      const ruta = '/esperar_sala/' + this.idPartida;
-      this.router.navigateByUrl(ruta);
-    })
   }
 
 
@@ -52,25 +45,17 @@ export class UnirseSalaComponent {
   async unirseSalaDatosEsperar() {
     const datos = { idPartida: this.idPartida, socketId: this.socketService.socketID};
     this.socketService.unirseSalaEsperar(datos)
-    .then((unirseSala: any) => {
+    .then((unirseSala: string) => {
       console.log("unirse SALA: ", unirseSala);
-      if(unirseSala === 4){
-        console.log("PARTIDA LLENA");
-        this.errorPartidaLlena = true;
-        this.finMensaje = true;
-          
-      } 
-      else if(unirseSala === 2){
-        alert("Vuelve a intentarlo, se ha producido un error en el servidor");
-      } 
-      
+      this.finMensaje = true;
+      this.errorPartidaLlena = true;
     })
     .catch(() => {
       console.log("ERROR AL CREAR SALA");
     });
-    
-    //const ruta = '/esperar_sala/' + this.idPartida;
-    //this.router.navigateByUrl(ruta);
+    this.socketService.actualizarUsuariosConectados();
+    const ruta = '/esperar_sala/' + this.idPartida;
+    this.router.navigateByUrl(ruta);
   }
 
   volverUnirseSala(){
