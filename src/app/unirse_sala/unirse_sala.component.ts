@@ -38,6 +38,13 @@ export class UnirseSalaComponent {
   ngOnInit() {
     
     //this.socketService.hacerOnSocket();
+    this.socketService.getSocket().on('esperaJugadores', (mensaje)=>{
+      console.log("Usuarios contectados: ",mensaje);
+      this.socketService.list_players = mensaje;
+      console.log("a esperar jugadores");
+      const ruta = '/esperar_sala/' + this.idPartida;
+      this.router.navigateByUrl(ruta);
+    })
   }
 
 
@@ -53,22 +60,15 @@ export class UnirseSalaComponent {
         this.finMensaje = true;
           
       } 
-      else if(unirseSala == 2){
+      else if(unirseSala === 2){
         alert("Vuelve a intentarlo, se ha producido un error en el servidor");
-      }
-      else if(unirseSala == 0){
-        console.log("a esperar jugadores");
-        const ruta = '/esperar_sala/' + this.idPartida;
-        this.router.navigateByUrl(ruta);
-      }
-      
-
+      } 
       
     })
     .catch(() => {
       console.log("ERROR AL CREAR SALA");
     });
-    this.socketService.actualizarUsuariosConectados();
+    
     //const ruta = '/esperar_sala/' + this.idPartida;
     //this.router.navigateByUrl(ruta);
   }

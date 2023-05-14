@@ -33,6 +33,7 @@ export class EsperarSalaComponent implements OnInit{
   ngOnInit() {
     console.log("ACTUALIZA INFO");
     let idPartida = this.route.snapshot.paramMap.get('id'); // Se obtiene id de la partida
+    
     this.socketService.escucharEntrarAJugar()
     .subscribe((data: any) => {
       console.log("ENTRA A JUGAR: ", data);
