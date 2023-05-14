@@ -138,7 +138,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.dices_interval.unsubscribe();
     }
   }
-
+ 
   load_game(){
     // Print message
     this.message = "Cargando la partida...";
