@@ -38,13 +38,12 @@ export class UnirseSalaComponent {
   ngOnInit() {
     
     //this.socketService.hacerOnSocket();
-    this.socketService.actualizarUsuariosConectados()
-    .subscribe((usuariosConectados) => {
-      console.log('Usuarios conectados:', usuariosConectados);
-      this.socketService.list_players = usuariosConectados;
-      
-    });
-
+    this.socketService.getSocket().on('esperaJugadores', (mensaje)=>{
+      console.log("Usuarios contectados ng: ",mensaje);
+      this.socketService.list_players = mensaje;
+      const ruta = '/esperar_sala/' + this.idPartida;
+      this.router.navigateByUrl(ruta);
+    })
 
   }
 
@@ -52,22 +51,29 @@ export class UnirseSalaComponent {
   // Función que permitirá o no a un usuario unirse a una sala en función de si hay hueco o no
   async unirseSalaDatosEsperar() {
     const datos = { idPartida: this.idPartida, socketId: this.socketService.socketID};
-    this.socketService.unirseSalaEsperar(datos)
-    .then((unirseSala: number) => {
-      console.log("unirse SALA: ", unirseSala);
-      this.finMensaje = true;
-      if(unirseSala === 0){
-        const ruta = '/esperar_sala/' + this.idPartida;
-        this.router.navigateByUrl(ruta);
-      } else {
-      this.errorPartidaLlena = true;
+    this.socketService.getSocket().emit('unirJugador',datos,
+    (ack: any)=>{
+      if(ack.cod == 4){
+        this.finMensaje = true;
+        this.errorPartidaLlena = true;
+      }
+      else{
 
       }
-    })
-    .catch(() => {
-      console.log("ERROR AL CREAR SALA");
     });
-
+    // this.socketService.unirseSalaEsperar(datos)
+    // .then((unirseSala: number) => {
+    //   console.log("unirse SALA: ", unirseSala);
+    //   if(unirseSala == 4) {
+    //     this.finMensaje = true;
+    //     this.errorPartidaLlena = true;
+    //   }
+    // })
+    // .catch(() => {
+    //   console.log("ERROR AL CREAR SALA");
+    // });
+    // const ruta = '/esperar_sala/' + this.idPartida;
+    // this.router.navigateByUrl(ruta);
   }
 
   volverUnirseSala(){

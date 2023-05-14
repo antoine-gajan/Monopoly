@@ -27,7 +27,6 @@ export class WebSocketService {
   idPartida: number;
   username: string;
   indexJugador: number;
-  errorPartidaLlena: boolean = false;
   private email: string;
   private picture: string;
   private _socketID: string;
@@ -280,31 +279,31 @@ export class WebSocketService {
 
   public unirseSalaEsperar(user: any): Promise<number> {
     console.log("UNIRSE SALA ESPERAR", user);
-  
+
+
     return new Promise<number>((resolve, reject) => {
       this.socket.emit('unirJugador', user, (response: any) => {
+
         console.log('unirJugador response:', response);
         console.log('unirJugador response.cod:', response.cod);
-  
-        const responseCode = response.cod;
-        console.log("SOCKET ID :"+this.socket.id);
-        if (responseCode === 4) {
-
-        } else if (responseCode === 0) {
-          console.log("UNIDO A LA PARTIDA");
-
+        if (response.cod == 0) {
+          console.log("SOCKET ID :"+this.socket.id);
+          let idPartida = '';
+          idPartida = user.idPartida;
+          //const ruta = '/esperar_sala/' + idPartida;
+          //this.router.navigateByUrl(ruta);
+          resolve(response.cod);
+        }  else {
+          console.log('Error al unirse a la sala');
+          resolve(response.cod);
         }
-        resolve(responseCode);
       });
     });
   }
-  
-  
 
   actualizarUsuariosConectados(): Observable<string[]>{
     return new Observable((observable) => {
       this.socket.on('esperaJugadores', (info) => {
-        console.log(info);
         if (typeof info === 'object' && info !== null) {
           const keys = Object.keys(info);
           const usuariosConectados = keys.map((key) => `${info[key]}`);

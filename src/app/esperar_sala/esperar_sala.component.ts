@@ -32,12 +32,12 @@ export class EsperarSalaComponent implements OnInit{
 
   ngOnInit() {
 
-    this.socketService.getSocket().on('esperaJugadores', (usuariosConectados)=>{
-      console.log('Usuarios conectados:', usuariosConectados);
-      this.socketService.list_players = usuariosConectados;
-      this.list_players = usuariosConectados;
-      this.mostrarListaJugadores = true;
-      console.log("usuarios----",usuariosConectados);
+    this.list_players = this.socketService.list_players;
+
+    this.socketService.getSocket().on('esperaJugadores', (mensaje)=>{
+      console.log("Usuarios contectados: ",mensaje);
+      this.list_players = mensaje;
+      this.socketService.list_players = mensaje;
     });
 
     console.log("ACTUALIZA INFO");
@@ -48,17 +48,18 @@ export class EsperarSalaComponent implements OnInit{
 
       this.mostrarBotonUnirse = true;
     });
-   
+  
     if (idPartida != null && this.username != null) {       // Actualiza la información del juego
       this.game_id = +idPartida;
     } else {
       this.router.navigate(['/error']);
     }
-    console.log("voy a pedir usuarios");
-    console.log(this.socketService.list_players);
-    
-    
-    console.log(this.socketService.list_players);
+
+
+   
+
+
+
   }
 
 
