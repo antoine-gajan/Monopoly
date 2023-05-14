@@ -81,6 +81,16 @@ export class BoardComponent implements OnInit, OnDestroy {
     console.log("TODO INICIADO: Username: ", this.username);
     console.log("TODO INICIADO: Game id: ", this.game_id);
 
+    // Socket to actualize game information
+    this.socketService.infoPartida()
+      .subscribe({
+        next: (info) => {
+          console.log("TODO INICIADO: Info: ", info);
+          this.actualize_game_info(info);
+          this.show_position_every_players();
+        }
+      });
+    
     // Socket to actualize the turn
     this.socketService.socketOnTurno()
     .subscribe({
@@ -89,6 +99,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.current_player = jugador;
         // If it's my turn, play
         if (this.current_player == this.username){
+          this.is_playing = true;
           this.play();
         }
         // If it's not my turn, wait
@@ -99,15 +110,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       }
      });
 
-    // Socket to actualize game information
-    this.socketService.infoPartida()
-      .subscribe({
-        next: (info) => {
-          console.log("TODO INICIADO: Info: ", info);
-          this.actualize_game_info(info);
-          this.show_position_every_players();
-        }
-      });
+    
 
     /*
     // Socket to know if there is puja
@@ -390,6 +393,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   /* === FUNCTIONS TO UPDATE INFORMATION === */
 
   actualize_game_info(data : Partida): void {
+    console.log("actualize_game_info", data);
     let listaJugadores = data.nombreJugadores;
     let listaDineros = data.dineroJugadores;
     let listaPosiciones = data.posicionJugadores;
