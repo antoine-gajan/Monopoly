@@ -62,17 +62,21 @@ export class CrearSalaComponent {
     //   console.log('Usuarios conectados:', usuariosConectados);
     //   this.list_players = usuariosConectados;
     // })
-    this.socketService.getSocket().on('comenzarPartida', (mensaje)=>{
-      console.log('Valor escuchar para entrar a jugar:', mensaje);
-        console.log("Username: "+mensaje.username);
-        this.socketService.dineroPartida = mensaje.partida.dineroJugadores;
-        const ruta = '/game/' + this.idPartida;
-        if(this.router!=null){
-          this.router.navigate([ruta]);
+    // this.socketService.getSocket().on('comenzarPartida', (mensaje)=>{
+    //   console.log('Valor escuchar para entrar a jugar:', mensaje);
+    //     console.log("Username: "+mensaje.username);
+    //     this.socketService.dineroPartida = mensaje.partida.dineroJugadores;
+    //     const ruta = '/game/' + this.idPartida;
+    //     if(this.router!=null){
+    //       this.router.navigate([ruta]);
 
-        }
+    //     }
       
-    })
+    // })
+    this.socketService.escucharEntrarAJugar()
+    .subscribe((data: any) => {
+      console.log("ENTRA A JUGAR: ", data);
+    });
     console.log("LISTA JUGADORES: ", this.list_players);
   }
 
