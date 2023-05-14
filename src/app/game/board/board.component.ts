@@ -81,6 +81,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     console.log("TODO INICIADO: Username: ", this.username);
     console.log("TODO INICIADO: Game id: ", this.game_id);
 
+    
+    
     // Socket to actualize the turn
     this.socketService.socketOnTurno()
     .subscribe({
@@ -89,6 +91,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         this.current_player = jugador;
         // If it's my turn, play
         if (this.current_player == this.username){
+          this.is_playing = true;
           this.play();
         }
         // If it's not my turn, wait
@@ -120,7 +123,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     */
 
     // Determine player for first turn
-    if (this.current_player == this.player[0]){
+    if (this.current_player == this.username){
       this.play();
     }
     else {
@@ -138,7 +141,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.dices_interval.unsubscribe();
     }
   }
-
+ 
   load_game(){
     // Print message
     this.message = "Cargando la partida...";
@@ -150,16 +153,18 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.game_id = parseInt(this.route.snapshot.paramMap.get('id')!);
     this.username = this.socketService.username;
     // Get token of the player
-    this.socketService.infoUsuario().subscribe({
-      next: (info) => {
-        const num_string = info.token?.match(/\d+/)?.[0] ?? "";
-        const num = num_string ? parseInt(num_string) : 1;
-        // In the tokens list, exchange the token of the element num with the first element
-        const temp = this.tokens[num - 1];
-        this.tokens[num - 1] = this.tokens[0];
-        this.tokens[0] = temp;
-      }
-    });
+    if(!this.socketService.soyInvitado){
+      this.socketService.infoUsuario().subscribe({
+        next: (info) => {
+          const num_string = info.token?.match(/\d+/)?.[0] ?? "";
+          const num = num_string ? parseInt(num_string) : 1;
+          // In the tokens list, exchange the token of the element num with the first element
+          const temp = this.tokens[num - 1];
+          this.tokens[num - 1] = this.tokens[0];
+          this.tokens[0] = temp;
+        }
+      });
+    }
     // Get the list of players
     this.list_players = this.socketService.list_players;
     // Current player is the first player in the list
@@ -171,6 +176,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         // Information of other players
         if (this.list_players[i] != this.username) {
           this.other_players_list.push([this.list_players[i], this.socketService.dineroPartida[i], {h: 10, v: 10}]);
+          
         }
         // Information of myself
         else {
@@ -180,6 +186,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       }
     }
     console.log("TODO INICIADO: Username: ", this.player[0]);
+    console.log("TODO INICIADO: MONEY: ", this.socketService.dineroPartida);
     // Se muestra la posición inicial de todos los jugadores en el tablero
      this.show_position_every_players();
   }
@@ -284,66 +291,73 @@ export class BoardComponent implements OnInit, OnDestroy {
   card_action() {
     console.log("=== CARD ACTION ===");
     // Get card information
-    this.socketService.casilla({coordenadas: {h: this.player[2].h, v: this.player[2].v}, socketId: this.socketService.socketID})
-    .subscribe({
-      next: async (msg: number) => {
-        //console.log
-        console.log("Position : " + this.player[2].h + " " + this.player[2].v);
-        // Get the number of ack code
-        let number = msg;
+    if(this.player[2].h == 0 && this.player[2].v == 10){
+      console.log("=== NO CARD ACTION ===");
+      console.log("está de paso en la cárcel");
+      this.end_turn();
+    } else {
+      
+      this.socketService.casilla({coordenadas: {h: this.player[2].h, v: this.player[2].v}, socketId: this.socketService.socketID})
+      .subscribe({
+        next: async (msg: number) => {
+          //console.log
+          console.log("Position : " + this.player[2].h + " " + this.player[2].v);
+          // Get the number of ack code
+          let number = msg;
 
-        // Get position with id
-        let position_id = this.convert_position_to_id(this.player[2]);
-        console.log("Position id: " + position_id);
-        // Check where is the player and special actions linked to the position
-        if (this.nothing_cards.includes(position_id)) {
-          this.message = "No pasa nada";
-          // End turn
-          this.end_turn();
+          // Get position with id
+          let position_id = this.convert_position_to_id(this.player[2]);
+          console.log("Position id: " + position_id);
+          // Check where is the player and special actions linked to the position
+          if (this.nothing_cards.includes(position_id)) {
+            this.message = "No pasa nada";
+            // End turn
+            this.end_turn();
+          }
+          else if (this.chance_cards.includes(position_id)) {
+            this.message = "Toma una carta de suerte";
+            this.createChanceCardComponent();
+          }
+          else if (this.community_cards.includes(position_id)) {
+            this.message = "Toma una carta de comunidad";
+            this.createCommunityCardComponent();
+          }
+          else if (this.taxes_cards.includes(position_id)) {
+            this.message = "Tienes que pagar...";
+            if (position_id == 38) {
+              this.createInfoCardComponent("SEGURO ESCOLAR", "Tienes que pagar el seguro escolar : 133€", "Pagar 133€");
+            }
+            else if (position_id == 4) {
+              this.createInfoCardComponent("APERTURA DE EXPEDIENTE", "Tienes que pagar la apertura de expediente : 267€", "Pagar 267€");
+            }
+          }
+          // If it's a normal card, check if it's owned and what to do
+          else {
+            // If has to pay another player
+            if (number == 2){
+              this.createCardComponent(this.player[2].v, this.player[2].h, "Tienes que pagar", this.dices[0] == this.dices[1], "pay");
+            }
+            // If owner is the player and can increase the number of credit
+            else if (number == 6) {
+              this.createCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.dices[0] == this.dices[1], "increase");
+            }
+            // If can't increase the number of credit, propose to sell the card
+            else if (number == 7) {
+              this.createCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.dices[0] == this.dices[1], "sell");
+            }
+            // If no owner and can buy
+            else if (number == 8) {
+              // Display buy card
+              this.createCardComponent(this.player[2].v, this.player[2].h, "Quieres comprar ?", this.dices[0] == this.dices[1], "buy");
+            }
+            // If no owner and can't buy, just show card
+            else if (number == 9) {
+              this.createCardComponent(this.player[2].v, this.player[2].h, "No puedes comprar", this.dices[0] == this.dices[1], "view");
+            }
+          }
         }
-        else if (this.chance_cards.includes(position_id)) {
-          this.message = "Toma una carta de suerte";
-          this.createChanceCardComponent();
-        }
-        else if (this.community_cards.includes(position_id)) {
-          this.message = "Toma una carta de comunidad";
-          this.createCommunityCardComponent();
-        }
-        else if (this.taxes_cards.includes(position_id)) {
-          this.message = "Tienes que pagar...";
-          if (position_id == 38) {
-            this.createInfoCardComponent("SEGURO ESCOLAR", "Tienes que pagar el seguro escolar : 133€", "Pagar 133€");
-          }
-          else if (position_id == 4) {
-            this.createInfoCardComponent("APERTURA DE EXPEDIENTE", "Tienes que pagar la apertura de expediente : 267€", "Pagar 267€");
-          }
-        }
-        // If it's a normal card, check if it's owned and what to do
-        else {
-          // If has to pay another player
-          if (number == 2){
-            this.createCardComponent(this.player[2].v, this.player[2].h, "Tienes que pagar", this.dices[0] == this.dices[1], "pay");
-          }
-          // If owner is the player and can increase the number of credit
-          else if (number == 6) {
-            this.createCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.dices[0] == this.dices[1], "increase");
-          }
-          // If can't increase the number of credit, propose to sell the card
-          else if (number == 7) {
-            this.createCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.dices[0] == this.dices[1], "sell");
-          }
-          // If no owner and can buy
-          else if (number == 8) {
-            // Display buy card
-            this.createCardComponent(this.player[2].v, this.player[2].h, "Quieres comprar ?", this.dices[0] == this.dices[1], "buy");
-          }
-          // If no owner and can't buy, just show card
-          else if (number == 9) {
-            this.createCardComponent(this.player[2].v, this.player[2].h, "No puedes comprar", this.dices[0] == this.dices[1], "view");
-          }
-        }
-      }
-    });
+      });
+    }
   }
 
   end_turn(): void {
@@ -388,6 +402,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   /* === FUNCTIONS TO UPDATE INFORMATION === */
 
   actualize_game_info(data : Partida): void {
+    console.log("actualize_game_info", data);
     let listaJugadores = data.nombreJugadores;
     let listaDineros = data.dineroJugadores;
     let listaPosiciones = data.posicionJugadores;
@@ -805,13 +820,13 @@ export class BoardComponent implements OnInit, OnDestroy {
         console.log("=== LEAVE GAME EXPULSAR ===");
       }
     });
-
+    this.router.navigate(['/']);
     // Redirect to home page of player
-    if(this.socketService.soyInvitado){
+   /* if(this.socketService.soyInvitado){
       this.router.navigate(['/pantalla_invitado']);
     }
     else {
       this.router.navigate(['/pantalla']);
-    }
+    }*/
   }
 }

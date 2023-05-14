@@ -55,6 +55,7 @@ export class CrearSalaComponent {
     this.socketService.getSocket().on('esperaJugadores', (mensaje)=>{
       console.log("Usuarios contectados: ",mensaje);
       this.list_players = mensaje;
+      this.socketService.list_players = mensaje;
     })
     // this.socketService.actualizarUsuariosConectados()
     // .subscribe((usuariosConectados) => {
@@ -89,6 +90,7 @@ export class CrearSalaComponent {
   }
   actualizarDatos(){
     console.log("ACTUALIZAR DATOS");
+    
     const datos = {
       dineroInicial: this.dineroJugador,
       nJugadores: this.numJugadores,
