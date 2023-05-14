@@ -150,16 +150,18 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.game_id = parseInt(this.route.snapshot.paramMap.get('id')!);
     this.username = this.socketService.username;
     // Get token of the player
-    this.socketService.infoUsuario().subscribe({
-      next: (info) => {
-        const num_string = info.token?.match(/\d+/)?.[0] ?? "";
-        const num = num_string ? parseInt(num_string) : 1;
-        // In the tokens list, exchange the token of the element num with the first element
-        const temp = this.tokens[num - 1];
-        this.tokens[num - 1] = this.tokens[0];
-        this.tokens[0] = temp;
-      }
-    });
+    if(!this.socketService.soyInvitado){
+      this.socketService.infoUsuario().subscribe({
+        next: (info) => {
+          const num_string = info.token?.match(/\d+/)?.[0] ?? "";
+          const num = num_string ? parseInt(num_string) : 1;
+          // In the tokens list, exchange the token of the element num with the first element
+          const temp = this.tokens[num - 1];
+          this.tokens[num - 1] = this.tokens[0];
+          this.tokens[0] = temp;
+        }
+      });
+    }
     // Get the list of players
     this.list_players = this.socketService.list_players;
     // Current player is the first player in the list
