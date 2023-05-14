@@ -259,9 +259,13 @@ export class BoardComponent implements OnInit, OnDestroy {
         clearInterval(this.dices_interval);
         // Store true value of dices
         this.dices[0] = msg.dado1;
+        this.dices[0] = 1;
         this.dices[1] = msg.dado2;
+        this.dices[1] = 1;
         this.list_players[this.socketService.indexJugador].coordenadas = msg.coordenadas;
+        this.list_players[this.socketService.indexJugador].coordenadas = {h: 8, v: 10};
         //this.player[2] = msg.coordenadas;
+        this.old_position = {h: 8, v: 10};
         this.old_position = msg.coordenadas;
         // Actualize position of players
         this.show_position_every_players();
@@ -297,10 +301,20 @@ export class BoardComponent implements OnInit, OnDestroy {
     console.log("=== CARD ACTION ===");
     // Get card information
     if(this.list_players[this.socketService.indexJugador].coordenadas.h == 0 && this.list_players[this.socketService.indexJugador].coordenadas.v == 10){
+      // Casilla de paso por la cárcel
       console.log("=== NO CARD ACTION ===");
       console.log("está de paso en la cárcel");
-      this.end_turn();
-    } else {
+      this.end_turn(); // TODO <- revisar si se cae por dobles gestión turno de nuevo
+    } else if(this.list_players[this.socketService.indexJugador].coordenadas.h == 8 && this.list_players[this.socketService.indexJugador].coordenadas.v == 10){
+      // Casillas de boletín
+      console.log("=== BOLETÍN ACTION ===");
+      this.message = "Toma una carta de comunidad";
+      this.createCommunityCardComponent();
+    }
+    
+    
+    
+    else {
       
       this.socketService.casilla({coordenadas: {h: this.list_players[this.socketService.indexJugador].coordenadas.h, v: this.list_players[this.socketService.indexJugador].coordenadas.v}, socketId: this.socketService.socketID})
       .subscribe({
