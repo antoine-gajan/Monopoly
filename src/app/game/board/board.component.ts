@@ -176,12 +176,13 @@ export class BoardComponent implements OnInit, OnDestroy {
         // Information of other players
         if (this.list_players[i] != this.username) {
           this.other_players_list.push([this.list_players[i], this.socketService.dineroPartida[i], {h: 10, v: 10}]);
+          this.player.push(this.username, this.socketService.dineroPartida[i], {h: 10, v: 10});
         }
-        // Information of myself
+       /* // Information of myself
         else {
           this.player[0] = this.username;
           this.player[1] = this.socketService.dineroPartida[i];
-        }
+        }*/
       }
     }
     console.log("TODO INICIADO: Username: ", this.player[0]);

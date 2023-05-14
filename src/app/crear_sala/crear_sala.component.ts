@@ -90,6 +90,7 @@ export class CrearSalaComponent {
   }
   actualizarDatos(){
     console.log("ACTUALIZAR DATOS");
+    
     const datos = {
       dineroInicial: this.dineroJugador,
       nJugadores: this.numJugadores,
