@@ -510,7 +510,7 @@ export class WebSocketService {
 
   public listaAsignaturasC(): Observable <PropertyBoughtResponse[]>{
     return new Observable ((observer) => {
-      this.socket.emit('listaAsignaturasC', {socketId: this.socketID},
+      this.socket.emit('listaAsignaturasC', ({socketId: this.socketID}),
        (ack: any) => {
         console.log('Server acknowledged:', ack);
         if(ack.cod == 0){
