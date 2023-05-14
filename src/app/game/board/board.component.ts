@@ -48,6 +48,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   community_cards: number[] = [2, 17, 33];
   taxes_cards: number[] = [4, 38];
 
+  indexJugador: number;
+
   // Relative to tokens
   tokens : string[] = ["red", "white", "#85FCF8", "#7CF209", "#051EFB", "#D405FB", "#AC763F", "#B8B8B7", "#FBDC34", "#FDEFA7", "#FE9430"];
 
@@ -186,6 +188,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       });
     }
     this.socketService.indexJugador = this.lista_nombre_jugadores.indexOf(this.username);
+    this.indexJugador = this.socketService.indexJugador;
     //console.log("TODO INICIADO: Username: ", this.list_players[0]);
     //console.log("TODO INICIADO: MONEY: ", this.socketService.dineroPartida);
     // Se muestra la posición inicial de todos los jugadores en el tablero
