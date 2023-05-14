@@ -269,11 +269,11 @@ export class BoardComponent implements OnInit, OnDestroy {
         // Clear dices interval to stop animation
         clearInterval(this.dices_interval);
         // Store true value of dices
-        this.dices[0] = msg.dado1;
-        this.dices[0] = 1;
-        this.dices[1] = msg.dado2;
-        this.dices[1] = 1;
-        this.list_players[this.socketService.indexJugador].coordenadas = msg.coordenadas;
+        //this.dices[0] = msg.dado1;
+        this.dices[0] = 0;
+        //this.dices[1] = msg.dado2;
+        this.dices[1] = 2;
+        //this.list_players[this.socketService.indexJugador].coordenadas = msg.coordenadas;
         this.list_players[this.socketService.indexJugador].coordenadas = {h: 8, v: 10};
         //this.player[2] = msg.coordenadas;
         this.old_position = {h: 8, v: 10};
@@ -397,10 +397,10 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Get properties of player
     this.update_player_info();
     // Compare old position and new position
-    if (this.old_position.h != this.list_players[this.socketService.indexJugador].coordenadas.h || this.old_position.v != this.list_players[this.socketService.indexJugador].coordenadas.v && this.list_players[this.socketService.indexJugador].coordenadas.h != 0 && this.list_players[this.socketService.indexJugador].coordenadas.v != 10) {
+    /*if (this.old_position.h != this.list_players[this.socketService.indexJugador].coordenadas.h || this.old_position.v != this.list_players[this.socketService.indexJugador].coordenadas.v && this.list_players[this.socketService.indexJugador].coordenadas.h != 0 && this.list_players[this.socketService.indexJugador].coordenadas.v != 10) {
       this.card_action();
     }
-    else if (this.dices[0] == this.dices[1]) {
+    else */if (this.dices[0] == this.dices[1]) {
       this.message = "Vuelve a tirar los dados";
       document.getElementById("tirar-dados")!.removeAttribute("disabled");
       document.getElementById("button-end-turn")!.setAttribute("disabled", "true");

@@ -286,17 +286,10 @@ export class WebSocketService {
 
         console.log('unirJugador response:', response);
         console.log('unirJugador response.cod:', response.cod);
-        if (response.cod == 0) {
+        
           console.log("SOCKET ID :"+this.socket.id);
-          let idPartida = '';
-          idPartida = user.idPartida;
-          const ruta = '/esperar_sala/' + idPartida;
-          this.router.navigateByUrl(ruta);
           resolve(response.cod);
-        }  else {
-          console.log('Error al unirse a la sala');
-          resolve(response.cod);
-        }
+       
       });
     });
   }

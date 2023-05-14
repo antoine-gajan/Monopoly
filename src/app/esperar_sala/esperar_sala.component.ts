@@ -56,16 +56,12 @@ export class EsperarSalaComponent implements OnInit{
       this.router.navigate(['/error']);
     }
 
-
-    this.socketService.actualizarUsuariosConectados()
-    .subscribe((usuariosConectados) => {
-      console.log('Usuarios conectados:', usuariosConectados);
-      this.socketService.list_players = usuariosConectados;
-      this.list_players = usuariosConectados;
+    this.socketService.getSocket().on('esperaJugadores', (mensaje)=>{
+      console.log("Usuarios contectados: ",mensaje);
+      this.list_players = mensaje;
+      this.socketService.list_players = mensaje;
       this.mostrarListaJugadores = true;
-    });
-
-
+    })
 
   }
 

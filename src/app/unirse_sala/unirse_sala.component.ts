@@ -45,17 +45,32 @@ export class UnirseSalaComponent {
   async unirseSalaDatosEsperar() {
     const datos = { idPartida: this.idPartida, socketId: this.socketService.socketID};
     this.socketService.unirseSalaEsperar(datos)
-    .then((unirseSala: string) => {
+    .then((unirseSala: any) => {
       console.log("unirse SALA: ", unirseSala);
-      this.finMensaje = true;
-      this.errorPartidaLlena = true;
+      if(unirseSala === 4){
+        console.log("PARTIDA LLENA");
+        this.errorPartidaLlena = true;
+        this.finMensaje = true;
+          
+      } 
+      else if(unirseSala == 2){
+        alert("Vuelve a intentarlo, se ha producido un error en el servidor");
+      }
+      else if(unirseSala == 0){
+        console.log("a esperar jugadores");
+        const ruta = '/esperar_sala/' + this.idPartida;
+        this.router.navigateByUrl(ruta);
+      }
+      
+
+      
     })
     .catch(() => {
       console.log("ERROR AL CREAR SALA");
     });
     this.socketService.actualizarUsuariosConectados();
-    const ruta = '/esperar_sala/' + this.idPartida;
-    this.router.navigateByUrl(ruta);
+    //const ruta = '/esperar_sala/' + this.idPartida;
+    //this.router.navigateByUrl(ruta);
   }
 
   volverUnirseSala(){
