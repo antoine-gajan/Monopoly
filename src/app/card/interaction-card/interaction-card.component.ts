@@ -133,7 +133,7 @@ export class InteractionCardComponent {
 
   callback(){
     console.log("callback");
-    this.update_player_info.emit();
+    //this.update_player_info.emit();
     if (this.trigger_end_turn) {
       this.end_turn.emit();
     }

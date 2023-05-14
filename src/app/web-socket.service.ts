@@ -464,6 +464,7 @@ export class WebSocketService {
     return new Observable ((observer) => {
       this.socket.emit('infoAsignatura', datos,
        (ack: any) => {
+        console.log('Server acknowledged:', datos);
         console.log('Server acknowledged:', ack);
         if(ack.cod == 0){
           console.log("INFO ASIGNATURA", ack.msg);

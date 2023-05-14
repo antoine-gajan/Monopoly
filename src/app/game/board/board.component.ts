@@ -299,14 +299,20 @@ export class BoardComponent implements OnInit, OnDestroy {
         // Clear dices interval to stop animation
         clearInterval(this.dices_interval);
         // Store true value of dices
-        this.dices[0] = msg.dado1;
+        this.dices[0] = 3;
+        this.dices[1] = 0;
+        this.list_players[this.socketService.indexJugador].coordenadas = {h: 7, v: 10};
+        this.old_position = {h: 7, v: 10};
+        
+        
+        //this.dices[0] = msg.dado1;
         //this.dices[0] = 0;
-        this.dices[1] = msg.dado2;
+        //this.dices[1] = msg.dado2;
         //this.dices[1] = 2;
-        this.list_players[this.socketService.indexJugador].coordenadas = msg.coordenadas;
+        //this.list_players[this.socketService.indexJugador].coordenadas = msg.coordenadas;
         //this.list_players[this.socketService.indexJugador].coordenadas = {h: 8, v: 10};
         //this.old_position = {h: 8, v: 10};
-        this.old_position = msg.coordenadas;
+        //this.old_position = msg.coordenadas;
         // Actualize position of players
         this.show_position_every_players();
         this.reStartTimerExpulsarJugador();

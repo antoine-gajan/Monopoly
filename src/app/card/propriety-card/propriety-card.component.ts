@@ -23,6 +23,7 @@ export class ProprietyCardComponent implements OnInit{
     this.socketService.infoAsignatura({coordenadas: {h: this.h, v: this.v}})
     .subscribe({
       next: (data) => {
+        console.log("infoAsignatura", data);
         this.propriety = data;
       },
       error: (error) => {
