@@ -31,7 +31,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   is_playing: boolean = false;
   is_bankrupt: boolean = false;
-  
+
   player_properties: [string, Coordenadas][] = [];
   timer: any;
   is_timer_active: boolean = false;
@@ -68,7 +68,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   interval_play: any;
   dices_interval: any;
 
-  
+
   // Variables with normes of the game
   is_puja_activated: boolean = false;
 
@@ -87,8 +87,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     console.log("TODO INICIADO: Username: ", this.username);
     console.log("TODO INICIADO: Game id: ", this.game_id);
 
-    
-    
+
+
     // Socket to actualize the turn
     this.socketService.socketOnTurno()
     .subscribe({
@@ -147,7 +147,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.dices_interval.unsubscribe();
     }
   }
- 
+
   load_game(){
     // Print message
     this.message = "Cargando la partida...";
@@ -157,22 +157,25 @@ export class BoardComponent implements OnInit, OnDestroy {
     document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
     // Get the game id from the url
     this.game_id = parseInt(this.route.snapshot.paramMap.get('id')!);
+    // Get the username of the player
     this.username = this.socketService.username;
+    // Get the list of players
+    this.lista_nombre_jugadores = this.socketService.list_players;
+    // Check position of the player in the list
+    let index_player = this.lista_nombre_jugadores.indexOf(this.username);
     // Get token of the player
     if(!this.socketService.soyInvitado){
       this.socketService.infoUsuario().subscribe({
         next: (info) => {
           const num_string = info.token?.match(/\d+/)?.[0] ?? "";
           const num = num_string ? parseInt(num_string) : 1;
-          // In the tokens list, exchange the token of the element num with the first element
+          // In the tokens list, exchange the token of the element num with the one of position player
           const temp = this.tokens[num - 1];
           this.tokens[num - 1] = this.tokens[0];
-          this.tokens[0] = temp;
+          this.tokens[index_player] = temp;
         }
       });
     }
-    // Get the list of players
-    this.lista_nombre_jugadores = this.socketService.list_players;
     // Current player is the first player in the list
     this.current_player = this.lista_nombre_jugadores[0];
     console.log("TODO INICIADO: List players: ", this.lista_nombre_jugadores);
@@ -301,7 +304,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       console.log("está de paso en la cárcel");
       this.end_turn();
     } else {
-      
+
       this.socketService.casilla({coordenadas: {h: this.list_players[this.socketService.indexJugador].coordenadas.h, v: this.list_players[this.socketService.indexJugador].coordenadas.v}, socketId: this.socketService.socketID})
       .subscribe({
         next: async (msg: number) => {
@@ -415,7 +418,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     let result : [string, number, Coordenadas][] = [];
     for (let i = 0; i < listaJugadores.length; i++) {
       this.list_players[i].dinero = listaDineros[i];
-      this.list_players[i].coordenadas = listaPosiciones[i]; 
+      this.list_players[i].coordenadas = listaPosiciones[i];
     }
   }
 
@@ -590,7 +593,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     componentRef.instance.idPartida = this.game_id;
     componentRef.instance.username = this.socketService.username;//this.player[0];
     componentRef.instance.coordenadas = this.list_players[this.socketService.indexJugador].coordenadas;
-   
+
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     //componentRef.instance.reStartTimerExpulsarJugador.subscribe(() => {this.reStartTimerExpulsarJugador()});

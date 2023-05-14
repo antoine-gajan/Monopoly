@@ -391,20 +391,20 @@
       <ng-container *ngFor="let player of list_players; let i = index">
         <div class="player-panel">
           <svg width="12" height="12" class="player-panel-token">
-            <circle cx="6" cy="6" r="6" [attr.fill]= "get_token_color_from_index(i + 1)" [style]="'stroke: black; stroke-width: 0.3px;'"></circle>
+            <circle cx="6" cy="6" r="6" [attr.fill]= "get_token_color_from_index(i)" [style]="'stroke: black; stroke-width: 0.3px;'"></circle>
           </svg>
           <span class="player-name">🥷{{player.username}}</span>
           <span class="player-money" data-ui="1400" style="color: rgb(0, 0, 0);">{{player.dinero}}🪙</span>
-            
+
           <div class ="player-properties" *ngFor="let prop of player_properties">
-            <div class="player-property" data-ui="vt" [style.background]="get_color_property(prop[1])" (click)="createCardComponent(prop[1].v, prop[1].h, 'Carta de ' + player.username, false, 'view', 0, false)">
+            <div class="player-property" *ngIf="player.username === username" data-ui="vt" [style.background]="get_color_property(prop[1])" (click)="createCardComponent(prop[1].v, prop[1].h, 'Carta de ' + player.username, false, 'view', 0, false)">
               {{ prop[i] }}
             </div>
           </div>
         </div>
       </ng-container>
-      
-      
+
+
     </div>
   </div>
 
