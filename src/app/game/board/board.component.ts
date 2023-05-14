@@ -496,9 +496,9 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   show_position_every_players(): void {
     console.log("=== POSITION OF PLAYERS ACTUALIZED ===");
-    // Show position of the player if he is not bankrupt
+    // Show position of the players
     for(let i = 0 ; i < this.list_players.length; i++){
-      this.show_position(this.list_players[i].username, this.list_players[i].coordenadas, 0);
+      this.show_position(this.list_players[i].username, this.list_players[i].coordenadas, i);
     }
   }
 
