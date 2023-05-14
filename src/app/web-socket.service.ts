@@ -585,14 +585,9 @@ export class WebSocketService {
   public infoPartida(): Observable<Partida>{
     return new Observable ((observer) => {
       this.socket.on('infoPartida', (ack: any) => {
-        console.log('Server acknowledged:', ack);
-        if(ack.cod == 0){
-          console.log("INFO PARTIDA", ack.msg);
-          observer.next(ack.msg);
-        }
-        else {
-          console.log("error en infoPartida");
-        }
+        console.log('Mensaje recibido infPartida:', ack);
+          console.log("INFO PARTIDA", ack);
+          observer.next(ack);
        });
       });
   }

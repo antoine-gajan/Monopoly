@@ -117,6 +117,17 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.show_position_every_players();
         }
       });
+    // this.socketService.getSocket().on('infoPartida', (ack: any) => {
+    //   console.log('Server acknowledged:', ack);
+    //   if(ack.cod == 0){
+    //     console.log("INFO PARTIDA", ack.msg);
+    //     this.actualize_game_info(ack.msg);
+    //     this.show_position_every_players();
+    //   }
+    //   else {
+    //     console.log("error en infoPartida");
+    //   }
+    //  });
 
     /*
     // Socket to know if there is puja
