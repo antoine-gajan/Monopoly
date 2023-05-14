@@ -100,6 +100,28 @@ export class BoardComponent implements OnInit, OnDestroy {
         // If it's my turn, play
         if (this.current_player == this.username){
           this.is_playing = true;
+          this.socketService.getSocket().emit('estaJulio', {socketId: this.socketService.getSocketID()},
+            (ack: any) => {
+              console.log('Server acknowledged julio:', ack);
+              if(ack.cod == 0){
+                console.log("ESTA JULIO", ack.msg);
+                if(ack.msg.carcel){
+                    this.message = "Estás en la cárcel";
+                    let carta_carcel_tengo = false;
+                    if(ack.msg.carta != null){
+                      carta_carcel_tengo = ack.msg.carta;
+                    }
+                    this.createJailCardComponent(carta_carcel_tengo, ack.msg.salirJulio);
+                }
+                else {
+                  document.getElementById("tirar-dados")!.removeAttribute("disabled");
+                }
+              }
+              else {
+                console.log("error en estaJulio");
+                //observer.error();
+              }
+            });
           this.play();
         }
         // If it's not my turn, wait
@@ -144,8 +166,10 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     // Determine player for first turn
     if (this.current_player == this.username){
+      document.getElementById("tirar-dados")!.removeAttribute("disabled");      
       this.play();
     }
+    
     else {
       this.cancelTimer();
       this.message = this.current_player + " está jugando su turno";
@@ -239,24 +263,24 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.message = this.current_player + ", es tu turno";
     console.log("ESTÁ JUGANDO");
     // Check if the player is in jail
-    this.socketService.estaJulio()
-    .subscribe({
-      next: (msg: any) => {
-        console.log("ESTÁ EN LA CÁRCEL: ", msg);
-        console.log("cacel: estas", msg.carcel[0]);
-        if(msg.carcel[0]){
-          this.message = "Estás en la cárcel";
-          let carta_carcel_tengo = false;
-          if(msg.carcel[1] != null){
-            carta_carcel_tengo = msg.carcel[0];
-          }
-          this.createJailCardComponent(carta_carcel_tengo, msg.salirJulio);
-        }
-        else {
-          document.getElementById("tirar-dados")!.removeAttribute("disabled");
-        }
-      }
-    });
+    // this.socketService.estaJulio()
+    // .subscribe({
+    //   next: (msg: any) => {
+    //     console.log("ESTÁ EN LA CÁRCEL: ", msg);
+    //     console.log("cacel: estas", msg.carcel);
+    //     if(msg.carcel){
+    //       this.message = "Estás en la cárcel";
+    //       let carta_carcel_tengo = false;
+    //       if(msg.carta != null){
+    //         carta_carcel_tengo = msg.carcel[0];
+    //       }
+    //       this.createJailCardComponent(carta_carcel_tengo, msg.salirJulio);
+    //     }
+    //     else {
+    //       document.getElementById("tirar-dados")!.removeAttribute("disabled");
+    //     }
+      // }
+    // });
    // document.getElementById("tirar-dados")!.removeAttribute("disabled");
   }
 
