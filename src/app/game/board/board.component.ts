@@ -7,7 +7,7 @@ import {ChanceCardComponent} from "../../card/chance-card/chance-card.component"
 import {CommunityCardComponent} from "../../card/community-card/community-card.component";
 import {InfoCardComponent} from "../../card/info-card/info-card.component";
 import {JailCardComponent} from "../../card/jail-card/jail-card.component";
-import {Coordenadas, Partida, PropertyBoughtResponse} from "../response-type";
+import {Coordenadas, Partida, Player, PropertyBoughtResponse} from "../response-type";
 import { WebSocketService } from 'app/web-socket.service';
 import {SubastaCardComponent} from "../../card/subasta-card/subasta-card.component";
 import { AlertComponent } from 'app/card/alert/alert.component';
@@ -25,9 +25,13 @@ export class BoardComponent implements OnInit, OnDestroy {
   username: string;
 
   // Relative to client player
-  player: [string, number, Coordenadas] = ["", 0, {h: 10, v: 10}];
+  //player: [string, number, Coordenadas] = ["", 0, {h: 10, v: 10}];
+  list_players: Player[] = [];
+  lista_nombre_jugadores: string[] = [];
+
   is_playing: boolean = false;
   is_bankrupt: boolean = false;
+  
   player_properties: [string, Coordenadas][] = [];
   timer: any;
   is_timer_active: boolean = false;
@@ -35,8 +39,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   old_position: Coordenadas;
 
   // Relative to other players
-  other_players_list: [string, number, Coordenadas][] = [];
-  other_player_properties: {[player_username: string]: [string, Coordenadas][]} = {};
+  //other_players_list: [string, number, Coordenadas][] = [];
+  //other_player_properties: {[player_username: string]: [string, Coordenadas][]} = {};
 
   // Relative to the board and cards positions
   nothing_cards: number[] = [0, 10, 20, 30];
@@ -62,7 +66,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   interval_play: any;
   dices_interval: any;
 
-  list_players: string[] = [];
+  
   // Variables with normes of the game
   is_puja_activated: boolean = false;
 
@@ -166,29 +170,26 @@ export class BoardComponent implements OnInit, OnDestroy {
       });
     }
     // Get the list of players
-    this.list_players = this.socketService.list_players;
+    this.lista_nombre_jugadores = this.socketService.list_players;
     // Current player is the first player in the list
-    this.current_player = this.list_players[0];
-    console.log("TODO INICIADO: List players: ", this.list_players);
+    this.current_player = this.lista_nombre_jugadores[0];
+    console.log("TODO INICIADO: List players: ", this.lista_nombre_jugadores);
     // Initialization of players
-    if(this.list_players.length != 0){
-      for(let i = 0; i < this.list_players.length; i++){
-        // Information of other players
-        if (this.list_players[i] != this.username) {
-          this.other_players_list.push([this.list_players[i], this.socketService.dineroPartida[i], {h: 10, v: 10}]);
-          
-        }
-        // Information of myself
-        else {
-          this.player[0] = this.username;
-          this.player[1] = this.socketService.dineroPartida[i];
-        }
-      }
+    if(this.lista_nombre_jugadores.length != 0){
+      this.lista_nombre_jugadores.forEach((name, i) => {
+        const player: Player = {
+          username: name,
+          dinero: this.socketService.dineroPartida[i],
+          coordenadas: { h: 10, v: 10 }
+        };
+        this.list_players.push(player);
+      });
     }
-    console.log("TODO INICIADO: Username: ", this.player[0]);
-    console.log("TODO INICIADO: MONEY: ", this.socketService.dineroPartida);
+    this.socketService.indexJugador = this.lista_nombre_jugadores.indexOf(this.username);
+    //console.log("TODO INICIADO: Username: ", this.list_players[0]);
+    //console.log("TODO INICIADO: MONEY: ", this.socketService.dineroPartida);
     // Se muestra la posición inicial de todos los jugadores en el tablero
-     this.show_position_every_players();
+    this.show_position_every_players();
   }
 
   /* === FUNCTIONS TO GET THE PROPERTIES OF THE PLAYERS === */
@@ -256,8 +257,9 @@ export class BoardComponent implements OnInit, OnDestroy {
         // Store true value of dices
         this.dices[0] = msg.dado1;
         this.dices[1] = msg.dado2;
-        this.player[2] = msg.coordenadas;
-        this.old_position = this.player[2];
+        this.list_players[this.socketService.indexJugador].coordenadas = msg.coordenadas;
+        //this.player[2] = msg.coordenadas;
+        this.old_position = msg.coordenadas;
         // Actualize position of players
         this.show_position_every_players();
         this.reStartTimerExpulsarJugador();
@@ -277,10 +279,10 @@ export class BoardComponent implements OnInit, OnDestroy {
       document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
       // Update message
       if (this.dices[0] === this.dices[1]){
-        this.message = this.player[0] + ", has sacado dobles " + this.dices[0];
+        this.message = this.list_players[this.socketService.indexJugador].username + ", has sacado dobles " + this.dices[0];
       }
       else {
-        this.message = this.player[0] + ", has sacado " + this.dices[0] + " y " + this.dices[1];
+        this.message = this.list_players[this.socketService.indexJugador].username + ", has sacado " + this.dices[0] + " y " + this.dices[1];
       }
       // Action of the card
       this.card_action();
@@ -291,22 +293,22 @@ export class BoardComponent implements OnInit, OnDestroy {
   card_action() {
     console.log("=== CARD ACTION ===");
     // Get card information
-    if(this.player[2].h == 0 && this.player[2].v == 10){
+    if(this.list_players[this.socketService.indexJugador].coordenadas.h == 0 && this.list_players[this.socketService.indexJugador].coordenadas.v == 10){
       console.log("=== NO CARD ACTION ===");
       console.log("está de paso en la cárcel");
       this.end_turn();
     } else {
       
-      this.socketService.casilla({coordenadas: {h: this.player[2].h, v: this.player[2].v}, socketId: this.socketService.socketID})
+      this.socketService.casilla({coordenadas: {h: this.list_players[this.socketService.indexJugador].coordenadas.h, v: this.list_players[this.socketService.indexJugador].coordenadas.v}, socketId: this.socketService.socketID})
       .subscribe({
         next: async (msg: number) => {
           //console.log
-          console.log("Position : " + this.player[2].h + " " + this.player[2].v);
+          console.log("Position : " + this.list_players[this.socketService.indexJugador].coordenadas.h + " " + this.list_players[this.socketService.indexJugador].coordenadas.h);
           // Get the number of ack code
           let number = msg;
 
           // Get position with id
-          let position_id = this.convert_position_to_id(this.player[2]);
+          let position_id = this.convert_position_to_id(this.list_players[this.socketService.indexJugador].coordenadas);
           console.log("Position id: " + position_id);
           // Check where is the player and special actions linked to the position
           if (this.nothing_cards.includes(position_id)) {
@@ -335,24 +337,24 @@ export class BoardComponent implements OnInit, OnDestroy {
           else {
             // If has to pay another player
             if (number == 2){
-              this.createCardComponent(this.player[2].v, this.player[2].h, "Tienes que pagar", this.dices[0] == this.dices[1], "pay");
+              this.createCardComponent(this.list_players[this.socketService.indexJugador].coordenadas.v, this.list_players[this.socketService.indexJugador].coordenadas.h, "Tienes que pagar", this.dices[0] == this.dices[1], "pay");
             }
             // If owner is the player and can increase the number of credit
             else if (number == 6) {
-              this.createCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.dices[0] == this.dices[1], "increase");
+              this.createCardComponent(this.list_players[this.socketService.indexJugador].coordenadas.v, this.list_players[this.socketService.indexJugador].coordenadas.h, "Posees la casilla", this.dices[0] == this.dices[1], "increase");
             }
             // If can't increase the number of credit, propose to sell the card
             else if (number == 7) {
-              this.createCardComponent(this.player[2].v, this.player[2].h, "Posees la casilla", this.dices[0] == this.dices[1], "sell");
+              this.createCardComponent(this.list_players[this.socketService.indexJugador].coordenadas.v, this.list_players[this.socketService.indexJugador].coordenadas.h, "Posees la casilla", this.dices[0] == this.dices[1], "sell");
             }
             // If no owner and can buy
             else if (number == 8) {
               // Display buy card
-              this.createCardComponent(this.player[2].v, this.player[2].h, "Quieres comprar ?", this.dices[0] == this.dices[1], "buy");
+              this.createCardComponent(this.list_players[this.socketService.indexJugador].coordenadas.v, this.list_players[this.socketService.indexJugador].coordenadas.h, "Quieres comprar ?", this.dices[0] == this.dices[1], "buy");
             }
             // If no owner and can't buy, just show card
             else if (number == 9) {
-              this.createCardComponent(this.player[2].v, this.player[2].h, "No puedes comprar", this.dices[0] == this.dices[1], "view");
+              this.createCardComponent(this.list_players[this.socketService.indexJugador].coordenadas.v, this.list_players[this.socketService.indexJugador].coordenadas.h, "No puedes comprar", this.dices[0] == this.dices[1], "view");
             }
           }
         }
@@ -367,7 +369,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Get properties of player
     this.update_player_info();
     // Compare old position and new position
-    if (this.old_position.h != this.player[2].h || this.old_position.v != this.player[2].v && this.player[2].h != 0 && this.player[2].v != 10) {
+    if (this.old_position.h != this.list_players[this.socketService.indexJugador].coordenadas.h || this.old_position.v != this.list_players[this.socketService.indexJugador].coordenadas.v && this.list_players[this.socketService.indexJugador].coordenadas.h != 0 && this.list_players[this.socketService.indexJugador].coordenadas.v != 10) {
       this.card_action();
     }
     else if (this.dices[0] == this.dices[1]) {
@@ -409,22 +411,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Result table with other players
     let result : [string, number, Coordenadas][] = [];
     for (let i = 0; i < listaJugadores.length; i++) {
-      if (listaJugadores[i] !== this.player[0]) {
-        // Get information of other players
-        let jugador = listaJugadores[i];
-        let dinero = listaDineros[i];
-        let posicion = listaPosiciones[i];
-        // Add to other_players_list if no error
-        if (jugador != null && dinero != null && posicion != null){
-          result.push([jugador, dinero, posicion]);
-        }
-      }
-      // Info of client player
-      else {
-        this.player[1] = listaDineros[i];
-        this.player[2] = listaPosiciones[i];
-      }
-      this.other_players_list = result;
+      this.list_players[i].dinero = listaDineros[i];
+      this.list_players[i].coordenadas = listaPosiciones[i]; 
     }
   }
 
@@ -503,10 +491,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   show_position_every_players(): void {
     console.log("=== POSITION OF PLAYERS ACTUALIZED ===");
     // Show position of the player if he is not bankrupt
-    this.show_position(this.player[0], this.player[2], 0);
-    // Show position of the other players
-    for (let i = 0; i < this.other_players_list.length; i++) {
-      this.show_position(this.other_players_list[i][0], this.other_players_list[i][2], i + 1);
+    for(let i = 0 ; i < this.list_players.length; i++){
+      this.show_position(this.list_players[i].username, this.list_players[i].coordenadas, 0);
     }
   }
 
@@ -599,8 +585,9 @@ export class BoardComponent implements OnInit, OnDestroy {
     const componentRef = this.viewContainerRef.createComponent(factory);
     // Inputs
     componentRef.instance.idPartida = this.game_id;
-    componentRef.instance.username = this.player[0];
-    componentRef.instance.coordenadas = this.player[2];
+    componentRef.instance.username = this.socketService.username;//this.player[0];
+    componentRef.instance.coordenadas = this.list_players[this.socketService.indexJugador].coordenadas;
+   
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     //componentRef.instance.reStartTimerExpulsarJugador.subscribe(() => {this.reStartTimerExpulsarJugador()});
@@ -618,8 +605,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     const componentRef = this.viewContainerRef.createComponent(factory);
     // Inputs
     componentRef.instance.idPartida = this.game_id;
-    componentRef.instance.username = this.player[0];
-    componentRef.instance.coordenadas = this.player[2];
+    componentRef.instance.username = this.username;
+    componentRef.instance.coordenadas = this.list_players[this.socketService.indexJugador].coordenadas;
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     //componentRef.instance.reStartTimerExpulsarJugador.subscribe(() => {this.reStartTimerExpulsarJugador()});

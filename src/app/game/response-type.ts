@@ -2,6 +2,12 @@ export class PlayerResponse {
     jugador: string;
 }
 
+export class Player {
+  username: string;
+  dinero: number;
+  coordenadas: Coordenadas;
+}
+
 export class PlayerListResponse {
   listaJugadores: string[];
   listaDineros: number[];
