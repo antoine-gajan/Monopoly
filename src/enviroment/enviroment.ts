@@ -7,4 +7,4 @@ export const environment = {
     //--API servidor local -> cuando funcione cambiarlo
 
 
-};
+}; 
