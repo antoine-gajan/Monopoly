@@ -31,6 +31,15 @@ export class EsperarSalaComponent implements OnInit{
   ) {}
 
   ngOnInit() {
+
+    this.socketService.getSocket().on('esperaJugadores', (usuariosConectados)=>{
+      console.log('Usuarios conectados:', usuariosConectados);
+      this.socketService.list_players = usuariosConectados;
+      this.list_players = usuariosConectados;
+      this.mostrarListaJugadores = true;
+      console.log("usuarios----",usuariosConectados);
+    });
+
     console.log("ACTUALIZA INFO");
     let idPartida = this.route.snapshot.paramMap.get('id'); // Se obtiene id de la partida
     this.socketService.escucharEntrarAJugar()
@@ -39,34 +48,17 @@ export class EsperarSalaComponent implements OnInit{
 
       this.mostrarBotonUnirse = true;
     });
-    //this.username = this.socketService.getUsername();         // Se obtiene el nombre del usuario actual
-
-    /*this.socketService.consultarUsuario()
-    .then ((usuario: any) => {
-      console.log("usuario: ", usuario);
-      this.username = usuario.msg.nombreUser;
-    })
-    .catch(() => {
-      console.log("ERROR AL OBTENER NOMBRE USUARIO");
-    });
-*/
+   
     if (idPartida != null && this.username != null) {       // Actualiza la información del juego
       this.game_id = +idPartida;
     } else {
       this.router.navigate(['/error']);
     }
-
-
-    this.socketService.actualizarUsuariosConectados()
-    .subscribe((usuariosConectados) => {
-      console.log('Usuarios conectados:', usuariosConectados);
-      this.socketService.list_players = usuariosConectados;
-      this.list_players = usuariosConectados;
-      this.mostrarListaJugadores = true;
-    });
-
-
-
+    console.log("voy a pedir usuarios");
+    console.log(this.socketService.list_players);
+    
+    
+    console.log(this.socketService.list_players);
   }
 
 

@@ -22,7 +22,7 @@ export class UnirseSalaComponent {
   seguirMostrando: boolean = false;
   finMensaje: boolean = false;
   errorPartidaLlena: boolean = false;
-  idCod: number;
+
 
 
   constructor(
@@ -38,6 +38,14 @@ export class UnirseSalaComponent {
   ngOnInit() {
     
     //this.socketService.hacerOnSocket();
+    this.socketService.actualizarUsuariosConectados()
+    .subscribe((usuariosConectados) => {
+      console.log('Usuarios conectados:', usuariosConectados);
+      this.socketService.list_players = usuariosConectados;
+      
+    });
+
+
   }
 
 
@@ -47,23 +55,19 @@ export class UnirseSalaComponent {
     this.socketService.unirseSalaEsperar(datos)
     .then((unirseSala: number) => {
       console.log("unirse SALA: ", unirseSala);
-        this.errorPartidaLlena = this.socketService.errorPartidaLlena;
-        this.idCod = unirseSala;
+      this.finMensaje = true;
+      if(unirseSala === 0){
+        const ruta = '/esperar_sala/' + this.idPartida;
+        this.router.navigateByUrl(ruta);
+      } else {
+      this.errorPartidaLlena = true;
+
+      }
     })
     .catch(() => {
-      console.log("ERROR AL UNIRSE A LA SALA");
-      alert("ERROR AL UNIRSE A LA SALA");
+      console.log("ERROR AL CREAR SALA");
     });
 
-    this.socketService.actualizarUsuariosConectados();
-    console.log("ACTUALIZA INFO", this.socketService.errorPartidaLlena);
-    if(this.socketService.errorPartidaLlena === false && this.idCod === 0){
-      const ruta = '/esperar_sala/' + this.idPartida;
-      this.router.navigateByUrl(ruta);
-    } else {
-      console.log("ERROR AL UNIRSE A LA SALA cambiar valor booleano");
-      this.errorPartidaLlena = true;
-    }
   }
 
   volverUnirseSala(){

@@ -289,11 +289,10 @@ export class WebSocketService {
         const responseCode = response.cod;
         console.log("SOCKET ID :"+this.socket.id);
         if (responseCode === 4) {
-          this.errorPartidaLlena = true;
-          console.log("ERROR PARTIDA LLENA", this.errorPartidaLlena);
+
         } else if (responseCode === 0) {
           console.log("UNIDO A LA PARTIDA");
-          this.errorPartidaLlena = false;
+
         }
         resolve(responseCode);
       });
@@ -305,6 +304,7 @@ export class WebSocketService {
   actualizarUsuariosConectados(): Observable<string[]>{
     return new Observable((observable) => {
       this.socket.on('esperaJugadores', (info) => {
+        console.log(info);
         if (typeof info === 'object' && info !== null) {
           const keys = Object.keys(info);
           const usuariosConectados = keys.map((key) => `${info[key]}`);
