@@ -262,25 +262,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.is_playing = true;
     this.message = this.current_player + ", es tu turno";
     console.log("ESTÁ JUGANDO");
-    // Check if the player is in jail
-    // this.socketService.estaJulio()
-    // .subscribe({
-    //   next: (msg: any) => {
-    //     console.log("ESTÁ EN LA CÁRCEL: ", msg);
-    //     console.log("cacel: estas", msg.carcel);
-    //     if(msg.carcel){
-    //       this.message = "Estás en la cárcel";
-    //       let carta_carcel_tengo = false;
-    //       if(msg.carta != null){
-    //         carta_carcel_tengo = msg.carcel[0];
-    //       }
-    //       this.createJailCardComponent(carta_carcel_tengo, msg.salirJulio);
-    //     }
-    //     else {
-    //       document.getElementById("tirar-dados")!.removeAttribute("disabled");
-    //     }
-      // }
-    // });
    // document.getElementById("tirar-dados")!.removeAttribute("disabled");
   }
 
@@ -299,20 +280,16 @@ export class BoardComponent implements OnInit, OnDestroy {
         // Clear dices interval to stop animation
         clearInterval(this.dices_interval);
         // Store true value of dices
-        this.dices[0] = 3;
-        this.dices[1] = 0;
-        this.list_players[this.socketService.indexJugador].coordenadas = {h: 7, v: 10};
-        this.old_position = {h: 7, v: 10};
+        //this.dices[0] = 3;
+        //this.dices[1] = 0;
+        //this.list_players[this.socketService.indexJugador].coordenadas = {h: 7, v: 10};
+        //this.old_position = {h: 7, v: 10};
         
         
-        //this.dices[0] = msg.dado1;
-        //this.dices[0] = 0;
-        //this.dices[1] = msg.dado2;
-        //this.dices[1] = 2;
-        //this.list_players[this.socketService.indexJugador].coordenadas = msg.coordenadas;
-        //this.list_players[this.socketService.indexJugador].coordenadas = {h: 8, v: 10};
-        //this.old_position = {h: 8, v: 10};
-        //this.old_position = msg.coordenadas;
+        this.dices[0] = msg.dado1;
+        this.dices[1] = msg.dado2;
+        this.list_players[this.socketService.indexJugador].coordenadas = msg.coordenadas;
+        this.old_position = msg.coordenadas;
         // Actualize position of players
         this.show_position_every_players();
         this.reStartTimerExpulsarJugador();
@@ -351,17 +328,15 @@ export class BoardComponent implements OnInit, OnDestroy {
       console.log("=== NO CARD ACTION ===");
       console.log("está de paso en la cárcel");
       this.end_turn(); // TODO <- revisar si se cae por dobles gestión turno de nuevo
-    } else if(this.list_players[this.socketService.indexJugador].coordenadas.h == 8 && this.list_players[this.socketService.indexJugador].coordenadas.v == 10){
+    } else if((this.list_players[this.socketService.indexJugador].coordenadas.h == 8 && this.list_players[this.socketService.indexJugador].coordenadas.v == 10)
+            || (this.list_players[this.socketService.indexJugador].coordenadas.h == 0 && this.list_players[this.socketService.indexJugador].coordenadas.v == 3)
+            || (this.list_players[this.socketService.indexJugador].coordenadas.h == 3 && this.list_players[this.socketService.indexJugador].coordenadas.v == 10)){ 
       // Casillas de boletín
       console.log("=== BOLETÍN ACTION ===");
       this.message = "Toma una carta de comunidad";
       this.createCommunityCardComponent();
     }
-    
-    
-    
     else {
-      
       this.socketService.casilla({coordenadas: {h: this.list_players[this.socketService.indexJugador].coordenadas.h, v: this.list_players[this.socketService.indexJugador].coordenadas.v}, socketId: this.socketService.socketID})
       .subscribe({
         next: async (msg: number) => {
@@ -418,6 +393,9 @@ export class BoardComponent implements OnInit, OnDestroy {
             // If no owner and can't buy, just show card
             else if (number == 9) {
               this.createCardComponent(this.list_players[this.socketService.indexJugador].coordenadas.v, this.list_players[this.socketService.indexJugador].coordenadas.h, "No puedes comprar", this.dices[0] == this.dices[1], "view");
+            } else if(number == 5){
+              console.log("has caido en una casilla comprada por otro jugaodr");
+              document.getElementById("button-end-turn")!.removeAttribute("disabled");
             }
           }
         }
@@ -477,6 +455,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.list_players[i].dinero = listaDineros[i];
       this.list_players[i].coordenadas = listaPosiciones[i]; 
     }
+    
   }
 
   update_player_info(): void {

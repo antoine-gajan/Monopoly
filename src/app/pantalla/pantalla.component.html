@@ -11,7 +11,7 @@
 
 <body *ngIf="!is_loading">
   <div class="mensaje_bienvenida" role="main">
-    <h2>¡Hola, {{username}}!</h2>
+    <h2>¡BIENVENID@!</h2>
     <br>
 
   </div>
@@ -60,6 +60,12 @@
           <svg class="material-icons" viewBox="0 0 24 24"></svg>
           <span><h4><b>Tienda 🛒</b></h4></span>
         </a>
+      <div *ngIf="partidaActiva">
+        <a class="card" rel="noopener">
+          <svg class="material-icons" viewBox="0 0 24 24"></svg>
+          <span><h4><b>Unirse Partida Activa</b></h4></span>
+        </a>
+      </div>
       </div>
     </div>
     <br><br><br><br>

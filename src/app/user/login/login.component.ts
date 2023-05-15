@@ -66,8 +66,19 @@ export class LoginComponent implements OnInit{
 
       console.log("LOGIN: ", user);
       this.socketService.login(user)
-        .then((loginResponse: boolean) => {
-          this.mostrarError = !loginResponse;
+        .then((ack: any) => {
+          
+          if(ack.cod === 0){
+            this.mostrarError = false;
+            if(ack.msg.id === 0){
+              this.socketService.hayPartidaActiva = false;
+              this.router.navigate(['/pantalla']);
+            } else {
+              this.socketService.partidaActiva = ack.msg.id;
+              this.socketService.hayPartidaActiva = true;
+            }
+          }
+          
         })
         .catch(() => {
           this.mostrarError = true;

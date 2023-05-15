@@ -14,6 +14,7 @@ export class PantallaComponent implements OnInit{
   username: string | null;
   id_partida_nueva: number;
   is_loading: boolean = false;
+  partidaActiva: boolean = false;
 
   constructor(
     private router: Router,
@@ -28,6 +29,7 @@ volverArriba() {
 }
 
   ngOnInit() {
+    //  this.partidaActiva = this.socketService.partidaActiva;
     this.socketService.soyInvitado = false;
     // Get username from browser
     //this.username = localStorage.getItem('username');
@@ -56,7 +58,6 @@ volverArriba() {
             this.socketService.idPartida = crearSala.id;
             // console.log("ID PARTIDA: ", this.socketService.idPartida);
             this.router.navigate(['/crear_sala'], { state: { username: crearSala.username } });
-
           }
         })
         .catch(() => {

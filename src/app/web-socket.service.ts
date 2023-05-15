@@ -27,6 +27,8 @@ export class WebSocketService {
   idPartida: number;
   username: string;
   indexJugador: number;
+  partidaActiva: number;
+  hayPartidaActiva: boolean = false;
   private email: string;
   private picture: string;
   private _socketID: string;
@@ -125,19 +127,19 @@ export class WebSocketService {
   }
 
   //Función que recibe la información necesaria para logear un usuario
-  public login(user: any): Promise<boolean> {
+  public login(user: any): Promise<number> {
     console.log('login: ', user);
     this.localSocketID = user.socketID;
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise<number>((resolve, reject) => {
         this.socket.emit('login', user, (response: any) => {
         console.log('Login response:', response);
         console.log('Login response.cod:', response.cod);
         if (response.cod === 0) { // Si el código de confirmación es 200, redirigir a la pantalla de usuario
-          this.router.navigate(['/pantalla']);
-          resolve(true);
+          //this.router.navigate(['/pantalla']);
+          resolve(response);
         } else{
           console.log('Error en el login, usuario o contraseña incorrectos');
-          reject(false);
+          reject(response);
         }
       });
 
