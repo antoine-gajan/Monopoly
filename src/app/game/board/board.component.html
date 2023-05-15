@@ -398,7 +398,7 @@
 
           <div class ="player-properties" *ngFor="let prop of player_properties">
             <div class="player-property" *ngIf="player.username === username" data-ui="vt" [style.background]="get_color_property(prop[1])" (click)="createCardComponent(prop[1].v, prop[1].h, 'Carta de ' + player.username, false, 'view', 0, false)">
-              {{ prop[i] }}
+              {{ prop[0] }}
             </div>
           </div>
         </div>

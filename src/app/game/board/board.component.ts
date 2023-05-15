@@ -99,29 +99,6 @@ export class BoardComponent implements OnInit, OnDestroy {
 
         // If it's my turn, play
         if (this.current_player == this.username){
-          this.is_playing = true;
-          this.socketService.getSocket().emit('estaJulio', {socketId: this.socketService.getSocketID()},
-            (ack: any) => {
-              console.log('Server acknowledged julio:', ack);
-              if(ack.cod == 0){
-                console.log("ESTA JULIO", ack.msg);
-                if(ack.msg.carcel){
-                    this.message = "Estás en la cárcel";
-                    let carta_carcel_tengo = false;
-                    if(ack.msg.carta != null){
-                      carta_carcel_tengo = ack.msg.carta;
-                    }
-                    this.createJailCardComponent(carta_carcel_tengo, ack.msg.salirJulio);
-                }
-                else {
-                  document.getElementById("tirar-dados")!.removeAttribute("disabled");
-                }
-              }
-              else {
-                console.log("error en estaJulio");
-                //observer.error();
-              }
-            });
           this.play();
         }
         // If it's not my turn, wait
@@ -258,11 +235,29 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   play(): void {
     console.log("=== PLAY ===");
-    this.reStartTimerExpulsarJugador();
     this.is_playing = true;
     this.message = this.current_player + ", es tu turno";
-    console.log("ESTÁ JUGANDO");
-   // document.getElementById("tirar-dados")!.removeAttribute("disabled");
+    // Know if is in jail or not
+    this.socketService.getSocket().emit('estaJulio', {socketId: this.socketService.getSocketID()},
+      (ack: any) => {
+        console.log('Server acknowledged julio:', ack);
+        if(ack.cod == 0){
+          console.log("ESTA JULIO", ack.msg);
+          // If in jail
+          if(ack.msg.carcel){
+              this.message = "Estás en la cárcel";
+              let carta_carcel_tengo = false;
+              if(ack.msg.carta != null){
+                carta_carcel_tengo = ack.msg.carta;
+              }
+              this.createJailCardComponent(carta_carcel_tengo, ack.msg.salirJulio);
+          }
+          // If not in jail, can roll dices
+          else {
+            document.getElementById("tirar-dados")!.removeAttribute("disabled");
+          }
+        }
+      });
   }
 
   play_turn_player() {
@@ -280,12 +275,6 @@ export class BoardComponent implements OnInit, OnDestroy {
         // Clear dices interval to stop animation
         clearInterval(this.dices_interval);
         // Store true value of dices
-        //this.dices[0] = 3;
-        //this.dices[1] = 0;
-        //this.list_players[this.socketService.indexJugador].coordenadas = {h: 7, v: 10};
-        //this.old_position = {h: 7, v: 10};
-
-
         this.dices[0] = msg.dado1;
         this.dices[1] = msg.dado2;
         this.list_players[this.socketService.indexJugador].coordenadas = msg.coordenadas;
@@ -323,84 +312,70 @@ export class BoardComponent implements OnInit, OnDestroy {
   card_action() {
     console.log("=== CARD ACTION ===");
     // Get card information
-    if(this.list_players[this.socketService.indexJugador].coordenadas.h == 0 && this.list_players[this.socketService.indexJugador].coordenadas.v == 10){
-      // Casilla de paso por la cárcel
-      console.log("=== NO CARD ACTION ===");
-      console.log("está de paso en la cárcel");
-      this.end_turn(); // TODO <- revisar si se cae por dobles gestión turno de nuevo
-    } else if((this.list_players[this.socketService.indexJugador].coordenadas.h == 8 && this.list_players[this.socketService.indexJugador].coordenadas.v == 10)
-            || (this.list_players[this.socketService.indexJugador].coordenadas.h == 0 && this.list_players[this.socketService.indexJugador].coordenadas.v == 3)
-            || (this.list_players[this.socketService.indexJugador].coordenadas.h == 3 && this.list_players[this.socketService.indexJugador].coordenadas.v == 10)){
-      // Casillas de boletín
-      console.log("=== BOLETÍN ACTION ===");
-      this.message = "Toma una carta de comunidad";
-      this.createCommunityCardComponent();
-    }
-    else {
-      this.socketService.casilla({coordenadas: {h: this.list_players[this.socketService.indexJugador].coordenadas.h, v: this.list_players[this.socketService.indexJugador].coordenadas.v}, socketId: this.socketService.socketID})
-      .subscribe({
-        next: async (msg: number) => {
-          //console.log
-          console.log("Position : " + this.list_players[this.socketService.indexJugador].coordenadas.h + " " + this.list_players[this.socketService.indexJugador].coordenadas.h);
-          // Get the number of ack code
-          let number = msg;
-
-          // Get position with id
-          let position_id = this.convert_position_to_id(this.list_players[this.socketService.indexJugador].coordenadas);
-          console.log("Position id: " + position_id);
-          // Check where is the player and special actions linked to the position
-          if (this.nothing_cards.includes(position_id)) {
-            this.message = "No pasa nada";
-            // End turn
-            this.end_turn();
+    this.socketService.casilla({coordenadas: {h: this.list_players[this.socketService.indexJugador].coordenadas.h, v: this.list_players[this.socketService.indexJugador].coordenadas.v}, socketId: this.socketService.socketID})
+    .subscribe({
+      next: async (msg: number) => {
+        // Store old position
+        this.old_position = this.list_players[this.socketService.indexJugador].coordenadas;
+        //console.log
+        console.log("Position : " + this.list_players[this.socketService.indexJugador].coordenadas.h + " " + this.list_players[this.socketService.indexJugador].coordenadas.h);
+        // Get the number of ack code
+        let number = msg;
+        // Get position with id
+        let position_id = this.convert_position_to_id(this.list_players[this.socketService.indexJugador].coordenadas);
+        console.log("Position id: " + position_id);
+        // Check where is the player and special actions linked to the position
+        if (this.nothing_cards.includes(position_id)) {
+          this.message = "No pasa nada";
+          // End turn
+          this.end_turn();
+        }
+        else if (this.chance_cards.includes(position_id)) {
+          this.message = "Toma una carta de suerte";
+          this.createChanceCardComponent();
+        }
+        else if (this.community_cards.includes(position_id)) {
+          this.message = "Toma una carta de comunidad";
+          this.createCommunityCardComponent();
+        }
+        else if (this.taxes_cards.includes(position_id)) {
+          this.message = "Tienes que pagar...";
+          if (position_id == 38) {
+            this.createInfoCardComponent("SEGURO ESCOLAR", "Tienes que pagar el seguro escolar : 133€", "Pagar 133€");
           }
-          else if (this.chance_cards.includes(position_id)) {
-            this.message = "Toma una carta de suerte";
-            this.createChanceCardComponent();
-          }
-          else if (this.community_cards.includes(position_id)) {
-            this.message = "Toma una carta de comunidad";
-            this.createCommunityCardComponent();
-          }
-          else if (this.taxes_cards.includes(position_id)) {
-            this.message = "Tienes que pagar...";
-            if (position_id == 38) {
-              this.createInfoCardComponent("SEGURO ESCOLAR", "Tienes que pagar el seguro escolar : 133€", "Pagar 133€");
-            }
-            else if (position_id == 4) {
-              this.createInfoCardComponent("APERTURA DE EXPEDIENTE", "Tienes que pagar la apertura de expediente : 267€", "Pagar 267€");
-            }
-          }
-          // If it's a normal card, check if it's owned and what to do
-          else {
-            // If has to pay another player
-            if (number == 2){
-              this.createCardComponent(this.list_players[this.socketService.indexJugador].coordenadas.v, this.list_players[this.socketService.indexJugador].coordenadas.h, "Tienes que pagar", this.dices[0] == this.dices[1], "pay");
-            }
-            // If owner is the player and can increase the number of credit
-            else if (number == 6) {
-              this.createCardComponent(this.list_players[this.socketService.indexJugador].coordenadas.v, this.list_players[this.socketService.indexJugador].coordenadas.h, "Posees la casilla", this.dices[0] == this.dices[1], "increase");
-            }
-            // If can't increase the number of credit, propose to sell the card
-            else if (number == 7) {
-              this.createCardComponent(this.list_players[this.socketService.indexJugador].coordenadas.v, this.list_players[this.socketService.indexJugador].coordenadas.h, "Posees la casilla", this.dices[0] == this.dices[1], "sell");
-            }
-            // If no owner and can buy
-            else if (number == 8) {
-              // Display buy card
-              this.createCardComponent(this.list_players[this.socketService.indexJugador].coordenadas.v, this.list_players[this.socketService.indexJugador].coordenadas.h, "Quieres comprar ?", this.dices[0] == this.dices[1], "buy");
-            }
-            // If no owner and can't buy, just show card
-            else if (number == 9) {
-              this.createCardComponent(this.list_players[this.socketService.indexJugador].coordenadas.v, this.list_players[this.socketService.indexJugador].coordenadas.h, "No puedes comprar", this.dices[0] == this.dices[1], "view");
-            } else if(number == 5){
-              console.log("has caido en una casilla comprada por otro jugaodr");
-              document.getElementById("button-end-turn")!.removeAttribute("disabled");
-            }
+          else if (position_id == 4) {
+            this.createInfoCardComponent("APERTURA DE EXPEDIENTE", "Tienes que pagar la apertura de expediente : 267€", "Pagar 267€");
           }
         }
-      });
-    }
+        // If it's a normal card, check if it's owned and what to do
+        else {
+          // If has to pay another player
+          if (number == 2){
+            this.createCardComponent(this.list_players[this.socketService.indexJugador].coordenadas.v, this.list_players[this.socketService.indexJugador].coordenadas.h, "Tienes que pagar", this.dices[0] == this.dices[1], "pay");
+          }
+          // If owner is the player and can increase the number of credit
+          else if (number == 6) {
+            this.createCardComponent(this.list_players[this.socketService.indexJugador].coordenadas.v, this.list_players[this.socketService.indexJugador].coordenadas.h, "Posees la casilla", this.dices[0] == this.dices[1], "increase");
+          }
+          // If can't increase the number of credit, propose to sell the card
+          else if (number == 7) {
+            this.createCardComponent(this.list_players[this.socketService.indexJugador].coordenadas.v, this.list_players[this.socketService.indexJugador].coordenadas.h, "Posees la casilla", this.dices[0] == this.dices[1], "sell");
+          }
+          // If no owner and can buy
+          else if (number == 8) {
+            // Display buy card
+            this.createCardComponent(this.list_players[this.socketService.indexJugador].coordenadas.v, this.list_players[this.socketService.indexJugador].coordenadas.h, "Quieres comprar ?", this.dices[0] == this.dices[1], "buy");
+          }
+          // If no owner and can't buy, just show card
+          else if (number == 9) {
+            this.createCardComponent(this.list_players[this.socketService.indexJugador].coordenadas.v, this.list_players[this.socketService.indexJugador].coordenadas.h, "No puedes comprar", this.dices[0] == this.dices[1], "view");
+          } else if(number == 5){
+            console.log("has caido en una casilla comprada por otro jugaodr");
+            document.getElementById("button-end-turn")!.removeAttribute("disabled");
+          }
+        }
+      }
+    });
   }
 
   end_turn(): void {
@@ -409,11 +384,12 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.delete_pop_up_component();
     // Get properties of player
     this.update_player_info();
-    // Compare old position and new position
-    /*if (this.old_position.h != this.list_players[this.socketService.indexJugador].coordenadas.h || this.old_position.v != this.list_players[this.socketService.indexJugador].coordenadas.v && this.list_players[this.socketService.indexJugador].coordenadas.h != 0 && this.list_players[this.socketService.indexJugador].coordenadas.v != 10) {
+    // Compare old position and new position (for instance, if chance card has changed the position)
+    if (this.old_position.h != this.list_players[this.socketService.indexJugador].coordenadas.h || this.old_position.v != this.list_players[this.socketService.indexJugador].coordenadas.v && this.list_players[this.socketService.indexJugador].coordenadas.h != 0 && this.list_players[this.socketService.indexJugador].coordenadas.v != 10) {
       this.card_action();
     }
-    else */if (this.dices[0] == this.dices[1]) {
+    // If dobles, can play again
+    else if (this.dices[0] == this.dices[1]) {
       this.message = "Vuelve a tirar los dados";
       document.getElementById("tirar-dados")!.removeAttribute("disabled");
       document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
@@ -580,7 +556,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     // Assure to delete the old buy card component
     this.delete_pop_up_component();
     this.cancelTimer();
-
     const factory = this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
     const componentRef = this.viewContainerRef.createComponent(factory);
     // Inputs
@@ -629,7 +604,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     componentRef.instance.idPartida = this.game_id;
     componentRef.instance.username = this.socketService.username;//this.player[0];
     componentRef.instance.coordenadas = this.list_players[this.socketService.indexJugador].coordenadas;
-
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     //componentRef.instance.reStartTimerExpulsarJugador.subscribe(() => {this.reStartTimerExpulsarJugador()});
@@ -853,16 +827,8 @@ export class BoardComponent implements OnInit, OnDestroy {
       },
       error: error => {
         this.delete_pop_up_component();
-        alert("Error al declarar la bancarrota, vas a continuar la partida.");
+        this.router.navigate(['/home']);
       }
     });
-
-    // Redirect to home page of player
-   /* if(this.socketService.soyInvitado){
-      this.router.navigate(['/pantalla_invitado']);
-    }
-    else {
-      this.router.navigate(['/pantalla']);
-    }*/
   }
 }

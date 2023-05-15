@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import {
   Coordenadas,
   InfoPlayerResponse,
-  Partida,
+  Partida, Party,
   Product,
   PropertyBoughtResponse,
   Propriety,
@@ -53,7 +53,7 @@ export class WebSocketService {
     console.log('getSocketID: ', this._socketID);
     return this._socketID;
   }
-  
+
   getSocket(){
     return this.socket;
   }
@@ -351,8 +351,8 @@ export class WebSocketService {
         console.log("ACTUALIZACIÓN CORRECTA");
         if(datos.jugar == true){
           console.log("ENTRA A JUGAR");
-          
-          
+
+
         }
       }
     })
@@ -463,7 +463,27 @@ export class WebSocketService {
     });
   }
 
-  public infoAsignatura(datos: any): Observable <Propriety>{ //datos tiene -> {socketId: this.socketID, coordenadas: {  "h": 3,  "v": 0 }}
+  public infoAsignatura(datos: any): Observable <Propriety>{
+    // Get information about a property (not a party)
+    return new Observable ((observer) => {
+      this.socket.emit('infoAsignatura', datos,
+       (ack: any) => {
+        console.log('Server acknowledged:', datos);
+        console.log('Server acknowledged:', ack);
+        if(ack.cod == 0){
+          console.log("INFO ASIGNATURA", ack.msg);
+          observer.next(ack.msg);
+          observer.complete();
+        } else {
+          console.log("Error al hacer obtener info de la asignatura");
+          observer.error(new Error("Error al obtener la información de la asignatura"));
+        }
+      });
+    });
+  }
+
+  public infoParty(datos: any): Observable <Party>{
+    // Get the information of a Party
     return new Observable ((observer) => {
       this.socket.emit('infoAsignatura', datos,
        (ack: any) => {
