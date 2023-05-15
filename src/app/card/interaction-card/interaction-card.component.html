@@ -21,7 +21,8 @@
   <div class="list-button"*ngIf="!botonPulsado">
     <button *ngIf="type == 'buy'" class="button-action buy" (click)="buy_card()">Comprar</button>
     <button *ngIf="play_again && type === 'buy'" class="button-action play-again" (click)="callback()">Jugar otra vez</button>
-    <button *ngIf="!play_again && type === 'buy' && !is_puja_activated" class="button-action stop" (click)="empezar_puja()">Pujar</button>
+    <button *ngIf="!play_again && type === 'buy' && is_puja_activated" class="button-action stop" (click)="empezar_puja()">Pujar</button>
+    <button *ngIf="!play_again && type === 'buy' && !is_puja_activated" class="button-action stop" (click)="callback()">Cancelar</button>
 
     <button *ngIf="(type === 'sell' || type === 'increase') && is_playing" class="button-action sell" (click)="sell_card()">Vender</button>
     <button *ngIf="(type === 'sell' || type === 'increase') && is_playing" class="button-action stop" (click)="callback()">Cancelar</button>
@@ -33,9 +34,8 @@
 
     <button *ngIf="type == 'pay'" class="button-action pay" (click)="pay_card()">Pagar</button>
 
-    <button *ngIf="type == 'view' && is_playing" class="button-action stop" (click)="sell_card()">Vender-2</button>
-
-    <button *ngIf="type == 'view'" class="button-action stop" (click)="callback()">Cerrar-2</button>
+    <button *ngIf="type == 'view' && is_playing" class="button-action stop" (click)="sell_card()">Vender</button>
+    <button *ngIf="type == 'view'" class="button-action stop" (click)="callback()">Cerrar</button>
   </div>
   <div *ngIf="botonPulsado" class="list-button"><app-loader></app-loader></div>
 </div>
