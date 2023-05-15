@@ -849,7 +849,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         console.log("=== LEAVE GAME EXPULSAR ===");
       }
     });
-    this.router.navigate(['/']);
+
     // Redirect to home page of player
    /* if(this.socketService.soyInvitado){
       this.router.navigate(['/pantalla_invitado']);

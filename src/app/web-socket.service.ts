@@ -437,6 +437,7 @@ export class WebSocketService {
           console.log("BANCARROTA", ack.msg);
           observer.next();
           observer.complete();
+          this.router.navigate(['/']);
         } else {
           console.log("Error al declarar bancarrota");
           observer.error(new Error("Error al declarar bancarrota"));

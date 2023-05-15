@@ -56,7 +56,7 @@ export class CrearSalaComponent {
       console.log("Usuarios contectados: ",mensaje);
       this.list_players = mensaje;
       this.socketService.list_players = mensaje;
-    })
+    });
     // this.socketService.actualizarUsuariosConectados()
     // .subscribe((usuariosConectados) => {
     //   console.log('Usuarios conectados:', usuariosConectados);
