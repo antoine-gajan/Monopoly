@@ -31,7 +31,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   is_playing: boolean = false;
   is_bankrupt: boolean = false;
-  
+
   player_properties: [string, Coordenadas][] = [];
   timer: any;
   is_timer_active: boolean = false;
@@ -69,7 +69,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   interval_play: any;
   dices_interval: any;
 
-  
+
   // Variables with normes of the game
   is_puja_activated: boolean = false;
 
@@ -88,8 +88,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     console.log("TODO INICIADO: Username: ", this.username);
     console.log("TODO INICIADO: Game id: ", this.game_id);
 
-    
-    
+
+
     // Socket to actualize the turn
     this.socketService.socketOnTurno()
     .subscribe({
@@ -166,15 +166,15 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     // Determine player for first turn
     if (this.current_player == this.username){
-      document.getElementById("tirar-dados")!.removeAttribute("disabled");      
+      document.getElementById("tirar-dados")!.removeAttribute("disabled");
       this.play();
     }
-    
+
     else {
       this.cancelTimer();
       this.message = this.current_player + " está jugando su turno";
       this.game_id = parseInt(this.route.snapshot.paramMap.get('id')!);
-   
+
     }
   }
 
@@ -187,7 +187,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.dices_interval.unsubscribe();
     }
   }
- 
+
   load_game(){
     // Print message
     this.message = "Cargando la partida...";
@@ -196,7 +196,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     document.getElementById("tirar-dados")!.setAttribute("disabled", "true");
     document.getElementById("button-end-turn")!.setAttribute("disabled", "true");
     // Get the game id from the url
-    
+
     this.username = this.socketService.username;
     // Get token of the player
     if(!this.socketService.soyInvitado){
@@ -284,8 +284,8 @@ export class BoardComponent implements OnInit, OnDestroy {
         //this.dices[1] = 0;
         //this.list_players[this.socketService.indexJugador].coordenadas = {h: 7, v: 10};
         //this.old_position = {h: 7, v: 10};
-        
-        
+
+
         this.dices[0] = msg.dado1;
         this.dices[1] = msg.dado2;
         this.list_players[this.socketService.indexJugador].coordenadas = msg.coordenadas;
@@ -330,7 +330,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.end_turn(); // TODO <- revisar si se cae por dobles gestión turno de nuevo
     } else if((this.list_players[this.socketService.indexJugador].coordenadas.h == 8 && this.list_players[this.socketService.indexJugador].coordenadas.v == 10)
             || (this.list_players[this.socketService.indexJugador].coordenadas.h == 0 && this.list_players[this.socketService.indexJugador].coordenadas.v == 3)
-            || (this.list_players[this.socketService.indexJugador].coordenadas.h == 3 && this.list_players[this.socketService.indexJugador].coordenadas.v == 10)){ 
+            || (this.list_players[this.socketService.indexJugador].coordenadas.h == 3 && this.list_players[this.socketService.indexJugador].coordenadas.v == 10)){
       // Casillas de boletín
       console.log("=== BOLETÍN ACTION ===");
       this.message = "Toma una carta de comunidad";
@@ -453,9 +453,9 @@ export class BoardComponent implements OnInit, OnDestroy {
     let result : [string, number, Coordenadas][] = [];
     for (let i = 0; i < listaJugadores.length; i++) {
       this.list_players[i].dinero = listaDineros[i];
-      this.list_players[i].coordenadas = listaPosiciones[i]; 
+      this.list_players[i].coordenadas = listaPosiciones[i];
     }
-    
+
   }
 
   update_player_info(): void {
@@ -629,7 +629,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     componentRef.instance.idPartida = this.game_id;
     componentRef.instance.username = this.socketService.username;//this.player[0];
     componentRef.instance.coordenadas = this.list_players[this.socketService.indexJugador].coordenadas;
-   
+
     // Outputs
     componentRef.instance.end_turn.subscribe(() => {this.end_turn()});
     //componentRef.instance.reStartTimerExpulsarJugador.subscribe(() => {this.reStartTimerExpulsarJugador()});
@@ -837,6 +837,8 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   /* === FUNCTIONS TO LEAVE THE GAME === */
   leave_game(){
+    // Cancel timer
+    this.cancelTimer();
     // Change the player who has to play
     this.socketService.siguienteTurno()
     .then((data: any) => {
@@ -847,6 +849,11 @@ export class BoardComponent implements OnInit, OnDestroy {
     .subscribe({
       next: () => {
         console.log("=== LEAVE GAME EXPULSAR ===");
+        this.router.navigate(['/home']);
+      },
+      error: error => {
+        this.delete_pop_up_component();
+        alert("Error al declarar la bancarrota, vas a continuar la partida.");
       }
     });
 
