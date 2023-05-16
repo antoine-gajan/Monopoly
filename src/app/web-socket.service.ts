@@ -366,8 +366,6 @@ export class WebSocketService {
         this.dineroPartida = ack.partida.dineroJugadores;
         observable.next(ack);
         observable.complete();
-        const ruta = '/game/' + this.idPartida;
-        this.router.navigate([ruta]);
       });
    });
   }

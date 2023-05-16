@@ -7,6 +7,6 @@
     <h3>{{product.nombre}}</h3>
     <h2 class="price">{{product.precio}} 💸</h2>
     <button *ngIf="!product.comprado" (click)="buy_product()" class="buy">Comprar</button>
-    <button *ngIf="product.comprado && !product.usado" class="bought">Comprado</button>
+    <button *ngIf="product.comprado && !product.usado" class="bought">Usar</button>
   </div>
 </div>

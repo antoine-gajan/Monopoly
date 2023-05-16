@@ -81,14 +81,13 @@ import 'zone.js';
     RouterModule,
     NgOptimizedImage,
     SocketIoModule.forRoot({url: environment.socketURL})
-    // SocketIOClient.Socket
   ],
     providers: [UserService, WebSocketService],
     bootstrap: [AppComponent],
     entryComponents: [InteractionCardComponent]
 })
 export class AppModule {
-  
+
  }
 
 

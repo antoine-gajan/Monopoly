@@ -19,11 +19,9 @@ export class EsperarSalaComponent implements OnInit{
   maxPlayers: number;
   veces: number = 0;
   mostrarBotonEmpezar: boolean = true;
-  mostrarBotonUnirse: boolean = false;
   mostrarListaJugadores: boolean = true;
 
   constructor(
-    //private userService: UserService,
     private gameService: GameService,
     private route: ActivatedRoute,
     private router: Router,
@@ -31,36 +29,30 @@ export class EsperarSalaComponent implements OnInit{
   ) {}
 
   ngOnInit() {
-
+    // Get id of the game
+    let idPartida = this.route.snapshot.paramMap.get('id'); // Se obtiene id de la partida
+    if (idPartida != null && this.username != null) {
+      // Actualize game info
+      this.game_id = +idPartida;
+    }
+    else {
+      this.router.navigate(['/error']);
+    }
     this.list_players = this.socketService.list_players;
 
+    // Sockets on to know when the game starts and players connected
     this.socketService.getSocket().on('esperaJugadores', (mensaje)=>{
       console.log("Usuarios contectados: ",mensaje);
       this.list_players = mensaje;
       this.socketService.list_players = mensaje;
     });
 
-    console.log("ACTUALIZA INFO");
-    let idPartida = this.route.snapshot.paramMap.get('id'); // Se obtiene id de la partida
-    if (idPartida != null && this.username != null) {       // Actualiza la información del juego
-      this.game_id = +idPartida;
-    } else {
-      this.router.navigate(['/error']);
-    }
     this.socketService.escucharEntrarAJugar()
     .subscribe((data: any) => {
       console.log("ENTRA A JUGAR: ", data);
-
-      this.mostrarBotonUnirse = true;
+      // Redirect to game
+      this.start_game();
     });
-  
-    
-
-
-   
-
-
-
   }
 
 
@@ -68,45 +60,12 @@ export class EsperarSalaComponent implements OnInit{
     window.history.back();
   }
 
-  actualize_game_info() {
-    /*this.socketService.actualizarUsuariosConectados(this.game_id)
-    .then((usuariosConectados) => {
-      console.log('Usuarios conectados:', usuariosConectados);
-      this.list_players = usuariosConectados;
-      this.mostrarListaJugadores = true;
-    })
-    .catch((error) => {
-      console.error('Error al obtener usuarios conectados:', error);
-    });*/
 
-}
-
-  // Función para acceder al tablero de juego para el creador de la partida
+  // Function to start the game
   start_game(): void {
     console.log("start game: ", this.game_id);
-    this.mostrarBotonUnirse = true;
     const ruta = '/game/' + this.game_id;
     this.router.navigateByUrl(ruta);
   }
 
-  // Función para acceder al tablero de juego para el resto de jugadores
-  join_game(): void {
-    console.log("join game: ", this.game_id);
-    const ruta = '/game/' + this.game_id;
-    this.router.navigateByUrl(ruta);
-  }
-
-  /*
-   * Genera el movimiento de reload al hacer click sobre el icono
-   * y devuelve la lista de jugadores actualizada
-   */
-  onRefreshClick() {
-    this.showSpinner = true;
-    setTimeout(() => {
-      this.showSpinner = false;
-    }, 2500);
-    //this.actualize_game_info();
-
-    this.mostrarListaJugadores = true;
-  }
 }
