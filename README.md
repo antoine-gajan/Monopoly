@@ -22,3 +22,7 @@ The MEARN stack was used to perform the front end of the software. In particular
 
 Our software allows from an online interface to create a user account, to connect and modify its information as well as to play a part of Monopoly (EINA version) with other players. During this game, the player will be able to roll the dice and buy properties (courses) as in the real game. Some aspects of the game have been revisited to allow for increased user experience. 
 
+## 💡Execute the code:
+
+The GitHub organization created for this project can be found at:  https://github.com/UNIZAR-30226-2023-11 
+You will find all the information to link the front end to the back end here. 
