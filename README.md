@@ -2,7 +2,7 @@
 
 ## 💻︎ Contents of the repository :
 
-This GitHub repository contains all the code of the Web Front-end produced during the EINA Monopoly software project in 2023.
+This GitHub repository contains all the code of the Web Front-end produced during the EINA Monopoly software project in 2023. This game enables to people located to different areas of the world to play each one against each other.
 
 
 ## 🎯 Course Objectives:
@@ -26,3 +26,24 @@ Our software allows from an online interface to create a user account, to connec
 
 The GitHub organization created for this project can be found at:  https://github.com/UNIZAR-30226-2023-11 
 You will find all the information to link the front end to the back end here. 
+
+## 🎯 Images of our game:
+
+Welcome page :
+<br>
+<img width="400" alt="image" src="https://github.com/antoine-gajan/Monopoly/assets/86797909/9c1c3baa-8fdb-493d-929c-ca11e2ad090c">
+<br>
+Log In :
+<br>
+<img width="362" alt="image" src="https://github.com/antoine-gajan/Monopoly/assets/86797909/8e5cbda3-1bc1-41fc-b489-3e8cbb126651">
+<br>
+Online shop :
+<br>
+<img width="456" alt="image" src="https://github.com/antoine-gajan/Monopoly/assets/86797909/4e5f8507-721f-47a1-acf0-aa3a7de3fe6b">
+<br>
+Monopoly game :
+<br>
+<img width="415" alt="image" src="https://github.com/antoine-gajan/Monopoly/assets/86797909/05314257-e8a8-4100-b434-eebf23ecb813">
+
+
+
